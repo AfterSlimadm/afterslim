@@ -123,8 +123,8 @@ export default function PrivacyPolicyPage() {
       <section>
         <h2>4. Data Security</h2>
         <p>
-          We implement industry-standard security measures — including SSL
-          encryption, secure payment processing, and access controls — to
+          We implement industry-standard security measures (including SSL
+          encryption, secure payment processing, and access controls) to
           protect your personal information. However, no method of transmission
           over the Internet is 100% secure, and we cannot guarantee absolute
           security.

@@ -20,11 +20,11 @@ import { Separator } from "@/components/ui/separator";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about AfterSlim — our mission to make premium, science-backed supplements accessible to everyone. Made in the USA with transparent formulas.",
+    "Learn about AfterSlim and our mission to make premium, science-backed supplements accessible to everyone. Made in the USA with transparent formulas.",
   openGraph: {
     title: "About Us | AfterSlim",
     description:
-      "Learn about AfterSlim — our mission to make premium, science-backed supplements accessible to everyone.",
+      "Learn about AfterSlim and our mission to make premium, science-backed supplements accessible to everyone.",
   },
 };
 
@@ -39,7 +39,7 @@ const VALUES = [
     icon: FlaskConical,
     title: "Science-Backed",
     description:
-      "Our formulas are developed with input from nutrition scientists and backed by peer-reviewed research — not trends.",
+      "Our formulas are developed with input from nutrition scientists and backed by peer-reviewed research, not trends.",
   },
   {
     icon: Eye,
@@ -59,7 +59,7 @@ const WHY_CHOOSE = [
   { icon: ShieldCheck, text: "Manufactured in a GMP-certified facility" },
   { icon: Flag, text: "Proudly made in the USA" },
   { icon: TestTubeDiagonal, text: "Third-party tested for purity and potency" },
-  { icon: ListChecks, text: "No proprietary blends — full label transparency" },
+  { icon: ListChecks, text: "No proprietary blends, full label transparency" },
   { icon: BadgeCheck, text: "30-day satisfaction guarantee on every order" },
 ] as const;
 
@@ -89,7 +89,7 @@ export default function AboutPage() {
             AfterSlim was founded with a simple but powerful mission: make
             premium-quality supplements accessible to everyone who's serious
             about their health. We saw an industry crowded with vague labels,
-            inflated claims, and hidden ingredients — and we knew there had to be
+            inflated claims, and hidden ingredients, and we knew there had to be
             a better way.
           </p>
           <p>
@@ -100,7 +100,7 @@ export default function AboutPage() {
             States, and is independently tested by third-party laboratories.
           </p>
           <p>
-            We believe that supplements should complement a healthy lifestyle —
+            We believe that supplements should complement a healthy lifestyle,
             not promise miracles. That's why we focus on honest communication,
             clinically studied ingredients, and formulas designed to deliver
             real, measurable results over time.
@@ -115,7 +115,7 @@ export default function AboutPage() {
             Our Values
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-muted-foreground">
-            These principles guide every decision we make — from sourcing
+            These principles guide every decision we make, from sourcing
             ingredients to shipping your order.
           </p>
 
@@ -163,7 +163,7 @@ export default function AboutPage() {
             Behind AfterSlim is a passionate team of nutrition enthusiasts,
             scientists, and customer-experience professionals who share a
             single goal: helping you feel your best, every day. We're growing
-            fast — stay tuned for more about the people making it all happen.
+            fast, so stay tuned for more about the people making it all happen.
           </p>
         </div>
       </section>

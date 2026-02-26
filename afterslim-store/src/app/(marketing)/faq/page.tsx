@@ -44,7 +44,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "Do you ship internationally?",
         answer:
-          "We currently ship within the United States only, including PO boxes and APO/FPO addresses. We're actively working on expanding to international markets — sign up for our newsletter to be the first to know when we do.",
+          "We currently ship within the United States only, including PO boxes and APO/FPO addresses. We're actively working on expanding to international markets. Sign up for our newsletter to be the first to know when we do.",
       },
       {
         question: "Can I track my order?",
@@ -69,7 +69,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "What is your Subscribe & Save program?",
         answer:
-          "Our Subscribe & Save program lets you set up recurring deliveries of your favorite supplements at a 15% discount. You'll also get free shipping on every subscription order. There are no long-term commitments — you can modify, pause, or cancel your subscription anytime from your account dashboard.",
+          "Our Subscribe & Save program lets you set up recurring deliveries of your favorite supplements at a 15% discount. You'll also get free shipping on every subscription order. There are no long-term commitments, and you can modify, pause, or cancel your subscription anytime from your account dashboard.",
       },
       {
         question: "Are your products vegan and gluten-free?",
@@ -89,7 +89,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "How do I cancel my subscription?",
         answer:
-          "Canceling is easy and can be done anytime. Log in to your account, navigate to the Subscriptions section, and click Cancel on the subscription you'd like to end. Your cancellation takes effect at the end of the current billing cycle — you'll still receive any orders that have already been processed.",
+          "Canceling is easy and can be done anytime. Log in to your account, navigate to the Subscriptions section, and click Cancel on the subscription you'd like to end. Your cancellation takes effect at the end of the current billing cycle, and you'll still receive any orders that have already been processed.",
       },
       {
         question: "What payment methods do you accept?",
@@ -98,7 +98,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       },
       {
         question: "How do I request a refund?",
-        answer: `To request a refund, email our support team at ${CONTACT.email} within 30 days of your delivery date. Include your order number and the reason for your request. Our team will guide you through the process — most refunds are processed within 5-10 business days after we receive your return.`,
+        answer: `To request a refund, email our support team at ${CONTACT.email} within 30 days of your delivery date. Include your order number and the reason for your request. Our team will guide you through the process. Most refunds are processed within 5-10 business days after we receive your return.`,
       },
     ],
   },

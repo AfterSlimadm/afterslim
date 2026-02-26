@@ -56,8 +56,8 @@ export default function ContactPage() {
         Contact Us
       </h1>
       <p className="mt-2 text-muted-foreground">
-        We'd love to hear from you. Fill out the form or reach out directly —
-        our team typically responds within 24 hours.
+        We'd love to hear from you. Fill out the form or reach out directly.
+        Our team typically responds within 24 hours.
       </p>
       <Separator className="my-8" />
 

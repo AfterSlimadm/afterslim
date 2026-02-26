@@ -157,8 +157,8 @@ export default function TermsOfServicePage() {
       <section>
         <h2>8. Intellectual Property</h2>
         <p>
-          All content on this website — including text, images, graphics, logos,
-          icons, audio, video, software, and other materials — is the property
+          All content on this website (including text, images, graphics, logos,
+          icons, audio, video, software, and other materials) is the property
           of {SITE.name} or its licensors and is protected by United States and
           international copyright, trademark, and other intellectual property
           laws. You may not reproduce, distribute, modify, or create derivative

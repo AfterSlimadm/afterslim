@@ -47,7 +47,7 @@ export function BenefitsSection() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             We hold ourselves to the highest standards so you can focus on what
-            matters most — your health.
+            matters most: your health.
           </p>
         </m.div>
 
