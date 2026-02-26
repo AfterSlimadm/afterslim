@@ -3,11 +3,11 @@ import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 /**
- * Middleware: protect all admin routes.
+ * Proxy: protect all admin routes.
  * - Browser routes: redirect to /login if no auth session.
  * - API routes: accept either a valid session (cookie) OR x-api-key (for external callers like agents/crons).
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // ── Public paths that skip all checks ─────────────────────
