@@ -9,7 +9,6 @@ import {
   Activity,
   CheckCircle,
   Clock,
-  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AGENTS, type AgentInfo } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -36,39 +34,6 @@ export interface AgentStatus {
   messagesLast24h: number;
 }
 
-/* ── Fallback mock data ── */
-
-const MOCK_STATUS: AgentStatus[] = [
-  {
-    agentId: "as-after", status: "online", lastActive: "Just now",
-    tasksCompleted: 847, tasksPending: 3, memoriesCount: 156, messagesLast24h: 42,
-  },
-  {
-    agentId: "as-legal", status: "idle", lastActive: "2h ago",
-    tasksCompleted: 124, tasksPending: 1, memoriesCount: 89, messagesLast24h: 5,
-  },
-  {
-    agentId: "as-marketing", status: "online", lastActive: "15m ago",
-    tasksCompleted: 312, tasksPending: 7, memoriesCount: 203, messagesLast24h: 18,
-  },
-  {
-    agentId: "as-management", status: "idle", lastActive: "1h ago",
-    tasksCompleted: 98, tasksPending: 2, memoriesCount: 67, messagesLast24h: 3,
-  },
-  {
-    agentId: "as-content", status: "online", lastActive: "5m ago",
-    tasksCompleted: 256, tasksPending: 4, memoriesCount: 178, messagesLast24h: 12,
-  },
-  {
-    agentId: "as-engagement", status: "offline", lastActive: "6h ago",
-    tasksCompleted: 189, tasksPending: 0, memoriesCount: 134, messagesLast24h: 0,
-  },
-  {
-    agentId: "as-analytics", status: "idle", lastActive: "30m ago",
-    tasksCompleted: 156, tasksPending: 1, memoriesCount: 245, messagesLast24h: 8,
-  },
-];
-
 const STATUS_CONFIG = {
   online: { label: "Online", color: "bg-green-500", textColor: "text-green-700" },
   idle: { label: "Idle", color: "bg-yellow-500", textColor: "text-yellow-700" },
@@ -84,10 +49,15 @@ function AgentCard({
   agent: AgentInfo;
   agentStatuses: AgentStatus[];
 }) {
-  const status =
-    agentStatuses.find((s) => s.agentId === agent.id) ??
-    MOCK_STATUS.find((s) => s.agentId === agent.id) ??
-    MOCK_STATUS[0];
+  const status = agentStatuses.find((s) => s.agentId === agent.id) ?? {
+    agentId: agent.id,
+    status: "offline" as const,
+    lastActive: "Sem atividade",
+    tasksCompleted: 0,
+    tasksPending: 0,
+    memoriesCount: 0,
+    messagesLast24h: 0,
+  };
   const statusConfig = STATUS_CONFIG[status.status];
 
   return (
@@ -130,15 +100,15 @@ function AgentCard({
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
             <CheckCircle className="size-3.5 text-green-600" />
-            <span>{status.tasksCompleted} completed</span>
+            <span>{status.tasksCompleted} concluídas</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <Clock className="size-3.5 text-yellow-600" />
-            <span>{status.tasksPending} pending</span>
+            <span>{status.tasksPending} pendentes</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <Brain className="size-3.5 text-purple-600" />
-            <span>{status.memoriesCount} memories</span>
+            <span>{status.memoriesCount} memórias</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <MessageSquare className="size-3.5 text-blue-600" />
@@ -157,7 +127,7 @@ function AgentCard({
           <Button size="sm" variant="outline" className="flex-1" asChild>
             <Link href="/agents/memory">
               <Brain className="size-3.5" />
-              Memory
+              Memória
             </Link>
           </Button>
         </div>
@@ -175,9 +145,7 @@ interface AgentsContentProps {
 /* ── Page ── */
 
 export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
-  // Use real data if available, otherwise fall back to mock
-  const statuses =
-    agentStatuses.length > 0 ? agentStatuses : MOCK_STATUS;
+  const statuses = agentStatuses;
 
   const totalTasks = statuses.reduce((s, a) => s + a.tasksCompleted, 0);
   const totalPending = statuses.reduce((s, a) => s + a.tasksPending, 0);
@@ -187,22 +155,22 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">AI Agents</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Agentes IA</h1>
           <p className="text-muted-foreground">
-            Monitor and manage the AfterSlim AI agent team.
+            Monitore e gerencie o time de agentes IA da AfterSlim.
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
             <Link href="/agents/messages">
               <MessageSquare className="size-4" />
-              Messages
+              Mensagens
             </Link>
           </Button>
           <Button variant="outline" asChild>
             <Link href="/agents/tasks">
               <ListTodo className="size-4" />
-              Tasks
+              Tarefas
             </Link>
           </Button>
         </div>
@@ -213,7 +181,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Agents Online
+              Agentes Online
             </CardTitle>
             <Activity className="size-4 text-green-600" />
           </CardHeader>
@@ -226,7 +194,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Tasks Completed
+              Tarefas Concluídas
             </CardTitle>
             <CheckCircle className="size-4 text-muted-foreground" />
           </CardHeader>
@@ -237,7 +205,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Pending Tasks
+              Tarefas Pendentes
             </CardTitle>
             <Clock className="size-4 text-yellow-600" />
           </CardHeader>
@@ -248,7 +216,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Messages (24h)
+              Mensagens (24h)
             </CardTitle>
             <MessageSquare className="size-4 text-muted-foreground" />
           </CardHeader>

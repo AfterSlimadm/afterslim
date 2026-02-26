@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import { Suspense } from "react";
 import { CartSyncProvider } from "@/components/shared/cart-sync-provider";
+import { PostHogProvider } from "@/components/providers/posthog-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,9 +46,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <CartSyncProvider />
-        {children}
-        <Toaster position="top-right" richColors closeButton />
+        <Suspense fallback={null}>
+          <PostHogProvider>
+            <CartSyncProvider />
+            {children}
+            <Toaster position="top-right" richColors closeButton />
+          </PostHogProvider>
+        </Suspense>
       </body>
     </html>
   );
