@@ -5,84 +5,41 @@ import { createServerClient } from "@/lib/supabase-server";
 export const maxDuration = 60;
 
 const CRON_SECRET = process.env.CRON_SECRET ?? "";
-const NVIDIA_API_KEY = process.env.NVIDIA_API_KEY ?? "";
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY ?? "";
+const VPS_GATEWAY_URL =
+  process.env.VPS_GATEWAY_URL ?? "http://217.216.89.234:18832";
+const GATEWAY_TOKEN = process.env.OPENCLAW_GATEWAY_TOKEN ?? "";
 const POSTHOG_API_KEY = process.env.POSTHOG_API_KEY ?? "";
 const POSTHOG_PROJECT_ID = process.env.POSTHOG_PROJECT_ID ?? "325148";
 
-const FREE_MODELS = [
-  "google/gemma-3-27b-it:free",
-  "meta-llama/llama-3.3-70b-instruct:free",
-];
-
-// ── LLM call helper (NVIDIA → OpenRouter fallback) ─────────────────────────
-async function callLLM(system: string, user: string): Promise<string | null> {
-  // 1. NVIDIA Kimi K2.5 (20s timeout)
-  if (NVIDIA_API_KEY) {
-    try {
-      const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${NVIDIA_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "moonshotai/kimi-k2.5",
-          messages: [
-            { role: "system", content: system },
-            { role: "user", content: user },
-          ],
-          max_tokens: 500,
-          temperature: 0.4,
-          top_p: 0.9,
-          stream: false,
-          chat_template_kwargs: { thinking: false },
-        }),
-        signal: AbortSignal.timeout(20000),
-      });
-      if (res.ok) {
-        const d = await res.json();
-        const content = d.choices?.[0]?.message?.content;
-        if (content) return content;
-      }
-    } catch {
-      /* fall through */
-    }
+// ── OpenClaw chat helper ────────────────────────────────────────────────────
+async function chatAgent(agentId: string, message: string): Promise<string | null> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (GATEWAY_TOKEN) {
+    headers["Authorization"] = `Bearer ${GATEWAY_TOKEN}`;
   }
 
-  // 2. OpenRouter free models
-  if (!OPENROUTER_API_KEY) return null;
-  for (const model of FREE_MODELS) {
-    try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "https://admin.afterslim.com",
-          "X-Title": "AfterSlim Cron",
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: "system", content: system },
-            { role: "user", content: user },
-          ],
-          max_tokens: 500,
-          temperature: 0.4,
-        }),
-        signal: AbortSignal.timeout(15000),
-      });
-      if (res.status === 429) continue;
-      if (!res.ok) continue;
-      const d = await res.json();
-      const content = d.choices?.[0]?.message?.content;
-      if (content) return content;
-    } catch {
-      continue;
+  try {
+    const res = await fetch(`${VPS_GATEWAY_URL}/agents/${agentId}/chat`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ message }),
+      signal: AbortSignal.timeout(50000), // 50s per agent (within 60s limit)
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      console.error(`[cron] ${agentId}: ${res.status} — ${errText.slice(0, 200)}`);
+      return null;
     }
+
+    const data = await res.json();
+    return data.content ?? data.response ?? JSON.stringify(data);
+  } catch (err) {
+    console.error(`[cron] ${agentId}: unreachable — ${err}`);
+    return null;
   }
-  return null;
 }
 
 // ── PostHog data fetch ──────────────────────────────────────────────────────
@@ -124,7 +81,7 @@ interface CronContext {
   today: string;
 }
 
-// ── Agent cron tasks ────────────────────────────────────────────────────────
+// ── Agent cron tasks (all via OpenClaw) ─────────────────────────────────────
 
 function parseJsonReply(raw: string): Record<string, unknown> | null {
   try {
@@ -139,17 +96,23 @@ async function runManagement(
   ctx: CronContext,
   supabase: ReturnType<typeof createServerClient>
 ): Promise<void> {
-  const system = `You are the MANAGEMENT agent for AfterSlim (US supplement brand). Generate a DAILY EXECUTIVE SUMMARY.
-Analyze orders, ideas, kanban, and finances. Output:
-1. STATUS: One sentence about business state
-2. PRIORITY: Most urgent item for today
-3. ALERT: Something needing attention (or "none")
-Format: JSON { "status": "...", "priority": "...", "alert": "..." }
-Respond ONLY with JSON, no markdown.`;
+  const message = `Generate a DAILY EXECUTIVE SUMMARY for ${ctx.today}.
 
-  const user = `DATE: ${ctx.today}\n\nRECENT ORDERS:\n${ctx.recentOrders || "No orders in last 24h"}\n\nIDEAS:\n${ctx.recentIdeas || "No recent ideas"}\n\nKANBAN:\n${ctx.kanbanActivity || "No activity"}\n\nFINANCES:\n${ctx.financialSummary || "No data"}`;
+RECENT ORDERS:
+${ctx.recentOrders || "No orders in last 24h"}
 
-  const reply = await callLLM(system, user);
+IDEAS:
+${ctx.recentIdeas || "No recent ideas"}
+
+KANBAN:
+${ctx.kanbanActivity || "No activity"}
+
+FINANCES:
+${ctx.financialSummary || "No data"}
+
+Respond with JSON only: { "status": "...", "priority": "...", "alert": "..." }`;
+
+  const reply = await chatAgent("as-management", message);
   if (!reply) return;
 
   const parsed = parseJsonReply(reply);
@@ -170,14 +133,20 @@ async function runMarketing(
   ctx: CronContext,
   supabase: ReturnType<typeof createServerClient>
 ): Promise<void> {
-  const system = `You are the MARKETING agent for AfterSlim (US D2C supplement brand, 8 SKUs).
-Based on recent activity, suggest ONE marketing action for today.
-Format: JSON { "type": "ad|email|social|campaign", "title": "...", "description": "..." }
-Respond ONLY with JSON, no markdown.`;
+  const message = `Based on today's activity (${ctx.today}), suggest ONE marketing action.
 
-  const user = `DATE: ${ctx.today}\n\nORDERS:\n${ctx.recentOrders || "No recent orders"}\n\nKANBAN:\n${ctx.kanbanActivity || "No activity"}\n\nPOSTHOG:\n${ctx.posthogSummary}`;
+ORDERS:
+${ctx.recentOrders || "No recent orders"}
 
-  const reply = await callLLM(system, user);
+KANBAN:
+${ctx.kanbanActivity || "No activity"}
+
+POSTHOG:
+${ctx.posthogSummary}
+
+Respond with JSON only: { "type": "ad|email|social|campaign", "title": "...", "description": "..." }`;
+
+  const reply = await chatAgent("as-marketing", message);
   if (!reply) return;
 
   const parsed = parseJsonReply(reply);
@@ -198,17 +167,20 @@ async function runLegal(
   ctx: CronContext,
   supabase: ReturnType<typeof createServerClient>
 ): Promise<void> {
-  const system = `You are the LEGAL agent for AfterSlim (US dietary supplement brand).
-Review recent business activity for compliance risks. Check:
-- Any health claims that might violate FDA rules (structure/function only, no disease claims)
-- Any FTC issues with marketing content
-- Any shipping/tax compliance flags
-Format: JSON { "risk_level": "none|low|medium|high", "findings": "..." }
-Respond ONLY with JSON, no markdown.`;
+  const message = `Review recent business activity (${ctx.today}) for compliance risks.
 
-  const user = `DATE: ${ctx.today}\n\nORDERS:\n${ctx.recentOrders || "No orders"}\n\nIDEAS:\n${ctx.recentIdeas || "No ideas"}\n\nKANBAN:\n${ctx.kanbanActivity || "No activity"}`;
+ORDERS:
+${ctx.recentOrders || "No orders"}
 
-  const reply = await callLLM(system, user);
+IDEAS:
+${ctx.recentIdeas || "No ideas"}
+
+KANBAN:
+${ctx.kanbanActivity || "No activity"}
+
+Respond with JSON only: { "risk_level": "none|low|medium|high", "findings": "..." }`;
+
+  const reply = await chatAgent("as-legal", message);
   if (!reply) return;
 
   const parsed = parseJsonReply(reply);
@@ -229,14 +201,20 @@ async function runAnalytics(
   ctx: CronContext,
   supabase: ReturnType<typeof createServerClient>
 ): Promise<void> {
-  const system = `You are the ANALYTICS agent for AfterSlim (US supplement e-commerce).
-Analyze available data and provide a performance summary.
-Format: JSON { "highlights": ["...", "..."], "recommendation": "..." }
-Respond ONLY with JSON, no markdown.`;
+  const message = `Analyze today's performance data (${ctx.today}).
 
-  const user = `DATE: ${ctx.today}\n\nORDERS:\n${ctx.recentOrders || "No orders"}\n\nPOSTHOG EVENTS:\n${ctx.posthogSummary}\n\nFINANCES:\n${ctx.financialSummary || "No data"}`;
+ORDERS:
+${ctx.recentOrders || "No orders"}
 
-  const reply = await callLLM(system, user);
+POSTHOG EVENTS:
+${ctx.posthogSummary}
+
+FINANCES:
+${ctx.financialSummary || "No data"}
+
+Respond with JSON only: { "highlights": ["...", "..."], "recommendation": "..." }`;
+
+  const reply = await chatAgent("as-analytics", message);
   if (!reply) return;
 
   const parsed = parseJsonReply(reply);
@@ -257,15 +235,17 @@ async function runContent(
   ctx: CronContext,
   supabase: ReturnType<typeof createServerClient>
 ): Promise<void> {
-  const system = `You are the CONTENT agent for AfterSlim's Instagram (US supplement brand).
-Based on recent activity, suggest ONE Instagram post idea.
-Content pillars: "Did you know?" | "Morning/Night routine" | "Myth vs. Fact" | "What I take and why" | "Behind the brand"
-Format: JSON { "format": "reel|carousel|story|post", "pillar": "...", "caption_hook": "...", "description": "..." }
-Respond ONLY with JSON, no markdown.`;
+  const message = `Suggest ONE Instagram post idea for today (${ctx.today}).
 
-  const user = `DATE: ${ctx.today}\n\nKANBAN:\n${ctx.kanbanActivity || "No activity"}\n\nIDEAS:\n${ctx.recentIdeas || "No ideas"}`;
+KANBAN:
+${ctx.kanbanActivity || "No activity"}
 
-  const reply = await callLLM(system, user);
+IDEAS:
+${ctx.recentIdeas || "No ideas"}
+
+Respond with JSON only: { "format": "reel|carousel|story|post", "pillar": "...", "caption_hook": "...", "description": "..." }`;
+
+  const reply = await chatAgent("as-content", message);
   if (!reply) return;
 
   const parsed = parseJsonReply(reply);
@@ -350,20 +330,26 @@ export async function GET(req: NextRequest) {
     today,
   };
 
-  // Run agents in parallel (each is independent)
-  const results = await Promise.allSettled([
-    runManagement(ctx, supabase),
-    runMarketing(ctx, supabase),
-    runLegal(ctx, supabase),
-    runAnalytics(ctx, supabase),
-    runContent(ctx, supabase),
-  ]);
+  // Run agents sequentially through OpenClaw (to respect gateway concurrency limits)
+  const agentTasks = [
+    { name: "as-management", fn: () => runManagement(ctx, supabase) },
+    { name: "as-marketing", fn: () => runMarketing(ctx, supabase) },
+    { name: "as-legal", fn: () => runLegal(ctx, supabase) },
+    { name: "as-analytics", fn: () => runAnalytics(ctx, supabase) },
+    { name: "as-content", fn: () => runContent(ctx, supabase) },
+  ];
 
-  const agentNames = ["as-management", "as-marketing", "as-legal", "as-analytics", "as-content"];
-  const summary = results.map((r, i) => ({
-    agent: agentNames[i],
-    status: r.status,
-  }));
+  const summary: { agent: string; status: string }[] = [];
+
+  for (const task of agentTasks) {
+    try {
+      await task.fn();
+      summary.push({ agent: task.name, status: "fulfilled" });
+    } catch (err) {
+      console.error(`[cron] ${task.name} failed:`, err);
+      summary.push({ agent: task.name, status: "rejected" });
+    }
+  }
 
   return NextResponse.json({
     ok: true,

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const VPS_GATEWAY_URL = process.env.VPS_GATEWAY_URL ?? "http://217.216.89.234:18789";
+const VPS_GATEWAY_URL = process.env.VPS_GATEWAY_URL ?? "http://217.216.89.234:18832";
 const GATEWAY_TOKEN = process.env.OPENCLAW_GATEWAY_TOKEN ?? "";
 
 /**
