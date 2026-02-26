@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAgentMemories } from "@/lib/queries/agents";
 import MemoryContent from "./memory-content";
 

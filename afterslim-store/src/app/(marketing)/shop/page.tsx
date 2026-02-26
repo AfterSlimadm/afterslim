@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { SITE } from "@/lib/constants";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";

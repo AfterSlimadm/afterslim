@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getFinancialGoals } from "@/lib/queries/finance";
 import GoalsContent from "./goals-content";
 

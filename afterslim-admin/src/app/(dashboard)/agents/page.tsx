@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAgentTasks, getAgentMemories, getAgentMessages } from "@/lib/queries/agents";
 import { AGENTS } from "@/lib/constants";
 import AgentsContent, { type AgentStatus } from "./agents-content";

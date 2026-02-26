@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getInventory } from "@/lib/queries/inventory";
 import InventoryContent from "./inventory-content";
 

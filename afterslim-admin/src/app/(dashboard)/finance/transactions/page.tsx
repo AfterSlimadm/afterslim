@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getTransactions } from "@/lib/queries/finance";
 import TransactionsContent from "./transactions-content";
 

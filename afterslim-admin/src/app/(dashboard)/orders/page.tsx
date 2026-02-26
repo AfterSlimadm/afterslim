@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getOrders } from "@/lib/queries/orders";
 import OrdersContent from "./orders-content";
 import type { Order } from "@/lib/types";

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAgentMessages } from "@/lib/queries/agents";
 import MessagesContent from "./messages-content";
 

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getIdeas } from "@/lib/queries/ideas";
 import IdeasContent from "./ideas-content";
 

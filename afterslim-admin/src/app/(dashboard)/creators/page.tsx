@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getCreators } from "@/lib/queries/creators";
 import CreatorsContent from "./creators-content";
 

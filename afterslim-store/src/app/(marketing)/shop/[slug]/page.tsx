@@ -1,19 +1,12 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SITE } from "@/lib/constants";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { FdaDisclaimer } from "@/components/marketing/fda-disclaimer";
 import { ProductDetail } from "./product-detail";
-import { getProductBySlug, getAllProductSlugs } from "@/lib/queries/products";
-
-// ---------------------------------------------------------------------------
-// Static params (for static generation)
-// ---------------------------------------------------------------------------
-
-export async function generateStaticParams() {
-  const slugs = await getAllProductSlugs();
-  return slugs.map((p) => ({ slug: p.slug }));
-}
+import { getProductBySlug } from "@/lib/queries/products";
 
 // ---------------------------------------------------------------------------
 // SEO

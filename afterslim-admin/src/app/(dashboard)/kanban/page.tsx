@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getKanbanColumns, getKanbanCards } from "@/lib/queries/kanban";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
 import type { KanbanColumn, KanbanCard } from "@/lib/types";
