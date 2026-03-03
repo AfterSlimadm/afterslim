@@ -14,11 +14,22 @@ const trustIndicators = [
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-brand-primary)] via-[var(--color-brand-primary-dark)] to-[#0f3d2b]" />
+      {/* Radial gradient background — Centrum-style circles in navy */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 120% 120% at 75% 50%, rgba(30,40,100,0.9) 0%, transparent 60%),
+            radial-gradient(ellipse 100% 100% at 20% 80%, rgba(25,30,80,0.8) 0%, transparent 50%),
+            radial-gradient(ellipse 80% 80% at 50% 20%, rgba(40,50,120,0.6) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 60% at 80% 70%, rgba(50,60,140,0.4) 0%, transparent 40%),
+            linear-gradient(135deg, #0a0e24 0%, #111838 30%, #0d1230 60%, #080c1e 100%)
+          `,
+        }}
+      />
 
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 opacity-5">
+      {/* Subtle dot pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.03]">
         <div
           className="h-full w-full"
           style={{
