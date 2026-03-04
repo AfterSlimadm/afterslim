@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { ShoppingBag, Menu } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { onCartAdd } from "@/lib/cart-animation";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import * as m from "motion/react-client";
@@ -16,9 +15,9 @@ import { AnimatePresence } from "motion/react";
 // ---------------------------------------------------------------------------
 
 export function CartButton() {
-  const totalItems = useCartStore((s) => s.totalItems);
+  const items = useCartStore((s) => s.items);
   const setCartOpen = useUIStore((s) => s.setCartOpen);
-  const count = totalItems();
+  const count = items.reduce((sum, item) => sum + item.quantity, 0);
   const [bouncing, setBouncing] = useState(false);
   const [prevCount, setPrevCount] = useState(count);
   const [badgePop, setBadgePop] = useState(false);
@@ -60,6 +59,7 @@ export function CartButton() {
         onClick={() => setCartOpen(true)}
         aria-label={`Shopping cart with ${count} items`}
         data-cart-icon
+        suppressHydrationWarning
       >
         <span className="relative">
           <ShoppingBag className="size-5" />

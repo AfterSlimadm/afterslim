@@ -144,7 +144,7 @@ export function StickyAddToCart({
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="fixed bottom-0 left-0 right-0 z-30 lg:hidden border-t border-border/50 bg-background/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-lg"
           >
-            <div className="flex items-center gap-3 px-4 py-3 safe-bottom">
+            <div className="flex items-center gap-3 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {/* Name + price */}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">
