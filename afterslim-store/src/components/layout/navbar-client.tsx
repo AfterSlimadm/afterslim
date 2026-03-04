@@ -1,38 +1,85 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ShoppingBag, Menu } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
+import { onCartAdd } from "@/lib/cart-animation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 
 // ---------------------------------------------------------------------------
-// Cart Icon w/ Badge — opens the CartSheet
+// Cart Icon w/ Badge — opens the CartSheet, bounces on item add
 // ---------------------------------------------------------------------------
 
 export function CartButton() {
   const totalItems = useCartStore((s) => s.totalItems);
   const setCartOpen = useUIStore((s) => s.setCartOpen);
   const count = totalItems();
+  const [bouncing, setBouncing] = useState(false);
+  const [prevCount, setPrevCount] = useState(count);
+  const [badgePop, setBadgePop] = useState(false);
+
+  // Listen for cart-add events and trigger bounce
+  useEffect(() => {
+    return onCartAdd(() => {
+      setBouncing(true);
+      setTimeout(() => setBouncing(false), 500);
+    });
+  }, []);
+
+  // Detect badge count change for pop animation
+  useEffect(() => {
+    if (count !== prevCount && count > 0) {
+      setBadgePop(true);
+      const timer = setTimeout(() => setBadgePop(false), 300);
+      setPrevCount(count);
+      return () => clearTimeout(timer);
+    }
+    setPrevCount(count);
+  }, [count, prevCount]);
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={() => setCartOpen(true)}
-      aria-label={`Shopping cart with ${count} items`}
+    <m.div
+      animate={
+        bouncing
+          ? {
+              rotate: [0, -12, 10, -8, 5, 0],
+              scale: [1, 1.2, 0.95, 1.1, 1],
+            }
+          : { rotate: 0, scale: 1 }
+      }
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <span className="relative">
-        <ShoppingBag className="size-5" />
-        {count > 0 && (
-          <Badge className="absolute -top-2.5 -right-2.5 flex h-4 min-w-4 items-center justify-center p-0.5 text-[10px] leading-none">
-            {count > 99 ? "99+" : count}
-          </Badge>
-        )}
-      </span>
-    </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setCartOpen(true)}
+        aria-label={`Shopping cart with ${count} items`}
+        data-cart-icon
+      >
+        <span className="relative">
+          <ShoppingBag className="size-5" />
+          <AnimatePresence mode="popLayout">
+            {count > 0 && (
+              <m.span
+                key={count}
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: badgePop ? 1.3 : 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className="absolute -top-2.5 -right-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary p-0.5 text-[10px] font-medium leading-none text-primary-foreground"
+              >
+                {count > 99 ? "99+" : count}
+              </m.span>
+            )}
+          </AnimatePresence>
+        </span>
+      </Button>
+    </m.div>
   );
 }
 

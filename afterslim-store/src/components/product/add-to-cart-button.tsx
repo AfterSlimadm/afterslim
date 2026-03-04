@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/useCartStore";
+import { useUIStore } from "@/store/useUIStore";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import * as m from "motion/react-client";
@@ -31,6 +32,7 @@ export function AddToCartButton({
 }: AddToCartButtonProps) {
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((s) => s.addItem);
+  const setCartOpen = useUIStore((s) => s.setCartOpen);
 
   const isOutOfStock = product.stock_quantity === 0;
 
@@ -56,6 +58,7 @@ export function AddToCartButton({
       description: `Quantity: ${quantity}`,
     });
     setQuantity(1);
+    setCartOpen(true);
   }
 
   return (

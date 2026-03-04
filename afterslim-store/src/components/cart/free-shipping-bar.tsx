@@ -1,6 +1,7 @@
 "use client";
 
-import { Truck } from "lucide-react";
+import { CheckCircle, Truck } from "lucide-react";
+import * as m from "motion/react-client";
 import { formatCurrency } from "@/lib/utils";
 import { FREE_SHIPPING_THRESHOLD_CENTS } from "@/lib/constants";
 
@@ -19,27 +20,35 @@ export function FreeShippingBar({ subtotalCents }: FreeShippingBarProps) {
   return (
     <div className="rounded-lg bg-muted/50 p-3">
       <div className="flex items-center gap-2 text-sm">
-        <Truck className="size-4 flex-shrink-0 text-primary" />
         {qualified ? (
-          <span className="font-medium text-primary">
-            You qualify for free shipping!
+          <CheckCircle className="size-4 flex-shrink-0 text-green-600" />
+        ) : (
+          <Truck className="size-4 flex-shrink-0 text-primary" />
+        )}
+        {qualified ? (
+          <span className="font-medium text-green-600">
+            You&apos;ve earned free shipping!
           </span>
         ) : (
           <span className="text-muted-foreground">
-            Add{" "}
+            You&apos;re{" "}
             <span className="font-semibold text-foreground">
               {formatCurrency(remaining)}
             </span>{" "}
-            more for free shipping
+            away from free shipping!
           </span>
         )}
       </div>
 
-      {/* Progress bar */}
+      {/* Animated progress bar */}
       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-border">
-        <div
-          className="h-full rounded-full bg-primary transition-all duration-500"
-          style={{ width: `${progress}%` }}
+        <m.div
+          className={`h-full rounded-full ${
+            qualified ? "bg-green-600" : "bg-primary"
+          }`}
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         />
       </div>
     </div>

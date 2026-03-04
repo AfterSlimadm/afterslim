@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { CheckCircle2, XCircle, Truck, ArrowRight, Shield } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,7 @@ import { SubscriptionToggle } from "@/components/product/subscription-toggle";
 import { AddToCartButton } from "@/components/product/add-to-cart-button";
 import { SupplementFacts } from "@/components/product/supplement-facts";
 import { ProductReviews } from "@/components/product/product-reviews";
+import { StickyAddToCart } from "@/components/product/sticky-add-to-cart";
 import * as m from "motion/react-client";
 import type { Product } from "@/types/database";
 
@@ -59,6 +60,31 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const [purchaseType, setPurchaseType] = useState<"one-time" | "subscription">(
     "one-time"
   );
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const atcRef = useRef<HTMLDivElement>(null);
+
+  // Track when the main ATC button scrolls out of viewport
+  const handleIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const [entry] = entries;
+      // Show sticky bar only when ATC is NOT visible AND user has scrolled down
+      setShowStickyBar(!entry.isIntersecting && window.scrollY > 100);
+    },
+    []
+  );
+
+  useEffect(() => {
+    const node = atcRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0,
+      rootMargin: "0px",
+    });
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [handleIntersection]);
 
   const hasDiscount =
     product.compare_at_price_cents !== null &&
@@ -202,7 +228,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </div>
 
           {/* Add to cart */}
-          <div className="mt-6">
+          <div ref={atcRef} className="mt-6">
             <AddToCartButton
               product={product}
               priceCentsOverride={activePriceCents}
@@ -332,6 +358,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Sticky add-to-cart bar */}
+      <StickyAddToCart
+        product={product}
+        activePriceCents={activePriceCents}
+        visible={showStickyBar}
+      />
     </div>
   );
 }

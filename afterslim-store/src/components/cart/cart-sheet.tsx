@@ -16,6 +16,8 @@ import { useUIStore } from "@/store/useUIStore";
 import { formatCurrency } from "@/lib/utils";
 import { CartItem } from "./cart-item";
 import { FreeShippingBar } from "./free-shipping-bar";
+import { CartCrossSell } from "./cart-cross-sell";
+import { CartTrustBadges } from "./cart-trust-badges";
 
 export function CartSheet() {
   const cartOpen = useUIStore((s) => s.cartOpen);
@@ -70,10 +72,20 @@ export function CartSheet() {
                   <CartItem key={item.id} item={item} />
                 ))}
               </div>
+
+              {/* Cross-sell suggestion */}
+              <div className="py-3">
+                <CartCrossSell />
+              </div>
             </div>
 
+            {/* Trust badges */}
+            <CartTrustBadges />
+
+            <Separator />
+
             {/* Footer */}
-            <SheetFooter className="flex-col gap-3 border-t pt-4 sm:flex-col">
+            <SheetFooter className="flex-col gap-3 pt-2 sm:flex-col">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Subtotal</span>
                 <span className="text-lg font-bold">
@@ -83,8 +95,6 @@ export function CartSheet() {
               <p className="text-xs text-muted-foreground">
                 Shipping and taxes calculated at checkout.
               </p>
-
-              <Separator />
 
               <Button
                 size="lg"

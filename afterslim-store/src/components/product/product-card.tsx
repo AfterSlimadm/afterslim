@@ -19,6 +19,7 @@ import {
   type ProductCategory,
 } from "@/lib/constants";
 import { useCartStore } from "@/store/useCartStore";
+import { useUIStore } from "@/store/useUIStore";
 import { toast } from "sonner";
 import * as m from "motion/react-client";
 import type { Product } from "@/types/database";
@@ -51,6 +52,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((s) => s.addItem);
+  const setCartOpen = useUIStore((s) => s.setCartOpen);
 
   const hasDiscount =
     product.compare_at_price_cents !== null &&
@@ -80,6 +82,7 @@ export function ProductCard({ product }: ProductCardProps) {
       image: product.images[0] ?? null,
     });
     toast.success(`${product.name} added to cart`);
+    setCartOpen(true);
   }
 
   return (

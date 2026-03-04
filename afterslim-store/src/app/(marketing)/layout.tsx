@@ -6,6 +6,7 @@ import { WhatsAppButton } from "@/components/shared/whatsapp-button";
 import { LeadCapturePopup } from "@/components/shared/lead-capture-popup";
 import { CartSheet } from "@/components/cart/cart-sheet";
 import { CookieConsent } from "@/components/shared/cookie-consent";
+import { SocialProofToast } from "@/components/marketing/social-proof-toast";
 
 export default function MarketingLayout({
   children,
@@ -25,6 +26,7 @@ export default function MarketingLayout({
       <WhatsAppButton />
       <LeadCapturePopup />
       <CookieConsent />
+      <SocialProofToast />
     </div>
   );
 }
