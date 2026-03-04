@@ -15,7 +15,7 @@ const TESTIMONIALS = [
     name: "Sarah M.",
     rating: 5,
     quote:
-      "Since starting Mounjaro, my hair was falling out in clumps. AfterSlim Night changed everything — my hair feels thicker and stronger after just 6 weeks.",
+      "Since starting Mounjaro, my hair was falling out in clumps. AfterSlim Night changed everything. My hair feels thicker and stronger after just 6 weeks.",
     product: "AfterSlim Night Support",
     verified: true,
   },

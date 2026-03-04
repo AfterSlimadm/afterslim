@@ -60,7 +60,7 @@ export function FeaturedProducts() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Targeted nutrition for every stage of your GLP-1 journey. Day,
-            Night, or both — you decide what your body needs.
+            Night, or both. You decide what your body needs.
           </p>
         </m.div>
 

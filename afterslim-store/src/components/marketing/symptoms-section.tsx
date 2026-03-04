@@ -9,7 +9,7 @@ const SYMPTOMS = [
     symptom: "Low Energy & Fatigue",
     solution: "Day Support restores your energy",
     description:
-      "GLP-1 medications can leave you drained. Our Day formula delivers sustained energy with B-vitamins, iron, and adaptogenic herbs — no crash, no jitters.",
+      "GLP-1 medications can leave you drained. Our Day formula delivers sustained energy with B-vitamins, iron, and adaptogenic herbs. No crash, no jitters.",
     product: "Day Support",
   },
   {
@@ -57,7 +57,7 @@ export function SymptomsSection() {
             Your Body Deserves Better Support
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Weight loss medications are powerful — but they come with side
+            Weight loss medications are powerful, but they come with side
             effects. AfterSlim addresses the four most common challenges so you
             can focus on your results.
           </p>

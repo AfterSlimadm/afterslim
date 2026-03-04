@@ -21,7 +21,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
-  title: "Our Science — The Research Behind AfterSlim",
+  title: "Our Science - The Research Behind AfterSlim",
   description:
     "Discover the science behind AfterSlim's Day & Night supplement system. Physician formulated for GLP-1 medication users, backed by research, and manufactured in the USA.",
   openGraph: {
@@ -36,7 +36,7 @@ const GLP1_CHALLENGES = [
     icon: Stethoscope,
     title: "Nutrient Depletion",
     description:
-      "Reduced food intake on GLP-1 medications means fewer vitamins, minerals, and essential nutrients absorbed daily — leading to deficiencies in B12, iron, vitamin D, and more.",
+      "Reduced food intake on GLP-1 medications means fewer vitamins, minerals, and essential nutrients absorbed daily, leading to deficiencies in B12, iron, vitamin D, and more.",
   },
   {
     icon: FlaskConical,
@@ -54,7 +54,7 @@ const GLP1_CHALLENGES = [
     icon: Beaker,
     title: "Energy & Sleep Disruption",
     description:
-      "Caloric deficit and metabolic shifts can cause fatigue during the day and restless sleep at night — a cycle that makes everything harder.",
+      "Caloric deficit and metabolic shifts can cause fatigue during the day and restless sleep at night, a cycle that makes everything harder.",
   },
 ] as const;
 
@@ -137,7 +137,7 @@ export default function AboutPage() {
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Physician formulated Day &amp; Night nutrition designed to address
             the real challenges of GLP-1 weight loss therapy. No guesswork, no
-            proprietary blends — just transparent, research-backed formulas.
+            proprietary blends. Just transparent, research-backed formulas.
           </p>
         </div>
       </section>
@@ -152,8 +152,8 @@ export default function AboutPage() {
           <p>
             GLP-1 receptor agonists like semaglutide (Ozempic, Wegovy) and
             tirzepatide (Mounjaro, Zepbound) have transformed weight management.
-            But the significant reduction in appetite and food intake — the very
-            mechanism that makes them effective — creates a nutritional paradox:
+            But the significant reduction in appetite and food intake, the very
+            mechanism that makes them effective, creates a nutritional paradox:
             as you eat less, your body receives fewer of the essential nutrients
             it needs to function optimally.
           </p>
@@ -161,7 +161,7 @@ export default function AboutPage() {
             Studies show that patients on GLP-1 therapy commonly experience
             deficiencies in B-vitamins, iron, vitamin D, and protein, leading to
             fatigue, hair loss, digestive discomfort, and disrupted sleep. These
-            side effects aren't just uncomfortable — they can affect adherence to
+            side effects aren't just uncomfortable. They can affect adherence to
             the very medication that's helping you reach your goals.
           </p>
           <p>
@@ -287,7 +287,7 @@ export default function AboutPage() {
               We publish our full Supplement Facts panels on every product page,
               and we encourage you to discuss our ingredient list with your
               healthcare provider. We believe informed customers are the best
-              customers — and that starts with full disclosure.
+              customers, and that starts with full disclosure.
             </p>
           </div>
         </div>
@@ -300,7 +300,7 @@ export default function AboutPage() {
             Ready to Support Your GLP-1 Journey?
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Try the Complete Bundle — Day &amp; Night formulas working together
+            Try the Complete Bundle. Day &amp; Night formulas working together
             for comprehensive 24/7 nutrition. 60-day money-back guarantee.
           </p>
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">

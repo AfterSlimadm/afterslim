@@ -38,7 +38,7 @@ export function CTASection() {
               asChild
             >
               <Link href="/shop">
-                Get the Bundle — Save 15%
+                Get the Bundle - Save 15%
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

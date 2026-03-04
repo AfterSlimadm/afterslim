@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/accordion";
 
 export const metadata: Metadata = {
-  title: "FAQ — AfterSlim GLP-1 Companion Supplements",
+  title: "FAQ - AfterSlim GLP-1 Companion Supplements",
   description:
     "Answers to common questions about AfterSlim Day & Night supplements for GLP-1 medication users. Ingredients, safety, shipping, and more.",
   openGraph: {
@@ -54,7 +54,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "Is AfterSlim FDA approved?",
         answer:
-          "Like all dietary supplements in the United States, AfterSlim is not FDA-approved — supplements are regulated differently than prescription drugs. However, our products are manufactured in an FDA-registered, cGMP-certified facility in the USA, and every batch is independently third-party tested for purity, potency, and safety. We follow the highest manufacturing standards in the industry.",
+          "Like all dietary supplements in the United States, AfterSlim is not FDA-approved. Supplements are regulated differently than prescription drugs. However, our products are manufactured in an FDA-registered, cGMP-certified facility in the USA, and every batch is independently third-party tested for purity, potency, and safety. We follow the highest manufacturing standards in the industry.",
       },
       {
         question: "Can I take AfterSlim with my GLP-1 medication?",
@@ -69,7 +69,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "What's in AfterSlim Day Support?",
         answer:
-          "Day Support contains Vitamin B12 (1,000 mcg), Vitamin B6 (25 mg), Iron (18 mg), Ginger Root Extract (500 mg) for nausea relief, DigeZyme\u00AE Enzyme Complex (150 mg), Chromium Picolinate (200 mcg), a Prebiotic Fiber Blend (3 g), and a Probiotic Blend (5 billion CFU). Every ingredient is included at clinically meaningful doses — no pixie-dusting.",
+          "Day Support contains Vitamin B12 (1,000 mcg), Vitamin B6 (25 mg), Iron (18 mg), Ginger Root Extract (500 mg) for nausea relief, DigeZyme\u00AE Enzyme Complex (150 mg), Chromium Picolinate (200 mcg), a Prebiotic Fiber Blend (3 g), and a Probiotic Blend (5 billion CFU). Every ingredient is included at clinically meaningful doses. No pixie-dusting.",
       },
       {
         question: "What's in AfterSlim Night Support?",
@@ -84,7 +84,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "Is AfterSlim gluten-free and suitable for dietary restrictions?",
         answer:
-          "Yes. AfterSlim is gluten-free, soy-free, and non-GMO. The capsules are made from hypromellose, making them suitable for vegetarians. The Night Support formula contains collagen peptides derived from bovine sources, so it is not vegan. We clearly list all ingredients on every product page and on the physical label — no proprietary blends, ever.",
+          "Yes. AfterSlim is gluten-free, soy-free, and non-GMO. The capsules are made from hypromellose, making them suitable for vegetarians. The Night Support formula contains collagen peptides derived from bovine sources, so it is not vegan. We clearly list all ingredients on every product page and on the physical label. No proprietary blends, ever.",
       },
     ],
   },
@@ -99,12 +99,12 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "Do you ship internationally?",
         answer:
-          "We currently ship within the United States only, including PO boxes and APO/FPO addresses. International shipping is on our roadmap — sign up for our newsletter to be the first to know when we expand.",
+          "We currently ship within the United States only, including PO boxes and APO/FPO addresses. International shipping is on our roadmap. Sign up for our newsletter to be the first to know when we expand.",
       },
       {
         question: "What is Subscribe & Save?",
         answer:
-          "Subscribe & Save is the best way to stay consistent with your GLP-1 support. Choose your products and delivery frequency (monthly, every 2 months, or quarterly), and receive up to 15% off every order plus free shipping. There are no commitments — you can modify, pause, or cancel anytime from your account dashboard. Most customers choose the Complete Bundle on a monthly subscription for the best value.",
+          "Subscribe & Save is the best way to stay consistent with your GLP-1 support. Choose your products and delivery frequency (monthly, every 2 months, or quarterly), and receive up to 15% off every order plus free shipping. There are no commitments. You can modify, pause, or cancel anytime from your account dashboard. Most customers choose the Complete Bundle on a monthly subscription for the best value.",
       },
       {
         question: "What is your return policy?",
@@ -113,7 +113,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       },
       {
         question: "How do I request a refund?",
-        answer: `Email our support team at ${CONTACT.email} within 60 days of your delivery date with your order number. Our team will guide you through the process — most refunds are processed within 5-10 business days. No complicated forms, no hassle.`,
+        answer: `Email our support team at ${CONTACT.email} within 60 days of your delivery date with your order number. Our team will guide you through the process. Most refunds are processed within 5-10 business days. No complicated forms, no hassle.`,
       },
     ],
   },
