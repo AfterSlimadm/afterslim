@@ -13,10 +13,29 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
+import {
+  PRODUCT_CATEGORY_CONFIG,
+  PRODUCTS,
+  type ProductCategory,
+} from "@/lib/constants";
 import { useCartStore } from "@/store/useCartStore";
 import { toast } from "sonner";
 import * as m from "motion/react-client";
 import type { Product } from "@/types/database";
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/** Resolve the product category from our constants map, falling back to the DB category field */
+function resolveCategory(product: Product): ProductCategory | null {
+  const productData = PRODUCTS[product.slug];
+  if (productData) return productData.category;
+  // Fallback: try to match DB category to our known categories
+  const cat = product.category?.toLowerCase();
+  if (cat === "day" || cat === "night" || cat === "bundle") return cat;
+  return null;
+}
 
 // ---------------------------------------------------------------------------
 // Props
@@ -44,6 +63,11 @@ export function ProductCard({ product }: ProductCardProps) {
           100
       )
     : 0;
+
+  const category = resolveCategory(product);
+  const categoryConfig = category ? PRODUCT_CATEGORY_CONFIG[category] : null;
+  const productData = PRODUCTS[product.slug];
+  const isBundle = category === "bundle";
 
   function handleAddToCart() {
     addItem({
@@ -80,12 +104,27 @@ export function ProductCard({ product }: ProductCardProps) {
 
             {/* Badges */}
             <div className="absolute left-4 top-4 flex flex-col gap-2">
-              {product.is_featured && (
-                <Badge className="bg-[var(--color-brand-secondary)] text-[var(--color-brand-primary-dark)]">
-                  Best Seller
+              {/* Category badge */}
+              {categoryConfig && (
+                <Badge
+                  variant="outline"
+                  className={categoryConfig.className}
+                >
+                  {categoryConfig.label}
                 </Badge>
               )}
-              {hasDiscount && (
+              {/* Most Popular badge for bundle */}
+              {productData?.badge && (
+                <Badge className="bg-[var(--color-brand-secondary)] text-[var(--color-brand-primary-dark)]">
+                  {productData.badge}
+                </Badge>
+              )}
+              {/* Save % badge for bundle */}
+              {isBundle && (
+                <Badge variant="destructive">Save 15%</Badge>
+              )}
+              {/* Sale badge for non-bundle discounts */}
+              {!isBundle && hasDiscount && (
                 <Badge variant="destructive">
                   Sale &minus;{savingsPercent}%
                 </Badge>
@@ -132,6 +171,21 @@ export function ProductCard({ product }: ProductCardProps) {
               </span>
               /mo
             </p>
+          )}
+
+          {/* Benefits preview */}
+          {productData && (
+            <ul className="mt-1 space-y-0.5">
+              {productData.benefits.slice(0, 3).map((benefit) => (
+                <li
+                  key={benefit}
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground"
+                >
+                  <span className="text-[var(--color-brand-primary)]">&#x2713;</span>
+                  {benefit}
+                </li>
+              ))}
+            </ul>
           )}
         </CardContent>
 

@@ -6,7 +6,7 @@ import * as m from "motion/react-client";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
-// Placeholder testimonials
+// GLP-1 relevant testimonials
 // ---------------------------------------------------------------------------
 
 const TESTIMONIALS = [
@@ -15,8 +15,8 @@ const TESTIMONIALS = [
     name: "Sarah M.",
     rating: 5,
     quote:
-      "I've tried so many supplements before, but the Slim Starter Kit is the real deal. I've lost 15 lbs in two months and feel more energetic than ever. The quality is outstanding.",
-    product: "Slim Starter Kit",
+      "Since starting Mounjaro, my hair was falling out in clumps. AfterSlim Night changed everything — my hair feels thicker and stronger after just 6 weeks.",
+    product: "AfterSlim Night Support",
     verified: true,
   },
   {
@@ -24,8 +24,8 @@ const TESTIMONIALS = [
     name: "James R.",
     rating: 5,
     quote:
-      "The Complete Wellness Kit has been a game-changer for my daily routine. My immunity has never been better, and the subscribe & save option makes it so convenient.",
-    product: "Complete Wellness Kit",
+      "The nausea was unbearable until I found AfterSlim Day Support. Within days my stomach settled and I could actually eat without discomfort.",
+    product: "AfterSlim Day Support",
     verified: true,
   },
   {
@@ -33,17 +33,17 @@ const TESTIMONIALS = [
     name: "Maria L.",
     rating: 5,
     quote:
-      "I was skeptical at first, but the Vitality Boost Kit exceeded my expectations. My focus is sharper, my energy is steady throughout the day, and the ingredients are clean.",
-    product: "Vitality Boost Kit",
+      "I finally sleep through the night again. Game changer. I wake up feeling rested instead of exhausted. Night Support is now a non-negotiable for me.",
+    product: "AfterSlim Night Support",
     verified: true,
   },
   {
     id: "4",
     name: "David K.",
-    rating: 4,
+    rating: 5,
     quote:
-      "Great quality supplements at fair prices. Free shipping over $99 is a nice touch. Customer service was also very responsive when I had a question about dosage.",
-    product: "Slim Starter Kit",
+      "Day & Night bundle is worth every penny. My energy is back, my gut feels great, and my skin looks healthier than it has in months.",
+    product: "Complete Bundle",
     verified: true,
   },
 ];
@@ -90,8 +90,8 @@ export function Testimonials() {
             What Our Customers Say
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Real results from real people. See why thousands trust AfterSlim for
-            their health journey.
+            Real results from real people on GLP-1 medications. See why
+            thousands trust AfterSlim for their wellness journey.
           </p>
         </m.div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Truck, RotateCcw, Percent } from "lucide-react";
+import { Check, Truck, RotateCcw, Percent, Shield } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 import * as m from "motion/react-client";
 
@@ -21,9 +21,10 @@ interface SubscriptionToggleProps {
 // ---------------------------------------------------------------------------
 
 const SUBSCRIPTION_BENEFITS = [
-  { icon: Truck, label: "Free shipping" },
-  { icon: RotateCcw, label: "Cancel anytime" },
-  { icon: Percent, label: "Exclusive savings" },
+  { icon: Truck, label: "Free Shipping" },
+  { icon: RotateCcw, label: "Cancel Anytime" },
+  { icon: Percent, label: "Exclusive Savings" },
+  { icon: Shield, label: "60-Day Guarantee" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -51,11 +52,14 @@ export function SubscriptionToggle({
         : "monthly";
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
+    <div role="radiogroup" aria-label="Purchase type" className="grid gap-3 sm:grid-cols-2">
       {/* One-time purchase */}
       <m.button
         whileTap={{ scale: 0.98 }}
         onClick={() => onSelect("one-time")}
+        role="radio"
+        aria-checked={selected === "one-time"}
+        aria-label={`One-time purchase at ${formatCurrency(priceCents)}`}
         className={cn(
           "relative flex flex-col rounded-xl border-2 p-4 text-left transition-all duration-200",
           selected === "one-time"
@@ -87,6 +91,9 @@ export function SubscriptionToggle({
       <m.button
         whileTap={{ scale: 0.98 }}
         onClick={() => onSelect("subscription")}
+        role="radio"
+        aria-checked={selected === "subscription"}
+        aria-label={`Subscribe and save at ${formatCurrency(subscriptionPriceCents)} ${intervalLabel}`}
         className={cn(
           "relative flex flex-col rounded-xl border-2 p-4 text-left transition-all duration-200",
           selected === "subscription"

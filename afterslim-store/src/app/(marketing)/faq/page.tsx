@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/accordion";
 
 export const metadata: Metadata = {
-  title: "Frequently Asked Questions",
+  title: "FAQ — AfterSlim GLP-1 Companion Supplements",
   description:
-    "Find answers to common questions about AfterSlim products, shipping, subscriptions, returns, and more.",
+    "Answers to common questions about AfterSlim Day & Night supplements for GLP-1 medication users. Ingredients, safety, shipping, and more.",
   openGraph: {
     title: "FAQ | AfterSlim",
     description:
-      "Find answers to common questions about AfterSlim products, shipping, subscriptions, returns, and more.",
+      "Answers to common questions about AfterSlim Day & Night supplements for GLP-1 medication users.",
   },
 };
 
@@ -34,71 +34,86 @@ interface FaqCategory {
 
 const FAQ_CATEGORIES: FaqCategory[] = [
   {
+    title: "About Our Supplements",
+    items: [
+      {
+        question: "What is AfterSlim?",
+        answer:
+          "AfterSlim is a physician-formulated supplement system designed specifically for people taking GLP-1 medications like semaglutide (Ozempic, Wegovy) and tirzepatide (Mounjaro, Zepbound). Our Day & Night formulas work around the clock to address the most common nutritional gaps and side effects that come with GLP-1 weight loss therapy, including low energy, digestive discomfort, hair thinning, and poor sleep.",
+      },
+      {
+        question: "Why do I need supplements while on a GLP-1?",
+        answer:
+          "GLP-1 medications are highly effective for weight loss, but the significant reduction in food intake can lead to nutrient depletion over time. Common issues include vitamin B12 and iron deficiency (causing fatigue), reduced protein absorption (leading to hair loss and muscle loss), digestive side effects like nausea and constipation, and disrupted sleep patterns. AfterSlim is designed to proactively address these gaps so you can focus on your progress, not the side effects.",
+      },
+      {
+        question: "What's the difference between Day Support and Night Support?",
+        answer:
+          "Our circadian approach means each formula is optimized for when your body needs it most. Day Support focuses on what you need during waking hours: sustained energy (B-vitamins, iron), digestive comfort (ginger root, digestive enzymes, probiotics), and healthy blood sugar support (chromium). Night Support focuses on overnight recovery: hair and skin health (collagen, biotin, keratin), bone density (vitamin D3, K2), restful sleep (magnesium glycinate, L-theanine), and cellular repair (zinc, selenium).",
+      },
+      {
+        question: "Is AfterSlim FDA approved?",
+        answer:
+          "Like all dietary supplements in the United States, AfterSlim is not FDA-approved — supplements are regulated differently than prescription drugs. However, our products are manufactured in an FDA-registered, cGMP-certified facility in the USA, and every batch is independently third-party tested for purity, potency, and safety. We follow the highest manufacturing standards in the industry.",
+      },
+      {
+        question: "Can I take AfterSlim with my GLP-1 medication?",
+        answer:
+          "AfterSlim was specifically formulated to complement GLP-1 therapy, not interfere with it. That said, we always recommend consulting your prescribing physician before starting any new supplement, especially if you are on prescription medications. Our formulas contain no stimulants, no appetite suppressants, and no ingredients known to interact with semaglutide or tirzepatide.",
+      },
+    ],
+  },
+  {
+    title: "Ingredients & Safety",
+    items: [
+      {
+        question: "What's in AfterSlim Day Support?",
+        answer:
+          "Day Support contains Vitamin B12 (1,000 mcg), Vitamin B6 (25 mg), Iron (18 mg), Ginger Root Extract (500 mg) for nausea relief, DigeZyme\u00AE Enzyme Complex (150 mg), Chromium Picolinate (200 mcg), a Prebiotic Fiber Blend (3 g), and a Probiotic Blend (5 billion CFU). Every ingredient is included at clinically meaningful doses — no pixie-dusting.",
+      },
+      {
+        question: "What's in AfterSlim Night Support?",
+        answer:
+          "Night Support contains Collagen Peptides (5 g), Biotin (5,000 mcg), Keratin Complex (500 mg), Magnesium Glycinate (400 mg), L-Theanine (200 mg), Vitamin D3 (2,000 IU), Vitamin K2 (100 mcg), Zinc (15 mg), and Selenium (55 mcg). This combination targets the nighttime recovery needs most affected by rapid weight loss.",
+      },
+      {
+        question: "Are there any side effects?",
+        answer:
+          "AfterSlim is generally well tolerated. Some people may experience mild digestive adjustment during the first few days as their body adapts to the prebiotic fiber and probiotics in Day Support. This typically resolves on its own. If you experience any persistent discomfort, reduce to one capsule daily and gradually increase, or consult your healthcare provider.",
+      },
+      {
+        question: "Is AfterSlim gluten-free and suitable for dietary restrictions?",
+        answer:
+          "Yes. AfterSlim is gluten-free, soy-free, and non-GMO. The capsules are made from hypromellose, making them suitable for vegetarians. The Night Support formula contains collagen peptides derived from bovine sources, so it is not vegan. We clearly list all ingredients on every product page and on the physical label — no proprietary blends, ever.",
+      },
+    ],
+  },
+  {
     title: "Orders & Shipping",
     items: [
       {
         question: "How long does shipping take?",
         answer:
-          "We offer several shipping options to fit your needs. Standard Shipping takes 5-7 business days and is free on orders over $99. Express Shipping arrives in 2-3 business days for $12.99. Overnight Shipping is available for $24.99 and delivers within 1 business day. All orders are processed within 1-2 business days before shipping.",
+          "Standard Shipping takes 5-7 business days and is free on all orders over $99 (including all Bundle and Subscribe & Save orders). Express Shipping arrives in 2-3 business days for $12.99. Overnight Shipping is available for $24.99. All orders are processed within 1-2 business days before shipping.",
       },
       {
         question: "Do you ship internationally?",
         answer:
-          "We currently ship within the United States only, including PO boxes and APO/FPO addresses. We're actively working on expanding to international markets. Sign up for our newsletter to be the first to know when we do.",
+          "We currently ship within the United States only, including PO boxes and APO/FPO addresses. International shipping is on our roadmap — sign up for our newsletter to be the first to know when we expand.",
       },
       {
-        question: "Can I track my order?",
+        question: "What is Subscribe & Save?",
         answer:
-          "Yes! Once your order ships, you'll receive an email with a tracking number and a link to follow your package in real time. You can also track your order anytime by logging into your account and visiting the Orders section.",
+          "Subscribe & Save is the best way to stay consistent with your GLP-1 support. Choose your products and delivery frequency (monthly, every 2 months, or quarterly), and receive up to 15% off every order plus free shipping. There are no commitments — you can modify, pause, or cancel anytime from your account dashboard. Most customers choose the Complete Bundle on a monthly subscription for the best value.",
       },
       {
         question: "What is your return policy?",
         answer:
-          "We offer a 30-day satisfaction guarantee on all products. If you're not completely satisfied, contact our support team within 30 days of delivery to start a return. Please see our full Refund Policy page for details on eligibility and the refund process.",
-      },
-    ],
-  },
-  {
-    title: "Products",
-    items: [
-      {
-        question: "Are your supplements FDA approved?",
-        answer:
-          "Dietary supplements do not require FDA approval before they are marketed. However, all AfterSlim products are manufactured in an FDA-registered, GMP-certified facility in the United States. Every batch is third-party tested for purity, potency, and safety to ensure you receive a product you can trust.",
-      },
-      {
-        question: "What is your Subscribe & Save program?",
-        answer:
-          "Our Subscribe & Save program lets you set up recurring deliveries of your favorite supplements at a 15% discount. You'll also get free shipping on every subscription order. There are no long-term commitments, and you can modify, pause, or cancel your subscription anytime from your account dashboard.",
-      },
-      {
-        question: "Are your products vegan and gluten-free?",
-        answer:
-          "Many of our products are vegan and gluten-free, but formulations vary. We clearly label all dietary information on each product page and on the physical packaging. If you have specific dietary concerns, check the product label or contact our support team for detailed ingredient information.",
-      },
-      {
-        question: "How should I store my supplements?",
-        answer:
-          "For best results, store your supplements in a cool, dry place away from direct sunlight and excessive heat. Keep the bottle tightly sealed after each use. Unless the label specifically states otherwise, refrigeration is not required.",
-      },
-    ],
-  },
-  {
-    title: "Account & Billing",
-    items: [
-      {
-        question: "How do I cancel my subscription?",
-        answer:
-          "Canceling is easy and can be done anytime. Log in to your account, navigate to the Subscriptions section, and click Cancel on the subscription you'd like to end. Your cancellation takes effect at the end of the current billing cycle, and you'll still receive any orders that have already been processed.",
-      },
-      {
-        question: "What payment methods do you accept?",
-        answer:
-          "We accept all major credit and debit cards (Visa, Mastercard, American Express, Discover) as well as PayPal. All transactions are processed through secure, PCI-compliant payment processors to protect your information.",
+          "We offer a 60-day money-back guarantee on all products, including opened bottles. If AfterSlim isn't right for you, contact our support team within 60 days of delivery for a full refund. We believe in our formulas and want you to try them risk-free.",
       },
       {
         question: "How do I request a refund?",
-        answer: `To request a refund, email our support team at ${CONTACT.email} within 30 days of your delivery date. Include your order number and the reason for your request. Our team will guide you through the process. Most refunds are processed within 5-10 business days after we receive your return.`,
+        answer: `Email our support team at ${CONTACT.email} within 60 days of your delivery date with your order number. Our team will guide you through the process — most refunds are processed within 5-10 business days. No complicated forms, no hassle.`,
       },
     ],
   },
@@ -112,8 +127,8 @@ export default function FaqPage() {
         Frequently Asked Questions
       </h1>
       <p className="mt-2 text-muted-foreground">
-        Find quick answers to the most common questions about {SITE.name}{" "}
-        products, orders, and policies.
+        Everything you need to know about {SITE.name} supplements, GLP-1
+        nutritional support, ingredients, and ordering.
       </p>
       <Separator className="my-8" />
 

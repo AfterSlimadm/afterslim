@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-import { SITE } from "@/lib/constants";
+import { SITE, PRODUCTS, SHOP_CATEGORIES } from "@/lib/constants";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ShopCatalog } from "./shop-catalog";
-import { getProducts, getProductCategories } from "@/lib/queries/products";
+import { getProducts } from "@/lib/queries/products";
 import type { Product } from "@/types/database";
 
 // ---------------------------------------------------------------------------
@@ -12,11 +12,11 @@ import type { Product } from "@/types/database";
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: "Shop All Products",
-  description: `Browse our complete collection of premium supplements. ${SITE.description}`,
+  title: "Shop GLP-1 Companion Supplements",
+  description: `Day & Night nutrition designed for GLP-1 users. ${SITE.description}`,
   openGraph: {
-    title: `Shop All Products | ${SITE.name}`,
-    description: `Browse our complete collection of premium supplements. ${SITE.description}`,
+    title: `Shop GLP-1 Companion Supplements | ${SITE.name}`,
+    description: `Day & Night nutrition designed for GLP-1 users. ${SITE.description}`,
     type: "website",
   },
 };
@@ -27,56 +27,41 @@ export const metadata: Metadata = {
 
 const PLACEHOLDER_PRODUCTS: Product[] = [
   {
-    id: "prod-1",
-    slug: "afterslim-burn",
-    name: "AfterSlim Burn",
-    short_description:
-      "Thermogenic fat burner with green tea extract and L-carnitine to boost metabolism and support weight management.",
+    id: "prod-day",
+    slug: "day-support",
+    name: PRODUCTS["day-support"].name,
+    short_description: PRODUCTS["day-support"].shortDescription,
     description:
-      "<p>AfterSlim Burn is our flagship thermogenic formula designed to support your weight management goals. Featuring a powerful blend of green tea extract (EGCG), caffeine anhydrous, L-carnitine, and cayenne pepper extract, this science-backed formula helps boost your metabolism and increase energy expenditure.</p><p>Enhanced with BioPerine for maximum absorption and chromium picolinate to support healthy blood sugar levels already within the normal range. Take 2 capsules daily with water, preferably before your morning workout for best results.</p>",
-    category: "Weight Management",
+      "<p>AfterSlim Day Support is a comprehensive daytime formula specifically designed for people on GLP-1 medications like Ozempic, Mounjaro, and Wegovy. Our physician-formulated blend targets the most common daytime side effects: low energy, nausea, bloating, constipation, and poor satiety.</p><p>With clinically studied ingredients including Vitamin B12, Ginger Root Extract for digestive comfort, DigeZyme Enzyme Complex, Chromium Picolinate for blood sugar support, and a Prebiotic Fiber + Probiotic blend for gut health. Take 2 capsules daily with your morning meal.</p>",
+    category: "day",
     product_type: "single",
-    price_cents: 4999,
-    compare_at_price_cents: 5999,
-    subscription_price_cents: 4249,
+    price_cents: PRODUCTS["day-support"].price,
+    compare_at_price_cents: PRODUCTS["day-support"].compareAtPrice,
+    subscription_price_cents: PRODUCTS["day-support"].subscriptionPrice,
     subscription_interval: "month",
-    sku: "AS-BURN-60",
+    sku: "AS-DAY-60",
     barcode: null,
     weight_oz: 3.2,
-    stock_quantity: 150,
-    low_stock_threshold: 20,
+    stock_quantity: 500,
+    low_stock_threshold: 50,
     is_active: true,
     is_featured: true,
     sort_order: 1,
     supplement_facts: {
-      serving_size: "2 capsules",
-      servings_per_container: 30,
-      ingredients: [
-        { name: "Green Tea Extract (EGCG)", amount: "500 mg", daily_value: "" },
-        { name: "Caffeine Anhydrous", amount: "200 mg", daily_value: "" },
-        { name: "L-Carnitine", amount: "500 mg", daily_value: "" },
-        { name: "Cayenne Pepper Extract", amount: "100 mg", daily_value: "" },
-        {
-          name: "Black Pepper Extract (BioPerine)",
-          amount: "5 mg",
-          daily_value: "",
-        },
-        {
-          name: "Chromium (as Chromium Picolinate)",
-          amount: "200 mcg",
-          daily_value: "571%",
-        },
-      ],
-      other_ingredients:
-        "Vegetable cellulose (capsule), rice flour, magnesium stearate, silicon dioxide.",
-      allergen_warning:
-        "Manufactured in a facility that also processes milk, soy, eggs, wheat, peanuts, and tree nuts.",
+      serving_size: PRODUCTS["day-support"].supplementFacts.servingSize,
+      servings_per_container: PRODUCTS["day-support"].supplementFacts.servings,
+      ingredients: PRODUCTS["day-support"].supplementFacts.ingredients.map((i) => ({
+        name: i.name,
+        amount: i.amount,
+        daily_value: i.dailyValue ?? "",
+      })),
+      other_ingredients: PRODUCTS["day-support"].supplementFacts.otherIngredients,
     },
-    meta_title: "AfterSlim Burn - Thermogenic Fat Burner",
+    meta_title: "AfterSlim Day Support - Daytime GLP-1 Companion Supplement",
     meta_description:
-      "Boost your metabolism with AfterSlim Burn. Science-backed thermogenic formula with green tea extract, L-carnitine, and BioPerine for maximum absorption.",
+      "Comprehensive daytime nutrition for GLP-1 users. Supports energy, gut health, and satiety. Physician formulated. 60 capsules.",
     images: [],
-    tags: ["weight-management", "fat-burner", "best-seller"],
+    tags: ["day-support", "energy", "gut-health", "glp-1"],
     stripe_product_id: null,
     stripe_price_id: null,
     stripe_subscription_price_id: null,
@@ -84,269 +69,87 @@ const PLACEHOLDER_PRODUCTS: Product[] = [
     updated_at: "2025-01-01T00:00:00Z",
   },
   {
-    id: "prod-2",
-    slug: "afterslim-cleanse",
-    name: "AfterSlim Cleanse",
-    short_description:
-      "Gentle 15-day detox support formula with milk thistle, dandelion root, and probiotics to support digestive wellness.",
+    id: "prod-night",
+    slug: "night-support",
+    name: PRODUCTS["night-support"].name,
+    short_description: PRODUCTS["night-support"].shortDescription,
     description:
-      "<p>AfterSlim Cleanse provides gentle yet effective detox support with a carefully balanced blend of natural ingredients. Milk thistle and dandelion root work together to support liver function, while a 5-strain probiotic blend promotes healthy gut flora.</p><p>This 15-day cleanse program includes artichoke extract for digestive comfort and turmeric for its antioxidant properties. Designed to be gentle enough for everyday wellness support without harsh side effects.</p>",
-    category: "Weight Management",
+      "<p>AfterSlim Night Support is a nighttime recovery formula designed to address the cosmetic and sleep-related side effects of GLP-1 medications. While you sleep, this formula works to support hair strength, skin elasticity, nail health, and restful sleep.</p><p>Featuring Collagen Peptides for skin and joint support, Biotin and Keratin Complex for hair and nails, Magnesium Glycinate and L-Theanine for deep relaxation, plus Vitamin D3, K2, Zinc, and Selenium for comprehensive nighttime restoration. Take 2 capsules 30 minutes before bed.</p>",
+    category: "night",
     product_type: "single",
-    price_cents: 3999,
-    compare_at_price_cents: null,
-    subscription_price_cents: 3399,
+    price_cents: PRODUCTS["night-support"].price,
+    compare_at_price_cents: PRODUCTS["night-support"].compareAtPrice,
+    subscription_price_cents: PRODUCTS["night-support"].subscriptionPrice,
     subscription_interval: "month",
-    sku: "AS-CLNS-30",
+    sku: "AS-NIGHT-60",
     barcode: null,
-    weight_oz: 2.8,
-    stock_quantity: 200,
-    low_stock_threshold: 25,
+    weight_oz: 3.4,
+    stock_quantity: 500,
+    low_stock_threshold: 50,
     is_active: true,
-    is_featured: false,
+    is_featured: true,
     sort_order: 2,
     supplement_facts: {
-      serving_size: "2 capsules",
-      servings_per_container: 15,
-      ingredients: [
-        { name: "Milk Thistle Extract (80% Silymarin)", amount: "250 mg", daily_value: "" },
-        { name: "Dandelion Root Extract", amount: "200 mg", daily_value: "" },
-        { name: "Artichoke Leaf Extract", amount: "150 mg", daily_value: "" },
-        { name: "Turmeric Extract (95% Curcuminoids)", amount: "100 mg", daily_value: "" },
-        { name: "Probiotic Blend (5 Billion CFU)", amount: "100 mg", daily_value: "" },
-        { name: "Ginger Root Extract", amount: "50 mg", daily_value: "" },
-      ],
-      other_ingredients:
-        "Vegetable cellulose (capsule), rice flour, silicon dioxide.",
-      allergen_warning:
-        "Manufactured in a facility that also processes milk, soy, and tree nuts.",
+      serving_size: PRODUCTS["night-support"].supplementFacts.servingSize,
+      servings_per_container: PRODUCTS["night-support"].supplementFacts.servings,
+      ingredients: PRODUCTS["night-support"].supplementFacts.ingredients.map((i) => ({
+        name: i.name,
+        amount: i.amount,
+        daily_value: i.dailyValue ?? "",
+      })),
+      other_ingredients: PRODUCTS["night-support"].supplementFacts.otherIngredients,
     },
-    meta_title: "AfterSlim Cleanse - Gentle Detox Support",
+    meta_title: "AfterSlim Night Support - Nighttime GLP-1 Recovery Formula",
     meta_description:
-      "Support your digestive wellness with AfterSlim Cleanse. A gentle 15-day detox formula with milk thistle, probiotics, and turmeric.",
+      "Nighttime recovery for GLP-1 users. Supports hair, skin, sleep, and nail health. Collagen, Biotin, Magnesium. 60 capsules.",
     images: [],
-    tags: ["weight-management", "detox", "cleanse"],
+    tags: ["night-support", "hair", "skin", "sleep", "glp-1"],
     stripe_product_id: null,
     stripe_price_id: null,
     stripe_subscription_price_id: null,
-    created_at: "2025-01-02T00:00:00Z",
-    updated_at: "2025-01-02T00:00:00Z",
+    created_at: "2025-01-01T00:00:00Z",
+    updated_at: "2025-01-01T00:00:00Z",
   },
   {
-    id: "prod-3",
-    slug: "afterslim-probiotics-plus",
-    name: "AfterSlim Probiotics+",
-    short_description:
-      "Advanced 50 billion CFU probiotic with 16 strains and prebiotic fiber for optimal gut health and immune support.",
+    id: "prod-bundle",
+    slug: "complete-bundle",
+    name: PRODUCTS["complete-bundle"].name,
+    short_description: PRODUCTS["complete-bundle"].shortDescription,
     description:
-      "<p>AfterSlim Probiotics+ delivers 50 billion CFU of beneficial bacteria across 16 carefully selected strains. Each strain is chosen for its specific benefit to digestive health, immune function, and overall wellness.</p><p>Our delayed-release capsule technology ensures the probiotics survive stomach acid and reach your intestines alive. Enhanced with prebiotic fiber (FOS) to nourish the good bacteria already in your gut.</p>",
-    category: "Supplements",
-    product_type: "single",
-    price_cents: 3499,
-    compare_at_price_cents: 4199,
-    subscription_price_cents: 2974,
+      "<p>The AfterSlim Complete Bundle combines our Day Support and Night Support formulas for comprehensive 24/7 GLP-1 companion nutrition. This is the most popular choice for people who want full coverage against all common GLP-1 side effects.</p><p>During the day, restore energy, soothe digestive discomfort, and maintain healthy satiety. At night, support hair and nail strength, skin elasticity, and restful sleep. Save 15% compared to buying each formula individually, plus enjoy free shipping on every order.</p>",
+    category: "bundle",
+    product_type: "kit",
+    price_cents: PRODUCTS["complete-bundle"].price,
+    compare_at_price_cents: PRODUCTS["complete-bundle"].compareAtPrice,
+    subscription_price_cents: PRODUCTS["complete-bundle"].subscriptionPrice,
     subscription_interval: "month",
-    sku: "AS-PROB-60",
+    sku: "AS-BUNDLE-120",
     barcode: null,
-    weight_oz: 2.5,
+    weight_oz: 6.6,
     stock_quantity: 300,
     low_stock_threshold: 30,
     is_active: true,
     is_featured: true,
-    sort_order: 3,
+    sort_order: 0, // Bundle shows first
     supplement_facts: {
-      serving_size: "1 capsule",
-      servings_per_container: 60,
-      ingredients: [
-        { name: "Probiotic Blend (16 Strains)", amount: "50 Billion CFU", daily_value: "" },
-        { name: "Prebiotic Fiber (FOS)", amount: "200 mg", daily_value: "" },
-        { name: "Lactobacillus acidophilus", amount: "12.5 Billion CFU", daily_value: "" },
-        { name: "Bifidobacterium lactis", amount: "10 Billion CFU", daily_value: "" },
-        { name: "Lactobacillus rhamnosus", amount: "7.5 Billion CFU", daily_value: "" },
-      ],
-      other_ingredients:
-        "Delayed-release vegetable capsule (HPMC, gellan gum), rice flour, silicon dioxide.",
+      serving_size: PRODUCTS["complete-bundle"].supplementFacts.servingSize,
+      servings_per_container: PRODUCTS["complete-bundle"].supplementFacts.servings,
+      ingredients: PRODUCTS["complete-bundle"].supplementFacts.ingredients.map((i) => ({
+        name: i.name,
+        amount: i.amount,
+        daily_value: i.dailyValue ?? "",
+      })),
     },
-    meta_title: "AfterSlim Probiotics+ - 50 Billion CFU Probiotic",
+    meta_title: "AfterSlim Complete Bundle - 24/7 GLP-1 Companion System",
     meta_description:
-      "Support gut health with 50 billion CFU and 16 probiotic strains. Delayed-release capsule with prebiotic fiber for optimal digestive wellness.",
+      "Day + Night GLP-1 companion nutrition. Save 15%. Addresses energy, gut health, hair, skin, sleep, and more. Free shipping.",
     images: [],
-    tags: ["supplements", "probiotics", "gut-health", "best-seller"],
+    tags: ["bundle", "complete", "day-night", "glp-1", "best-seller"],
     stripe_product_id: null,
     stripe_price_id: null,
     stripe_subscription_price_id: null,
-    created_at: "2025-01-03T00:00:00Z",
-    updated_at: "2025-01-03T00:00:00Z",
-  },
-  {
-    id: "prod-4",
-    slug: "afterslim-omega-3-ultra",
-    name: "AfterSlim Omega-3 Ultra",
-    short_description:
-      "Triple-strength fish oil with 2400 mg EPA/DHA per serving for heart, brain, and joint support.",
-    description:
-      "<p>AfterSlim Omega-3 Ultra delivers a potent 2400 mg of combined EPA and DHA per serving from sustainably sourced wild-caught fish. Our molecular distillation process ensures pharmaceutical-grade purity free from heavy metals and contaminants.</p><p>Each softgel features a natural lemon coating to eliminate fishy aftertaste. Supports cardiovascular health, cognitive function, and joint comfort.</p>",
-    category: "Supplements",
-    product_type: "single",
-    price_cents: 2999,
-    compare_at_price_cents: null,
-    subscription_price_cents: null,
-    subscription_interval: null,
-    sku: "AS-OMG3-90",
-    barcode: null,
-    weight_oz: 5.6,
-    stock_quantity: 180,
-    low_stock_threshold: 20,
-    is_active: true,
-    is_featured: false,
-    sort_order: 4,
-    supplement_facts: null,
-    meta_title: "AfterSlim Omega-3 Ultra - Triple Strength Fish Oil",
-    meta_description:
-      "Triple-strength fish oil with 2400 mg EPA/DHA. Sustainably sourced, molecularly distilled for purity. Supports heart, brain, and joints.",
-    images: [],
-    tags: ["supplements", "omega-3", "heart-health"],
-    stripe_product_id: null,
-    stripe_price_id: null,
-    stripe_subscription_price_id: null,
-    created_at: "2025-01-04T00:00:00Z",
-    updated_at: "2025-01-04T00:00:00Z",
-  },
-  {
-    id: "prod-5",
-    slug: "afterslim-vitamin-d3-k2",
-    name: "AfterSlim Vitamin D3+K2",
-    short_description:
-      "5000 IU Vitamin D3 with K2 (MK-7) for optimal calcium absorption, bone strength, and immune support.",
-    description:
-      "<p>AfterSlim Vitamin D3+K2 combines 5000 IU of Vitamin D3 (cholecalciferol) with 100 mcg of Vitamin K2 (as MK-7) for synergistic bone and immune support. Vitamin K2 directs calcium to your bones where it belongs, rather than to your arteries.</p><p>Our formula uses organic coconut oil as a carrier for enhanced fat-soluble vitamin absorption. One small softgel daily is all you need.</p>",
-    category: "Supplements",
-    product_type: "single",
-    price_cents: 2499,
-    compare_at_price_cents: 2999,
-    subscription_price_cents: 2124,
-    subscription_interval: "month",
-    sku: "AS-D3K2-120",
-    barcode: null,
-    weight_oz: 1.8,
-    stock_quantity: 250,
-    low_stock_threshold: 30,
-    is_active: true,
-    is_featured: false,
-    sort_order: 5,
-    supplement_facts: null,
-    meta_title: "AfterSlim Vitamin D3+K2 - Bone & Immune Support",
-    meta_description:
-      "5000 IU Vitamin D3 with K2 (MK-7) for optimal calcium absorption. Supports bone strength, immune health, and cardiovascular wellness.",
-    images: [],
-    tags: ["supplements", "vitamins", "bone-health"],
-    stripe_product_id: null,
-    stripe_price_id: null,
-    stripe_subscription_price_id: null,
-    created_at: "2025-01-05T00:00:00Z",
-    updated_at: "2025-01-05T00:00:00Z",
-  },
-  {
-    id: "prod-6",
-    slug: "afterslim-collagen-peptides",
-    name: "AfterSlim Collagen Peptides",
-    short_description:
-      "Hydrolyzed multi-collagen peptides (Types I, II, III, V, X) for radiant skin, strong joints, and healthy hair.",
-    description:
-      "<p>AfterSlim Collagen Peptides provides 10g of hydrolyzed multi-collagen per serving from five collagen types (I, II, III, V, and X). Our advanced hydrolysis process breaks collagen into small peptides for rapid absorption and bioavailability.</p><p>Sourced from grass-fed, pasture-raised bovine, wild-caught fish, and cage-free chicken. Unflavored and dissolves easily in coffee, smoothies, or water. Supports skin elasticity, joint comfort, hair strength, and nail growth.</p>",
-    category: "Supplements",
-    product_type: "single",
-    price_cents: 4499,
-    compare_at_price_cents: 5399,
-    subscription_price_cents: 3824,
-    subscription_interval: "month",
-    sku: "AS-COLL-30",
-    barcode: null,
-    weight_oz: 10.6,
-    stock_quantity: 120,
-    low_stock_threshold: 15,
-    is_active: true,
-    is_featured: true,
-    sort_order: 6,
-    supplement_facts: null,
-    meta_title: "AfterSlim Collagen Peptides - Multi-Collagen Protein",
-    meta_description:
-      "Hydrolyzed multi-collagen peptides with Types I, II, III, V, X. Supports radiant skin, strong joints, and healthy hair and nails.",
-    images: [],
-    tags: ["supplements", "collagen", "skin-health", "best-seller"],
-    stripe_product_id: null,
-    stripe_price_id: null,
-    stripe_subscription_price_id: null,
-    created_at: "2025-01-06T00:00:00Z",
-    updated_at: "2025-01-06T00:00:00Z",
-  },
-  {
-    id: "prod-7",
-    slug: "afterslim-sleep-formula",
-    name: "AfterSlim Sleep Formula",
-    short_description:
-      "Natural sleep support with melatonin, magnesium glycinate, L-theanine, and ashwagandha for restful recovery.",
-    description:
-      "<p>AfterSlim Sleep Formula combines the most effective natural sleep ingredients into one convenient capsule. Melatonin helps regulate your circadian rhythm, while magnesium glycinate relaxes muscles and calms the nervous system.</p><p>L-theanine promotes alpha brain waves for calm focus before bed, and ashwagandha (KSM-66) helps reduce occasional stress. Wake up refreshed without grogginess. Non-habit-forming formula you can trust.</p>",
-    category: "Energy",
-    product_type: "single",
-    price_cents: 3299,
-    compare_at_price_cents: null,
-    subscription_price_cents: 2804,
-    subscription_interval: "month",
-    sku: "AS-SLEP-60",
-    barcode: null,
-    weight_oz: 2.4,
-    stock_quantity: 175,
-    low_stock_threshold: 20,
-    is_active: true,
-    is_featured: false,
-    sort_order: 7,
-    supplement_facts: null,
-    meta_title: "AfterSlim Sleep Formula - Natural Sleep Support",
-    meta_description:
-      "Fall asleep faster and wake refreshed with our natural sleep formula. Melatonin, magnesium, L-theanine, and ashwagandha. Non-habit-forming.",
-    images: [],
-    tags: ["energy", "sleep", "recovery"],
-    stripe_product_id: null,
-    stripe_price_id: null,
-    stripe_subscription_price_id: null,
-    created_at: "2025-01-07T00:00:00Z",
-    updated_at: "2025-01-07T00:00:00Z",
-  },
-  {
-    id: "prod-8",
-    slug: "afterslim-immunity-shield",
-    name: "AfterSlim Immunity Shield",
-    short_description:
-      "Comprehensive immune support with Vitamin C, zinc, elderberry, and echinacea to keep your defenses strong.",
-    description:
-      "<p>AfterSlim Immunity Shield is your daily defense against seasonal challenges. This comprehensive formula combines Vitamin C (1000 mg), zinc bisglycinate, elderberry extract, and echinacea to support a robust immune response.</p><p>Enhanced with quercetin and selenium for powerful antioxidant protection. Perfect for daily use or increased dosing during times when extra immune support is needed.</p>",
-    category: "Supplements",
-    product_type: "single",
-    price_cents: 2799,
-    compare_at_price_cents: 3359,
-    subscription_price_cents: null,
-    subscription_interval: null,
-    sku: "AS-IMMU-90",
-    barcode: null,
-    weight_oz: 3.0,
-    stock_quantity: 220,
-    low_stock_threshold: 25,
-    is_active: true,
-    is_featured: false,
-    sort_order: 8,
-    supplement_facts: null,
-    meta_title: "AfterSlim Immunity Shield - Immune Support Complex",
-    meta_description:
-      "Strengthen your immune defenses with Vitamin C, zinc, elderberry, and echinacea. Comprehensive daily immune support formula.",
-    images: [],
-    tags: ["supplements", "immune-support", "vitamins"],
-    stripe_product_id: null,
-    stripe_price_id: null,
-    stripe_subscription_price_id: null,
-    created_at: "2025-01-08T00:00:00Z",
-    updated_at: "2025-01-08T00:00:00Z",
+    created_at: "2025-01-01T00:00:00Z",
+    updated_at: "2025-01-01T00:00:00Z",
   },
 ];
 
@@ -355,20 +158,14 @@ const PLACEHOLDER_PRODUCTS: Product[] = [
 // ---------------------------------------------------------------------------
 
 export default async function ShopPage() {
-  // Fetch products and categories from Supabase
-  const [products, dbCategories] = await Promise.all([
-    getProducts(),
-    getProductCategories(),
-  ]);
+  // Fetch products from Supabase
+  const products = await getProducts();
 
   // Fall back to placeholder data if Supabase returns nothing
   const finalProducts = products.length > 0 ? products : PLACEHOLDER_PRODUCTS;
 
-  // Build categories list: "All" + distinct categories from DB (or fallback)
-  const categories =
-    dbCategories.length > 0
-      ? ["All", ...dbCategories]
-      : ["All", "Supplements", "Weight Management", "Energy"];
+  // Use our predefined shop categories (All, Day, Night, Bundle)
+  const categories = [...SHOP_CATEGORIES];
 
   return (
     <section className="py-8 sm:py-12">
@@ -379,10 +176,10 @@ export default async function ShopPage() {
         {/* Page header */}
         <div className="mt-4">
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Shop All Products
+            GLP-1 Companion Supplements
           </h1>
           <p className="mt-2 text-lg text-muted-foreground">
-            Premium supplements backed by science, crafted for results.
+            Physician-formulated Day &amp; Night nutrition designed for people on Ozempic, Mounjaro, and Wegovy.
           </p>
         </div>
 

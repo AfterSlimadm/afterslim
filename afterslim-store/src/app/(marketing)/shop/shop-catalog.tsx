@@ -48,9 +48,11 @@ export function ShopCatalog({ products, categories }: ShopCatalogProps) {
   const filteredProducts = useMemo(() => {
     let result = products.filter((p) => p.is_active);
 
-    // Category filter
+    // Category filter (case-insensitive match)
     if (activeCategory !== "All") {
-      result = result.filter((p) => p.category === activeCategory);
+      result = result.filter(
+        (p) => p.category.toLowerCase() === activeCategory.toLowerCase()
+      );
     }
 
     // Sort

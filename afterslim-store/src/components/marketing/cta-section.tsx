@@ -24,12 +24,12 @@ export function CTASection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Ready to Start Your Transformation?
+            Ready to Thrive on Your GLP-1?
           </h2>
           <p className="mt-4 text-lg text-white/80">
-            Join thousands of satisfied customers who have transformed their
-            health with AfterSlim. Start your journey today with our
-            science-backed formulas.
+            Join thousands who support their bodies with AfterSlim Day &amp;
+            Night. Comprehensive nutrition designed for your weight loss
+            medication journey.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Button
@@ -38,7 +38,7 @@ export function CTASection() {
               asChild
             >
               <Link href="/shop">
-                Shop Now
+                Get the Bundle — Save 15%
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
