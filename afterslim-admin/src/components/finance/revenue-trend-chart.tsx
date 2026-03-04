@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, createSeededRandom } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -22,6 +22,9 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 function generateRevenueTrendData() {
   const data: { date: string; revenue: number }[] = [];
   const today = new Date();
+  // Use a seed based on today's date so server and client produce the same data
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  const random = createSeededRandom(seed + 7); // offset from dashboard chart seed
 
   for (let i = 29; i >= 0; i--) {
     const date = new Date(today);
@@ -32,7 +35,7 @@ function generateRevenueTrendData() {
     const dayOfWeek = date.getDay();
     // Weekends have slightly higher sales
     const weekendBoost = dayOfWeek === 0 || dayOfWeek === 6 ? 250 : 0;
-    const noise = (Math.random() - 0.5) * 400;
+    const noise = (random() - 0.5) * 400;
     const revenue = Math.max(300, Math.round(baseRevenue + weekendBoost + noise));
 
     data.push({

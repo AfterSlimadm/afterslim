@@ -14,7 +14,7 @@ export default async function KanbanPage() {
       getKanbanCards(),
     ]);
 
-    columns = rawColumns as KanbanColumn[];
+    columns = rawColumns;
     cards = rawCards as KanbanCard[];
   } catch (error) {
     console.error("[KanbanPage] Failed to fetch kanban data:", error);

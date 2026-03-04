@@ -10,11 +10,31 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Safely coerce a value to a finite number, defaulting to 0 for
+ * null, undefined, NaN, or Infinity.
+ */
+export function safeNumber(value: unknown): number {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/**
+ * Format a number with US locale thousands separators (e.g. 1269 -> "1,269").
+ * Uses Intl.NumberFormat for reliable SSR/client consistency.
+ */
+export function formatNumber(value: number): string {
+  const safe = Number.isFinite(value) ? value : 0;
+  return new Intl.NumberFormat("en-US").format(safe);
+}
+
+/**
  * Format a number as USD currency.
  * Accepts dollars (e.g. 49.99) or optionally cents with fromCents flag.
+ * Guards against NaN/Infinity by falling back to 0.
  */
 export function formatCurrency(value: number, fromCents = false): string {
-  const dollars = fromCents ? value / 100 : value;
+  const safeValue = Number.isFinite(value) ? value : 0;
+  const dollars = fromCents ? safeValue / 100 : safeValue;
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -139,4 +159,19 @@ export function getInitials(name: string): string {
  */
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Create a seeded pseudo-random number generator (mulberry32).
+ * Returns a function that produces deterministic values in [0, 1)
+ * so that server and client render identical "random" data.
+ */
+export function createSeededRandom(seed: number) {
+  let s = seed | 0;
+  return () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }

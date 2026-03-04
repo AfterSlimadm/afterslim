@@ -16,6 +16,8 @@ import {
   TrendingUp,
   Calendar,
   Zap,
+  User,
+  Tag,
 } from "lucide-react";
 import {
   Card,
@@ -33,6 +35,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 import { IdeaCard } from "@/components/ideas/idea-card";
 import { IdeaFilters, type ViewMode, type SortOption } from "@/components/ideas/idea-filters";
 import { NewIdeaDialog } from "@/components/ideas/new-idea-dialog";
@@ -100,6 +110,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
 
   // Filtered & sorted ideas
   const filteredIdeas = useMemo(() => {
@@ -254,7 +265,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
       {viewMode === "grid" && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredIdeas.map((idea) => (
-            <IdeaCard key={idea.id} idea={idea} />
+            <IdeaCard key={idea.id} idea={idea} onClick={setSelectedIdea} />
           ))}
           {filteredIdeas.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
@@ -295,6 +306,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
                     <TableRow
                       key={idea.id}
                       className="cursor-pointer hover:bg-muted/50"
+                      onClick={() => setSelectedIdea(idea)}
                     >
                       <TableCell>
                         <div>
@@ -386,6 +398,152 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
           </CardContent>
         </Card>
       )}
+
+      {/* Idea Detail Sheet */}
+      <Sheet
+        open={selectedIdea !== null}
+        onOpenChange={(open) => {
+          if (!open) setSelectedIdea(null);
+        }}
+      >
+        <SheetContent side="right" className="sm:max-w-lg overflow-y-auto">
+          {selectedIdea && (() => {
+            const statusConfig = IDEA_STATUS_CONFIG[selectedIdea.status];
+            const priorityConfig = PRIORITY_CONFIG[selectedIdea.priority];
+            return (
+              <>
+                <SheetHeader>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="secondary"
+                      className={cn("text-[10px] font-medium", statusConfig.color)}
+                    >
+                      {statusConfig.label}
+                    </Badge>
+                    <Badge
+                      variant="secondary"
+                      className={cn("text-[10px] font-medium gap-1", priorityConfig.color)}
+                    >
+                      {PRIORITY_ICONS[selectedIdea.priority]}
+                      {priorityConfig.label}
+                    </Badge>
+                  </div>
+                  <SheetTitle className="text-lg">
+                    {selectedIdea.title}
+                  </SheetTitle>
+                  <SheetDescription>
+                    {selectedIdea.description}
+                  </SheetDescription>
+                </SheetHeader>
+
+                <Separator />
+
+                <div className="space-y-4 px-4">
+                  {/* Category */}
+                  <div className="flex items-center gap-2">
+                    <Tag className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Category:</span>
+                    <Badge variant="outline" className="text-xs">
+                      {selectedIdea.category}
+                    </Badge>
+                  </div>
+
+                  {/* Assignee */}
+                  {selectedIdea.assignee && (
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">Assignee:</span>
+                      <span className="text-sm font-medium">{selectedIdea.assignee}</span>
+                    </div>
+                  )}
+
+                  {/* Financial Estimates */}
+                  {(selectedIdea.estimated_cost !== null || selectedIdea.estimated_revenue !== null) && (
+                    <div className="rounded-lg border p-3 space-y-2">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        Financial Estimates
+                      </p>
+                      <div className="grid grid-cols-2 gap-3">
+                        {selectedIdea.estimated_cost !== null && (
+                          <div className="flex items-center gap-1.5">
+                            <DollarSign className="h-4 w-4 text-red-500" />
+                            <div>
+                              <p className="text-[10px] text-muted-foreground">Cost</p>
+                              <p className="text-sm font-semibold">{formatCurrency(selectedIdea.estimated_cost)}</p>
+                            </div>
+                          </div>
+                        )}
+                        {selectedIdea.estimated_revenue !== null && (
+                          <div className="flex items-center gap-1.5">
+                            <TrendingUp className="h-4 w-4 text-emerald-500" />
+                            <div>
+                              <p className="text-[10px] text-muted-foreground">Revenue</p>
+                              <p className="text-sm font-semibold">{formatCurrency(selectedIdea.estimated_revenue)}</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Score */}
+                  {selectedIdea.score !== null && (
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">Score:</span>
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold",
+                          selectedIdea.score >= 80
+                            ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+                            : selectedIdea.score >= 60
+                            ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                            : selectedIdea.score >= 40
+                            ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400"
+                            : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                        )}
+                      >
+                        <Zap className="h-3 w-3" />
+                        {selectedIdea.score}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Tags */}
+                  {selectedIdea.tags.length > 0 && (
+                    <div className="space-y-1.5">
+                      <p className="text-sm text-muted-foreground">Tags</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedIdea.tags.map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Notes */}
+                  {selectedIdea.notes && (
+                    <div className="space-y-1.5">
+                      <p className="text-sm text-muted-foreground">Notes</p>
+                      <p className="text-sm whitespace-pre-wrap rounded-lg border p-3 bg-muted/30">
+                        {selectedIdea.notes}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Date */}
+                  <div className="flex items-center gap-2 pt-2 text-xs text-muted-foreground">
+                    <Calendar className="h-3.5 w-3.5" />
+                    Created {formatDate(selectedIdea.created_at)}
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

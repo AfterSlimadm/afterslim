@@ -73,7 +73,7 @@ export default function TasksContent({ tasks }: TasksContentProps) {
                 // Derive a description from input JSON if available
                 const description = task.input
                   ? Object.values(task.input).join(" - ")
-                  : task.task_type ?? "—";
+                  : task.task_type ?? "-";
                 return (
                   <TableRow key={task.id}>
                     <TableCell className="pl-6 text-sm font-medium">
@@ -95,11 +95,11 @@ export default function TasksContent({ tasks }: TasksContentProps) {
                         {statusCfg.label}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">
+                    <TableCell className="text-xs text-muted-foreground" suppressHydrationWarning>
                       {formatDateTime(task.created_at)}
                     </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">
-                      {task.completed_at ? formatDateTime(task.completed_at) : "\u2014"}
+                    <TableCell className="text-xs text-muted-foreground" suppressHydrationWarning>
+                      {task.completed_at ? formatDateTime(task.completed_at) : "-"}
                     </TableCell>
                   </TableRow>
                 );

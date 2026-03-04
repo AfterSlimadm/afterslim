@@ -65,8 +65,8 @@ export interface FinancialGoalRow {
   id: string;
   name: string;
   metric: string;
-  target: number;
-  current: number;
+  target: number | null;
+  current: number | null;
   period: string;
   start_date: string | null;
   end_date: string | null;

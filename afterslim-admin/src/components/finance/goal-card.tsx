@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency, safeNumber } from "@/lib/utils";
 import type { FinancialGoal } from "@/lib/types";
 import {
   Card,
@@ -58,10 +58,11 @@ interface GoalCardProps {
 }
 
 export function GoalCard({ goal, className }: GoalCardProps) {
-  const percentage = Math.min(
-    100,
-    Math.round((goal.current_amount / goal.target_amount) * 100)
-  );
+  const currentAmount = safeNumber(goal.current_amount);
+  const targetAmount = safeNumber(goal.target_amount);
+  const percentage = targetAmount > 0
+    ? Math.min(100, Math.round((currentAmount / targetAmount) * 100))
+    : 0;
   const daysRemaining = getDaysRemaining(goal.end_date);
   const totalDays = getTotalDays(goal.start_date, goal.end_date);
   const status = getGoalStatus(percentage, daysRemaining, totalDays);
@@ -106,10 +107,10 @@ export function GoalCard({ goal, className }: GoalCardProps) {
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">
-              {formatCurrency(goal.current_amount)}
+              {formatCurrency(currentAmount)}
             </span>
             <span className="font-medium">
-              {formatCurrency(goal.target_amount)}
+              {formatCurrency(targetAmount)}
             </span>
           </div>
         </div>
@@ -117,9 +118,9 @@ export function GoalCard({ goal, className }: GoalCardProps) {
         {/* Footer info */}
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>
-            Remaining: {formatCurrency(Math.max(0, goal.target_amount - goal.current_amount))}
+            Remaining: {formatCurrency(Math.max(0, targetAmount - currentAmount))}
           </span>
-          <span>
+          <span suppressHydrationWarning>
             {daysRemaining} {daysRemaining === 1 ? "day" : "days"} left
           </span>
         </div>

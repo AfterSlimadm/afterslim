@@ -228,7 +228,7 @@ export default function AgentChat({ agent, recentMemories }: AgentChatProps) {
                         <Badge variant="outline" className="text-xs">
                           {memory.kind}
                         </Badge>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-muted-foreground" suppressHydrationWarning>
                           {new Date(memory.created_at).toLocaleDateString(
                             "en-US",
                             {
@@ -348,7 +348,7 @@ export default function AgentChat({ agent, recentMemories }: AgentChatProps) {
                         {msg.source}
                       </Badge>
                     )}
-                    <span className="text-[10px] text-muted-foreground">
+                    <span className="text-[10px] text-muted-foreground" suppressHydrationWarning>
                       {msg.timestamp.toLocaleTimeString("en-US", {
                         hour: "2-digit",
                         minute: "2-digit",

@@ -26,15 +26,18 @@ interface DashboardContentProps {
 /* ── Component ─────────────────────────────────────────────── */
 
 export default function DashboardContent({ stats }: DashboardContentProps) {
-  // Derive KPI values from real data, falling back to mock when empty
-  const hasRealData = stats && (stats.totalRevenue > 0 || stats.ordersCount > 0);
+  // When stats were fetched successfully, always use real data (even if zero).
+  // Only fall back to mock when the fetch failed entirely (stats === null).
+  const hasRealData = stats != null;
 
   const revenue = hasRealData ? stats.totalRevenue : MOCK_KPI_DATA.revenue.value;
   const ordersCount = hasRealData ? stats.ordersCount : MOCK_KPI_DATA.orders.value;
   const avgOrder =
     hasRealData && stats.ordersCount > 0
       ? stats.totalRevenue / stats.ordersCount
-      : MOCK_KPI_DATA.avgOrder.value;
+      : hasRealData
+        ? 0
+        : MOCK_KPI_DATA.avgOrder.value;
   const lowStock = hasRealData ? stats.lowStockCount : MOCK_KPI_DATA.pending.value;
 
   // Trends are not available from the query (would need historical comparison),

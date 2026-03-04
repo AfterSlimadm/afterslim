@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, createSeededRandom } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -24,6 +24,9 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 function generateCashFlowData() {
   const data: { week: string; income: number; expense: number }[] = [];
   const today = new Date();
+  // Use a seed based on today's date so server and client produce the same data
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  const random = createSeededRandom(seed + 13); // offset from other chart seeds
 
   for (let i = 7; i >= 0; i--) {
     const weekStart = new Date(today);
@@ -36,10 +39,10 @@ function generateCashFlowData() {
 
     // ~$7,500/week revenue with variance, expenses ~40-55% of revenue
     const baseIncome = 7500 + Math.sin(i * 0.5) * 1500;
-    const incomeNoise = (Math.random() - 0.5) * 2000;
+    const incomeNoise = (random() - 0.5) * 2000;
     const income = Math.max(4000, Math.round(baseIncome + incomeNoise));
 
-    const expenseRatio = 0.4 + Math.random() * 0.15;
+    const expenseRatio = 0.4 + random() * 0.15;
     const expense = Math.round(income * expenseRatio);
 
     data.push({ week: weekLabel, income, expense });

@@ -106,7 +106,7 @@ export default function MessagesContent({ messages }: MessagesContentProps) {
                         {msg.classification}
                       </Badge>
                     )}
-                    <span className="ml-auto text-xs text-muted-foreground">
+                    <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>
                       {new Date(msg.created_at).toLocaleString("en-US", {
                         month: "short",
                         day: "numeric",

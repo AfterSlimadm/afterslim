@@ -57,14 +57,8 @@ interface SalesRow {
 }
 
 const MOCK_SALES: SalesRow[] = [
-  { product: "AfterSlim Burn", sku: "AS-BURN-60", unitsSold: 87, revenue: 434913, costOfGoods: 108750, profit: 326163 },
-  { product: "AfterSlim Cleanse", sku: "AS-CLNS-30", unitsSold: 63, revenue: 251937, costOfGoods: 61425, profit: 190512 },
-  { product: "AfterSlim Probiotics+", sku: "AS-PROB-60", unitsSold: 52, revenue: 181948, costOfGoods: 44200, profit: 137748 },
-  { product: "AfterSlim Collagen Peptides", sku: "AS-COLL-30", unitsSold: 41, revenue: 184459, costOfGoods: 57400, profit: 127059 },
-  { product: "AfterSlim Sleep Formula", sku: "AS-SLEEP-60", unitsSold: 38, revenue: 125362, costOfGoods: 30400, profit: 94962 },
-  { product: "AfterSlim Omega-3 Ultra", sku: "AS-OMG3-90", unitsSold: 35, revenue: 104965, costOfGoods: 25375, profit: 79590 },
-  { product: "AfterSlim Immunity Shield", sku: "AS-IMMUN-90", unitsSold: 29, revenue: 81171, costOfGoods: 19575, profit: 61596 },
-  { product: "AfterSlim Vitamin D3+K2", sku: "AS-VDK2-60", unitsSold: 22, revenue: 54978, costOfGoods: 12100, profit: 42878 },
+  { product: "AfterSlim Biotin", sku: "AS-BIOT-60", unitsSold: 156, revenue: 389844, costOfGoods: 101400, profit: 288444 },
+  { product: "AfterSlim Nootropic", sku: "AS-NOOT-60", unitsSold: 111, revenue: 388389, costOfGoods: 94350, profit: 294039 },
 ];
 
 const AVAILABLE_REPORTS = [
@@ -88,7 +82,10 @@ export default function ReportsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Reports</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold tracking-tight">Reports</h1>
+            <Badge variant="secondary" className="text-xs">Sample Data</Badge>
+          </div>
           <p className="text-muted-foreground">
             Generate and view business reports, sales analytics, and performance summaries.
           </p>

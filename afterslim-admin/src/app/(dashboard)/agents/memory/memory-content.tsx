@@ -93,7 +93,7 @@ export default function MemoryContent({ memories }: MemoryContentProps) {
                       >
                         {kindCfg.label}
                       </Badge>
-                      <span className="ml-auto text-xs text-muted-foreground">
+                      <span className="ml-auto text-xs text-muted-foreground" suppressHydrationWarning>
                         {new Date(mem.created_at).toLocaleString("en-US", {
                           month: "short",
                           day: "numeric",
