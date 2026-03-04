@@ -27,7 +27,7 @@ export function Footer() {
     <footer className="border-t bg-muted/30">
       {/* Main footer grid */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-7">
           {/* Brand column */}
           <div className="space-y-4 lg:col-span-2">
             <Logo size="lg" />
@@ -164,7 +164,7 @@ export function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div>
+          <div className="sm:col-span-2 lg:col-span-2">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground">
               Stay Updated
             </h3>

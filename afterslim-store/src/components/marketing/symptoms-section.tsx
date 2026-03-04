@@ -40,7 +40,7 @@ const SYMPTOMS = [
 
 export function SymptomsSection() {
   return (
-    <section id="symptoms" className="py-20 sm:py-24">
+    <section id="symptoms" className="py-12 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <m.div
@@ -63,42 +63,39 @@ export function SymptomsSection() {
           </p>
         </m.div>
 
-        {/* Symptoms grid */}
-        <div className="mt-16 grid gap-8 sm:grid-cols-2">
+        {/* Symptoms grid — compact on mobile, full on desktop */}
+        <div className="mt-12 grid gap-3 sm:mt-16 sm:grid-cols-2 sm:gap-8">
           {SYMPTOMS.map((item, index) => (
             <m.div
               key={item.symptom}
-              className="group relative rounded-2xl border bg-card p-8 shadow-sm transition-shadow duration-300 hover:shadow-md"
+              className="group relative rounded-xl border bg-card p-4 shadow-sm transition-shadow duration-300 sm:rounded-2xl sm:p-8 sm:hover:shadow-md"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              {/* Icon */}
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <item.icon className="size-6" />
-              </div>
-
-              {/* Symptom label */}
-              <p className="text-sm font-semibold uppercase tracking-wide text-destructive/80">
-                {item.symptom}
-              </p>
-
-              {/* Solution */}
-              <h3 className="mt-2 text-xl font-bold text-foreground">
-                {item.solution}
-              </h3>
-
-              {/* Description */}
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {item.description}
-              </p>
-
-              {/* Product tag */}
-              <div className="mt-5">
-                <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                  {item.product}
-                </span>
+              {/* Mobile: horizontal compact layout */}
+              <div className="flex items-start gap-3 sm:block">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:mb-5 sm:h-12 sm:w-12 sm:rounded-xl">
+                  <item.icon className="size-5 sm:size-6" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-destructive/80 sm:text-sm">
+                    {item.symptom}
+                  </p>
+                  <h3 className="mt-1 text-base font-bold text-foreground sm:mt-2 sm:text-xl">
+                    {item.solution}
+                  </h3>
+                  {/* Description — hidden on mobile */}
+                  <p className="mt-3 hidden text-sm leading-relaxed text-muted-foreground sm:block">
+                    {item.description}
+                  </p>
+                  <div className="mt-2 sm:mt-5">
+                    <span className="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary sm:px-3 sm:py-1 sm:text-xs">
+                      {item.product}
+                    </span>
+                  </div>
+                </div>
               </div>
             </m.div>
           ))}
