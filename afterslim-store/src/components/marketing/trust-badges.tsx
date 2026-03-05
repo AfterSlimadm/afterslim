@@ -28,7 +28,7 @@ export function TrustBadges() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-brand-accent-subtle)] text-[var(--color-brand-accent)]">
                   <Icon className="size-7" />
                 </div>
                 <div>

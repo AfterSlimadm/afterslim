@@ -121,7 +121,7 @@ function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md
           className={cn(
             sizeClasses[size],
             star <= rating
-              ? "fill-[var(--color-brand-secondary)] text-[var(--color-brand-secondary)]"
+              ? "fill-[var(--color-brand-accent)] text-[var(--color-brand-accent)]"
               : "fill-none text-muted-foreground/30"
           )}
         />
@@ -140,7 +140,7 @@ function RatingBar({ stars, count, total }: { stars: number; count: number; tota
       </span>
       <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-[var(--color-brand-secondary)] transition-all duration-500"
+          className="h-full rounded-full bg-[var(--color-brand-accent)] transition-all duration-500"
           style={{ width: `${percentage}%` }}
         />
       </div>

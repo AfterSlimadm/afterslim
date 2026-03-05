@@ -13,12 +13,12 @@ import { cn } from "@/lib/utils";
 const ANNOUNCEMENTS = [
   {
     id: "free-shipping",
-    text: "Free Shipping on Orders Over $99",
+    text: "Free Shipping on 3+ Bottles",
     Icon: Truck,
   },
   {
     id: "subscribe-save",
-    text: "Subscribe & Save 15% on Every Order",
+    text: "Subscribe & Save up to 30%",
     Icon: Percent,
   },
   {

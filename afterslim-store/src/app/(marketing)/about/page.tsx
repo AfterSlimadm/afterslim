@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   FlaskConical,
-  Sun,
+  Flame,
+  Zap,
   Moon,
+  Heart,
   ShieldCheck,
   Flag,
   TestTubeDiagonal,
@@ -23,11 +25,11 @@ import { Separator } from "@/components/ui/separator";
 export const metadata: Metadata = {
   title: "Our Science - The Research Behind AfterSlim",
   description:
-    "Discover the science behind AfterSlim's Day & Night supplement system. Physician formulated for GLP-1 medication users, backed by research, and manufactured in the USA.",
+    "Discover the science behind AfterSlim's Berberine-powered formula. 9 science-backed ingredients for metabolism, energy, sleep, and recovery. Physician formulated for GLP-1 medication users.",
   openGraph: {
     title: "Our Science | AfterSlim",
     description:
-      "Physician formulated Day & Night nutrition for GLP-1 medication users. cGMP certified, third-party tested, Made in USA.",
+      "Berberine-powered functional support for GLP-1 medication users. cGMP certified, third-party tested, Made in USA.",
   },
 };
 
@@ -58,29 +60,45 @@ const GLP1_CHALLENGES = [
   },
 ] as const;
 
-const DAY_NIGHT_APPROACH = [
+const FOUR_PILLARS = [
   {
-    icon: Sun,
-    title: "Day Support",
-    time: "Morning",
+    icon: Flame,
+    title: "Metabolism",
+    color: "bg-[var(--color-brand-accent-subtle)] text-[var(--color-brand-accent)]",
+    points: [
+      "Berberine HCl (1,200 mg) activates AMPK",
+      "Chromium Picolinate for blood sugar support",
+      "Alpha Lipoic Acid for cellular energy",
+    ],
+  },
+  {
+    icon: Zap,
+    title: "Energy",
     color: "bg-amber-100 text-amber-800",
     points: [
-      "B-vitamins & Iron for sustained energy",
-      "Ginger root & DigeZyme\u00AE for digestive comfort",
-      "Prebiotic fiber & probiotics for gut health",
-      "Chromium for healthy blood sugar support",
+      "Vitamin B12 (1,000 mcg) for sustained energy",
+      "Alpha Lipoic Acid enhances energy production",
+      "No crashes, no jitters",
     ],
   },
   {
     icon: Moon,
-    title: "Night Support",
-    time: "Evening",
+    title: "Sleep",
     color: "bg-indigo-100 text-indigo-800",
     points: [
-      "Collagen, biotin & keratin for hair and skin",
-      "Magnesium glycinate & L-theanine for restful sleep",
-      "Vitamin D3 & K2 for bone density",
-      "Zinc & selenium for cellular recovery",
+      "Magnesium Glycinate (200 mg) for deep relaxation",
+      "L-Theanine (200 mg) calms without drowsiness",
+      "Better recovery through restful sleep",
+    ],
+  },
+  {
+    icon: Heart,
+    title: "Recovery",
+    color: "bg-rose-100 text-rose-800",
+    points: [
+      "Vitamin D3 (2,000 IU) for immune function",
+      "Zinc (15 mg) for skin health and immunity",
+      "BioPerine for 2x absorption of all ingredients",
     ],
   },
 ] as const;
@@ -128,16 +146,16 @@ export default function AboutPage() {
   return (
     <>
       {/* ---- Hero ---- */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-20 sm:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[var(--color-brand-accent-subtle)] via-background to-muted/30 py-20 sm:py-28">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <Breadcrumbs items={[{ label: "Our Science" }]} />
           <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
             The Science Behind {SITE.name}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Physician formulated Day &amp; Night nutrition designed to address
-            the real challenges of GLP-1 weight loss therapy. No guesswork, no
-            proprietary blends. Just transparent, research-backed formulas.
+            9 science-backed ingredients in one formula. Berberine-powered
+            support designed to address the real challenges of GLP-1 weight
+            loss therapy. No guesswork, no proprietary blends.
           </p>
         </div>
       </section>
@@ -165,10 +183,11 @@ export default function AboutPage() {
             the very medication that's helping you reach your goals.
           </p>
           <p>
-            AfterSlim was built to bridge that gap. We don't replace your
+            AfterSlim was built to bridge that gap. Powered by Berberine HCl
+            and 8 other science-backed ingredients, our single formula covers
+            metabolism, energy, sleep, and recovery. We don't replace your
             medication or your meals. We fill in the nutritional blind spots that
-            GLP-1 therapy creates, so your body has what it needs to thrive
-            through every stage of your weight loss journey.
+            GLP-1 therapy creates.
           </p>
         </div>
 
@@ -176,7 +195,7 @@ export default function AboutPage() {
           {GLP1_CHALLENGES.map(({ icon: Icon, title, description }) => (
             <Card key={title} className="border-none bg-muted/50 shadow-sm">
               <CardContent className="flex gap-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-brand-accent-subtle)] text-[var(--color-brand-accent)]">
                   <Icon className="size-5" />
                 </div>
                 <div>
@@ -191,32 +210,27 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ---- Section 2: Our Approach — Day & Night ---- */}
+      {/* ---- Section 2: One Formula, Four Pillars ---- */}
       <section className="bg-muted/50 py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-3xl font-bold tracking-tight">
-            Our Approach: Day &amp; Night
+            One Formula. Four Pillars.
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-muted-foreground">
-            Your body has different nutritional needs at different times of day.
-            A single multivitamin can't account for that. Our circadian
-            supplement design delivers the right nutrients at the right time.
+            AfterSlim combines 9 clinically dosed ingredients to support the
+            four key areas affected by GLP-1 therapy. Take 4 capsules daily
+            with a meal.
           </p>
 
-          <div className="mt-10 grid gap-8 md:grid-cols-2">
-            {DAY_NIGHT_APPROACH.map(({ icon: Icon, title, time, color, points }) => (
+          <div className="mt-10 grid gap-8 sm:grid-cols-2">
+            {FOUR_PILLARS.map(({ icon: Icon, title, color, points }) => (
               <Card key={title} className="border-none bg-card shadow-sm">
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className={`flex size-10 items-center justify-center rounded-lg ${color}`}>
                       <Icon className="size-5" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold">{title}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        Take with your {time.toLowerCase()} meal
-                      </p>
-                    </div>
+                    <h3 className="text-lg font-semibold">{title}</h3>
                   </div>
                   <ul className="space-y-2">
                     {points.map((point) => (
@@ -224,7 +238,7 @@ export default function AboutPage() {
                         key={point}
                         className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
-                        <span className="mt-1.5 block size-1.5 shrink-0 rounded-full bg-primary" />
+                        <span className="mt-1.5 block size-1.5 shrink-0 rounded-full bg-[var(--color-brand-accent)]" />
                         {point}
                       </li>
                     ))}
@@ -249,7 +263,7 @@ export default function AboutPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {STANDARDS.map(({ icon: Icon, title, description }) => (
             <div key={title} className="flex gap-3">
-              <Icon className="mt-0.5 size-5 shrink-0 text-primary" />
+              <Icon className="mt-0.5 size-5 shrink-0 text-[var(--color-brand-accent)]" />
               <div>
                 <h3 className="font-semibold">{title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -265,7 +279,7 @@ export default function AboutPage() {
       <section id="transparency" className="bg-muted/50 py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <Eye className="size-7 text-primary" />
+            <Eye className="size-7 text-[var(--color-brand-accent)]" />
             <h2 className="text-3xl font-bold tracking-tight">Transparency</h2>
           </div>
           <Separator className="my-6" />
@@ -278,13 +292,13 @@ export default function AboutPage() {
             </p>
             <p>
               AfterSlim takes the opposite approach. Every ingredient in our
-              formulas is listed with its exact dose on both our website and
-              physical labels. We don't use proprietary blends. We don't hide
+              formula is listed with its exact dose on both our website and
+              physical label. We don't use proprietary blends. We don't hide
               behind "complexes" with undisclosed ratios. If it's in the
               capsule, you know exactly how much.
             </p>
             <p>
-              We publish our full Supplement Facts panels on every product page,
+              We publish our full Supplement Facts panel on our product page,
               and we encourage you to discuss our ingredient list with your
               healthcare provider. We believe informed customers are the best
               customers, and that starts with full disclosure.
@@ -300,15 +314,19 @@ export default function AboutPage() {
             Ready to Support Your GLP-1 Journey?
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Try the Complete Bundle. Day &amp; Night formulas working together
-            for comprehensive 24/7 nutrition. 60-day money-back guarantee.
+            One formula, 9 ingredients, complete support. 60-day money-back
+            guarantee.
           </p>
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <Button asChild size="lg">
-              <Link href="/shop/complete-bundle">Shop the Bundle</Link>
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full bg-[var(--color-brand-accent)] text-white hover:bg-[var(--color-brand-accent-light)]"
+            >
+              <Link href="/shop">Get Started</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="/shop">View All Products</Link>
+              <Link href="/faq">View FAQ</Link>
             </Button>
           </div>
         </div>

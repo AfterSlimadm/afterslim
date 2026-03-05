@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Package } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -33,18 +32,15 @@ export function MobileMenu() {
           </SheetDescription>
         </SheetHeader>
 
-        {/* Prominent Bundle CTA */}
+        {/* Get Started CTA */}
         <div className="px-4 pb-2">
-          <Button asChild className="w-full gap-2" size="lg">
-            <Link
-              href="/shop/complete-bundle"
-              onClick={() => setOpen(false)}
-            >
-              <Package className="size-4" />
-              Shop the Bundle
-              <span className="ml-auto rounded-full bg-primary-foreground/20 px-2 py-0.5 text-[10px] font-semibold leading-none">
-                SAVE 15%
-              </span>
+          <Button
+            asChild
+            className="w-full gap-2 rounded-full bg-[var(--color-brand-accent)] text-white hover:bg-[var(--color-brand-accent-light)]"
+            size="lg"
+          >
+            <Link href="/shop" onClick={() => setOpen(false)}>
+              Get Started
             </Link>
           </Button>
         </div>
@@ -52,9 +48,6 @@ export function MobileMenu() {
         <nav className="flex flex-1 flex-col gap-1 px-4">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
-            const isBundle = item.label === "Bundle";
-            // Skip Bundle from the list since it's already the CTA above
-            if (isBundle) return null;
             return (
               <Link
                 key={item.href}
@@ -63,7 +56,7 @@ export function MobileMenu() {
                 className={cn(
                   "flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors",
                   isActive
-                    ? "bg-primary/10 text-primary"
+                    ? "bg-[var(--color-brand-accent-subtle)] text-[var(--color-brand-accent)]"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground",
                 )}
               >

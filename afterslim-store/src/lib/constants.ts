@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------
-// AfterSlim -- Site-wide constants
+// AfterSlim -- Site-wide constants (One Product Store)
 // ---------------------------------------------------------------------------
 
 export const SITE = {
   name: "AfterSlim",
-  tagline: "Day & Night Nutrition for Your GLP-1 Journey",
+  tagline: "Functional Support for the Weight Loss Journey",
   description:
-    "Comprehensive Day & Night nutrition designed for people on GLP-1 weight loss medications. Physician formulated, science-backed supplements.",
+    "Berberine-powered supplement supporting metabolism, energy, sleep, and recovery for people on GLP-1 weight loss medications like Ozempic, Mounjaro, and Wegovy. 120 capsules per bottle.",
   url: process.env.NEXT_PUBLIC_APP_URL ?? "https://afterslim.com",
 } as const;
 
@@ -23,6 +23,10 @@ export const SOCIAL = {
   youtube: "https://youtube.com/@afterslim",
 } as const;
 
+// ---------------------------------------------------------------------------
+// Navigation
+// ---------------------------------------------------------------------------
+
 export type NavItem = {
   label: string;
   href: string;
@@ -30,25 +34,21 @@ export type NavItem = {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Shop", href: "/shop" },
-  { label: "Day Support", href: "/shop/day-support" },
-  { label: "Night Support", href: "/shop/night-support" },
-  { label: "Bundle", href: "/shop/complete-bundle" },
   { label: "Science", href: "/about" },
   { label: "Blog", href: "/blog" },
+  { label: "FAQ", href: "/faq" },
 ] as const;
 
 export const FOOTER_NAV = {
   shop: [
-    { label: "Day Support", href: "/shop/day-support" },
-    { label: "Night Support", href: "/shop/night-support" },
-    { label: "Complete Bundle", href: "/shop/complete-bundle" },
-    { label: "All Products", href: "/shop" },
+    { label: "AfterSlim", href: "/shop" },
+    { label: "Subscribe & Save", href: "/shop#subscribe" },
   ],
   learn: [
-    { label: "Our Science", href: "/about" },
+    { label: "The Science", href: "/about" },
     { label: "Blog", href: "/blog" },
     { label: "FAQ", href: "/faq" },
-    { label: "Ingredients", href: "/about#transparency" },
+    { label: "Ingredients", href: "/about#ingredients" },
   ],
   support: [
     { label: "Contact", href: "/contact" },
@@ -62,170 +62,216 @@ export const FOOTER_NAV = {
   ],
 } as const;
 
-/** Number of items shown per page on the shop grid */
-export const PRODUCTS_PER_PAGE = 12;
-
-/** Free shipping threshold in cents */
-export const FREE_SHIPPING_THRESHOLD_CENTS = 9900; // $99.00
-
-/** Default currency */
-export const CURRENCY = "USD" as const;
-
 // ---------------------------------------------------------------------------
-// Product Data
+// Product Data (One Product Store)
 // ---------------------------------------------------------------------------
 
-export type ProductCategory = "day" | "night" | "bundle";
+export type PackTier = "1-bottle" | "3-bottle" | "6-bottle";
 
-export interface ProductData {
+export interface PackOption {
+  tier: PackTier;
+  bottles: number;
+  label: string;
+  supplyDays: number;
+  /** Price per bottle in this pack (cents) */
+  pricePerBottleCents: number;
+  /** Total pack price (cents) */
+  totalPriceCents: number;
+  /** Strikethrough total (cents) */
+  compareAtTotalCents: number;
+  /** Subscription total price (cents) */
+  subscriptionPriceCents: number;
+  badge?: string;
+  /** Savings % vs 1-bottle price */
+  savingsPercent: number;
+  freeShipping: boolean;
+}
+
+export interface BenefitDetail {
+  /** Lucide icon name */
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface SingleProduct {
   slug: string;
   name: string;
   shortDescription: string;
-  price: number; // cents
-  compareAtPrice: number; // cents
-  subscriptionPrice: number; // cents
-  subscriptionInterval: "month" | "bimonth" | "quarter";
+  capsulesPerBottle: number;
+  mainIngredient: string;
   benefits: string[];
+  packOptions: PackOption[];
   supplementFacts: {
     servingSize: string;
     servings: number;
     ingredients: { name: string; amount: string; dailyValue?: string }[];
     otherIngredients?: string;
   };
-  featured: boolean;
-  category: ProductCategory;
-  badge?: string;
-  /** GLP-1 side effects this product addresses */
-  addresses: string[];
+  benefitsDetail: BenefitDetail[];
 }
 
-export const PRODUCTS: Record<string, ProductData> = {
-  "day-support": {
-    slug: "day-support",
-    name: "AfterSlim Day Support",
-    shortDescription:
-      "Comprehensive daytime nutrition for GLP-1 users. Supports energy, gut health, and satiety.",
-    price: 3999,
-    compareAtPrice: 4999,
-    subscriptionPrice: 3599,
-    subscriptionInterval: "month",
-    benefits: [
-      "Restores Natural Energy",
-      "Soothes Digestive Discomfort",
-      "Supports Healthy Satiety",
-      "Physician Formulated",
-    ],
-    supplementFacts: {
-      servingSize: "2 Capsules",
-      servings: 30,
-      ingredients: [
-        { name: "Vitamin B12", amount: "1,000 mcg", dailyValue: "41,667%" },
-        { name: "Vitamin B6", amount: "25 mg", dailyValue: "1,471%" },
-        { name: "Iron", amount: "18 mg", dailyValue: "100%" },
-        { name: "Ginger Root Extract", amount: "500 mg" },
-        { name: "DigeZyme\u00AE Enzyme Complex", amount: "150 mg" },
-        { name: "Chromium Picolinate", amount: "200 mcg", dailyValue: "571%" },
-        { name: "Prebiotic Fiber Blend", amount: "3 g" },
-        { name: "Probiotic Blend", amount: "5 Billion CFU" },
-      ],
-      otherIngredients:
-        "Hypromellose (Capsule), Microcrystalline Cellulose, Magnesium Stearate, Silicon Dioxide.",
+export const PRODUCT: SingleProduct = {
+  slug: "afterslim",
+  name: "AfterSlim",
+  shortDescription:
+    "120 capsules of Berberine-powered functional support. Metabolism, energy, sleep, and recovery in one formula.",
+  capsulesPerBottle: 120,
+  mainIngredient: "Berberine",
+  benefits: [
+    "Boosts Metabolism",
+    "Sustains Energy",
+    "Supports Restful Sleep",
+    "Accelerates Recovery",
+  ],
+  packOptions: [
+    {
+      tier: "1-bottle",
+      bottles: 1,
+      label: "1 Bottle",
+      supplyDays: 30,
+      pricePerBottleCents: 5999,
+      totalPriceCents: 5999,
+      compareAtTotalCents: 6999,
+      subscriptionPriceCents: 4999,
+      savingsPercent: 0,
+      freeShipping: false,
     },
-    featured: true,
-    category: "day",
-    addresses: ["Low Energy", "Nausea", "Bloating", "Constipation", "Poor Satiety"],
-  },
-  "night-support": {
-    slug: "night-support",
-    name: "AfterSlim Night Support",
-    shortDescription:
-      "Nighttime recovery formula for GLP-1 users. Supports hair, skin, sleep, and overall restoration.",
-    price: 3999,
-    compareAtPrice: 4999,
-    subscriptionPrice: 3599,
-    subscriptionInterval: "month",
-    benefits: [
-      "Strengthens Hair & Nails",
-      "Supports Skin Elasticity",
-      "Promotes Restful Sleep",
-      "Physician Formulated",
-    ],
-    supplementFacts: {
-      servingSize: "2 Capsules",
-      servings: 30,
-      ingredients: [
-        { name: "Collagen Peptides", amount: "5 g" },
-        { name: "Biotin", amount: "5,000 mcg", dailyValue: "16,667%" },
-        { name: "Keratin Complex", amount: "500 mg" },
-        { name: "Magnesium Glycinate", amount: "400 mg", dailyValue: "95%" },
-        { name: "L-Theanine", amount: "200 mg" },
-        { name: "Vitamin D3", amount: "2,000 IU", dailyValue: "250%" },
-        { name: "Vitamin K2", amount: "100 mcg", dailyValue: "83%" },
-        { name: "Zinc", amount: "15 mg", dailyValue: "136%" },
-        { name: "Selenium", amount: "55 mcg", dailyValue: "100%" },
-      ],
-      otherIngredients:
-        "Hypromellose (Capsule), Microcrystalline Cellulose, Magnesium Stearate, Silicon Dioxide.",
+    {
+      tier: "3-bottle",
+      bottles: 3,
+      label: "3 Bottles",
+      supplyDays: 90,
+      pricePerBottleCents: 4999,
+      totalPriceCents: 14997,
+      compareAtTotalCents: 17997,
+      subscriptionPriceCents: 12997,
+      badge: "Most Popular",
+      savingsPercent: 17,
+      freeShipping: true,
     },
-    featured: true,
-    category: "night",
-    addresses: ["Hair Loss", "Skin Changes", "Poor Sleep", "Nail Weakness"],
-  },
-  "complete-bundle": {
-    slug: "complete-bundle",
-    name: "AfterSlim Complete Bundle",
-    shortDescription:
-      "24/7 GLP-1 support. Day + Night formulas working together for comprehensive nutrition.",
-    price: 6799,
-    compareAtPrice: 9998,
-    subscriptionPrice: 5999,
-    subscriptionInterval: "month",
-    benefits: [
-      "Complete 24/7 Support",
-      "Save 15% vs Individual",
-      "Free Shipping Included",
-      "60-Day Money Back Guarantee",
-    ],
-    supplementFacts: {
-      servingSize: "2 Capsules (Day) + 2 Capsules (Night)",
-      servings: 30,
-      ingredients: [
-        { name: "Day Formula", amount: "See Day Support label" },
-        { name: "Night Formula", amount: "See Night Support label" },
-      ],
+    {
+      tier: "6-bottle",
+      bottles: 6,
+      label: "6 Bottles",
+      supplyDays: 180,
+      pricePerBottleCents: 3999,
+      totalPriceCents: 23994,
+      compareAtTotalCents: 35994,
+      subscriptionPriceCents: 20994,
+      badge: "Best Value",
+      savingsPercent: 33,
+      freeShipping: true,
     },
-    featured: true,
-    category: "bundle",
-    badge: "Most Popular",
-    addresses: ["All GLP-1 Side Effects \u2014 24/7 Coverage"],
+  ],
+  supplementFacts: {
+    servingSize: "4 Capsules",
+    servings: 30,
+    ingredients: [
+      { name: "Berberine HCl", amount: "1,200 mg" },
+      { name: "Chromium Picolinate", amount: "200 mcg", dailyValue: "571%" },
+      { name: "Alpha Lipoic Acid", amount: "300 mg" },
+      { name: "Magnesium Glycinate", amount: "200 mg", dailyValue: "48%" },
+      { name: "L-Theanine", amount: "200 mg" },
+      { name: "Vitamin B12", amount: "1,000 mcg", dailyValue: "41,667%" },
+      { name: "Vitamin D3", amount: "2,000 IU", dailyValue: "250%" },
+      { name: "Zinc", amount: "15 mg", dailyValue: "136%" },
+      { name: "BioPerine (Black Pepper Extract)", amount: "10 mg" },
+    ],
+    otherIngredients:
+      "Hypromellose (Capsule), Microcrystalline Cellulose, Magnesium Stearate, Silicon Dioxide.",
   },
-};
-
-/** Product category labels and colors for UI */
-export const PRODUCT_CATEGORY_CONFIG: Record<
-  ProductCategory,
-  { label: string; className: string }
-> = {
-  day: {
-    label: "Day",
-    className: "bg-amber-100 text-amber-800 border-amber-200",
-  },
-  night: {
-    label: "Night",
-    className: "bg-indigo-100 text-indigo-800 border-indigo-200",
-  },
-  bundle: {
-    label: "Bundle",
-    className: "bg-[var(--color-brand-primary)] text-white",
-  },
+  benefitsDetail: [
+    {
+      icon: "Flame",
+      title: "Metabolism",
+      description:
+        "Berberine activates AMPK, the master metabolic switch. Supports natural GLP-1 production for sustained satiety.",
+    },
+    {
+      icon: "Zap",
+      title: "Energy",
+      description:
+        "B-vitamins, Alpha Lipoic Acid, and Chromium maintain steady energy without crashes or jitters.",
+    },
+    {
+      icon: "Moon",
+      title: "Sleep",
+      description:
+        "Magnesium Glycinate and L-Theanine promote deep, restorative sleep essential for weight loss recovery.",
+    },
+    {
+      icon: "Heart",
+      title: "Recovery",
+      description:
+        "Zinc, Vitamin D3, and antioxidants support immune function and help your body repair during rapid weight loss.",
+    },
+  ],
 };
 
 // ---------------------------------------------------------------------------
-// Trust Indicators (shared between hero-section and trust-badges)
+// Price Comparison (AG1 pattern: us vs buying separately)
+// ---------------------------------------------------------------------------
+
+export interface PriceComparisonItem {
+  name: string;
+  priceCents: number;
+}
+
+export const PRICE_COMPARISON: PriceComparisonItem[] = [
+  { name: "Berberine Supplement", priceCents: 3500 },
+  { name: "Magnesium Glycinate", priceCents: 2500 },
+  { name: "B-Vitamin Complex", priceCents: 2000 },
+  { name: "Chromium Picolinate", priceCents: 1500 },
+  { name: "L-Theanine", priceCents: 2000 },
+  { name: "Vitamin D3 + K2", priceCents: 1800 },
+  { name: "Zinc", priceCents: 1200 },
+  { name: "Alpha Lipoic Acid", priceCents: 2500 },
+  { name: "BioPerine Extract", priceCents: 1500 },
+];
+
+// ---------------------------------------------------------------------------
+// Benefits Timeline (Seed pattern: results over time)
+// ---------------------------------------------------------------------------
+
+export interface TimelineMilestone {
+  period: string;
+  title: string;
+  description: string;
+}
+
+export const BENEFITS_TIMELINE: TimelineMilestone[] = [
+  {
+    period: "Week 1",
+    title: "Reduced Bloating, Improved Energy",
+    description:
+      "Berberine begins activating AMPK. Digestive comfort improves. B-vitamins restore natural energy levels.",
+  },
+  {
+    period: "Week 2",
+    title: "Better Sleep Quality",
+    description:
+      "Magnesium Glycinate and L-Theanine promote deeper, more restorative sleep cycles.",
+  },
+  {
+    period: "Month 1",
+    title: "Metabolism Stabilization",
+    description:
+      "Natural GLP-1 support kicks in. Blood sugar stability improves. Satiety feels more natural even between doses.",
+  },
+  {
+    period: "Month 3",
+    title: "Full Companion Benefits",
+    description:
+      "Complete metabolic, immune, and recovery support. Your body adapts to the formula for sustained results.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Trust Indicators
 // ---------------------------------------------------------------------------
 
 export interface TrustIndicator {
-  /** Lucide icon name (components import the actual icon) */
   iconName: "Stethoscope" | "ShieldCheck" | "Flag" | "RotateCcw";
   label: string;
   description: string;
@@ -254,5 +300,5 @@ export const TRUST_INDICATORS: TrustIndicator[] = [
   },
 ];
 
-/** Shop filter tab categories */
-export const SHOP_CATEGORIES = ["All", "Day", "Night", "Bundle"] as const;
+/** Default currency */
+export const CURRENCY = "USD" as const;

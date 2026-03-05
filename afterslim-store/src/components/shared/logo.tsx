@@ -44,9 +44,7 @@ export function Logo({
       <span
         className={cn(
           "font-extrabold",
-          variant === "dark"
-            ? "text-[var(--color-brand-secondary)]"
-            : "text-[var(--color-brand-secondary-light)]",
+          "text-[var(--color-brand-accent)]",
         )}
       >
         Slim

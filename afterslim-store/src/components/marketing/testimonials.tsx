@@ -5,63 +5,54 @@ import { Card, CardContent } from "@/components/ui/card";
 import * as m from "motion/react-client";
 import { cn } from "@/lib/utils";
 
-// ---------------------------------------------------------------------------
-// GLP-1 relevant testimonials
-// ---------------------------------------------------------------------------
-
 const TESTIMONIALS = [
   {
     id: "1",
     name: "Sarah M.",
     rating: 5,
     quote:
-      "Since starting Mounjaro, my hair was falling out in clumps. AfterSlim Night changed everything. My hair feels thicker and stronger after just 6 weeks.",
-    product: "AfterSlim Night Support",
-    verified: true,
+      "Since starting Mounjaro, my energy was completely gone. AfterSlim brought it back within the first week. I feel like myself again.",
+    label: "Verified Buyer",
   },
   {
     id: "2",
     name: "James R.",
     rating: 5,
     quote:
-      "The nausea was unbearable until I found AfterSlim Day Support. Within days my stomach settled and I could actually eat without discomfort.",
-    product: "AfterSlim Day Support",
-    verified: true,
+      "I was taking 5 different supplements to manage my GLP-1 side effects. AfterSlim replaced all of them in one bottle. So much simpler.",
+    label: "Verified Buyer",
   },
   {
     id: "3",
     name: "Maria L.",
     rating: 5,
     quote:
-      "I finally sleep through the night again. Game changer. I wake up feeling rested instead of exhausted. Night Support is now a non-negotiable for me.",
-    product: "AfterSlim Night Support",
-    verified: true,
+      "I finally sleep through the night again. The Magnesium and L-Theanine combo is incredible. I wake up feeling rested instead of exhausted.",
+    label: "Verified Buyer",
   },
   {
     id: "4",
     name: "David K.",
     rating: 5,
     quote:
-      "Day & Night bundle is worth every penny. My energy is back, my gut feels great, and my skin looks healthier than it has in months.",
-    product: "Complete Bundle",
-    verified: true,
+      "AfterSlim is worth every penny. My metabolism feels faster, my energy is back, and my skin looks healthier than it has in months.",
+    label: "Verified Buyer",
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Star Rating
-// ---------------------------------------------------------------------------
-
 function StarRating({ rating }: { rating: number }) {
   return (
-    <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+    <div
+      className="flex items-center gap-0.5"
+      aria-label={`${rating} out of 5 stars`}
+    >
       {Array.from({ length: 5 }, (_, i) => (
         <Star
           key={i}
           className={cn(
             "size-4",
             i < rating
-              ? "fill-[var(--color-brand-secondary)] text-[var(--color-brand-secondary)]"
+              ? "fill-[var(--color-brand-accent)] text-[var(--color-brand-accent)]"
               : "fill-muted text-muted",
           )}
         />
@@ -70,15 +61,11 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export function Testimonials() {
   return (
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
+        {/* Header */}
         <m.div
           className="text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -90,8 +77,8 @@ export function Testimonials() {
             What Our Customers Say
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Real results from real people on GLP-1 medications. See why
-            thousands trust AfterSlim for their wellness journey.
+            Real results from real people on GLP-1 medications. From 2,000+
+            verified reviews.
           </p>
         </m.div>
 
@@ -117,16 +104,9 @@ export function Testimonials() {
                     <p className="text-sm font-semibold text-foreground">
                       {testimonial.name}
                     </p>
-                    <div className="flex items-center gap-2">
-                      <p className="text-xs text-muted-foreground">
-                        {testimonial.product}
-                      </p>
-                      {testimonial.verified && (
-                        <span className="text-xs font-medium text-primary">
-                          Verified Buyer
-                        </span>
-                      )}
-                    </div>
+                    <span className="text-xs font-medium text-[var(--color-brand-accent)]">
+                      {testimonial.label}
+                    </span>
                   </div>
                 </CardContent>
               </Card>

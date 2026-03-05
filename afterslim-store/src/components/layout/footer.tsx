@@ -32,8 +32,8 @@ export function Footer() {
           <div className="space-y-4 lg:col-span-2">
             <Logo size="lg" />
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Comprehensive nutrition for your GLP-1 journey. Physician
-              formulated Day &amp; Night supplements.
+              Berberine-powered functional support for your GLP-1
+              journey. One formula, complete coverage.
             </p>
 
             {/* Social icons */}

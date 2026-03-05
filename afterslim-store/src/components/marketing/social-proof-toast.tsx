@@ -11,14 +11,14 @@ import { AnimatePresence } from "motion/react";
 /* ------------------------------------------------------------------ */
 
 const PURCHASE_NOTIFICATIONS = [
-  { name: "Sarah M.", location: "Austin, TX", product: "Complete Bundle" },
-  { name: "James R.", location: "Miami, FL", product: "Day Support" },
-  { name: "Maria L.", location: "Portland, OR", product: "Night Support" },
-  { name: "David K.", location: "Denver, CO", product: "Complete Bundle" },
-  { name: "Emily W.", location: "Nashville, TN", product: "Day Support" },
-  { name: "Michael C.", location: "San Diego, CA", product: "Night Support" },
-  { name: "Jessica T.", location: "Seattle, WA", product: "Complete Bundle" },
-  { name: "Robert H.", location: "Chicago, IL", product: "Day Support" },
+  { name: "Sarah M.", location: "Austin, TX", product: "AfterSlim (3 Bottles)" },
+  { name: "James R.", location: "Miami, FL", product: "AfterSlim (1 Bottle)" },
+  { name: "Maria L.", location: "Portland, OR", product: "AfterSlim (6 Bottles)" },
+  { name: "David K.", location: "Denver, CO", product: "AfterSlim (3 Bottles)" },
+  { name: "Emily W.", location: "Nashville, TN", product: "AfterSlim (3 Bottles)" },
+  { name: "Michael C.", location: "San Diego, CA", product: "AfterSlim (6 Bottles)" },
+  { name: "Jessica T.", location: "Seattle, WA", product: "AfterSlim (3 Bottles)" },
+  { name: "Robert H.", location: "Chicago, IL", product: "AfterSlim (1 Bottle)" },
 ] as const;
 
 /* ------------------------------------------------------------------ */

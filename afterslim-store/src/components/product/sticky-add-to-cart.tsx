@@ -77,7 +77,7 @@ export function StickyAddToCart({
               {/* Left: thumbnail + name + price */}
               <div className="flex items-center gap-4">
                 {/* Thumbnail placeholder */}
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-brand-primary)]/15 to-[var(--color-brand-secondary)]/10">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-brand-primary)]/15 to-[var(--color-brand-accent)]/10">
                   <span className="text-xs font-bold text-muted-foreground/50">
                     AS
                   </span>

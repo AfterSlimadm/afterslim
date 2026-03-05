@@ -1,78 +1,118 @@
 "use client";
 
-import { FlaskConical, Leaf, RefreshCw, Truck } from "lucide-react";
+import { Flame, Zap, Moon, Heart } from "lucide-react";
 import * as m from "motion/react-client";
+import type { LucideIcon } from "lucide-react";
 
-const BENEFITS = [
+interface Pillar {
+  icon: LucideIcon;
+  title: string;
+  solution: string;
+  description: string;
+  color: string;
+  bgColor: string;
+}
+
+const PILLARS: Pillar[] = [
   {
-    icon: FlaskConical,
-    title: "Science-Backed Formulas",
+    icon: Flame,
+    title: "Metabolism",
+    solution: "Activate your body's fat-burning engine",
     description:
-      "Every ingredient is carefully selected based on clinical research and third-party tested for purity and potency.",
+      "Berberine activates AMPK, the same enzyme triggered by exercise. Combined with Chromium and Alpha Lipoic Acid, AfterSlim helps your body metabolize efficiently even during caloric restriction.",
+    color: "text-[var(--color-brand-accent)]",
+    bgColor: "bg-[var(--color-brand-accent-subtle)]",
   },
   {
-    icon: Leaf,
-    title: "Premium Ingredients",
+    icon: Zap,
+    title: "Energy",
+    solution: "Sustained energy without the crash",
     description:
-      "We source only the highest quality natural ingredients, free from artificial fillers, binders, and unnecessary additives.",
+      "GLP-1 medications can leave you drained. Vitamin B12 and Alpha Lipoic Acid support cellular energy production, keeping you alert and focused throughout the day.",
+    color: "text-amber-500",
+    bgColor: "bg-amber-500/10",
   },
   {
-    icon: RefreshCw,
-    title: "Subscribe & Save",
+    icon: Moon,
+    title: "Sleep",
+    solution: "Deep, restorative rest every night",
     description:
-      "Never run out of your favorites. Subscribe for automatic deliveries and save up to 20% on every order.",
+      "Your body needs quality sleep to recover during weight loss. Magnesium Glycinate and L-Theanine calm the mind and promote deep sleep so you wake up refreshed.",
+    color: "text-indigo-400",
+    bgColor: "bg-indigo-500/10",
   },
   {
-    icon: Truck,
-    title: "Fast & Free Shipping",
+    icon: Heart,
+    title: "Recovery",
+    solution: "Support your body's natural healing",
     description:
-      "Enjoy free shipping on all orders over $99. Most orders are processed within 24 hours and arrive within 3-5 business days.",
+      "Vitamin D3, Zinc, and BioPerine work together to strengthen immunity, support skin health, and enhance nutrient absorption during rapid weight change.",
+    color: "text-rose-400",
+    bgColor: "bg-rose-500/10",
   },
 ];
 
 export function BenefitsSection() {
   return (
-    <section className="bg-muted/30 py-20 sm:py-24">
+    <section id="benefits" className="py-12 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
+        {/* Header */}
         <m.div
-          className="text-center"
+          className="mx-auto max-w-2xl text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Why Choose AfterSlim?
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-brand-accent)]">
+            One Formula. Four Pillars.
+          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Everything Your Body Needs on GLP-1
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            We hold ourselves to the highest standards so you can focus on what
-            matters most: your health.
+          <p className="mt-4 text-lg text-muted-foreground">
+            Weight loss medications are powerful, but they come with challenges.
+            AfterSlim addresses the four key areas so you can focus on your
+            results.
           </p>
         </m.div>
 
-        {/* Benefits grid */}
-        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {BENEFITS.map((benefit, index) => (
-            <m.div
-              key={benefit.title}
-              className="group rounded-2xl bg-card p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <benefit.icon className="size-6" />
-              </div>
-              <h3 className="mb-2 text-lg font-semibold text-foreground">
-                {benefit.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {benefit.description}
-              </p>
-            </m.div>
-          ))}
+        {/* Pillars grid */}
+        <div className="mt-12 grid gap-3 sm:mt-16 sm:grid-cols-2 sm:gap-8">
+          {PILLARS.map((pillar, index) => {
+            const Icon = pillar.icon;
+            return (
+              <m.div
+                key={pillar.title}
+                className="group relative rounded-xl border bg-card p-4 shadow-sm transition-shadow duration-300 sm:rounded-2xl sm:p-8 sm:hover:shadow-md"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <div className="flex items-start gap-3 sm:block">
+                  <div
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${pillar.bgColor} ${pillar.color} sm:mb-5 sm:h-12 sm:w-12 sm:rounded-xl`}
+                  >
+                    <Icon className="size-5 sm:size-6" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-wide ${pillar.color} sm:text-sm`}
+                    >
+                      {pillar.title}
+                    </p>
+                    <h3 className="mt-1 text-base font-bold text-foreground sm:mt-2 sm:text-xl">
+                      {pillar.solution}
+                    </h3>
+                    <p className="mt-3 hidden text-sm leading-relaxed text-muted-foreground sm:block">
+                      {pillar.description}
+                    </p>
+                  </div>
+                </div>
+              </m.div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -4,61 +4,47 @@ import { Plus, Sparkles } from "lucide-react";
 import * as m from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/useCartStore";
-import { PRODUCTS } from "@/lib/constants";
+import { PRODUCT } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utils";
 import { toast } from "sonner";
 import type { CartItem } from "@/types/database";
 
 // ---------------------------------------------------------------------------
-// Cross-sell logic
+// Upsell logic: suggest upgrading to a bigger pack
 // ---------------------------------------------------------------------------
 
-interface CrossSellSuggestion {
-  slug: string;
-  name: string;
-  price: number;
-  shortLabel: string;
+interface UpsellSuggestion {
+  tier: "3-bottle" | "6-bottle";
+  label: string;
+  savingsPercent: number;
+  pricePerBottle: number;
 }
 
-function getCrossSellSuggestion(
-  items: CartItem[]
-): CrossSellSuggestion | null {
-  const slugs = items.map((i) => i.slug);
+function getUpsellSuggestion(
+  items: CartItem[],
+): UpsellSuggestion | null {
+  const hasSixBottle = items.some((i) => i.pack_tier === "6-bottle");
+  if (hasSixBottle) return null;
 
-  const hasDay = slugs.includes("day-support");
-  const hasNight = slugs.includes("night-support");
-  const hasBundle = slugs.includes("complete-bundle");
+  const hasThreeBottle = items.some((i) => i.pack_tier === "3-bottle");
 
-  // Already has the bundle or both individual products
-  if (hasBundle || (hasDay && hasNight)) return null;
-
-  if (hasDay && !hasNight) {
-    const product = PRODUCTS["night-support"];
+  if (hasThreeBottle) {
+    const pack = PRODUCT.packOptions.find((p) => p.tier === "6-bottle")!;
     return {
-      slug: product.slug,
-      name: product.name,
-      price: product.price,
-      shortLabel: "Night Support",
+      tier: "6-bottle",
+      label: "Upgrade to 6 Bottles",
+      savingsPercent: pack.savingsPercent,
+      pricePerBottle: pack.pricePerBottleCents,
     };
   }
 
-  if (hasNight && !hasDay) {
-    const product = PRODUCTS["day-support"];
-    return {
-      slug: product.slug,
-      name: product.name,
-      price: product.price,
-      shortLabel: "Day Support",
-    };
-  }
-
-  // Cart has neither day nor night
-  const bundle = PRODUCTS["complete-bundle"];
+  // Has 1-bottle or no AfterSlim at all
+  const pack = PRODUCT.packOptions.find((p) => p.tier === "3-bottle")!;
   return {
-    slug: bundle.slug,
-    name: bundle.name,
-    price: bundle.price,
-    shortLabel: "Complete Bundle",
+    tier: "3-bottle",
+    label: "Upgrade to 3 Bottles",
+    savingsPercent: pack.savingsPercent,
+    pricePerBottle: pack.pricePerBottleCents,
   };
 }
 
@@ -70,22 +56,26 @@ export function CartCrossSell() {
   const items = useCartStore((s) => s.items);
   const addItem = useCartStore((s) => s.addItem);
 
-  const suggestion = getCrossSellSuggestion(items);
+  const suggestion = getUpsellSuggestion(items);
 
   if (!suggestion) return null;
 
-  function handleQuickAdd() {
+  function handleUpgrade() {
     if (!suggestion) return;
+    const pack = PRODUCT.packOptions.find((p) => p.tier === suggestion.tier)!;
     addItem({
-      id: suggestion.slug,
-      type: suggestion.slug === "complete-bundle" ? "kit" : "product",
-      name: suggestion.name,
-      slug: suggestion.slug,
-      price_cents: suggestion.price,
+      id: `afterslim-${suggestion.tier}-one-time`,
+      type: "product",
+      name: `AfterSlim (${pack.bottles} Bottles)`,
+      slug: "afterslim",
+      price_cents: pack.totalPriceCents,
       quantity: 1,
       image: null,
+      pack_tier: suggestion.tier,
+      bottles: pack.bottles,
+      is_subscription: false,
     });
-    toast.success(`${suggestion.name} added to cart`);
+    toast.success(`Upgraded to ${pack.bottles} bottles!`);
   }
 
   return (
@@ -93,33 +83,32 @@ export function CartCrossSell() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.1 }}
-      className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-3"
+      className="rounded-lg border border-dashed border-[var(--color-brand-accent)]/30 bg-[var(--color-brand-accent-subtle)] p-3"
     >
       <div className="mb-2 flex items-center gap-1.5">
-        <Sparkles className="size-3.5 text-primary" />
-        <span className="text-xs font-semibold uppercase tracking-wide text-primary">
-          Complete Your Routine
+        <Sparkles className="size-3.5 text-[var(--color-brand-accent)]" />
+        <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-brand-accent)]">
+          Save {suggestion.savingsPercent}% More
         </span>
       </div>
 
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium leading-tight">
-            {suggestion.shortLabel}
+            {suggestion.label}
           </p>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            {formatCurrency(suggestion.price)}
+            {formatCurrency(suggestion.pricePerBottle)}/bottle
           </p>
         </div>
 
         <Button
           size="sm"
-          variant="default"
-          className="shrink-0"
-          onClick={handleQuickAdd}
+          className="shrink-0 bg-[var(--color-brand-accent)] text-white hover:bg-[var(--color-brand-accent-light)]"
+          onClick={handleUpgrade}
         >
           <Plus className="size-3.5" />
-          Add
+          Upgrade
         </Button>
       </div>
     </m.div>

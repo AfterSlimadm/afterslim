@@ -102,7 +102,7 @@ export function SubscriptionToggle({
         )}
       >
         {/* Savings badge */}
-        <div className="absolute -top-2.5 right-3 rounded-full bg-[var(--color-brand-secondary)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-brand-primary-dark)]">
+        <div className="absolute -top-2.5 right-3 rounded-full bg-[var(--color-brand-accent)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-brand-primary-dark)]">
           Save {savingsPercent}%
         </div>
 
