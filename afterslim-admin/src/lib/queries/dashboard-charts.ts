@@ -101,10 +101,13 @@ export async function getRecentOrders(
 
   return (data ?? []).map((order, index) => {
     // Generate order number from row position (descending)
-    const customerName =
-      order.customer && typeof order.customer === "object"
-        ? (order.customer as { name: string }).name
-        : "Unknown";
+    const raw = order.customer as unknown;
+    let customerName = "Unknown";
+    if (Array.isArray(raw) && raw.length > 0 && raw[0]?.name) {
+      customerName = raw[0].name;
+    } else if (raw && typeof raw === "object" && !Array.isArray(raw) && (raw as Record<string, unknown>).name) {
+      customerName = (raw as Record<string, string>).name;
+    }
 
     return {
       id: order.id,
