@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTheme } from "next-themes";
 import {
   Settings,
   Users,
@@ -12,6 +13,8 @@ import {
   Plus,
   Activity,
   Loader2,
+  Lock,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,6 +55,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
 import type { TeamMember } from "@/lib/queries/team";
 import type { AuditLogEntry } from "@/lib/queries/settings";
 
@@ -61,6 +65,7 @@ interface SettingsContentProps {
   initialSettings: Record<string, unknown>;
   initialTeam: TeamMember[];
   initialAuditLog: AuditLogEntry[];
+  currentUser: { email: string; id: string };
 }
 
 // ─── Helpers ──────────────────────────────────────────────────
@@ -101,7 +106,16 @@ export default function SettingsContent({
   initialSettings,
   initialTeam,
   initialAuditLog,
+  currentUser,
 }: SettingsContentProps) {
+  // Theme (next-themes)
+  const { setTheme: setNextTheme } = useTheme();
+
+  // Password change state
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [savingPassword, setSavingPassword] = useState(false);
+
   // Store settings state
   const [storeName, setStoreName] = useState(
     (initialSettings.store_name as string) || "AfterSlim"
@@ -130,10 +144,15 @@ export default function SettingsContent({
     initialSettings.notify_weekly_summary === true
   );
 
-  // Appearance
-  const [theme, setTheme] = useState(
+  // Appearance (local state synced with next-themes)
+  const [theme, setThemeLocal] = useState(
     (initialSettings.theme as string) || "system"
   );
+
+  function setTheme(value: string) {
+    setThemeLocal(value);
+    setNextTheme(value);
+  }
 
   // Team
   const [team, setTeam] = useState<TeamMember[]>(initialTeam);
@@ -203,6 +222,38 @@ export default function SettingsContent({
       );
     } finally {
       setSavingAppearance(false);
+    }
+  }
+
+  async function handleChangePassword() {
+    if (!newPassword || !confirmPassword) {
+      toast.error("Preencha ambos os campos de senha");
+      return;
+    }
+    if (newPassword.length < 6) {
+      toast.error("A senha deve ter no minimo 6 caracteres");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("As senhas nao coincidem");
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+      if (error) throw error;
+      toast.success("Senha alterada com sucesso");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      toast.error(
+        `Erro ao trocar senha: ${err instanceof Error ? err.message : "desconhecido"}`
+      );
+    } finally {
+      setSavingPassword(false);
     }
   }
 
@@ -293,8 +344,12 @@ export default function SettingsContent({
         </p>
       </div>
 
-      <Tabs defaultValue="store" className="w-full">
+      <Tabs defaultValue="account" className="w-full">
         <TabsList>
+          <TabsTrigger value="account">
+            <User className="size-4" />
+            Conta
+          </TabsTrigger>
           <TabsTrigger value="store">
             <Store className="size-4" />
             Loja
@@ -320,6 +375,83 @@ export default function SettingsContent({
             Perigo
           </TabsTrigger>
         </TabsList>
+
+        {/* ─── Conta ────────────────────────────────────────── */}
+        <TabsContent value="account">
+          <div className="space-y-6">
+            {/* Perfil */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="size-5 text-muted-foreground" />
+                  Perfil
+                </CardTitle>
+                <CardDescription>
+                  Informacoes da conta logada.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <Input value={currentUser.email} disabled />
+                  <p className="text-xs text-muted-foreground">
+                    Este e o email usado para login. Para alterar, entre em contato com o suporte.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Trocar Senha */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lock className="size-5 text-muted-foreground" />
+                  Trocar Senha
+                </CardTitle>
+                <CardDescription>
+                  Atualize a senha da sua conta.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="newPassword">Nova senha</Label>
+                    <Input
+                      id="newPassword"
+                      type="password"
+                      placeholder="Minimo 6 caracteres"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirmar nova senha</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      placeholder="Repita a nova senha"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end pt-2">
+                  <Button
+                    onClick={handleChangePassword}
+                    disabled={savingPassword}
+                  >
+                    {savingPassword ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <Lock className="size-4" />
+                    )}
+                    {savingPassword ? "Salvando..." : "Trocar Senha"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
         {/* ─── Loja ─────────────────────────────────────────── */}
         <TabsContent value="store">

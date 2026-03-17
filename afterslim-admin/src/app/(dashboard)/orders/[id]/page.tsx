@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -13,6 +13,7 @@ import {
   Package,
   Mail,
   Phone,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatCurrency, formatDate, formatDateTime, cn } from "@/lib/utils";
@@ -57,130 +58,6 @@ import { OrderStatusBadge } from "@/components/orders/order-status-badge";
 import { OrderTimeline } from "@/components/orders/order-timeline";
 import type { Order, OrderStatus, OrderEvent } from "@/lib/types";
 
-/* ── Mock data (single order detail) ─────────────────────── */
-
-const MOCK_ORDER: Order = {
-  id: "100001",
-  customer_id: "c1",
-  status: "shipped",
-  payment_status: "paid",
-  payment_method: "stripe",
-  subtotal: 129.97,
-  discount: 10.0,
-  shipping_cost: 5.99,
-  total: 125.96,
-  tracking_code: "1Z999AA10123456784",
-  notes: "Customer prefers delivery before noon",
-  created_at: "2026-02-22T14:30:00Z",
-  updated_at: "2026-02-25T10:00:00Z",
-  shipping_address: {
-    street: "123 Main St",
-    number: "Apt 4B",
-    neighborhood: "Downtown",
-    city: "Austin",
-    state: "TX",
-    zip_code: "78701",
-  },
-  customer: {
-    id: "c1",
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    phone: "+1 (512) 555-0147",
-    cpf: null,
-    total_orders: 5,
-    total_spent: 412.5,
-    last_order_at: "2026-02-22T14:30:00Z",
-    notes: null,
-    created_at: "2025-11-10T08:00:00Z",
-    updated_at: "2026-02-22T14:30:00Z",
-  },
-  items: [
-    {
-      id: "i1",
-      order_id: "100001",
-      product_id: "p1",
-      product_name: "AfterSlim Burn",
-      variant: "60 capsules",
-      quantity: 1,
-      unit_price: 49.99,
-      total_price: 49.99,
-      created_at: "2026-02-22T14:30:00Z",
-    },
-    {
-      id: "i2",
-      order_id: "100001",
-      product_id: "p2",
-      product_name: "AfterSlim Cleanse",
-      variant: "60 capsules",
-      quantity: 1,
-      unit_price: 44.99,
-      total_price: 44.99,
-      created_at: "2026-02-22T14:30:00Z",
-    },
-    {
-      id: "i3",
-      order_id: "100001",
-      product_id: "p4",
-      product_name: "AfterSlim Glow",
-      variant: "30 capsules",
-      quantity: 1,
-      unit_price: 34.99,
-      total_price: 34.99,
-      created_at: "2026-02-22T14:30:00Z",
-    },
-  ],
-  events: [
-    {
-      id: "e1",
-      order_id: "100001",
-      type: "created",
-      description: "Order placed by customer",
-      metadata: null,
-      created_by: "Sarah Johnson",
-      created_at: "2026-02-22T14:30:00Z",
-    },
-    {
-      id: "e2",
-      order_id: "100001",
-      type: "payment_confirmed",
-      description: "Payment of $125.96 confirmed via Stripe",
-      metadata: { transaction_id: "pi_3QX7abc123" },
-      created_by: "System",
-      created_at: "2026-02-22T14:32:00Z",
-    },
-    {
-      id: "e3",
-      order_id: "100001",
-      type: "status_changed",
-      description: "Status changed from Pending to Processing",
-      metadata: { from: "pending", to: "processing" },
-      created_by: "Admin",
-      created_at: "2026-02-23T09:15:00Z",
-    },
-    {
-      id: "e4",
-      order_id: "100001",
-      type: "shipped",
-      description: "Package shipped via USPS — tracking 1Z999AA10123456784",
-      metadata: {
-        carrier: "USPS",
-        tracking: "1Z999AA10123456784",
-      },
-      created_by: "Admin",
-      created_at: "2026-02-24T11:45:00Z",
-    },
-    {
-      id: "e5",
-      order_id: "100001",
-      type: "note_added",
-      description: "Customer called to confirm delivery address is correct",
-      metadata: null,
-      created_by: "Admin",
-      created_at: "2026-02-25T10:00:00Z",
-    },
-  ],
-};
-
 /* ── Status transition options ────────────────────────────── */
 
 const STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
@@ -193,6 +70,35 @@ const STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   refunded: [],
 };
 
+/* ── Empty order default ──────────────────────────────────── */
+
+const EMPTY_ORDER: Order = {
+  id: "",
+  customer_id: "",
+  status: "pending",
+  payment_status: "pending",
+  payment_method: "other",
+  subtotal: 0,
+  discount: 0,
+  shipping_cost: 0,
+  total: 0,
+  tracking_code: null,
+  notes: null,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+  shipping_address: {
+    street: "",
+    number: "",
+    neighborhood: "",
+    city: "",
+    state: "",
+    zip_code: "",
+  },
+  customer: undefined,
+  items: [],
+  events: [],
+};
+
 /* ── Page component ───────────────────────────────────────── */
 
 export default function OrderDetailPage({
@@ -201,9 +107,72 @@ export default function OrderDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const [order, setOrder] = useState<Order>(MOCK_ORDER);
+  const [order, setOrder] = useState<Order>(EMPTY_ORDER);
+  const [loading, setLoading] = useState(true);
   const [noteOpen, setNoteOpen] = useState(false);
   const [noteText, setNoteText] = useState("");
+
+  useEffect(() => {
+    async function fetchOrder() {
+      try {
+        const res = await fetch(`/api/orders/${id}`);
+        if (!res.ok) throw new Error("Erro ao buscar pedido");
+        const data = await res.json();
+        setOrder({
+          id: data.id ?? id,
+          customer_id: data.customer_id ?? "",
+          status: data.status ?? "pending",
+          payment_status: data.payment_status ?? "pending",
+          payment_method: data.payment_method ?? "other",
+          subtotal: Number(data.subtotal ?? 0),
+          discount: Number(data.discount ?? 0),
+          shipping_cost: Number(data.shipping_cost ?? 0),
+          total: Number(data.total ?? 0),
+          tracking_code: data.tracking_code ?? null,
+          notes: data.notes ?? null,
+          created_at: data.created_at ?? new Date().toISOString(),
+          updated_at: data.updated_at ?? new Date().toISOString(),
+          shipping_address: data.shipping_address ?? EMPTY_ORDER.shipping_address,
+          customer: data.customer ?? undefined,
+          items: data.order_items ?? data.items ?? [],
+          events: data.order_events ?? data.events ?? [],
+        });
+      } catch (err) {
+        console.error("[OrderDetail] fetch failed:", err);
+        toast.error("Erro ao carregar pedido");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOrder();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+        <Loader2 className="h-8 w-8 animate-spin mb-3" />
+        <p className="text-sm">Carregando pedido...</p>
+      </div>
+    );
+  }
+
+  if (!order.id) {
+    return (
+      <div className="space-y-4">
+        <Button variant="ghost" size="sm" asChild className="gap-1.5">
+          <Link href="/orders">
+            <ArrowLeft className="h-4 w-4" />
+            Voltar para Pedidos
+          </Link>
+        </Button>
+        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+          <Package className="h-10 w-10 mb-3" />
+          <p className="font-medium">Pedido nao encontrado</p>
+          <p className="text-sm">O pedido #{id} nao existe ou foi removido.</p>
+        </div>
+      </div>
+    );
+  }
 
   const orderNumber = `AS-${id.padStart(6, "0")}`;
   const statusConfig = ORDER_STATUS_CONFIG[order.status];
@@ -342,82 +311,89 @@ export default function OrderDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="pl-6">Produto</TableHead>
-                    <TableHead className="text-center">Qtd</TableHead>
-                    <TableHead className="text-right">Preco Unit.</TableHead>
-                    <TableHead className="pr-6 text-right">Total</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {order.items?.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell className="pl-6">
-                        <div>
-                          <p className="font-medium">{item.product_name}</p>
-                          {item.variant && (
-                            <p className="text-xs text-muted-foreground">
-                              {item.variant}
-                            </p>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {item.quantity}
-                      </TableCell>
-                      <TableCell className="text-right font-mono">
-                        {formatCurrency(item.unit_price)}
-                      </TableCell>
-                      <TableCell className="pr-6 text-right font-mono">
-                        {formatCurrency(item.total_price)}
-                      </TableCell>
+              {order.items && order.items.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="pl-6">Produto</TableHead>
+                      <TableHead className="text-center">Qtd</TableHead>
+                      <TableHead className="text-right">Preco Unit.</TableHead>
+                      <TableHead className="pr-6 text-right">Total</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={3} className="pl-6 text-right">
-                      Subtotal
-                    </TableCell>
-                    <TableCell className="pr-6 text-right font-mono">
-                      {formatCurrency(order.subtotal)}
-                    </TableCell>
-                  </TableRow>
-                  {order.discount > 0 && (
+                  </TableHeader>
+                  <TableBody>
+                    {order.items.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="pl-6">
+                          <div>
+                            <p className="font-medium">{item.product_name}</p>
+                            {item.variant && (
+                              <p className="text-xs text-muted-foreground">
+                                {item.variant}
+                              </p>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {item.quantity}
+                        </TableCell>
+                        <TableCell className="text-right font-mono">
+                          {formatCurrency(item.unit_price)}
+                        </TableCell>
+                        <TableCell className="pr-6 text-right font-mono">
+                          {formatCurrency(item.total_price)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
                     <TableRow>
                       <TableCell colSpan={3} className="pl-6 text-right">
-                        Desconto
+                        Subtotal
                       </TableCell>
-                      <TableCell className="pr-6 text-right font-mono text-red-600">
-                        -{formatCurrency(order.discount)}
+                      <TableCell className="pr-6 text-right font-mono">
+                        {formatCurrency(order.subtotal)}
                       </TableCell>
                     </TableRow>
-                  )}
-                  <TableRow>
-                    <TableCell colSpan={3} className="pl-6 text-right">
-                      Frete
-                    </TableCell>
-                    <TableCell className="pr-6 text-right font-mono">
-                      {order.shipping_cost === 0
-                        ? "Gratis"
-                        : formatCurrency(order.shipping_cost)}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell
-                      colSpan={3}
-                      className="pl-6 text-right font-bold"
-                    >
-                      Total
-                    </TableCell>
-                    <TableCell className="pr-6 text-right font-mono font-bold">
-                      {formatCurrency(order.total)}
-                    </TableCell>
-                  </TableRow>
-                </TableFooter>
-              </Table>
+                    {order.discount > 0 && (
+                      <TableRow>
+                        <TableCell colSpan={3} className="pl-6 text-right">
+                          Desconto
+                        </TableCell>
+                        <TableCell className="pr-6 text-right font-mono text-red-600">
+                          -{formatCurrency(order.discount)}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    <TableRow>
+                      <TableCell colSpan={3} className="pl-6 text-right">
+                        Frete
+                      </TableCell>
+                      <TableCell className="pr-6 text-right font-mono">
+                        {order.shipping_cost === 0
+                          ? "Gratis"
+                          : formatCurrency(order.shipping_cost)}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        colSpan={3}
+                        className="pl-6 text-right font-bold"
+                      >
+                        Total
+                      </TableCell>
+                      <TableCell className="pr-6 text-right font-mono font-bold">
+                        {formatCurrency(order.total)}
+                      </TableCell>
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+                  <Package className="h-8 w-8 mb-2" />
+                  <p className="text-sm">Nenhum item neste pedido.</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -452,26 +428,34 @@ export default function OrderDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div>
-                <p className="font-medium">{order.customer?.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {order.customer?.total_orders} pedidos &middot;{" "}
-                  {formatCurrency(order.customer?.total_spent ?? 0)} gasto
-                </p>
-              </div>
-              <Separator />
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm">
-                  <Mail className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span>{order.customer?.email}</span>
-                </div>
-                {order.customer?.phone && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="h-3.5 w-3.5 text-muted-foreground" />
-                    <span>{order.customer.phone}</span>
+              {order.customer ? (
+                <>
+                  <div>
+                    <p className="font-medium">{order.customer.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {order.customer.total_orders ?? 0} pedidos &middot;{" "}
+                      {formatCurrency(order.customer.total_spent ?? 0)} gasto
+                    </p>
                   </div>
-                )}
-              </div>
+                  <Separator />
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span>{order.customer.email}</span>
+                    </div>
+                    {order.customer.phone && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+                        <span>{order.customer.phone}</span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Dados do cliente nao disponiveis.
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -484,19 +468,25 @@ export default function OrderDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-sm leading-relaxed">
-                <p>
-                  {order.shipping_address.street}
-                  {order.shipping_address.number &&
-                    `, ${order.shipping_address.number}`}
+              {order.shipping_address?.street ? (
+                <div className="text-sm leading-relaxed">
+                  <p>
+                    {order.shipping_address.street}
+                    {order.shipping_address.number &&
+                      `, ${order.shipping_address.number}`}
+                  </p>
+                  <p>{order.shipping_address.neighborhood}</p>
+                  <p>
+                    {order.shipping_address.city},{" "}
+                    {order.shipping_address.state}{" "}
+                    {order.shipping_address.zip_code}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Endereco nao informado.
                 </p>
-                <p>{order.shipping_address.neighborhood}</p>
-                <p>
-                  {order.shipping_address.city},{" "}
-                  {order.shipping_address.state}{" "}
-                  {order.shipping_address.zip_code}
-                </p>
-              </div>
+              )}
               {order.tracking_code && (
                 <>
                   <Separator className="my-3" />
