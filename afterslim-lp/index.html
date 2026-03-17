@@ -1,0 +1,1206 @@
+<!DOCTYPE html><html lang="en" style="scroll-behavior:auto;"><head>
+<script id="local-interceptor">
+// Block external analytics, redirect seed.com URLs, suppress hydration errors
+(function(){
+  var blocked=['segment.io','sentry.io','onetrust.com','litix.io','google-analytics','googletagmanager','cdn.segment','analytics'];
+  var origFetch=window.fetch;
+  window.fetch=function(url){
+    var u=typeof url==='string'?url:(url&&url.url?url.url:'');
+    for(var i=0;i<blocked.length;i++){if(u.indexOf(blocked[i])!==-1)return Promise.resolve(new Response('',{status:200}));}
+    if(u.indexOf('seed.com')!==-1&&u.indexOf('localhost')===-1){
+      u=u.replace(/https?:\/\/[^/]*seed\.com/,'');
+      return origFetch.call(this,u);
+    }
+    return origFetch.apply(this,arguments);
+  };
+  var origXHR=XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open=function(m,url){
+    var u=typeof url==='string'?url:'';
+    for(var i=0;i<blocked.length;i++){if(u.indexOf(blocked[i])!==-1){this._blocked=true;return;}}
+    if(u.indexOf('seed.com')!==-1&&u.indexOf('localhost')===-1){
+      u=u.replace(/https?:\/\/[^/]*seed\.com/,'');
+    }
+    return origXHR.call(this,m,u);
+  };
+  var origSend=XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send=function(){if(this._blocked)return;return origSend.apply(this,arguments);};
+  // Stub OneTrust + Segment
+  window.OneTrust={Init:function(){},ToggleInfoDisplay:function(){},LoadBanner:function(){}};
+  window.OnetrustActiveGroups='C0001,C0002,C0003,C0004';
+  window.analytics={track:function(){},identify:function(){},page:function(){},ready:function(cb){if(cb)cb();}};
+  // Suppress hydration errors
+  var origError=console.error;
+  console.error=function(){
+    var msg=arguments[0];
+    if(typeof msg==='string'&&(msg.indexOf('Hydration')!==-1||msg.indexOf('hydrat')!==-1||msg.indexOf('Minified React')!==-1||msg.indexOf('did not match')!==-1)){
+      console.warn('[Local Clone] Suppressed hydration error');return;
+    }
+    return origError.apply(console,arguments);
+  };
+})();
+</script><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" data-next-head=""/><meta http-equiv="Content-Type" content="text/html; charset=utf-8" data-next-head=""/><title data-next-head="">Seed • Whole Body Health Starts in the Gut</title><meta name="description" content="Seed develops clinically-studied probiotics to impact human and planetary health. Our first product is the DS-01® Berberine 1200mg—a probiotic + prebiotic for systemic benefits." data-next-head=""/><link rel="canonical" href="https://seed.com" data-next-head=""/><meta property="og:locale" content="en_US" data-next-head=""/><meta property="og:site_name" content="Seed" data-next-head=""/><meta property="og:title" content="Seed • Whole Body Health Starts in the Gut" data-next-head=""/><meta property="og:description" content="Seed develops clinically-studied probiotics to impact human and planetary health. Our first product is the DS-01® Berberine 1200mg—a probiotic + prebiotic for systemic benefits." data-next-head=""/><meta property="og:url" content="https://seed.com" data-next-head=""/><meta property="og:type" content="website" data-next-head=""/><meta property="og:image" content="images/og-homepage.png" data-next-head=""/><meta property="og:image:type" content="image/png" data-next-head=""/><meta property="og:image:width" content="2400" data-next-head=""/><meta property="og:image:height" content="1260" data-next-head=""/><meta property="og:image:alt" content="Seed • Whole Body Health Starts in the Gut" data-next-head=""/><meta name="twitter:title" content="Seed • Whole Body Health Starts in the Gut" data-next-head=""/><meta name="twitter:description" content="Seed develops clinically-studied probiotics to impact human and planetary health. Our first product is the DS-01® Berberine 1200mg—a probiotic + prebiotic for systemic benefits." data-next-head=""/><meta name="twitter:url" content="https://seed.com" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:site" content="@seedhealth" data-next-head=""/><meta name="twitter:image" content="images/og-homepage.png" data-next-head=""/><meta name="twitter:image:alt" content="Seed • Whole Body Health Starts in the Gut" data-next-head=""/><link rel="shortcut icon" href="images/favicon.png"/><link rel="preload" href="fonts/SeedSans-Light-subset.woff2" as="font" crossorigin="anonymous"/><link rel="preload" href="fonts/SeedSans-Regular-subset.woff2" as="font" crossorigin="anonymous"/><link rel="preload" href="fonts/SeedSans-Medium-subset.woff2" as="font" crossorigin="anonymous"/><link rel="preload" href="fonts/SeedSans-LightItalic-subset.woff2" as="font" crossorigin="anonymous"/><link rel="preload" href="fonts/SeedSans-RegularItalic-subset.woff2" as="font" crossorigin="anonymous"/><link rel="preload" href="fonts/SeedSans-MediumItalic-subset.woff2" as="font" crossorigin="anonymous"/><link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap_index.xml"/><link rel="apple-touch-icon" href="images/seed-circle.png"/><meta name="google-site-verification" content="EV6y5k0c-8EwuXFVVXZdKkepM2cMkby8ig04xphpbGQ"/><meta name="p:domain_verify" content="9bfefe21e0aeb5110226850066340c26"/><link rel="preload" href="_next/static/css/6dfe793b326d5ac2.css" as="style"/><link rel="preload" href="_next/static/css/e9fe1f1894b911f8.css" as="style"/><meta name="sentry-trace" content="3b78e4ce5e921d274e33b65714080609-44cd709ef61f7d39-0"/><meta name="baggage" content="sentry-environment=production,sentry-release=a67dca73f6a7,sentry-public_key=80e6ed81a4054a52bc8cfc58be4602bf,sentry-trace_id=3b78e4ce5e921d274e33b65714080609,sentry-sampled=false"/><script id="seo-script" type="application/ld+json" data-nscript="beforeInteractive">{"@context":"http://schema.org","@type":"Organization","url":"https://seed.com/","Name":"Seed®","logo":"images/press-seed.png","description":"The science of probiotics demands precision. In collaboration with leading scientists and research partners from around the world, we develop research- backed probiotics for outcomes across gastrointestinal, dermatological, oral, pediatric, and nutritional health.","image":["images/daily-synbiotic-Seed_PDP_01_Hero_Mobile_1_NEW.jpg","images/daily-synbiotic-Seed_PDP_01_Hero_Mobile_2.png","images/PDS_PDP-pds08_pdp_hero.png","images/DM_400x400.png","images/PM_400x400.png","images/AM_400x400.png","images/BUNDLE_400x400.png"],"foundingDate":"2017","foundingLocation":"Los Angeles","founder":[{"@type":"Person","name":"Ara Katz"},{"@type":"Person","name":"Raja Dhir"}],"address":{"@type":"PostalAddress","streetAddress":"2100 Abbot Kinney Blvd","addressLocality":"Venice","addressRegion":"CA","postalCode":"90291","addressCountry":"USA"},"contactPoint":{"@type":"ContactPoint","contactType":"customer service","email":"care@seed.com","telephone":"[844-646-3586]","url":"https://seed.com/"},"sameAs":["https://www.instagram.com/seed/","https://www.facebook.com/seedmicrobiome/","https://twitter.com/seedhealth","https://en.wikipedia.org/wiki/Seed_(company)"],"parentOrganization":"Seed Health"}</script><script id="google-consent-defaults" data-nscript="beforeInteractive">
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+
+                // EU/EEA/UK/CH regions: GDPR requires opt-in (denied by default)
+                // wait_for_update gives OneTrust time to resolve consent
+                gtag('consent', 'default', {
+                  'ad_storage': 'denied',
+                  'ad_user_data': 'denied',
+                  'ad_personalization': 'denied',
+                  'analytics_storage': 'denied',
+                  'functionality_storage': 'denied',
+                  'personalization_storage': 'denied',
+                  'security_storage': 'granted',
+                  'wait_for_update': 500,
+                  'region': ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']
+                });
+
+                // All other regions: opt-out model (granted by default)
+                // OneTrust will update based on actual user consent choices
+                // Only wait_for_update if user has existing consent cookie (returning visitor)
+                // This avoids 500ms delay for first-time visitors while ensuring
+                // returning visitors who revoked consent have it properly applied
+                var hasConsentCookie = document.cookie.indexOf('OptanonConsent') !== -1;
+                var globalDefaults = {
+                  'ad_storage': 'granted',
+                  'ad_user_data': 'granted',
+                  'ad_personalization': 'granted',
+                  'analytics_storage': 'granted',
+                  'functionality_storage': 'granted',
+                  'personalization_storage': 'granted',
+                  'security_storage': 'granted'
+                };
+                if (hasConsentCookie) {
+                  globalDefaults['wait_for_update'] = 500;
+                }
+                gtag('consent', 'default', globalDefaults);
+              </script><link rel="stylesheet" href="_next/static/css/6dfe793b326d5ac2.css" data-n-g=""/><link rel="stylesheet" href="_next/static/css/e9fe1f1894b911f8.css" data-n-p=""/><noscript data-n-css=""></noscript><script id="local-interceptor">
+// Intercept fetch to handle API calls locally
+(function() {
+  var originalFetch = window.fetch;
+  window.fetch = function(url, options) {
+    if (typeof url === 'string') {
+      // Redirect seed.com API calls to local
+      if (url.startsWith('https://seed.com/')) {
+        url = url.replace('https://seed.com/', '/');
+      }
+      // Block analytics/tracking
+      if (url.includes('segment.') || url.includes('optimizely.') || 
+          url.includes('sentry.') || url.includes('cookielaw.') ||
+          url.includes('google-analytics.') || url.includes('gtag')) {
+        return Promise.resolve(new Response('{}', {status: 200, headers: {'Content-Type': 'application/json'}}));
+      }
+    }
+    return originalFetch.apply(this, arguments);
+  };
+
+  // Intercept XMLHttpRequest too
+  var originalOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method, url) {
+    if (typeof url === 'string') {
+      if (url.startsWith('https://seed.com/')) {
+        url = url.replace('https://seed.com/', '/');
+      }
+      if (url.includes('segment.') || url.includes('optimizely.') ||
+          url.includes('sentry.') || url.includes('cookielaw.') ||
+          url.includes('ingest.sentry.io')) {
+        url = 'about:blank';
+      }
+    }
+    return originalOpen.apply(this, [method, url].concat(Array.prototype.slice.call(arguments, 2)));
+  };
+
+  // Suppress React hydration errors - prevent white screen of death
+  window.addEventListener('error', function(e) {
+    if (e.message && (e.message.includes('hydrat') || e.message.includes('Minified React error'))) {
+      e.preventDefault();
+      console.warn('[Local Clone] Suppressed hydration error:', e.message);
+      // Ensure body stays visible
+      document.body.style.opacity = '1';
+      document.body.style.visibility = 'visible';
+    }
+  });
+
+  // Also handle unhandled promise rejections (fetch failures)
+  window.addEventListener('unhandledrejection', function(e) {
+    if (e.reason && e.reason.message && (
+      e.reason.message.includes('fetch') ||
+      e.reason.message.includes('network') ||
+      e.reason.message.includes('Failed to fetch')
+    )) {
+      e.preventDefault();
+      console.warn('[Local Clone] Suppressed network error:', e.reason.message);
+    }
+  });
+
+  // Force body visible after React loads
+  setTimeout(function() {
+    document.body.style.opacity = '1';
+    document.body.style.visibility = 'visible';
+  }, 100);
+  
+  // Stub out OneTrust
+  window.OneTrust = { 
+    Init: function(){}, 
+    LoadBanner: function(){},
+    InsertHtml: function(){},
+    getGeolocationData: function(){ return {country:'US',state:'CA'}; },
+    InsertScript: function(){},
+    IsAlertBoxClosedAndValid: function(){ return true; }
+  };
+  window.OptanonWrapper = function(){};
+  window.OptanonActiveGroups = ',C0001,C0002,C0003,C0004,';
+  
+  // Stub Segment analytics
+  window.analytics = {
+    track: function(){},
+    identify: function(){},
+    page: function(){},
+    group: function(){},
+    alias: function(){},
+    ready: function(){},
+    reset: function(){},
+    user: function(){ return {}; },
+    on: function(){},
+    off: function(){},
+    load: function(){},
+    _writeKey: '',
+    SNIPPET_VERSION: '4.13.2'
+  };
+})();
+</script>
+<!-- Next.js hydration scripts removed to prevent color flash --><style data-styled="" data-styled-version="6.1.19">:root{--appearance-measurement-100:4px;--appearance-measurement-200:8px;--appearance-measurement-300:12px;--appearance-measurement-400:16px;--appearance-measurement-600:24px;--appearance-measurement-800:32px;--appearance-measurement-1000:40px;--appearance-measurement-1200:48px;--appearance-measurement-1400:56px;--appearance-measurement-1600:64px;--appearance-measurement-1800:72px;--appearance-measurement-2000:80px;--appearance-measurement-2500:100px;--appearance-measurement-00:0px;--appearance-measurement-025:1px;--appearance-measurement-050:2px;--appearance-opacity-10:0.1;--appearance-opacity-20:0.2;--appearance-opacity-30:0.3;--appearance-opacity-40:0.4;--appearance-opacity-50:0.5;--appearance-opacity-60:0.6;--appearance-opacity-70:0.7;--appearance-opacity-80:0.8;--appearance-opacity-90:0.9;--appearance-opacity-100:1;--appearance-opacity-00:0;--color-dark-opacity-10:rgba(0, 0, 0, 0.1);--color-dark-opacity-12:rgba(0, 0, 0, 0.12);--color-dark-opacity-16:rgba(0, 0, 0, 0.16);--color-dark-opacity-20:rgba(0, 0, 0, 0.2);--color-dark-opacity-30:rgba(0, 0, 0, 0.3);--color-dark-opacity-40:rgba(0, 0, 0, 0.4);--color-dark-opacity-50:rgba(0, 0, 0, 0.5);--color-dark-opacity-60:rgba(0, 0, 0, 0.6);--color-dark-opacity-70:rgba(0, 0, 0, 0.7);--color-dark-opacity-80:rgba(0, 0, 0, 0.8);--color-dark-opacity-90:rgba(0, 0, 0, 0.9);--color-dark-opacity-100:#000000;--color-dark-opacity-00:rgba(0, 0, 0, 0);--color-dark-opacity-08:rgba(0, 0, 0, 0.08);--color-guidance-error:#eb5757;--color-guidance-fluorescent-green:#f5a623;--color-guidance-lemongrass:#fce4b8;--color-guidance-warning:#ebb057;--color-light-opacity-10:rgba(255, 255, 255, 0.1);--color-light-opacity-12:rgba(255, 255, 255, 0.12);--color-light-opacity-16:rgba(255, 255, 255, 0.16);--color-light-opacity-20:rgba(255, 255, 255, 0.2);--color-light-opacity-30:rgba(255, 255, 255, 0.3);--color-light-opacity-40:rgba(255, 255, 255, 0.4);--color-light-opacity-50:rgba(255, 255, 255, 0.5);--color-light-opacity-60:rgba(255, 255, 255, 0.6);--color-light-opacity-70:rgba(255, 255, 255, 0.7);--color-light-opacity-80:rgba(255, 255, 255, 0.8);--color-light-opacity-90:rgba(255, 255, 255, 0.9);--color-light-opacity-100:#ffffff;--color-light-opacity-00:rgba(255, 255, 255, 0);--color-light-opacity-08:rgba(255, 255, 255, 0.08);--color-neutral-cool-neutral-20:#f9f9f9;--color-neutral-cool-neutral-40:#efefef;--color-neutral-cool-neutral-60:#e6e6e6;--color-neutral-faded-green-20:#d2d8d0;--color-neutral-faded-green-40:#a4b0a1;--color-neutral-faded-green-60:#778971;--color-neutral-foam-white:#eff1e4;--color-neutral-frosted-glass-t35:rgba(87, 94, 85, 0.35);--color-neutral-frosted-glass-t8:rgba(87, 94, 85, 0.08);--color-neutral-yellowish-white:#f6f7ef;--color-primary-seed-green:#2C1810;--color-primary-seed-green-t10:rgba(44, 24, 16, 0.1);--color-primary-seed-green-t15:rgba(44, 24, 16, 0.15);--color-primary-seed-green-t20:rgba(44, 24, 16, 0.2);--color-primary-seed-green-t5:rgba(44, 24, 16, 0.05);--color-primary-seed-green-t50:rgba(44, 24, 16, 0.5);--color-primary-seed-green-t70:rgba(44, 24, 16, 0.7);--color-primary-snow-white:#fcfcf7;--color-primary-snow-white-t10:rgba(252, 252, 247, 0.1);--color-primary-snow-white-t20:rgba(252, 252, 247, 0.2);--color-primary-snow-white-t50:rgba(252, 252, 247, 0.5);--color-primary-snow-white-t70:rgba(252, 252, 247, 0.7);--color-primary-soft-green:#4A2E1F;--color-primary-white:#ffffff;--extended-palette-arterial-red:#731418;--extended-palette-arterial-red-light:#eedac2;--extended-palette-asparagus-green:#d0d9b9;--extended-palette-duck-green:#466b22;--extended-palette-emerald-green:#97b578;--extended-palette-grass-green:#86996d;--extended-palette-indigo-blue:#4d628d;--extended-palette-indigo-blue-light:#cdd6d1;--extended-palette-oil-green:#ad9f61;--extended-palette-olive-green:#61735e;--extended-palette-pistachio-green:#829249;--extended-palette-reddish-orange:#be6140;--extended-palette-reddish-orange-light:#f7ddaa;--extended-palette-scarlet-red:#ef4800;--extended-palette-siskin-green:#d7e090;--extended-palette-umber-brown:#533b3b;--extended-palette-umber-brown-light:#bb797a;--extended-palette-verdigris-green:#71aa89;--products-am-02-dark:#9f995b;--products-am-02-highlight:#fff593;--products-am-02-light:#faf7d3;--products-am-02-primary:#eae081;--products-am-02-secondary:#f2ecae;--products-dm-02-dark:#757c5d;--products-dm-02-highlight:#dcf194;--products-dm-02-light:#ecf2d7;--products-dm-02-primary:#b7c194;--products-dm-02-secondary:#dee3ca;--products-pm-02-dark:#698e79;--products-pm-02-highlight:#c9f3db;--products-pm-02-light:#ebf5ef;--products-pm-02-primary:#b0d1be;--products-pm-02-secondary:#d2e6da;--state-layer-outer-focused-fixed:#0000f5;--typography-font-brand:Seed Sans;--typography-font-brand-mono:Seed Sans Mono;--typography-size-250:10px;--typography-size-300:12px;--typography-size-350:14px;--typography-size-400:16px;--typography-size-450:18px;--typography-size-500:20px;--typography-size-600:24px;--typography-size-800:32px;--typography-size-1000:40px;--typography-size-1200:48px;--typography-size-1600:64px;--typography-weight-300:light;--typography-weight-400:regular;--typography-weight-500:medium;--actions-bright:var(--color-primary-white);--actions-inverse:var(--color-primary-snow-white);--actions-primary:var(--color-primary-seed-green);--column-compact:var(--appearance-measurement-300);--column-default:var(--appearance-measurement-100);--column-medium:var(--appearance-measurement-200);--container-foam-white:var(--color-neutral-foam-white);--container-gray:var(--color-neutral-cool-neutral-40);--container-light-gray:var(--color-neutral-cool-neutral-20);--container-lightest:var(--color-primary-white);--container-medium-gray:var(--color-neutral-cool-neutral-60);--container-seed-green:var(--color-primary-seed-green);--container-snow-white:var(--color-primary-snow-white);--container-soft-green:var(--color-primary-soft-green);--container-yellowish-white:var(--color-neutral-yellowish-white);--disabled:var(--appearance-opacity-40);--focused:var(--appearance-opacity-80);--gap-4:var(--appearance-measurement-100);--gap-8:var(--appearance-measurement-200);--gap-16:var(--appearance-measurement-400);--gap-24:var(--appearance-measurement-600);--gap-32:var(--appearance-measurement-800);--gap-40:var(--appearance-measurement-1000);--gap-48:var(--appearance-measurement-1200);--gap-56:var(--appearance-measurement-1400);--gap-64:var(--appearance-measurement-1600);--gap-72:var(--appearance-measurement-1800);--gap-80:var(--appearance-measurement-2000);--guidance-guidance-primary:var(--color-guidance-fluorescent-green);--guidance-guidance-secondary:var(--color-guidance-lemongrass);--gutter-large:var(--appearance-measurement-600);--gutter-medium:var(--appearance-measurement-400);--gutter-none:var(--appearance-measurement-00);--gutter-small:var(--appearance-measurement-200);--hover:var(--appearance-opacity-80);--margin-giant:var(--appearance-measurement-2000);--margin-large:var(--appearance-measurement-600);--margin-medium:var(--appearance-measurement-400);--margin-none:var(--appearance-measurement-00);--margin-small:var(--appearance-measurement-200);--outline-error:var(--color-guidance-error);--outline-light:var(--color-primary-snow-white);--outline-lightest:var(--color-primary-snow-white-t20);--outline-neutral:var(--color-neutral-faded-green-20);--outline-neutral-light:var(--color-primary-seed-green-t10);--outline-primary:var(--color-primary-seed-green);--page-grid-column:var(--appearance-measurement-200);--page-grid-gutter:var(--appearance-measurement-400);--page-grid-margin:var(--appearance-measurement-400);--pressed:var(--appearance-opacity-70);--radius-full:var(--appearance-measurement-2500);--radius-large:var(--appearance-measurement-800);--radius-medium:var(--appearance-measurement-400);--radius-small:var(--appearance-measurement-200);--radius-x-small:var(--appearance-measurement-100);--scrim-dark-20:var(--color-dark-opacity-20);--scrim-dark-50:var(--color-dark-opacity-50);--scrim-glass-dark-08:var(--color-neutral-frosted-glass-t8);--scrim-glass-dark-35:var(--color-neutral-frosted-glass-t35);--scrim-glass-light-10:var(--color-primary-snow-white-t10);--scrim-glass-light-20:var(--color-primary-snow-white-t20);--state-layer-dark-disabled:var(--color-dark-opacity-40);--state-layer-dark-enabled:var(--color-dark-opacity-00);--state-layer-dark-focused:var(--color-dark-opacity-12);--state-layer-dark-hovered:var(--color-dark-opacity-08);--state-layer-dark-pressed:var(--color-dark-opacity-12);--state-layer-inner-focused-fixed:var(--color-primary-snow-white);--state-layer-light-disabled:var(--color-light-opacity-60);--state-layer-light-enabled:var(--color-light-opacity-00);--state-layer-light-focused:var(--color-light-opacity-12);--state-layer-light-hovered:var(--color-light-opacity-08);--state-layer-light-pressed:var(--color-light-opacity-12);--stroke-default:var(--appearance-measurement-025);--text-disabled:var(--color-primary-seed-green-t50);--text-error:var(--color-guidance-error);--text-inverse-disabled:var(--color-primary-snow-white-t50);--text-inverse-primary:var(--color-primary-snow-white);--text-inverse-secondary:var(--color-primary-snow-white-t70);--text-primary:var(--color-primary-seed-green);--text-secondary:var(--color-primary-seed-green-t70);--text-warning:var(--color-guidance-warning);}/*!sc*/
+.text-desktop-display-large{font-family:"Seed Sans";font-size:64px;font-weight:350;letter-spacing:-1.28px;line-height:110%;}/*!sc*/
+.text-desktop-display-small{font-family:"Seed Sans";font-size:48px;font-weight:350;letter-spacing:-0.96px;line-height:100%;}/*!sc*/
+.text-fixed-body-large{font-family:"Seed Sans";font-size:18px;font-weight:350;letter-spacing:-0.18px;line-height:140%;}/*!sc*/
+.text-fixed-body-medium{font-family:"Seed Sans";font-size:16px;font-weight:350;letter-spacing:-0.16px;line-height:140%;}/*!sc*/
+.text-fixed-body-small{font-family:"Seed Sans";font-size:14px;font-weight:350;letter-spacing:-0.14px;line-height:140%;}/*!sc*/
+.text-fixed-body-x-large{font-family:"Seed Sans";font-size:20px;font-weight:350;letter-spacing:-0.2px;line-height:140%;}/*!sc*/
+.text-fixed-body-x-small{font-family:"Seed Sans";font-size:12px;font-weight:350;letter-spacing:-0.06px;line-height:140%;}/*!sc*/
+.text-fixed-body-xx-small{font-family:"Seed Sans";font-size:10px;font-weight:350;letter-spacing:-0.05px;line-height:140%;}/*!sc*/
+.text-fixed-eyebrow{font-family:"Seed Sans";font-size:12px;font-weight:500;letter-spacing:0.24px;line-height:110%;}/*!sc*/
+.text-fixed-label-large{font-family:"Seed Sans";font-size:18px;font-weight:500;letter-spacing:-0.18px;line-height:140%;}/*!sc*/
+.text-fixed-label-medium{font-family:"Seed Sans";font-size:16px;font-weight:500;letter-spacing:-0.16px;line-height:140%;}/*!sc*/
+.text-fixed-label-small{font-family:"Seed Sans";font-size:14px;font-weight:500;letter-spacing:-0.14px;line-height:140%;}/*!sc*/
+.text-fixed-label-x-large{font-family:"Seed Sans";font-size:20px;font-weight:500;letter-spacing:-0.2px;line-height:140%;}/*!sc*/
+.text-fixed-label-x-small{font-family:"Seed Sans";font-size:12px;font-weight:500;letter-spacing:-0.06px;line-height:140%;}/*!sc*/
+.text-fixed-mono-large{font-family:"Seed Sans Mono";font-size:16px;font-weight:400;letter-spacing:0px;line-height:110%;}/*!sc*/
+.text-fixed-mono-small{font-family:"Seed Sans Mono";font-size:12px;font-weight:400;letter-spacing:0px;line-height:110%;}/*!sc*/
+.text-fixed-title-large{font-family:"Seed Sans";font-size:32px;font-weight:350;letter-spacing:-0.64px;line-height:110%;}/*!sc*/
+.text-fixed-title-small{font-family:"Seed Sans";font-size:24px;font-weight:350;letter-spacing:-0.36px;line-height:120.00000762939453%;}/*!sc*/
+.effect-frosted-glass-light{backdrop-filter:blur(38px);-webkit-backdrop-filter:blur(38px);}/*!sc*/
+.effect-frosted-glass-strong{backdrop-filter:blur(75px);-webkit-backdrop-filter:blur(75px);}/*!sc*/
+.text-mobile-display-large{font-family:"Seed Sans";font-size:48px;font-weight:350;letter-spacing:-0.96px;line-height:110%;}/*!sc*/
+.text-mobile-display-small{font-family:"Seed Sans";font-size:40px;font-weight:350;letter-spacing:-0.8px;line-height:110%;}/*!sc*/
+.shadow-subtle-shadow{box-shadow:0px 4px 30px 0px rgba(0, 0, 0, 0.07999999821186066);}/*!sc*/
+data-styled.g1[id="sc-global-eHamgE1"]{content:"sc-global-eHamgE1,"}/*!sc*/
+*,*::before,*::after{box-sizing:border-box;}/*!sc*/
+html{-moz-text-size-adjust:none;-webkit-text-size-adjust:none;text-size-adjust:none;}/*!sc*/
+body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0;}/*!sc*/
+ul[role='list'],ol[role='list']{list-style:none;}/*!sc*/
+html:focus-within{scroll-behavior:smooth;}/*!sc*/
+body{min-height:100vh;line-height:1.5;}/*!sc*/
+h1,h2,h3,h4,button,input,label{line-height:1.1;}/*!sc*/
+h1,h2,h3,h4{text-wrap:balance;}/*!sc*/
+a:not([class]){text-decoration-skip-ink:auto;}/*!sc*/
+img,picture{max-width:100%;}/*!sc*/
+input,button,textarea,select{font:inherit;}/*!sc*/
+textarea:not([rows]){min-height:10em;}/*!sc*/
+:target{scroll-margin-block:5ex;}/*!sc*/
+@media (prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto;}}/*!sc*/
+html,body{overflow-x:unset;}/*!sc*/
+body{opacity:1!important;}/*!sc*/
+@font-face{font-family:'SeedSansMono';src:url('/fonts/SeedSansMono-RegularItalic.woff2') format('woff2');font-style:italic;font-weight:400;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSansMono';src:url('/fonts/SeedSansMono-Regular-subset.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-Light-subset.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-Light-subset.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-LightItalic-subset.woff2') format('woff2');font-weight:300;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-LightItalic-subset.woff2') format('woff2');font-weight:300;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-Regular-subset.woff2') format('woff2');font-weight:350;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-Regular-subset.woff2') format('woff2');font-weight:350;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-RegularItalic-subset.woff2') format('woff2');font-weight:350;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-RegularItalic-subset.woff2') format('woff2');font-weight:350;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-Regular-subset.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-Regular-subset.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-RegularItalic-subset.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-RegularItalic-subset.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-Medium-subset.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-Medium-subset.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'SeedSans';src:url('/fonts/SeedSans-MediumItalic-subset.woff2') format('woff2');font-weight:500;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'Seed Sans';src:url('/fonts/SeedSans-MediumItalic-subset.woff2') format('woff2');font-weight:500;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'NeueHaasUnicaW1G';src:url('/fonts/NeueHaasUnicaW1G-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'NeueHaasUnicaW1G-It';src:url('/fonts/NeueHaasUnicaW1G-MediumIt.woff2') format('woff2');font-weight:500;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'NeueHaasUnicaW1G';src:url('/fonts/NeueHaasUnicaW1G-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'NeueHaasUnicaW1G-It';src:url('/fonts/NeueHaasUnicaW1G-Italic.woff2') format('woff2');font-weight:normal;font-style:italic;font-display:swap;}/*!sc*/
+@font-face{font-family:'NeueHaasUnicaW1G';src:url('/fonts/NeueHaasUnicaW1G-Light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;}/*!sc*/
+@font-face{font-family:'NeueHaasUnicaW1G-It';src:url('/fonts/NeueHaasUnicaW1G-LightIt.woff2') format('woff2');font-weight:300;font-style:italic;font-display:swap;}/*!sc*/
+html{background:var(--color--snowwhite);font-size:1rem;min-height:100%;}/*!sc*/
+body{color:var(--color-text);font-family:var(--ff-sans);-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;line-height:1.4;margin:0;min-height:100%;-ms-overflow-style:-ms-autohiding-scrollbar;}/*!sc*/
+.has-menu,.has-annotation,.has-loader{overflow:hidden;}/*!sc*/
+main{transition:transform 0.25s cubic-bezier(0.75,0,0.25,1);position:relative;z-index:1;}/*!sc*/
+.has-annotation main{transform:translate3d(-600px,0,0);}/*!sc*/
+@media (max-width: 59.9375em){.has-annotation main{transform:translate3d(-95%,0,0);}}/*!sc*/
+:root{--bdrs-s:0.5rem;--bdrs-sm:0.75rem;--bdrs-m:1rem;--bdrs-l:2rem;--bdrs-pill:99em;}/*!sc*/
+:root{--color--seedgreen:#B8722D;--color--seedgreen-active:#142f0c;--color--seedgreen-hover:#334e2b;--color--seedgreen-card:rgba(184, 114, 45, 0.15);--color--seedgreen-pressed:#162e0f;--color--seedgreen-faded:rgba(28,58,19,0.5);--color--seedgreen-t5:rgba(28,58,19,0.05);--color--seedgreen-t10:rgba(28,58,19,0.10);--color--seedgreen-t20:rgba(28,58,19,0.2);--color--mossroot:#3d5b34;--color--olivegreen:#61735e;--color--frostedglass-t55:rgba(87,94,85,0.55);--color--frostedglass-t35:rgba(87,94,85,0.35);--color--frostedglass-t8:rgba(87,94,85,0.08);--color--micronav-green:#58644c;--color--yellowishwhite:#f6f7ef;--color--lemongrass:#e9f0ca;--color--asparagusgreen:#d0d9b9;--color--asparagusgreen-hover:#d9e1c7;--color--asparagusgreen-pressed:#bbc3a6;--color-guidance-fluorescent-green:#f5a623;--color--snowwhite:#fcfcf7;--color--foamwhite:#eff1e4;--color--snowwhite-t10:#fcfcf71a;--color--snowwhite-t20:#fcfcf733;--color--snowwhite-focus:#fcfcf780;--color--seedgreen-t5:rgba(28,58,19,0.05);--color--seedgreen-t20:rgba(28,58,19,0.2);--color--black:#000000;--color--white:#ffffff;--color-bg-primary:var(--color--seedgreen);--color-bg-primary-hover:var(--color--seedgreen-hover);--color-bg-primary-pressed:var(--color--seedgreen-pressed);--color-text-primary:var(--color--snowwhite);--color-bg-secondary:var(--color--asparagusgreen);--color-bg-secondary-hover:var(--color--asparagusgreen-hover);--color-bg-secondary-pressed:var(--color--asparagusgreen-pressed);--color-text-secondary:var(--color--seedgreen);--color-bg-active:var(--color--snowwhite);--color-bg-active-hover:var(--color-white);--color-bg-active-pressed:#e3e3de;--color-text-active:var(--color--seedgreen);--color-bg-ghost:var(--color--snowwhite);--color-bg-ghost-hover:var(--color-white);--color-text-ghost:var(--color--snowwhite);--color-text-ghost-hover:var(--color--seedgreen);--color-bg-disabled:#d3d3d3;--color-text-disabled:#9ca599;--color--arterialred:#731418;--color--dm:#757c5d;--color--am:#9f995b;--color--pm:#698e79;--color--dm-redemption:#dee3ca;--color--am-redemption:rgba(223,214,134,0.7);--color--pm-redemption:#d2e6da;}/*!sc*/
+:root{--grid:repeat(var(--space-columns),minmax(0,1fr));--space-columns:4;--grid-width:calc(100vw - (2 * var(--space-outer)));--total-gutter:3;--grid-col-width:calc( (var(--grid-width) - var(--total-gutter) * var(--space-gutter)) / var(--space-columns) );}/*!sc*/
+@media (min-width: 37.5em){:root{--space-columns:8;--total-gutter:7;}}/*!sc*/
+@media (min-width: 60em){:root{--space-columns:12;--total-gutter:11;}}/*!sc*/
+@media (min-width: 90em){:root{--grid-width:var(--maw);}}/*!sc*/
+:root{--nav-height:3rem;--banner-height:2.5rem;--space-fixed-1:0.5rem;--space-fixed-2:1rem;--space-fixed-2-5:1.25rem;--space-fixed-3:1.5rem;--space-fixed-3-5:1.75rem;--space-fixed-4:2rem;--space-fixed-4-5:2.25rem;--space-fixed-5:2.5rem;--space-fixed-6:3.5rem;--space-6:5rem;--space-5:4rem;--space-4:2rem;--space-3:1.5rem;--space-2:1rem;--space-1:0.5rem;--maw:90rem;--maw-w:68.75rem;--maw-n:55.3125rem;--maw-xn:40.8125rem;--vp-h:100dvh;--space-gutter:1.25rem;--space-gutter-s:calc(var(--space-gutter) / 2);--space-gutter-v:var(--space-gutter);--space-outer:var(--space-2);--space-outer-v:var(--space-6);--space-inner:var(--space-2);--space-inner-v:var(--space-3);}/*!sc*/
+@media (min-width: 37.5em){:root{--space-6:6rem;--space-5:4.5rem;--space-4:2.5rem;--space-3:2rem;--space-2:1.5rem;--space-1:1rem;}}/*!sc*/
+@media (min-width: 60em){:root{--space-6:8.3125rem;--space-5:5rem;--space-4:3.5625rem;--space-3:2.5rem;--space-2:2rem;--space-1:1.5rem;}}/*!sc*/
+:root{--color-bg:var(--color--snowwhite);--color-text:var(--color--seedgreen);}/*!sc*/
+:root{--trs-prop:all;--trs-time:0.3s;--trs-tfunc:ease-in-out;--trs:var(--trs-prop) var(--trs-time) var(--trs-tfunc);}/*!sc*/
+:root{--flag-font-family:'Seed Sans',Helvetica,sans-serif;--flag-border-radius:99px;--flag-border-radius-points-badge:99px;--flag-letter-spacing-1:-1%;--flag-letter-spacing-2:-2%;--flag-margin:calc((var(--nav-height) + var(--space-fixed-1)) * -1);--flag-vaginal-margin:-30px;--flag-vaginal-padding:0px;--flag-hero-padding:0px;--flag-site-content-padding-top:0;--flag-site-content-padding-top-2:14px;}/*!sc*/
+data-styled.g34[id="sc-global-hfEkhR1"]{content:"sc-global-hfEkhR1,"}/*!sc*/
+.coCPJR{--color-text:var(--color--seedgreen);}/*!sc*/
+.OIZSz{--color-text:var(--color--snowwhite);}/*!sc*/
+data-styled.g36[id="sc-413e5ea6-0"]{content:"coCPJR,OIZSz,"}/*!sc*/
+.hwtDyp{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:2.5rem;--lh:1.1;--lts:-0.025em;}/*!sc*/
+@media (min-width: 37.5em){.hwtDyp{--fz:3rem;}}/*!sc*/
+data-styled.g37[id="sc-413e5ea6-1"]{content:"hwtDyp,"}/*!sc*/
+.Qqlry{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:2rem;--lh:1.1;--lts:-0.015em;}/*!sc*/
+@media (min-width: 37.5em){.Qqlry{--fz:3rem;}}/*!sc*/
+data-styled.g38[id="sc-413e5ea6-2"]{content:"Qqlry,"}/*!sc*/
+.bkcVyT{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:1.75rem;--lh:1.1;--lts:-0.01em;}/*!sc*/
+@media (min-width: 37.5em){.bkcVyT{--fz:2.5rem;}}/*!sc*/
+data-styled.g39[id="sc-413e5ea6-3"]{content:"bkcVyT,"}/*!sc*/
+.jSVdBp{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:400;--fz:1.75rem;--lh:1.1;--lts:-0.01em;}/*!sc*/
+@media (min-width: 37.5em){.jSVdBp{--fz:2rem;}}/*!sc*/
+data-styled.g41[id="sc-413e5ea6-5"]{content:"jSVdBp,"}/*!sc*/
+.dmRLuy{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:1.5rem;--lh:1.2;--lts:-0.02em;}/*!sc*/
+data-styled.g42[id="sc-413e5ea6-6"]{content:"dmRLuy,"}/*!sc*/
+.dGEvBT{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:1.25rem;--lh:1.3;--lts:-0.01em;}/*!sc*/
+data-styled.g43[id="sc-413e5ea6-7"]{content:"dGEvBT,"}/*!sc*/
+.cJfIGx{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:1rem;--lh:1.3;--lts:-0.01em;}/*!sc*/
+data-styled.g45[id="sc-413e5ea6-9"]{content:"cJfIGx,"}/*!sc*/
+.hzUlAx{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:500;--fz:0.75rem;--tt:uppercase;font-family:var(--ff-sans-medium,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);}/*!sc*/
+data-styled.g46[id="sc-413e5ea6-10"]{content:"hzUlAx,"}/*!sc*/
+.cXegNI{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:300;--fz:0.75rem;--tt:uppercase;font-family:var(--ff-sans-mono,"Seed Sans Mono", monospace);}/*!sc*/
+data-styled.g47[id="sc-413e5ea6-11"]{content:"cXegNI,"}/*!sc*/
+.egNwcf{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:0.75rem;--lh:1.4;}/*!sc*/
+@media (min-width: 37.5em){.egNwcf{--fz:1rem;}}/*!sc*/
+data-styled.g48[id="sc-413e5ea6-12"]{content:"egNwcf,"}/*!sc*/
+.gOdofi{color:var(--color-text);font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);font-size:var(--fz,1rem);font-weight:var(--fw,inherit);letter-spacing:var(--lts,normal);line-height:var(--lh,inherit);text-transform:var(--tt,none);--fw:350;--fz:0.75rem;--lh:1.4;--lts:-0.003em;}/*!sc*/
+data-styled.g49[id="sc-413e5ea6-13"]{content:"gOdofi,"}/*!sc*/
+.dVraTm{grid-column:1/-1;}/*!sc*/
+@media (min-width: 60em){.dVraTm{grid-column:8/span 5;margin-top:0;}}/*!sc*/
+data-styled.g50[id="sc-bb622dc8-0"]{content:"dVraTm,"}/*!sc*/
+.fgVjzs{display:flex;flex-wrap:wrap;row-gap:var(--space-fixed-3);height:100%;margin:0;padding:0;list-style:none;}/*!sc*/
+data-styled.g51[id="sc-bb622dc8-1"]{content:"fgVjzs,"}/*!sc*/
+.jByjNq{flex-grow:1;width:50%;}/*!sc*/
+.jByjNq span{opacity:0.5;}/*!sc*/
+@media (min-width: 60em){.jByjNq{width:33%;}}/*!sc*/
+data-styled.g52[id="sc-bb622dc8-2"]{content:"jByjNq,"}/*!sc*/
+.lnQSJF{margin-inline:0;margin-block-start:var(--space-fixed-2);padding:0;list-style:none;}/*!sc*/
+.lnQSJF li+li{margin-block:var(--space-fixed-1);}/*!sc*/
+data-styled.g53[id="sc-bb622dc8-3"]{content:"lnQSJF,"}/*!sc*/
+.jeuLRB{color:var(--color--snowwhite);text-decoration:none;font-size:0.875rem;}/*!sc*/
+.jeuLRB:hover{color:var(--color--snowwhite);opacity:0.5;}/*!sc*/
+data-styled.g54[id="sc-bb622dc8-4"]{content:"jeuLRB,"}/*!sc*/
+.GkLCs{color:var(--color--snowwhite);opacity:0.5;}/*!sc*/
+data-styled.g55[id="sc-bb622dc8-5"]{content:"GkLCs,"}/*!sc*/
+.iCsCEw{display:grid;gap:var(--space-2);grid-template-columns:repeat(var(--space-columns),minmax(0,1fr));row-gap:0;}/*!sc*/
+.gtnmyo{display:grid;gap:var(--space-2);grid-template-columns:repeat(var(--space-columns),minmax(0,1fr));}/*!sc*/
+data-styled.g56[id="sc-a72cd7bc-0"]{content:"iCsCEw,gtnmyo,"}/*!sc*/
+.hTQtFS{position:absolute;width:100%;height:5rem;}/*!sc*/
+@media (min-width: 60em){.hTQtFS{margin-top:-60px!important;height:12rem;}}/*!sc*/
+data-styled.g57[id="sc-ba2bdb0f-0"]{content:"hTQtFS,"}/*!sc*/
+.ewSpsC{position:relative;width:100%;margin-bottom:19.75rem;}/*!sc*/
+data-styled.g58[id="sc-ba2bdb0f-1"]{content:"ewSpsC,"}/*!sc*/
+.cPsJUc{background-color:var(--color--seedgreen);color:var(--color--snowwhite);padding-top:2rem;padding-left:1rem;padding-right:1rem;padding-bottom:2rem;position:relative;z-index:3;row-gap:var(--space-fixed-4);}/*!sc*/
+@media (min-width: 60em){.cPsJUc{padding:4rem;}}/*!sc*/
+data-styled.g60[id="sc-ba2bdb0f-3"]{content:"cPsJUc,"}/*!sc*/
+.cGkMzU{grid-column:1/-1;display:grid;flex-direction:column;justify-content:space-between;}/*!sc*/
+.cGkMzU>*+*{margin-top:2rem;}/*!sc*/
+.cGkMzU >a{text-align:center;}/*!sc*/
+@media (min-width: 60em){.cGkMzU >a{text-align:left;}}/*!sc*/
+@media (max-width: 59.9375em){.cGkMzU >a{margin-block:var(--space-fixed-5);}}/*!sc*/
+@media (min-width: 60em){.cGkMzU{grid-column:auto/span 6;margin-bottom:83px;}}/*!sc*/
+data-styled.g61[id="sc-ba2bdb0f-4"]{content:"cGkMzU,"}/*!sc*/
+.fzlNOd>*+*{margin-top:2rem;}/*!sc*/
+data-styled.g62[id="sc-ba2bdb0f-5"]{content:"fzlNOd,"}/*!sc*/
+.hcbBmV{color:var(--color--snowwhite);font-feature-settings:'ss05' on;font-family:var(--ff,'Seed Sans');letter-spacing:0!important;}/*!sc*/
+@media (max-width: 59.9375em){.hcbBmV{font-size:1.5rem;font-weight:350;line-height:120%;}}/*!sc*/
+.hcbBmV svg{margin-bottom:-6px;}/*!sc*/
+.hcbBmV svg:nth-of-type(3){margin-bottom:0px;padding:0px 6px;width:48px;}/*!sc*/
+data-styled.g63[id="sc-ba2bdb0f-6"]{content:"hcbBmV,"}/*!sc*/
+.iugReo{color:var(--color--snowwhite);opacity:0.5;font-size:0.875rem;}/*!sc*/
+data-styled.g64[id="sc-ba2bdb0f-7"]{content:"iugReo,"}/*!sc*/
+.jnmlWu{display:flex;flex-direction:column;}/*!sc*/
+.jnmlWu label{color:var(--color--snowwhite);}/*!sc*/
+data-styled.g65[id="sc-ba2bdb0f-8"]{content:"jnmlWu,"}/*!sc*/
+.huRjhJ[type='email']{background:transparent;appearance:none;color:var(--color--snowwhite);border:2px solid var(--color--snowwhite);border-radius:var(--bdrs-s);padding:0.875rem 1.25rem;width:100%;height:52px;}/*!sc*/
+.huRjhJ:focus-visible{outline:1px solid var(--color-guidance-fluorescent-green);}/*!sc*/
+.huRjhJ::placeholder{opacity:0.5;color:var(--color--snowwhite);font-size:0.875rem;}/*!sc*/
+@media ((min-width: 60em)){.huRjhJ::placeholder{opacity:1;}}/*!sc*/
+.huRjhJ:focus::placeholder{opacity:0;}/*!sc*/
+data-styled.g66[id="sc-ba2bdb0f-9"]{content:"huRjhJ,"}/*!sc*/
+.gilQGW{position:relative;max-width:26.5625rem;width:100%;margin-top:var(--space-fixed-2);}/*!sc*/
+data-styled.g67[id="sc-ba2bdb0f-10"]{content:"gilQGW,"}/*!sc*/
+.ckLfEX{appearance:none;background:transparent;border:none;color:var(--color--snowwhite);cursor:pointer;display:flex;align-items:center;justify-content:center;padding-inline:var(--space-fixed-2);position:absolute;top:50%;right:0;transform:translate3d(0,-50%,0);height:100%;z-index:2;width:43px;}/*!sc*/
+data-styled.g68[id="sc-ba2bdb0f-11"]{content:"ckLfEX,"}/*!sc*/
+.fBEvrz{position:fixed;bottom:0;background-size:cover;background-position:center;width:100%;min-height:50rem;z-index:-1;}/*!sc*/
+.fBEvrz:before{content:'';position:absolute;inset:0;height:100%;width:100%;background-blend-mode:multiply;background:rgba(59,82,40,0.48);}/*!sc*/
+data-styled.g69[id="sc-ba2bdb0f-12"]{content:"fBEvrz,"}/*!sc*/
+.dGtHtq{padding-block:21.875rem 8.875rem;margin-top:15.125rem;position:relative;}/*!sc*/
+.dGtHtq svg{width:0;height:0;}/*!sc*/
+data-styled.g70[id="sc-ba2bdb0f-13"]{content:"dGtHtq,"}/*!sc*/
+.ixcaKn{text-align:center;color:var(--color--snowwhite);}/*!sc*/
+data-styled.g72[id="sc-ba2bdb0f-15"]{content:"ixcaKn,"}/*!sc*/
+.gUvxCH{display:flex;padding:8px var(--spacing--base,8px);align-items:flex-start;gap:8px;border-radius:4px;border:1px solid rgba(252,252,247,0.1);width:400px;flex:1 0 0;font-size:0.625rem;font-weight:350;color:#fff;}/*!sc*/
+data-styled.g75[id="sc-ba2bdb0f-18"]{content:"gUvxCH,"}/*!sc*/
+.crAOth{box-sizing:content-box;margin-left:auto;margin-right:auto;max-width:var(--maw);width:100%;}/*!sc*/
+data-styled.g77[id="sc-f76ffe93-0"]{content:"crAOth,"}/*!sc*/
+.ihVdLq{padding-inline:var(--space-fixed-1);position:sticky;top:var(--space-fixed-1);z-index:10;}/*!sc*/
+@media (min-width: 60em){.ihVdLq{padding-inline-start:var(--space-fixed-2);}}/*!sc*/
+.ihVdLq *{letter-spacing:-0.04px;}/*!sc*/
+data-styled.g83[id="sc-a8566d8e-0"]{content:"ihVdLq,"}/*!sc*/
+.ktsopc{font-family:'Seed Sans';font-weight:300;line-height:1;color:#2C1810;text-decoration:none;align-content:center;font-size:20px;z-index:2;}/*!sc*/
+.ktsopc.ktsopc{letter-spacing:normal;}/*!sc*/
+.ktsopc:hover,.ktsopc:focus{font-family:'Seed Sans';font-weight:300;line-height:1;color:#2C1810;}/*!sc*/
+data-styled.g84[id="sc-63c72040-0"]{content:"ktsopc,"}/*!sc*/
+.evVzdr{display:flex;align-items:center;}/*!sc*/
+data-styled.g85[id="sc-a5094583-0"]{content:"evVzdr,"}/*!sc*/
+.ewPaTi{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);border:none;cursor:pointer;text-align:center;font-family:var(--ff,'Seed Sans');font-style:normal;font-weight:350;line-height:normal;letter-spacing:-0.0025em;text-decoration:none;--focus-color:var(--color-primary-seed-green);background:var(--color-primary-seed-green);color:var(--color-primary-snow-white);padding:var(--spacing--x2, 16px) var(--spacing--x3, 24px);--fz:16px;font-size:var(--fz);gap:0;}/*!sc*/
+.ewPaTi:focus,.ewPaTi:focus-visible{border:3px solid var(--color-primary-seed-green);box-shadow:0 0 0 0.5px var(--color--snowwhite-focus);}/*!sc*/
+.ewPaTi:focus-visible{outline:none;}/*!sc*/
+.ewPaTi:disabled{opacity:0.5;cursor:not-allowed;pointer-events:none;}/*!sc*/
+.ewPaTi:hover,.ewPaTi:focus,.ewPaTi:active{color:var(--color-primary-seed-green);background:var(--color-primary-snow-white);--focus-color:var(--color-primary-snow-white);}/*!sc*/
+.ewPaTi:active{background:var(--color-neutral-foam-white);}/*!sc*/
+.ewPaTi:hover .sc-a5094583-0,.ewPaTi:focus .sc-a5094583-0,.ewPaTi:active .sc-a5094583-0{margin-left:8px;}/*!sc*/
+.iVgFZj{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);border:none;cursor:pointer;text-align:center;font-family:var(--ff,'Seed Sans');font-style:normal;font-weight:350;line-height:normal;letter-spacing:-0.0025em;text-decoration:none;--focus-color:var(--color-primary-seed-green);background:var(--color-primary-seed-green);color:var(--color-primary-snow-white);padding:var(--spacing--x2, 16px) var(--spacing--x3, 24px);--fz:16px;font-size:var(--fz);gap:8px;}/*!sc*/
+.iVgFZj:focus,.iVgFZj:focus-visible{border:3px solid var(--color-primary-snow-white);box-shadow:0 0 0 0.5px var(--color-primary-seed-green);}/*!sc*/
+.iVgFZj:focus-visible{outline:none;}/*!sc*/
+.iVgFZj:disabled{opacity:0.5;cursor:not-allowed;pointer-events:none;}/*!sc*/
+.iVgFZj:hover,.iVgFZj:focus,.iVgFZj:active{color:var(--color-primary-snow-white);background:var(--color-primary-seed-green);--focus-color:var(--color-primary-seed-green);}/*!sc*/
+.iVgFZj:active{background:var(--color--seedgreen-active);}/*!sc*/
+.iVgFZj:hover .sc-a5094583-0,.iVgFZj:focus .sc-a5094583-0,.iVgFZj:active .sc-a5094583-0{margin-left:8px;}/*!sc*/
+.bAsSQK{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);border:none;cursor:pointer;text-align:center;font-family:var(--ff,'Seed Sans');font-style:normal;font-weight:350;line-height:normal;letter-spacing:-0.0025em;text-decoration:none;--focus-color:var(--color-primary-seed-green);background:var(--color-primary-seed-green);color:var(--color-primary-snow-white);padding:10px;--fz:14px;font-size:var(--fz);gap:8px;}/*!sc*/
+.bAsSQK:focus,.bAsSQK:focus-visible{border:3px solid var(--color-primary-snow-white);box-shadow:0 0 0 0.5px var(--color-primary-seed-green);}/*!sc*/
+.bAsSQK:focus-visible{outline:none;}/*!sc*/
+.bAsSQK:disabled{opacity:0.5;cursor:not-allowed;pointer-events:none;}/*!sc*/
+.bAsSQK:hover,.bAsSQK:focus,.bAsSQK:active{color:var(--color-primary-snow-white);background:var(--color-primary-seed-green);--focus-color:var(--color-primary-seed-green);}/*!sc*/
+.bAsSQK:active{background:var(--color--seedgreen-active);}/*!sc*/
+.bAsSQK:hover .sc-a5094583-0,.bAsSQK:focus .sc-a5094583-0,.bAsSQK:active .sc-a5094583-0{margin-left:8px;}/*!sc*/
+data-styled.g86[id="sc-a5094583-1"]{content:"ewPaTi,iVgFZj,bAsSQK,"}/*!sc*/
+.vwwvS{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);border:none;cursor:pointer;text-align:center;font-family:var(--ff,'Seed Sans');font-style:normal;font-weight:350;line-height:normal;letter-spacing:-0.0025em;text-decoration:none;--focus-color:var(--color-primary-seed-green);background:var(--color-primary-seed-green);color:var(--color-primary-snow-white);padding:var(--spacing--x2, 16px) var(--spacing--x3, 24px);--fz:16px;font-size:var(--fz);}/*!sc*/
+.vwwvS:focus,.vwwvS:focus-visible{border:3px solid var(--color-primary-snow-white);box-shadow:0 0 0 0.5px var(--color-primary-seed-green);}/*!sc*/
+.vwwvS:focus-visible{outline:none;}/*!sc*/
+.vwwvS:disabled{opacity:0.5;cursor:not-allowed;pointer-events:none;}/*!sc*/
+.vwwvS:hover,.vwwvS:focus,.vwwvS:active{color:var(--color-primary-snow-white);background:var(--color-primary-seed-green);--focus-color:var(--color-primary-seed-green);}/*!sc*/
+.vwwvS:active{background:var(--color--seedgreen-active);}/*!sc*/
+.vwwvS:hover .sc-a5094583-0,.vwwvS:focus .sc-a5094583-0,.vwwvS:active .sc-a5094583-0{margin-left:8px;}/*!sc*/
+.GsxeN{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);border:none;cursor:pointer;text-align:center;font-family:var(--ff,'Seed Sans');font-style:normal;font-weight:350;line-height:normal;letter-spacing:-0.0025em;text-decoration:none;--focus-color:var(--color-primary-snow-white);background:var(--color-primary-snow-white);color:var(--color-primary-seed-green);padding:var(--spacing--x2, 16px) var(--spacing--x3, 24px);--fz:16px;font-size:var(--fz);}/*!sc*/
+.GsxeN:focus,.GsxeN:focus-visible{border:3px solid var(--color-primary-seed-green);box-shadow:0 0 0 0.5px var(--color--snowwhite-focus);}/*!sc*/
+.GsxeN:focus-visible{outline:none;}/*!sc*/
+.GsxeN:disabled{opacity:0.5;cursor:not-allowed;pointer-events:none;}/*!sc*/
+.GsxeN:hover,.GsxeN:focus,.GsxeN:active{color:var(--color-primary-seed-green);background:var(--color-primary-snow-white);--focus-color:var(--color-primary-snow-white);}/*!sc*/
+.GsxeN:active{background:var(--color-neutral-foam-white);}/*!sc*/
+.GsxeN:hover .sc-a5094583-0,.GsxeN:focus .sc-a5094583-0,.GsxeN:active .sc-a5094583-0{margin-left:8px;}/*!sc*/
+data-styled.g87[id="sc-a5094583-2"]{content:"vwwvS,GsxeN,"}/*!sc*/
+.gGAMkK{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);padding:0.5em 0.667em;font-family:var(--ff,'Seed Sans');font-size:var(--fz);font-style:normal;font-weight:500;line-height:100%;--fz:0.75rem;color:var(--color-primary-seed-green);background:var(--color-guidance-fluorescent-green);}/*!sc*/
+.iGBdRP{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);padding:0.5em 0.667em;font-family:var(--ff,'Seed Sans');font-size:var(--fz);font-style:normal;font-weight:500;line-height:100%;--fz:0.75rem;color:var(--color-primary-snow-white);background:var(--products-dm-02-dark);}/*!sc*/
+.hNJQHC{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);padding:0.5em 0.667em;font-family:var(--ff,'Seed Sans');font-size:var(--fz);font-style:normal;font-weight:500;line-height:100%;--fz:0.75rem;color:var(--color-primary-snow-white);background:var(--products-am-02-dark);}/*!sc*/
+.iepVBv{display:inline-flex;justify-content:center;align-items:center;border-radius:var(--bdrs-pill);padding:0.5em 0.667em;font-family:var(--ff,'Seed Sans');font-size:var(--fz);font-style:normal;font-weight:500;line-height:100%;--fz:0.75rem;color:var(--color-primary-snow-white);background:var(--products-pm-02-dark);}/*!sc*/
+data-styled.g88[id="sc-60b7c4e8-0"]{content:"gGAMkK,iGBdRP,hNJQHC,iepVBv,"}/*!sc*/
+.hsVaWe{align-items:center;border-radius:var(--bdrs-pill);display:inline-flex;gap:1em;min-height:48px;overflow:hidden;padding-inline:var(--space-fixed-2);position:relative;width:100%;}/*!sc*/
+.hsVaWe.is-open{padding-inline-end:0;}/*!sc*/
+@media (min-width: 60em){.hsVaWe{padding-inline:2em;}}/*!sc*/
+html.with-little-scrolled .hsVaWe a{color:var(--color--snowwhite);}/*!sc*/
+data-styled.g90[id="sc-f73a1584-1"]{content:"hsVaWe,"}/*!sc*/
+.bdmyiO{transition:background-color 0.3s ease-in-out,color 0.3s ease-in-out,backdrop-filter 0.3s ease-in-out,-webkit-backdrop-filter 0.3s ease-in-out;border-radius:inherit;position:absolute;top:0;left:0;width:100%;height:100%;}/*!sc*/
+@media (max-width: 59.9375em){.bdmyiO{inset:0;}}/*!sc*/
+html.with-little-scrolled .bdmyiO{background:rgba(87,94,85,0.4);backdrop-filter:blur(38px);-webkit-backdrop-filter:blur(38px);}/*!sc*/
+.bdmyiO.is-open{background:rgba(87,94,85,0.4);backdrop-filter:blur(38px);-webkit-backdrop-filter:blur(38px);}/*!sc*/
+data-styled.g91[id="sc-f73a1584-2"]{content:"bdmyiO,"}/*!sc*/
+.clNkIY{display:flex;justify-content:space-between;position:relative;padding-right:var(--space-fixed-1);width:100%;z-index:5;}/*!sc*/
+data-styled.g96[id="sc-f73a1584-7"]{content:"clNkIY,"}/*!sc*/
+.btTDJG{background:none;border:none;color:var(--color--snowwhite);cursor:pointer;font-size:0.875rem;padding:0.5em 0.75em;position:relative;line-height:1;}/*!sc*/
+html:not(.with-little-scrolled) .btTDJG.theme-green{color:var(--color--seedgreen);}/*!sc*/
+.btTDJG.with-label{display:flex;align-items:center;gap:4px;}/*!sc*/
+data-styled.g97[id="sc-f73a1584-8"]{content:"btTDJG,"}/*!sc*/
+.bfshQ{display:flex;font-family:var(--ff,"Seed Sans", system-ui, "Helvetic Neue", "Helvetica", Arial, sans-serif);justify-content:space-between;}/*!sc*/
+data-styled.g106[id="sc-f73a1584-17"]{content:"bfshQ,"}/*!sc*/
+.ibGwLj{display:flex;position:relative;max-width:375px;width:100%;}/*!sc*/
+data-styled.g108[id="sc-f73a1584-19"]{content:"ibGwLj,"}/*!sc*/
+.hdcPyx{align-items:center;display:inline-flex;justify-content:center;gap:8px;border-radius:var(--bdrs-pill);background:none;border:none;cursor:pointer;font-family:var(--ff,'Seed Sans');font-size:1rem;font-style:normal;font-weight:500;line-height:normal;letter-spacing:-0.04px;text-transform:capitalize;text-decoration:none;position:relative;font-weight:500;color:var(--color--seedgreen);}/*!sc*/
+.hdcPyx:after{content:'';background-color:currentColor;position:absolute;bottom:-0.3em;left:0;height:1px;width:calc(100% - 20px);}/*!sc*/
+.hdcPyx:hover{color:var(--color--seedgreen);}/*!sc*/
+.eBnxQF{align-items:center;display:inline-flex;justify-content:center;gap:8px;border-radius:var(--bdrs-pill);background:none;border:none;cursor:pointer;font-family:var(--ff,'Seed Sans');font-size:0.875rem;font-style:normal;font-weight:500;line-height:normal;letter-spacing:-0.04px;text-transform:capitalize;text-decoration:none;position:relative;font-weight:500;color:var(--color--snowwhite);}/*!sc*/
+.eBnxQF:after{content:'';background-color:currentColor;position:absolute;bottom:-0.3em;left:0;height:1px;width:calc(100% - 16px);}/*!sc*/
+.eBnxQF:hover{color:var(--color--snowwhite);}/*!sc*/
+data-styled.g116[id="sc-53616bdf-0"]{content:"hdcPyx,eBnxQF,"}/*!sc*/
+.cBTRmd{color:currentColor;padding-right:0.1rem;}/*!sc*/
+.esxijv{color:currentColor;top:-0.25em;font-size:75%;line-height:0;position:relative;vertical-align:baseline;}/*!sc*/
+data-styled.g117[id="sc-9317bf53-0"]{content:"cBTRmd,esxijv,"}/*!sc*/
+.gzVGyL{background:var(--color--snowwhite);padding:var(--space-outer);}/*!sc*/
+data-styled.g1333[id="sc-6e354259-0"]{content:"gzVGyL,"}/*!sc*/
+.kaSEom{display:flex;flex-direction:column;align-items:flex-start;text-align:left;}/*!sc*/
+.kaSEom>*+*{margin-top:1rem;}/*!sc*/
+@media (min-width: 60em){.kaSEom>*+*{margin-top:1.5rem;}}/*!sc*/
+@media (min-width: 37.5em){.kaSEom{align-items:center;text-align:center;}}/*!sc*/
+.fMwsGW{display:flex;flex-direction:column;align-items:flex-start;text-align:left;}/*!sc*/
+.fMwsGW>*+*{margin-top:1rem;}/*!sc*/
+@media (min-width: 60em){.fMwsGW>*+*{margin-top:1.5rem;}}/*!sc*/
+data-styled.g1334[id="sc-6e354259-1"]{content:"kaSEom,fMwsGW,"}/*!sc*/
+.fhgRWj{max-inline-size:28.125rem;}/*!sc*/
+.fhgRWj>*+*{margin-top:2rem;}/*!sc*/
+.fmaSxW{max-inline-size:21.875rem;}/*!sc*/
+.fmaSxW>*+*{margin-top:2rem;}/*!sc*/
+data-styled.g1335[id="sc-6e354259-2"]{content:"fhgRWj,fmaSxW,"}/*!sc*/
+.jdhFDc{max-inline-size:43.75rem;margin:0;}/*!sc*/
+.jdfUDY{max-inline-size:31.25rem;margin:0;}/*!sc*/
+data-styled.g1336[id="sc-6e354259-3"]{content:"jdhFDc,jdfUDY,"}/*!sc*/
+.hXDUNb{margin-bottom:0.8125rem;}/*!sc*/
+@media ((max-width: 59.9375em)){.hXDUNb{margin-bottom:2.25875rem;}}/*!sc*/
+data-styled.g1337[id="sc-910d0348-0"]{content:"hXDUNb,"}/*!sc*/
+.brytll{background:var(--color--snowwhite);padding-block:var(--space-5);padding-inline:var(--space-outer);}/*!sc*/
+@media (max-width: 59.9375em){.brytll{padding-block:var(--space-fixed-2);}}/*!sc*/
+data-styled.g1338[id="sc-8a481476-0"]{content:"brytll,"}/*!sc*/
+.cpDkWx{background-color:var(--color--seedgreen);background-size:cover;aspect-ratio:1/1;border-radius:var(--bdrs-m);align-items:center;justify-content:center;display:flex;flex-direction:column;overflow:hidden;position:relative;grid-column:auto/span 6;padding:3rem 8rem;width:100%;}/*!sc*/
+@media (max-width: 59.9375em){.cpDkWx{padding:1.5rem 3.5rem;grid-column:1/-1;}}/*!sc*/
+.cpDkWx>picture,.cpDkWx img,.cpDkWx>video{block-size:100%;inline-size:100%;object-fit:cover;}/*!sc*/
+data-styled.g1339[id="sc-8a481476-1"]{content:"cpDkWx,"}/*!sc*/
+.hhPMoP{display:flex;flex-direction:column;align-items:center;text-align:center;}/*!sc*/
+.hhPMoP>*+*{margin-top:1.5rem;}/*!sc*/
+data-styled.g1340[id="sc-8a481476-2"]{content:"hhPMoP,"}/*!sc*/
+.bwdHxJ{color:var(--color--snowwhite);align-self:center;transform-origin:0 0;transform:rotate(90deg);position:absolute;top:33%;left:var(--space-fixed-4);}/*!sc*/
+data-styled.g1341[id="sc-8a481476-3"]{content:"bwdHxJ,"}/*!sc*/
+.GbQHl{position:relative;}/*!sc*/
+.GbQHl:before,.GbQHl:after{position:absolute;top:0;}/*!sc*/
+.GbQHl:before{content:'【';left:-44px;}/*!sc*/
+.GbQHl:after{content:'】';right:60px;transition:all 0.5s linear;}/*!sc*/
+.GbQHl.is-visible:after{right:-44px;}/*!sc*/
+data-styled.g1342[id="sc-8a481476-4"]{content:"GbQHl,"}/*!sc*/
+.fhqUbj{color:var(--color--snowwhite);font-feature-settings:'ss05' on;display:flex;gap:var(--space-fixed-4);}/*!sc*/
+.fhqUbj[data-pill]:before{content:attr(data-pill);color:var(--color--snowwhite);font-family:var(--ff);font-size:0.875rem;font-weight:500;text-transform:uppercase;border-radius:var(--bdrs-pill);border:1.5px solid currentColor;padding-block:0.5rem;padding-inline:0.75rem;vertical-align:middle;display:inline-block;margin-right:var(--space-fixed-1);margin-bottom:var(--space-fixed-1);}/*!sc*/
+data-styled.g1344[id="sc-8a481476-6"]{content:"fhqUbj,"}/*!sc*/
+.iZAgLW mux-player,.iZAgLW mux-video{--media-background-color:transparent!important;}/*!sc*/
+data-styled.g1346[id="sc-ddd75f23-0"]{content:"iZAgLW,"}/*!sc*/
+.jlOIHd{background-color:var(--color--seedgreen);--offset:calc(var(--nav-height) );height:min(calc(100vh - var(--offset)), 900px);margin-top:calc(var(--offset) * -1);}/*!sc*/
+.jlOIHd .pause-play-white{margin-right:6px;margin-left:6px;}/*!sc*/
+.jlOIHd .pause-play-white path{stroke:var(--color--snowwhite);color:var(--color--snowwhite);fill:var(--color--snowwhite);}/*!sc*/
+.jlOIHd .swiper{width:100%;height:100%;overflow:hidden;border-radius:0 0 var(--bdrs-l) var(--bdrs-l);}/*!sc*/
+.jlOIHd .swiper-slide{width:100%;height:100%!important;}/*!sc*/
+.jlOIHd .swiper-pagination-bullet{--swiper-pagination-bullet-inactive-color:var(--color--snowwhite);transition:all 0.25s ease-in-out;}/*!sc*/
+.jlOIHd .swiper-pagination-bullet-active{background-color:#fff;border-radius:99em;height:16px;}/*!sc*/
+.jlOIHd .swiper-vertical>.swiper-pagination-bullets,.jlOIHd .swiper-pagination-vertical.swiper-pagination-bullets{bottom:0;right:50%;top:auto;}/*!sc*/
+@media (max-width: 37.4375em){.jlOIHd:has(.swiper-pagination) .content{padding-block-end:var(--space-fixed-5);}}/*!sc*/
+data-styled.g1347[id="sc-d163430a-0"]{content:"jlOIHd,"}/*!sc*/
+.aZUbU{display:flex;height:100%;justify-content:center;align-items:center;position:relative;padding-inline:var(--space-fixed-2);padding-block-start:var(--offset,var(--space-fixed-2));padding-block-end:calc(var(--offset) + var(--space-4));width:100%;justify-content:start;}/*!sc*/
+@media (min-width: 60em){.aZUbU{padding-inline:var(--space-fixed-6);padding-bottom:0px;}}/*!sc*/
+@media (max-width: 37.4375em){.aZUbU{align-items:flex-end;}}/*!sc*/
+.aZUbU:before{content:'';inset:0;position:absolute;height:100%;width:100%;z-index:2;}/*!sc*/
+@media (max-width: 59.9375em){.aZUbU:after{content:'';position:absolute;bottom:0;left:0;width:100%;height:30%;z-index:2;}}/*!sc*/
+data-styled.g1348[id="sc-d163430a-1"]{content:"aZUbU,"}/*!sc*/
+.bDVYdc{color:#fff;position:relative;max-width:46.875rem;z-index:5;}/*!sc*/
+data-styled.g1349[id="sc-d163430a-2"]{content:"bDVYdc,"}/*!sc*/
+@media ((min-width: 90em)){.lzQHv{width:100%;margin-left:auto;margin-right:auto;max-width:var(--maw);}}/*!sc*/
+@media (min-width:1550px){.lzQHv{padding-inline:2em;}}/*!sc*/
+data-styled.g1350[id="sc-d163430a-3"]{content:"lzQHv,"}/*!sc*/
+.idHavi{height:100%;left:0;object-fit:cover;position:absolute;top:0;width:100%;z-index:1;}/*!sc*/
+@media (max-width: 59.9375em){.idHavi{object-fit:contain;object-position:center center;background-color:#F6F7F0;}}/*!sc*/
+@media (min-width: 60em){.idHavi{object-fit:contain;object-position:center center;background-color:#F6F7F0;}}/*!sc*/
+data-styled.g1351[id="sc-d163430a-4"]{content:"idHavi,"}/*!sc*/
+.joJhls>*+*{margin-top:1rem;}/*!sc*/
+data-styled.g1353[id="sc-d163430a-6"]{content:"joJhls,"}/*!sc*/
+.iWtWuW{margin-top:var(--space-fixed-2-5);}/*!sc*/
+@media (max-width: 37.4375em){.iWtWuW{margin-top:var(--space-fixed-2);margin-bottom:var(--space-fixed-2);font-size:32px;}}/*!sc*/
+.iWtWuW[data-pill]:before{content:attr(data-pill);color:var(--color--snowwhite);font-family:var(--ff);font-size:0.875rem;font-weight:500;height:1.875rem;text-transform:uppercase;border-radius:var(--bdrs-pill);border:1.5px solid currentColor;padding-inline:0.75rem;vertical-align:middle;display:inline-flex;align-items:center;margin-right:var(--space-fixed-1);margin-bottom:var(--space-fixed-1);}/*!sc*/
+data-styled.g1354[id="sc-d163430a-7"]{content:"iWtWuW,"}/*!sc*/
+.gklpgC{max-width:26.625rem;}/*!sc*/
+data-styled.g1355[id="sc-d163430a-8"]{content:"gklpgC,"}/*!sc*/
+.kSRaBJ{align-items:center;display:flex;justify-content:center;gap:var(--space-fixed-2);margin-top:var(--space-fixed-3);justify-content:start;}/*!sc*/
+@media (min-width: 60em){.kSRaBJ{margin-top:var(--space-fixed-3-5);}}/*!sc*/
+data-styled.g1356[id="sc-d163430a-9"]{content:"kSRaBJ,"}/*!sc*/
+.boZjzp{background:var(--color--snowwhite);width:100%;}/*!sc*/
+data-styled.g1361[id="sc-9b430418-2"]{content:"boZjzp,"}/*!sc*/
+.jDjBgJ{background-color:rgba(0,0,0,0.3);position:absolute;top:var(--space-fixed-2);right:var(--space-fixed-2);z-index:3;}/*!sc*/
+data-styled.g1366[id="sc-94052591-0"]{content:"jDjBgJ,"}/*!sc*/
+.kewNfF{aspect-ratio:var(--ratio);align-items:center;display:flex;overflow:hidden;position:relative;transition:width 0.6s cubic-bezier(0.75,0,0.25,1);transition-delay:0.4s;will-change:width;width:var(--width);border-radius:100%;grid-row:span 2;}/*!sc*/
+.kewNfF>picture,.kewNfF img,.kewNfF>mux-player{block-size:100%;inline-size:100%;object-fit:cover;transition:transform 0.6s cubic-bezier(0.75,0,0.25,1);will-change:transform;}/*!sc*/
+@media (hover:hover){.kewNfF:has(mux-player):hover,.kewNfF:is(a):hover{cursor:pointer;width:calc(var(--width) * 1.2);}.kewNfF:has(mux-player):hover >picture,.kewNfF:is(a):hover >picture,.kewNfF:has(mux-player):hover >img,.kewNfF:is(a):hover >img,.kewNfF:has(mux-player):hover >mux-player,.kewNfF:is(a):hover >mux-player{transform:scale(1.05);}}/*!sc*/
+.gSKwZs{aspect-ratio:var(--ratio);align-items:center;display:flex;overflow:hidden;position:relative;transition:width 0.6s cubic-bezier(0.75,0,0.25,1);transition-delay:0.4s;will-change:width;width:var(--width);grid-row:span 2;border-radius:var(--bdrs-m);}/*!sc*/
+.gSKwZs>picture,.gSKwZs img,.gSKwZs>mux-player{block-size:100%;inline-size:100%;object-fit:cover;transition:transform 0.6s cubic-bezier(0.75,0,0.25,1);will-change:transform;}/*!sc*/
+@media (hover:hover){.gSKwZs:has(mux-player):hover,.gSKwZs:is(a):hover{cursor:pointer;width:calc(var(--width) * 1.2);}.gSKwZs:has(mux-player):hover >picture,.gSKwZs:is(a):hover >picture,.gSKwZs:has(mux-player):hover >img,.gSKwZs:is(a):hover >img,.gSKwZs:has(mux-player):hover >mux-player,.gSKwZs:is(a):hover >mux-player{transform:scale(1.05);}}/*!sc*/
+.lfzNbp{aspect-ratio:var(--ratio);align-items:center;display:flex;overflow:hidden;position:relative;transition:width 0.6s cubic-bezier(0.75,0,0.25,1);transition-delay:0.4s;will-change:width;width:var(--width);border-radius:var(--bdrs-pill);grid-row:span 1;}/*!sc*/
+.lfzNbp>picture,.lfzNbp img,.lfzNbp>mux-player{block-size:100%;inline-size:100%;object-fit:cover;transition:transform 0.6s cubic-bezier(0.75,0,0.25,1);will-change:transform;}/*!sc*/
+@media (hover:hover){.lfzNbp:has(mux-player):hover,.lfzNbp:is(a):hover{cursor:pointer;width:calc(var(--width) * 1.2);}.lfzNbp:has(mux-player):hover >picture,.lfzNbp:is(a):hover >picture,.lfzNbp:has(mux-player):hover >img,.lfzNbp:is(a):hover >img,.lfzNbp:has(mux-player):hover >mux-player,.lfzNbp:is(a):hover >mux-player{transform:scale(1.05);}}/*!sc*/
+.dhzCDP{aspect-ratio:var(--ratio);align-items:center;display:flex;overflow:hidden;position:relative;transition:width 0.6s cubic-bezier(0.75,0,0.25,1);transition-delay:0.4s;will-change:width;width:var(--width);grid-row:span 1;border-radius:var(--bdrs-m);}/*!sc*/
+.dhzCDP>picture,.dhzCDP img,.dhzCDP>mux-player{block-size:100%;inline-size:100%;object-fit:cover;transition:transform 0.6s cubic-bezier(0.75,0,0.25,1);will-change:transform;}/*!sc*/
+@media (hover:hover){.dhzCDP:has(mux-player):hover,.dhzCDP:is(a):hover{cursor:pointer;width:calc(var(--width) * 1.2);}.dhzCDP:has(mux-player):hover >picture,.dhzCDP:is(a):hover >picture,.dhzCDP:has(mux-player):hover >img,.dhzCDP:is(a):hover >img,.dhzCDP:has(mux-player):hover >mux-player,.dhzCDP:is(a):hover >mux-player{transform:scale(1.05);}}/*!sc*/
+data-styled.g1367[id="sc-94052591-1"]{content:"kewNfF,gSKwZs,lfzNbp,dhzCDP,"}/*!sc*/
+.tavmx{position:relative;display:flex;white-space:nowrap;gap:var(--space-fixed-2);display:inline-grid;grid-auto-flow:column;grid-template-rows:1fr 1fr;gap:var(--space-fixed-2);align-items:center;}/*!sc*/
+data-styled.g1368[id="sc-94052591-2"]{content:"tavmx,"}/*!sc*/
+.iuJaa{background:var(--color--snowwhite);padding:var(--space-outer);overflow:scroll;width:100vw;scrollbar-width:none;scrollbar-color:transparent transparent;}/*!sc*/
+.iuJaa>*+*{margin-top:1rem;}/*!sc*/
+.iuJaa::-webkit-scrollbar{width:8px;height:8px;-webkit-appearance:none;}/*!sc*/
+.iuJaa::-webkit-scrollbar-track{background:transparent;border-radius:4px;}/*!sc*/
+.iuJaa::-webkit-scrollbar-thumb{background:transparent;border-radius:4px;transition:all 0.2s ease;-webkit-transition:all 0.2s ease;}/*!sc*/
+.iuJaa:has(.marquee){padding-inline:0;}/*!sc*/
+data-styled.g1374[id="sc-6a2d7c8c-0"]{content:"iuJaa,"}/*!sc*/
+.flKcyL{padding-inline:var(--space-outer);padding-block:var(--space-5);background-size:cover;overflow-x:hidden;}/*!sc*/
+data-styled.g1375[id="sc-e74ce85f-0"]{content:"flKcyL,"}/*!sc*/
+.YzlOs{border-radius:var(--bdrs-l);background:rgba(87,94,85,0.35);backdrop-filter:blur(37.5px);-webkit-backdrop-filter:blur(37.5px);padding:var(--space-5);display:flex;flex-direction:column;gap:var(--space-2);align-items:center;margin-left:auto;margin-right:auto;max-width:var(--maw);width:100%;overflow:hidden;position:relative;}/*!sc*/
+@media (max-width: 59.9375em){.YzlOs{flex-direction:column;padding:var(--space-fixed-2);}}/*!sc*/
+@media (min-width: 60em){.YzlOs{flex-direction:row;align-items:flex-start;}}/*!sc*/
+data-styled.g1376[id="sc-e74ce85f-1"]{content:"YzlOs,"}/*!sc*/
+.jPbzkj{margin-bottom:var(--space-4);}/*!sc*/
+.jPbzkj>*+*{margin-top:1.5rem;}/*!sc*/
+@media (min-width: 60em){.jPbzkj{flex:0 0 auto;width:45%;margin-bottom:0;}}/*!sc*/
+data-styled.g1377[id="sc-e74ce85f-2"]{content:"jPbzkj,"}/*!sc*/
+.hBeyzF{padding:var(--space-2);border-radius:var(--bdrs-m);border:1px solid rgba(255,255,255,0.25);display:flex;align-items:center;gap:var(--space-fixed-3);max-width:23.75rem;}/*!sc*/
+data-styled.g1379[id="sc-e74ce85f-4"]{content:"hBeyzF,"}/*!sc*/
+.fvynGu{--fz:1.125rem;color:var(--color--snowwhite);width:190px;}/*!sc*/
+.fvynGu[data-pill]:before{content:attr(data-pill);color:var(--color--snowwhite);font-family:var(--ff);font-size:0.75rem;font-weight:500;height:1.875rem;text-transform:uppercase;border-radius:var(--bdrs-pill);border:1.5px solid currentColor;padding-inline:0.5rem;vertical-align:middle;display:inline-flex;align-items:center;margin-right:var(--space-fixed-1);margin-bottom:0.25rem;height:24px;}/*!sc*/
+data-styled.g1380[id="sc-e74ce85f-5"]{content:"fvynGu,"}/*!sc*/
+.hGoONG{display:flex;align-items:center;justify-content:space-between;}/*!sc*/
+.hGoONG>*{font-family:"Seed Sans",system-ui,"Helvetic Neue","Helvetica",Arial,sans-serif;font-size:2rem;font-weight:300;color:var(--color--snowwhite);}/*!sc*/
+.hGoONG span>sup{color:var(--color--snowwhite);}/*!sc*/
+data-styled.g1381[id="sc-e74ce85f-6"]{content:"hGoONG,"}/*!sc*/
+.iBLmbr{font-family:"Seed Sans",system-ui,"Helvetic Neue","Helvetica",Arial,sans-serif;font-size:2rem;font-weight:300;color:var(--color--snowwhite);display:inline-block;font-feature-settings:'ss03' on;}/*!sc*/
+data-styled.g1382[id="sc-e74ce85f-7"]{content:"iBLmbr,"}/*!sc*/
+.fABEv{color:var(--color--snowwhite);font-family:"Seed Sans",system-ui,"Helvetic Neue","Helvetica",Arial,sans-serif;font-size:2rem;font-weight:300;}/*!sc*/
+data-styled.g1383[id="sc-e74ce85f-8"]{content:"fABEv,"}/*!sc*/
+.kwJPId{font-family:"Seed Sans Mono",monospace;font-size:0.75rem;font-weight:300;text-transform:uppercase;display:inline-block;color:var(--color--snowwhite);}/*!sc*/
+data-styled.g1384[id="sc-e74ce85f-9"]{content:"kwJPId,"}/*!sc*/
+.gFzdoR{display:flex;align-items:center;position:relative;min-height:25rem;max-width:100%;flex:0 0 auto;width:60%;margin-bottom:0;padding:var(--space-4) 0;justify-content:space-between;}/*!sc*/
+data-styled.g1385[id="sc-e74ce85f-10"]{content:"gFzdoR,"}/*!sc*/
+.bSsxVD{width:100px;flex-shrink:0;}/*!sc*/
+data-styled.g1386[id="sc-e74ce85f-11"]{content:"bSsxVD,"}/*!sc*/
+.fbsMwZ{position:absolute;z-index:5;display:flex;justify-content:center;align-items:center;left:74%;top:50%;transform:translate(-50%,-50%);width:400px;height:400px;pointer-events:none;}/*!sc*/
+data-styled.g1387[id="sc-e74ce85f-12"]{content:"fbsMwZ,"}/*!sc*/
+.hfwVWZ{display:flex;flex-direction:column;align-items:flex-start;flex:0 1 auto;position:relative;z-index:100;max-width:200px;word-wrap:break-word;overflow-wrap:break-word;align-self:flex-start;}/*!sc*/
+.ktlVsQ{display:flex;flex-direction:column;align-items:flex-start;flex:0 1 auto;position:relative;z-index:100;max-width:200px;word-wrap:break-word;overflow-wrap:break-word;align-self:flex-end;align-items:flex-start;margin-top:1rem;padding:0 1rem;}/*!sc*/
+data-styled.g1388[id="sc-e74ce85f-13"]{content:"hfwVWZ,ktlVsQ,"}/*!sc*/
+.DreWQ{display:flex;flex-direction:row;align-items:center;gap:0;flex-shrink:1;margin-top:-30px;margin-bottom:6rem;align-self:flex-start;justify-content:flex-start;}/*!sc*/
+.hWYEvM{display:flex;flex-direction:row;align-items:center;gap:0;flex-shrink:1;margin-top:-30px;margin-bottom:6rem;align-self:flex-end;justify-content:flex-end;}/*!sc*/
+data-styled.g1389[id="sc-e74ce85f-14"]{content:"DreWQ,hWYEvM,"}/*!sc*/
+.iROSZN{border-top:1px dashed var(--color--snowwhite);opacity:0.8;height:1px;width:70px;align-self:flex-start;z-index:10;transform:translateY(-50%);margin-top:1rem;}/*!sc*/
+@media (min-width: 60em){.iROSZN{margin-bottom:3rem;margin-top:3rem;}}/*!sc*/
+.bOpKKQ{border-top:1px dashed var(--color--snowwhite);opacity:0.8;height:1px;width:70px;align-self:center;z-index:10;transform:translateY(-50%);margin-bottom:5rem;}/*!sc*/
+@media (min-width: 60em){.bOpKKQ{margin-bottom:3rem;transform:translateY(0);margin-top:2rem;}}/*!sc*/
+data-styled.g1390[id="sc-e74ce85f-15"]{content:"iROSZN,bOpKKQ,"}/*!sc*/
+.dkLBre{color:var(--color--snowwhite);font-size:0.75rem;font-weight:500;margin-block-end:4px;text-transform:uppercase;}/*!sc*/
+data-styled.g1392[id="sc-e74ce85f-17"]{content:"dkLBre,"}/*!sc*/
+.fDNxUP{background:var(--color--snowwhite);padding-block:var(--space-6);}/*!sc*/
+@media ((max-width: 59.9375em)){.fDNxUP{padding-block:var(--space-5);}}/*!sc*/
+data-styled.g1402[id="sc-7d5757c9-0"]{content:"fDNxUP,"}/*!sc*/
+.cEllkp{display:grid;}/*!sc*/
+.cEllkp .swiper{padding-inline:var(--space-outer);max-width:100%;}/*!sc*/
+.cEllkp .swiper-wrapper{padding-block-end:var(--space-fixed-1);width:100%;}/*!sc*/
+.cEllkp .swiper:not(.swiper-backface-hidden) .swiper-slide{transform:none;transition:none;opacity:0;}/*!sc*/
+.cEllkp .swiper-slide:not(.swiper-slide-prev,.swiper-slide-next){transform:scale(0.95);}/*!sc*/
+.cEllkp .swiper-backface-hidden .swiper-slide{transform:scale(0.95) translateZ(0);opacity:1;transition:transform 0.3s ease-in-out 0.1s;}/*!sc*/
+.cEllkp .swiper-backface-hidden .swiper-slide-prev{transform:translateX(-40px) translateZ(0) scale(0.95);}/*!sc*/
+.cEllkp .swiper-backface-hidden .swiper-slide-next{transform:translateX(40px) translateZ(0) scale(0.95);}/*!sc*/
+.cEllkp .swiper-slide.swiper-slide-active{transform:scale(1)!important;}/*!sc*/
+.cEllkp.in-view .swiper-backface-hidden .swiper-slide.swiper-slide-prev,.cEllkp.in-view .swiper-backface-hidden .swiper-slide.swiper-slide-next{transform:scale(0.95) translateZ(0)!important;}/*!sc*/
+.cEllkp .swiper-backface-hidden .swiper-slide.swiper-slide-active{transform:scale(1) translateZ(0)!important;}/*!sc*/
+data-styled.g1403[id="sc-7d5757c9-1"]{content:"cEllkp,"}/*!sc*/
+.hJmgET{filter:url(#filter);display:flex;align-items:center;justify-content:center;margin-inline:auto;width:fit-content;}/*!sc*/
+data-styled.g1404[id="sc-7d5757c9-2"]{content:"hJmgET,"}/*!sc*/
+.evYMhP{background:#efefea;border-radius:var(--bdrs-pill);padding:12px;display:flex;align-items:center;gap:var(--space-fixed-2);margin-left:-12px;}/*!sc*/
+.evYMhP>div{cursor:pointer;}/*!sc*/
+data-styled.g1405[id="sc-7d5757c9-3"]{content:"evYMhP,"}/*!sc*/
+.kiLDmu{--ratio:5/6;aspect-ratio:var(--ratio);align-items:center;border-radius:var(--bdrs-m);display:flex;position:relative;overflow:hidden;}/*!sc*/
+@media (min-width: 60em){.kiLDmu{--ratio:16/9;}}/*!sc*/
+.kiLDmu>img,.kiLDmu>picture,.kiLDmu>video{block-size:100%;inline-size:100%;object-fit:cover;}/*!sc*/
+.cbbiPn{--ratio:5/6;aspect-ratio:var(--ratio);align-items:center;border-radius:var(--bdrs-m);display:flex;position:relative;overflow:hidden;border-radius:100%;max-width:36px;}/*!sc*/
+@media (min-width: 60em){.cbbiPn{--ratio:16/9;}}/*!sc*/
+.cbbiPn>img,.cbbiPn>picture,.cbbiPn>video{block-size:100%;inline-size:100%;object-fit:cover;}/*!sc*/
+data-styled.g1406[id="sc-7d5757c9-4"]{content:"kiLDmu,cbbiPn,"}/*!sc*/
+.ljQnQM{background:#efefea;border-radius:50%;padding:12px;align-items:center;gap:var(--space-fixed-2);display:flex;}/*!sc*/
+data-styled.g1407[id="sc-7d5757c9-5"]{content:"ljQnQM,"}/*!sc*/
+.eeNhIE{border-radius:var(--bdrs-pill);height:36px;width:fit-content;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}/*!sc*/
+data-styled.g1408[id="sc-7d5757c9-6"]{content:"eeNhIE,"}/*!sc*/
+.kAmrhi{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}/*!sc*/
+data-styled.g1409[id="sc-7d5757c9-7"]{content:"kAmrhi,"}/*!sc*/
+.eMBChS{background-color:rgba(0,0,0,0.1);height:100%;width:100%;inset:0;transform-origin:left;position:absolute;pointer-events:none;transform:scaleX(0);z-index:3;}/*!sc*/
+data-styled.g1410[id="sc-7d5757c9-8"]{content:"eMBChS,"}/*!sc*/
+.iyLOfV{--focus-color:var(--color--seedgreen);--focus-offset:-1ch;color:var(--color--seedgreen);font-family:"Seed Sans",system-ui,"Helvetic Neue","Helvetica",Arial,sans-serif;font-size:0.875rem;font-weight:350;cursor:pointer;appearance:none;background-color:var(--color--snowwhite);border:none;display:flex;gap:var(--space-fixed-1);align-items:center;padding:10px;overflow:hidden;z-index:2;}/*!sc*/
+data-styled.g1411[id="sc-7d5757c9-9"]{content:"iyLOfV,"}/*!sc*/
+.iskmJY{--focus-color:var(--color--snowwhite);position:absolute;background:var(--color--frostedglass-t35,rgba(73,73,73,0.7));color:var(--color--snowwhite);top:var(--space-fixed-2);right:var(--space-fixed-2);border:none;display:flex;align-items:center;cursor:pointer;padding:6px 12px;border-radius:var(--bdrs-pill);transform:scale(0);transition:transform 0.2s;transition-delay:0.3s;z-index:10;}/*!sc*/
+.iskmJY >svg>path{color:var(--color--snowwhite);transition:0.2s;}/*!sc*/
+.iskmJY:hover >.fullscreen :nth-child(2){transform:translate(-3px,-3px);}/*!sc*/
+.iskmJY:hover >.fullscreen :nth-child(3){transform:translate(-3px,3px);}/*!sc*/
+.iskmJY:hover >.fullscreen :nth-child(4){transform:translate(3px,-3px);}/*!sc*/
+.iskmJY:hover >.fullscreen :nth-child(5){transform:translate(3px,3px);}/*!sc*/
+.iskmJY.is-active{transform:none;}/*!sc*/
+data-styled.g1412[id="sc-7d5757c9-10"]{content:"iskmJY,"}/*!sc*/
+.bKPbEh{background:rgba(252,252,247,1);padding-inline:var(--space-outer);}/*!sc*/
+@media (max-width: 59.9375em){.bKPbEh{padding-block:2.875rem;}}/*!sc*/
+data-styled.g1431[id="sc-53749a5a-15"]{content:"bKPbEh,"}/*!sc*/
+.fEjrdi{place-items:center;margin-inline:auto;max-width:var(--maw);width:100%;}/*!sc*/
+@media (min-width: 60em){.fEjrdi{position:relative;min-height:760px;}}/*!sc*/
+data-styled.g1432[id="sc-53749a5a-16"]{content:"fEjrdi,"}/*!sc*/
+.gxKRHV{grid-column:1/span 2;justify-self:start;color:var(--color--seedgreen);font-variant-numeric:slashed-zero;font-family:var(--ff-sans,'Seed Sans');font-size:20px;font-style:normal;font-weight:350;line-height:90%;letter-spacing:-0.6px;}/*!sc*/
+data-styled.g1433[id="sc-53749a5a-17"]{content:"gxKRHV,"}/*!sc*/
+.dLkOMh{grid-column:1/span 5;}/*!sc*/
+.dLkOMh>*+*{margin-top:2rem;}/*!sc*/
+@media (max-width: 59.9375em){.dLkOMh{grid-column:1/-1;}}/*!sc*/
+data-styled.g1434[id="sc-53749a5a-18"]{content:"dLkOMh,"}/*!sc*/
+.hnLSaa{--padding:calc(100% - var(--maw));background-color:rgba(238,238,233,1);aspect-ratio:1/1;border-radius:var(--bdrs-l);overflow:hidden;}/*!sc*/
+@media (max-width: 59.9375em){.hnLSaa{grid-column:1/-1;order:2;width:100%!important;position:relative;}}/*!sc*/
+@media (min-width: 60em){.hnLSaa{position:absolute;right:0;top:50%;transform:translate3d(0,-50%,0);transform-origin:left;width:calc( 5 * var(--grid-col-width) + (5 - 1) * var(--space-gutter) );}}/*!sc*/
+.hnLSaa>picture,.hnLSaa img,.hnLSaa>video{block-size:100%;inline-size:100%;object-fit:cover;}/*!sc*/
+data-styled.g1435[id="sc-53749a5a-19"]{content:"hnLSaa,"}/*!sc*/
+.gLlVgI{grid-column:1/span 3;align-self:end;justify-self:start;padding-block:2.875rem;color:var(--color--seedgreen);}/*!sc*/
+@media (max-width: 59.9375em){.gLlVgI{display:none;}}/*!sc*/
+data-styled.g1436[id="sc-53749a5a-20"]{content:"gLlVgI,"}/*!sc*/
+.DNVQT{letter-spacing:0.24px;font-family:var(--ff-sans-mono,"Seed Sans Mono", monospace);text-transform:uppercase;}/*!sc*/
+data-styled.g1437[id="sc-53749a5a-21"]{content:"DNVQT,"}/*!sc*/
+.cIjOTy{font-weight:500;letter-spacing:-0.12px;margin-left:var(--space-fixed-1);}/*!sc*/
+data-styled.g1438[id="sc-53749a5a-22"]{content:"cIjOTy,"}/*!sc*/
+.jIDAPB{padding-top:5px;padding-bottom:5px;padding-right:5px;padding-left:34px;gap:18px;}/*!sc*/
+data-styled.g1441[id="sc-53749a5a-25"]{content:"jIDAPB,"}/*!sc*/
+.dNaZvg{background-color:var(--color--seedgreen);padding-block:var(--space-fixed-6);}/*!sc*/
+data-styled.g1450[id="sc-b3035f6c-0"]{content:"dNaZvg,"}/*!sc*/
+.jKlSPw{--padding:calc(100% - var(--maw));display:grid;gap:var(--space-fixed-2);grid-template-columns:repeat(1,minmax(10px,1fr));margin-block-end:var(--space-fixed-2);padding-inline:var(--space-outer);}/*!sc*/
+@media (min-width: 60em){.jKlSPw{grid-template-columns:repeat(3,minmax(10px,1fr));padding-top:24px;}}/*!sc*/
+@media (min-width: 90em){.jKlSPw{padding-inline:calc(var(--padding) / 2);}}/*!sc*/
+data-styled.g1452[id="sc-b3035f6c-2"]{content:"jKlSPw,"}/*!sc*/
+.bVnlWg{display:inline-flex;align-items:center;color:var(--pill-color);border:1px solid var(--pill-color);border-radius:var(--bdrs-pill);font-family:var(--ff,'Seed Sans');font-size:var(--fz);font-style:normal;font-weight:350;letter-spacing:-0.24px;line-height:14px;width:fit-content;height:fit-content;--pill-color:var(--color--seedgreen);--fz:0.75rem;padding:5px;line-height:8px;}/*!sc*/
+.bVnlWg sup{color:var(--color--seedgreen);}/*!sc*/
+@media (min-width: 60em){.bVnlWg{padding:6px 8px;}}/*!sc*/
+.lpuDMx{display:inline-flex;align-items:center;color:var(--pill-color);border:1px solid var(--pill-color);border-radius:var(--bdrs-pill);font-family:var(--ff,'Seed Sans');font-size:var(--fz);font-style:normal;font-weight:350;letter-spacing:-0.24px;line-height:14px;width:fit-content;height:fit-content;--pill-color:var(--color--snowwhite);--fz:0.75rem;padding:5px;font-weight:350;line-height:8px;}/*!sc*/
+.lpuDMx sup{color:var(--color--snowwhite);}/*!sc*/
+@media (min-width: 60em){.lpuDMx{padding:6px 8px;}}/*!sc*/
+data-styled.g1461[id="sc-3fd0a620-0"]{content:"bVnlWg,lpuDMx,"}/*!sc*/
+.jXIGTY{background-color:transparent;border-radius:var(--bdrs-m);padding:var(--space-fixed-6) var(--space-fixed-2) var(--space-fixed-2) var(--space-fixed-2);position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;text-decoration:none;color:var(--color--seedgreen);}/*!sc*/
+@media (min-width: 60em){.jXIGTY{padding:var(--space-fixed-5);}}/*!sc*/
+.jXIGTY img{aspect-ratio:5/6;height:auto;transform:scale(1);transition:transform 0.3s linear;}/*!sc*/
+.jXIGTY video{transform:scale(1);transition:transform 0.3s linear;}/*!sc*/
+.jXIGTY:before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scaleY(0.9);width:100%;height:calc(100% + 40px);transform-origin:center;transition:transform 0.3s;background-color:rgba(87,94,85,0.08);background-color:var(--color--seedgreen-card);border-radius:var(--bdrs-m);}/*!sc*/
+@media (min-width: 60em){.jXIGTY:before{height:calc(100% + 50px);}}/*!sc*/
+.jXIGTY.in-view{position:relative;}/*!sc*/
+.jXIGTY.in-view:before{transform:translate(-50%,-50%) scaleY(1);}/*!sc*/
+.jXIGTY.in-view img{transform:scale(1.25);}/*!sc*/
+.jXIGTY.in-view video{transform:scale(1.25);}/*!sc*/
+.jXIGTY.in-view>span{top:calc(var(--space-fixed-2) * -1);}/*!sc*/
+.jXIGTY.in-view>.block-top{transform:translateY(-20px);}/*!sc*/
+.jXIGTY.in-view>.block-bottom{transform:translateY(20px);}/*!sc*/
+.jXIGTY:hover .video-overlay{opacity:1!important;}/*!sc*/
+data-styled.g1462[id="sc-baccdee5-0"]{content:"jXIGTY,"}/*!sc*/
+.bCwiXP{z-index:1;text-align:center;transition:transform 0.3s;}/*!sc*/
+.bCwiXP>*+*{margin-top:0.5rem;}/*!sc*/
+*:hover .bCwiXP p,*:hover .bCwiXP span{color:var(--color--snowwhite);}/*!sc*/
+.lhwQgV{z-index:1;text-align:center;transition:transform 0.3s;}/*!sc*/
+.lhwQgV>*+*{margin-top:1rem;}/*!sc*/
+*:hover .lhwQgV p,*:hover .lhwQgV span{color:var(--color--snowwhite);}/*!sc*/
+data-styled.g1463[id="sc-baccdee5-1"]{content:"bCwiXP,lhwQgV,"}/*!sc*/
+.fMLtWv{display:flex;justify-content:center;gap:var(--space-fixed-2);}/*!sc*/
+data-styled.g1464[id="sc-baccdee5-2"]{content:"fMLtWv,"}/*!sc*/
+.bMONEt{position:absolute;top:var(--space-fixed-1);left:var(--space-fixed-1);transition:all 0.3s;}/*!sc*/
+data-styled.g1465[id="sc-baccdee5-3"]{content:"bMONEt,"}/*!sc*/
+.boCEsu{opacity:0.7;}/*!sc*/
+@media (min-width: 37.5em){.boCEsu{--fz:0.75rem;}}/*!sc*/
+data-styled.g1466[id="sc-baccdee5-4"]{content:"boCEsu,"}/*!sc*/
+.bottle-spin{width:157px;height:200px;z-index:1;display:flex;justify-content:center;align-items:center;perspective:800px;}/*!sc*/
+@media (min-width: 60em){.bottle-spin{width:264px;height:320px;}}/*!sc*/
+.bottle-spin img{width:100%;height:100%;object-fit:contain;transition:transform 0.6s ease;}/*!sc*/
+.jXIGTY:hover .bottle-spin img{animation:spin3d 1.2s ease-in-out;}/*!sc*/
+@keyframes spin3d{0%{transform:rotateY(0deg) scale(1);}50%{transform:rotateY(180deg) scale(1.1);}100%{transform:rotateY(360deg) scale(1);}}/*!sc*/
+data-styled.g1467[id="sc-baccdee5-5"]{content:"bottle-spin,"}/*!sc*/
+.bYpOuQ{padding:0 var(--space-fixed-2) var(--space-fixed-6) var(--space-fixed-2);align-items:end;display:flex;justify-content:space-between;gap:var(--space-fixed-1);padding-inline:var(--space-outer);width:calc(100% - var(--space-outer) * 2);}/*!sc*/
+data-styled.g1469[id="sc-359548e0-1"]{content:"bYpOuQ,"}/*!sc*/
+.eKYqMo{width:570px;}/*!sc*/
+data-styled.g1470[id="sc-359548e0-2"]{content:"eKYqMo,"}/*!sc*/
+.cLSucC{width:450px;}/*!sc*/
+data-styled.g1471[id="sc-359548e0-3"]{content:"cLSucC,"}/*!sc*/
+.eRFTnp{background:var(--color--seedgreen);}/*!sc*/
+data-styled.g1472[id="sc-77e450dc-0"]{content:"eRFTnp,"}/*!sc*/
+.faWsQJ{background:var(--color--snowwhite);padding-inline:var(--space-outer);padding-block:var(--space-5);border-radius:var(--bdrs-l) var(--bdrs-l) 0 0;}/*!sc*/
+@media ((max-width: 59.9375em)){.faWsQJ{padding-block:var(--space-2) var(--space-5);}}/*!sc*/
+data-styled.g1473[id="sc-77e450dc-1"]{content:"faWsQJ,"}/*!sc*/
+.jlJoaK{border-radius:var(--bdrs-m);aspect-ratio:auto;align-items:center;display:flex;position:relative;overflow:hidden;}/*!sc*/
+.jlJoaK>picture,.jlJoaK img,.jlJoaK>video{block-size:auto;inline-size:120%;object-fit:cover;object-position:top center;}/*!sc*/
+data-styled.g1475[id="sc-77e450dc-3"]{content:"jlJoaK,"}/*!sc*/
+.cSglPZ{align-self:center;grid-column:1/-1;margin-bottom:2.375rem;}/*!sc*/
+.cSglPZ>*+*{margin-top:1.5rem;}/*!sc*/
+@media (min-width: 60em){.cSglPZ{margin-bottom:3.5rem;}}/*!sc*/
+@media (min-width: 60em){.cSglPZ{grid-column:auto/span 6;max-width:608px;}}/*!sc*/
+data-styled.g1476[id="sc-77e450dc-4"]{content:"cSglPZ,"}/*!sc*/
+.exoYDP{grid-column:1/-1;}/*!sc*/
+@media (min-width: 60em){.exoYDP{grid-column:7/span 6;grid-row:1;}}/*!sc*/
+data-styled.g1477[id="sc-77e450dc-5"]{content:"exoYDP,"}/*!sc*/
+.jAPhxV{--columns:2;--span:2;display:grid;grid-template-columns:repeat(var(--columns),minmax(10px,1fr));gap:var(--space-fixed-2);--columns:6;}/*!sc*/
+@media (max-width: 59.9375em){.jAPhxV{--span:3;}}/*!sc*/
+.jAPhxV .card{aspect-ratio:1/1;grid-column:auto/span var(--span);}/*!sc*/
+@media (min-width: 60em){.jAPhxV .card{aspect-ratio:16/14;}}/*!sc*/
+.jAPhxV .card:nth-child(1){aspect-ratio:16/9;grid-column:1/-1;}/*!sc*/
+data-styled.g1478[id="sc-77e450dc-6"]{content:"jAPhxV,"}/*!sc*/
+.gwUyoS{font-family:Seed Sans;font-size:24px;font-weight:350;letter-spacing:-0.36px;line-height:120.00000762939453%;color:var(--color-primary-seed-green);}/*!sc*/
+data-styled.g1479[id="sc-ff9056db-0"]{content:"gwUyoS,"}/*!sc*/
+.fvUyAg{gap:6px;display:flex;align-items:center;}/*!sc*/
+data-styled.g1480[id="sc-ff9056db-1"]{content:"fvUyAg,"}/*!sc*/
+main{overflow:visible!important;}/*!sc*/
+#homepage-hero-control{display:visible;}/*!sc*/
+#homepage-hero-variant-1{display:none;}/*!sc*/
+#homepage-hero-variant-2{display:none;}/*!sc*/
+#homepage-hero-variant-3{display:none;}/*!sc*/
+data-styled.g1481[id="sc-global-jdwNhx1"]{content:"sc-global-jdwNhx1,"}/*!sc*/
+</style>
+<style id="local-overrides">
+  body { visibility: visible !important; }
+  /* opacity starts at 0 (inline style), fix() sets it to 1 after replacing content */
+  #onetrust-consent-sdk, .onetrust-pc-dark-filter, #onetrust-banner-sdk { display: none !important; }
+  .optanon-alert-box-wrapper { display: none !important; }
+  /* Fix ViaCap letter fade-in animation (React state doesn't update inline opacity) */
+  .sc-e74ce85f-9 { opacity: 1 !important; transition: opacity 0.4s ease !important; }
+  /* Fix ViaCap section translateY (scroll animation initial state) */
+  .sc-e74ce85f-1 { transform: none !important; }
+  /* Fix ViaCap arrow animation */
+  .sc-e74ce85f-7 { opacity: 1 !important; transform: none !important; }
+  /* Fix ViaCap capsule description slide-in */
+  .sc-e74ce85f-13 { transform: none !important; }
+</style>
+<link rel="stylesheet" href="styled-components.css"/>
+<style id="local-overrides">
+/* === AfterSlim Color Palette === */
+/* Cognac #B8722D (text, headings, dark bg) | Gold Amber #C17F2E (buttons, CTAs, badges) */
+:root {
+  --color--seedgreen: #B8722D !important;
+  --color--seedgreen-dark: #9A5F25 !important;
+  --color--seedgreen-light: #D4944A !important;
+  --color--seedgreen-rgb: 184, 114, 45 !important;
+  --color--oatmilk: #FDF6ED !important;
+  --color--oatmilk-rgb: 253, 246, 237 !important;
+  --color--cream: #F5EDE0 !important;
+  --color--cream-rgb: 245, 237, 224 !important;
+  --color--matcha: #C17F2E !important;
+  --color--matcha-rgb: 193, 127, 46 !important;
+  --color--matcha-dark: #A66B22 !important;
+  --color--matcha-dark-rgb: 166, 107, 34 !important;
+  --color--blueberry: #8B5E3C !important;
+  --color--blueberry-rgb: 139, 94, 60 !important;
+  --color--charcoal: #3D2B1F !important;
+  --color--charcoal-rgb: 61, 43, 31 !important;
+  --color--snowwhite: #FCFCF7 !important;
+  --bdrs-pill: 999px !important;
+}
+/* Buttons */
+.sc-a5094583-2[color="seedgreen"],
+a[color="seedgreen"],
+button[color="seedgreen"] {
+  background-color: #C17F2E !important;
+  color: #FCFCF7 !important;
+}
+.sc-a5094583-2[color="seedgreen"]:hover,
+a[color="seedgreen"]:hover {
+  background-color: #A66B22 !important;
+}
+/* Pill badges */
+.sc-3fd0a620-0[color="seedgreen"] {
+  color: #B8722D !important;
+  border-color: #B8722D !important;
+}
+/* Green backgrounds → Cognac */
+.sc-dd5765e8-0, .sc-91f3b0c8-0 {
+  background-color: #B8722D !important;
+}
+/* Hide "Thousands of lives transformed" section */
+.fDNxUP, .sc-7d5757c9-0 {
+  display: none !important;
+}
+/* Top bar - navy dark */
+.sc-2f4b498e-0 {
+  background-color: #2C1810 !important;
+}
+/* Announcement bar - amber accent instead of lime green */
+.cPUiyA {
+  background-color: #f5a623 !important;
+  color: #2C1810 !important;
+}
+/* Recolor ViaCap capsule video (green -> amber) - hide until filter applied */
+.sc-e74ce85f-12 video, .sc-e74ce85f-0 video {
+  filter: hue-rotate(160deg) saturate(1.3) brightness(0.95) !important;
+  opacity: 0;
+  animation: fadeInVideo 0.3s ease-in 0.2s forwards;
+}
+@keyframes fadeInVideo {
+  to { opacity: 1; }
+}
+/* Recolor Seed jar/product images in bundle and other sections */
+#homepage-product-highlight-control img,
+.sc-77e450dc-3 img {
+  filter: hue-rotate(160deg) saturate(1.1) brightness(1.05) !important;
+}
+/* Recolor Seed SVG icon */
+.sc-53749a5a-15 svg path { fill: #B8722D !important; }
+.sc-53749a5a-15 svg rect { fill: #B8722D !important; }
+/* Recolor play button green */
+.sc-53749a5a-25 svg rect { fill: #B8722D !important; }
+/* UGC grid images - amber tint */
+.sc-dd5765e8-0 img, .sc-91f3b0c8-0 img {
+  filter: sepia(0.2) hue-rotate(-10deg) saturate(1.1) !important;
+}
+/* Seed Labs section images */
+.sc-53749a5a-19 { filter: hue-rotate(160deg) saturate(1.2) brightness(0.95) !important; }
+/* Video thumbnails */
+.sc-ddd75f23-0 img, mux-player { filter: hue-rotate(160deg) saturate(1.1) !important; }
+/* Product cards hover */
+.sc-bf485308-0:hover {
+  border-color: #C17F2E !important;
+}
+/* Footer */
+.sc-ba2bdb0f-1 {
+  background-color: #B8722D !important;
+}
+/* Hero mobile: image on top, text below */
+@media (max-width: 59.99em) {
+  .jlOIHd,
+  .jlOIHd .swiper,
+  .jlOIHd .swiper-wrapper,
+  .jlOIHd .swiper-slide,
+  .jlOIHd .boZjzp,
+  .jlOIHd .aZUbU,
+  #homepage-hero-control,
+  #homepage-hero-control .boZjzp {
+    background-color: #fcfcf7 !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+  .jlOIHd .swiper,
+  .jlOIHd .swiper-wrapper,
+  .jlOIHd .swiper-slide {
+    height: auto !important;
+  }
+  .aZUbU {
+    flex-direction: column-reverse !important;
+    height: auto !important;
+    padding-top: 0 !important;
+    padding-bottom: 1.5rem !important;
+    overflow: hidden !important;
+  }
+  html, body, #__next {
+    overflow-x: hidden !important;
+  }
+  .idHavi {
+    position: relative !important;
+    width: 285% !important;
+    max-width: 285% !important;
+    height: auto !important;
+    margin-left: -108% !important;
+    margin-right: -77% !important;
+    margin-top: -1.5rem !important;
+    margin-bottom: -4rem !important;
+    object-fit: contain !important;
+    display: block !important;
+    transform: translateX(-9%) !important;
+  }
+  .lzQHv {
+    z-index: 3 !important;
+    position: relative !important;
+    width: 100% !important;
+    padding: 0 1.25rem 0 !important;
+    margin-top: 0 !important;
+  }
+  .kSRaBJ {
+    justify-content: flex-start !important;
+    gap: 1.25rem !important;
+    flex-wrap: wrap !important;
+  }
+  .kSRaBJ .hdcPyx {
+    padding: 0.6rem 1rem !important;
+  }
+  /* Reduce announcement bar height */
+  .cPUiyA {
+    padding-block: 6px !important;
+    font-size: 0.7rem !important;
+  }
+}
+/* Satoshi font */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('fonts/Satoshi-Variable.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --ff: 'Satoshi', 'Seed Sans', system-ui, sans-serif !important;
+}
+body, p, span, a, button, input, label, h1, h2, h3, h4, h5, h6, div {
+  font-family: var(--ff) !important;
+}
+</style>
+</head><body style="opacity:0"><link rel="preload" as="image" href="images/science_and_tech_desktop.png"/><link rel="preload" as="image" href="images/highlight-Frame_1739333908_2.png"/><link rel="preload" as="image" href="images/highlight-1de23b9c19a1b7098203106cb8647453916e1416.png"/><link rel="preload" as="image" href="images/highlight-2_1.png"/><link rel="preload" as="image" href="images/highlight-cd4fcd333d2d2c517ca600e6ee9efbbaf896fded.png"/><link rel="preload" as="image" href="images/mux-thumb-87tnV011w6Gk.webp?time=0"/><link rel="preload" as="image" href="images/mux-thumb-oB02r9BUIqkJ.webp?time=3"/><link rel="preload" as="image" href="images/mux-thumb-iM00sNT9JitD.webp?time=2.5"/><link rel="preload" as="image" href="images/reviews-alice_thumbnail.png"/><link rel="preload" as="image" href="images/mux-thumb-B7ii9VEdNofK.webp?time=0"/><link rel="preload" as="image" href="images/mux-thumb-ulw3ww5UZIgd.webp?time=0"/><div id="__next"><div class="cPUiyA" style="background-color:#B8722D;color:#fcfcf7;padding:10px 16px;text-align:center;position:relative;z-index:2;font-family:var(--ff);font-size:14px;font-weight:400;letter-spacing:-0.02em;"><a href="#buy-1" style="color:#fcfcf7;text-decoration:none;">Is AfterSlim® Berberine 1200mg Right For You? →</a></div><header role="banner" class="sc-a8566d8e-0 ihVdLq"><div class="sc-f76ffe93-0 crAOth"><nav class="sc-f73a1584-17 bfshQ"><div class="sc-f73a1584-19 ibGwLj"><div class="sc-f73a1584-1 hsVaWe"><a class="sc-63c72040-0 ktsopc seed-logo" font-size="20px" href="/"><span style="font-family:Satoshi,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.5px;color:#B8722D;">After<span style="color:#C17F2E;">Slim</span></span><span class="screenreader-only">Home</span></a><nav class="sc-f73a1584-7 clNkIY"><button id="tab-shop" aria-controls="panel-shop" aria-expanded="false" class="sc-f73a1584-8 btTDJG theme-green " type="button">Shop</button><button id="tab-science" aria-controls="panel-science" aria-expanded="false" class="sc-f73a1584-8 btTDJG theme-green " type="button">Science</button><button id="tab-learn" aria-controls="panel-learn" aria-expanded="false" class="sc-f73a1584-8 btTDJG theme-green " type="button">Learn</button></nav><div class="sc-f73a1584-2 bdmyiO"></div></div></div></nav></div></header><main id="main" class="site-content"><div id="homepage-hero-control"><div class="sc-9b430418-2 boZjzp"><section class="sc-d163430a-0 jlOIHd"><div class="swiper"><div class="swiper-wrapper"><div class="swiper-slide"><div id="slide-content-0" data-swiper-parallax="5%" position="center" alignment="left" class="sc-d163430a-1 aZUbU content"><div id="slide-text-container" position="center" class="sc-d163430a-3 lzQHv"><div data-swiper-parallax-y="-168" data-swiper-parallax-x="0" data-swiper-parallax-duration="700" alignment="left" class="sc-d163430a-2 bDVYdc"><div class="sc-ff9056db-1 fvUyAg"><span color="seedgreen" lineHeight="8px" class="sc-3fd0a620-0 bVnlWg">AS–01®</span><span class="sc-ff9056db-0 gwUyoS">Berberine 1200mg</span></div><div alignment="left" class="sc-d163430a-6 joJhls"><h2 color="seedgreen" class="sc-413e5ea6-0 sc-413e5ea6-1 sc-d163430a-7 coCPJR hwtDyp iWtWuW">A healthy metabolism can<br/>change your body.<br/></h2><p color="seedgreen" class="sc-413e5ea6-0 sc-413e5ea6-9 sc-d163430a-8 coCPJR cJfIGx gklpgC">Premium Berberine HCl 1200mg formula that boosts your metabolism, controls appetite, and reduces body fat naturally and effectively.*</p></div><div alignment="left" position="center" class="sc-d163430a-9 kSRaBJ"><a color="seedgreen" class="sc-a5094583-2 vwwvS" tabindex="0" href="#buy-1">Shop Now<sup paddingRight="0.1rem" class="sc-9317bf53-0 cBTRmd">®</sup><span class="sc-a5094583-0 evVzdr" style="opacity:0;width:0px;margin-left:0px;transform:translateX(-8px)"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 11 11" style="width:12px;height:12px"><path fill="var(--color-primary-snow-white)" fill-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" clip-rule="evenodd"></path></svg></span></a><a color="seedgreen" align="center" transform="lower" class="sc-53616bdf-0 hdcPyx" href="#viacap">Learn More<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 11 11" style="width:12px;height:12px"><path fill="var(--color--seedgreen)" fill-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" clip-rule="evenodd"></path></svg></a></div></div></div><img src="images/science_and_tech_desktop.png" data-swiper-parallax-y="-20%" data-swiper-parallax-x="0" data-swiper-parallax-duration="400" class="sc-d163430a-4 idHavi" style="transform:none"/></div></div></div><div class="swiper-pagination"></div></div></section></div></div><section id="homepage-product-carousel-control" class="sc-b3035f6c-0 dNaZvg"><div class="sc-f76ffe93-0 sc-359548e0-1 crAOth bYpOuQ"><div class="sc-359548e0-2 eKYqMo"><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-2 OIZSz Qqlry">Choose your supply.</p></div><div class="sc-359548e0-3 cLSucC"><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-9 OIZSz cJfIGx body">Clinical-dose Berberine HCl 1200mg. The more you buy, the more you save.</p></div></div><div class="sc-b3035f6c-2 jKlSPw"><a class="sc-baccdee5-0 jXIGTY card " href="#buy-1"><span color="seedgreen" class="sc-60b7c4e8-0 sc-baccdee5-3 gGAMkK bMONEt">Try It</span><div class="sc-baccdee5-1 bCwiXP block-top" hoverColor="snowwhite" stackSize="xSmall"><div class="sc-baccdee5-2 fMLtWv"><span color="snowwhite" lineHeight="8px" font-weight="350" class="sc-3fd0a620-0 lpuDMx">1 Bottle</span></div><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-6 OIZSz dmRLuy">30-Day Supply</p></div><div class="bottle-spin"><img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Berberine 1200mg bottle" loading="lazy"/></div><div hoverColor="snowwhite" class="sc-baccdee5-1 lhwQgV block-bottom"><button color="seedgreen" type="button" class="sc-a5094583-1 ewPaTi" tabindex="0">Shop Now<span class="sc-a5094583-0 evVzdr" style="opacity:0;width:0px;margin-left:0px;transform:translateX(-8px)"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 11 11" style="width:12px;height:12px"><path fill="var(--color-primary-seed-green)" fill-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" clip-rule="evenodd"></path></svg></span></button><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-baccdee5-4 OIZSz egNwcf boCEsu">$59.99</p></div></a><a class="sc-baccdee5-0 jXIGTY card " href="#buy-2"><span color="seedgreen" class="sc-60b7c4e8-0 sc-baccdee5-3 gGAMkK bMONEt">Popular</span><div class="sc-baccdee5-1 bCwiXP block-top" hoverColor="snowwhite" stackSize="xSmall"><div class="sc-baccdee5-2 fMLtWv"><span color="snowwhite" lineHeight="8px" font-weight="350" class="sc-3fd0a620-0 lpuDMx">3 Bottles</span></div><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-6 OIZSz dmRLuy">90-Day Supply</p></div><div class="bottle-spin"><img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Berberine 1200mg - 3 bottles" loading="lazy"/></div><div hoverColor="snowwhite" class="sc-baccdee5-1 lhwQgV block-bottom"><button color="seedgreen" type="button" class="sc-a5094583-1 ewPaTi" tabindex="0">Shop Now<span class="sc-a5094583-0 evVzdr" style="opacity:0;width:0px;margin-left:0px;transform:translateX(-8px)"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 11 11" style="width:12px;height:12px"><path fill="var(--color-primary-seed-green)" fill-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" clip-rule="evenodd"></path></svg></span></button><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-baccdee5-4 OIZSz egNwcf boCEsu">$49.99/ea · Save 17%</p></div></a><a class="sc-baccdee5-0 jXIGTY card " href="#buy-3"><span color="seedgreen" class="sc-60b7c4e8-0 sc-baccdee5-3 gGAMkK bMONEt">Best Value</span><div class="sc-baccdee5-1 bCwiXP block-top" hoverColor="snowwhite" stackSize="xSmall"><div class="sc-baccdee5-2 fMLtWv"><span color="snowwhite" lineHeight="8px" font-weight="350" class="sc-3fd0a620-0 lpuDMx">6 Bottles</span></div><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-6 OIZSz dmRLuy">180-Day Supply</p></div><div class="bottle-spin"><img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Berberine 1200mg - 6 bottles" loading="lazy"/></div><div hoverColor="snowwhite" class="sc-baccdee5-1 lhwQgV block-bottom"><button color="seedgreen" type="button" class="sc-a5094583-1 ewPaTi" tabindex="0">Shop Now<span class="sc-a5094583-0 evVzdr" style="opacity:0;width:0px;margin-left:0px;transform:translateX(-8px)"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 11 11" style="width:12px;height:12px"><path fill="var(--color-primary-seed-green)" fill-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" clip-rule="evenodd"></path></svg></span></button><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-baccdee5-4 OIZSz egNwcf boCEsu">$39.99/ea · Save 33%</p></div></a></div></section><div id="homepage-product-highlight-control" class="sc-77e450dc-0 eRFTnp"><section borderRadius="var(--bdrs-l) var(--bdrs-l) 0 0" class="sc-77e450dc-1 faWsQJ"><div class="sc-f76ffe93-0 crAOth"><div class="sc-a72cd7bc-0 iCsCEw"><div variant="right" class="sc-77e450dc-4 cSglPZ"><span class="sc-60b7c4e8-0 gGAMkK">Bundle + Save 25%</span><p class="sc-413e5ea6-0 sc-413e5ea6-3 coCPJR bkcVyT">Everything you need to transform your metabolism.</p><p class="sc-413e5ea6-0 sc-413e5ea6-9 coCPJR cJfIGx">Our best-selling combo. Clinical-dose Berberine HCl 1200mg to boost metabolism, reduce belly fat, and naturally control appetite.</p><a color="seedgreen" class="sc-a5094583-2 vwwvS" tabindex="0" href="#buy-6">Shop Bundle<span class="sc-a5094583-0 evVzdr" style="opacity:0;width:0px;margin-left:0px;transform:translateX(-8px)"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 11 11" style="width:12px;height:12px"><path fill="var(--color-primary-snow-white)" fill-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" clip-rule="evenodd"></path></svg></span></a></div><div variant="right" class="sc-77e450dc-5 exoYDP"><div variant="right" total="4" class="sc-77e450dc-6 jAPhxV"><div class="sc-77e450dc-3 jlJoaK card" blockSize="auto"><img src="images/highlight-Frame_1739333908_2.png" alt="A jar of DS-10 and a jar of DM-02"/></div><div class="sc-77e450dc-3 jlJoaK card" blockSize="auto"><img src="images/highlight-1de23b9c19a1b7098203106cb8647453916e1416.png" alt="Taking pill out of DM-02 jar"/></div><div class="sc-77e450dc-3 jlJoaK card" blockSize="auto"><img src="images/highlight-2_1.png" alt="Unboxing products"/></div><div class="sc-77e450dc-3 jlJoaK card" blockSize="auto"><img src="images/highlight-cd4fcd333d2d2c517ca600e6ee9efbbaf896fded.png" alt="A jar of DS-10 and a jar of DM-02 with plant behind them"/></div></div></div></div></div></section></div><section style="background-image:url(images/viacapbg.png)" class="sc-e74ce85f-0 flKcyL"><div class="sc-e74ce85f-1 YzlOs" style="transform:translateY(60px)"><div class="sc-e74ce85f-2 jPbzkj"><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-11 OIZSz cXegNI">●<!-- --> <span style="opacity:0;transition-delay:0s" class="sc-e74ce85f-9 kwJPId">V</span><span style="opacity:0;transition-delay:0.05s" class="sc-e74ce85f-9 kwJPId">i</span><span style="opacity:0;transition-delay:0.1s" class="sc-e74ce85f-9 kwJPId">a</span><span style="opacity:0;transition-delay:0.15000000000000002s" class="sc-e74ce85f-9 kwJPId">C</span><span style="opacity:0;transition-delay:0.2s" class="sc-e74ce85f-9 kwJPId">a</span><span style="opacity:0;transition-delay:0.25s" class="sc-e74ce85f-9 kwJPId">p</span><span style="opacity:0;transition-delay:0.30000000000000004s" class="sc-e74ce85f-9 kwJPId">®</span><span style="opacity:0;transition-delay:0.35000000000000003s" class="sc-e74ce85f-9 kwJPId"> </span><span style="opacity:0;transition-delay:0.4s" class="sc-e74ce85f-9 kwJPId">T</span><span style="opacity:0;transition-delay:0.45s" class="sc-e74ce85f-9 kwJPId">e</span><span style="opacity:0;transition-delay:0.5s" class="sc-e74ce85f-9 kwJPId">c</span><span style="opacity:0;transition-delay:0.55s" class="sc-e74ce85f-9 kwJPId">h</span><span style="opacity:0;transition-delay:0.6000000000000001s" class="sc-e74ce85f-9 kwJPId">n</span><span style="opacity:0;transition-delay:0.65s" class="sc-e74ce85f-9 kwJPId">o</span><span style="opacity:0;transition-delay:0.7000000000000001s" class="sc-e74ce85f-9 kwJPId">l</span><span style="opacity:0;transition-delay:0.75s" class="sc-e74ce85f-9 kwJPId">o</span><span style="opacity:0;transition-delay:0.8s" class="sc-e74ce85f-9 kwJPId">g</span><span style="opacity:0;transition-delay:0.8500000000000001s" class="sc-e74ce85f-9 kwJPId">y</span></p><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-3 OIZSz bkcVyT">Most supplements lose potency during digestion—AfterSlim® doesn’t.</p><div class="sc-e74ce85f-4 hBeyzF"><p data-pill="DS-01®" class="sc-413e5ea6-0 sc-413e5ea6-7 sc-e74ce85f-5 coCPJR dGEvBT fvynGu">Boosts metabolism°</p><p class="sc-e74ce85f-6 hGoONG"><span class="sc-e74ce85f-7 iBLmbr" style="transform:translateY(30px);opacity:0">↑</span><span class="sc-e74ce85f-8 fABEv">0</span><span>x</span></p></div><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-13 OIZSz gOdofi">°Clinically-tested Berberine HCl</p></div><div class="sc-e74ce85f-12 fbsMwZ"><video src="videos/ds01-capsule.mov" width="400" height="400" loop="" muted="" playsInline="" aria-label="DS-01 3D 360° Product Catalog Capsule" data-testid="viacap-video" style="object-fit:contain"></video></div><div class="sc-e74ce85f-10 gFzdoR"><div class="sc-e74ce85f-14 DreWQ"><div class="sc-e74ce85f-13 hfwVWZ" style="transform:translateY(20px)"><h3 class="sc-e74ce85f-17 dkLBre">OUTER LAYER</h3><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-13 OIZSz gOdofi">Shields Berberine from stomach acid, ensuring it reaches the intestine intact for maximum absorption and effectiveness.</p></div><div class="sc-e74ce85f-15 iROSZN"></div></div><div class="sc-e74ce85f-11 bSsxVD"></div><div class="sc-e74ce85f-14 hWYEvM"><div class="sc-e74ce85f-15 bOpKKQ"></div><div class="sc-e74ce85f-13 ktlVsQ" style="transform:translateY(-20px)"><h3 class="sc-e74ce85f-17 dkLBre">INNER LAYER</h3><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-13 OIZSz gOdofi">Delivers 1200mg of pure Berberine HCl directly where your body needs it most for faster results.</p></div></div></div></div></section><section class="sc-53749a5a-15 bKPbEh"><div class="sc-a72cd7bc-0 sc-53749a5a-16 gtnmyo fEjrdi"><div class="sc-53749a5a-17 gxKRHV">AfterSlim【 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="21" fill="none"><path fill="currentColor" d="M4.10059 6.27284v1.5H1.75V18.5521h22.5V7.77284h-2.1172v-1.5H25.75V20.0521H.25V6.27284h3.85059Z"></path><path fill="currentColor" d="M22.9068 14.5952V.750427L12.774 6.14789l-.3975.21094V20.2036l10.5303-5.6084Zm-9.0303-7.33501 7.5303-4.01074V13.6948l-7.5303 4.0107V7.26019Z"></path><path fill="currentColor" d="M3.34625 14.5952V.750427L13.4791 6.14789l.3974.21094V20.2036L3.34625 14.5952Zm9.03025-7.33501L4.84625 3.24945V13.6948l7.53025 4.0107V7.26019Z"></path></svg> 】</div><div class="sc-53749a5a-18 dLkOMh"><h2 color="seedgreen" class="sc-413e5ea6-0 sc-413e5ea6-2 coCPJR Qqlry">Your body deserves more.</h2><p color="seedgreen" class="sc-413e5ea6-0 sc-413e5ea6-9 coCPJR cJfIGx">Your metabolism controls everything from energy levels to weight management. Clinical studies show that Berberine HCl activates AMPK, the enzyme that regulates how your body burns fat and processes sugar. Learn how AfterSlim works at the cellular level.</p><button color="seedgreen" class="sc-a5094583-1 iVgFZj sc-53749a5a-25 jIDAPB" type="button">Discover <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"><title id="play-icon">Play icon</title><rect width="38" height="38" rx="19" fill="#B8722D"></rect> <path d="M24.8461 19L17.1538 24L17.1538 14L24.8461 19Z" fill="var(--color--snowwhite)"></path></svg></button></div><div class="sc-53749a5a-20 gLlVgI"><span class="sc-53749a5a-21 DNVQT">SCIENCE /</span><span class="sc-53749a5a-22 cIjOTy">How It Works</span></div><figure class="sc-53749a5a-19 hnLSaa" style="background:rgba(238, 238, 233, 1);height:auto;width:calc(6 * var(--grid-col-width) + 5 * var(--space-gutter));opacity:1"><div style="position:relative" class="sc-ddd75f23-0 iZAgLW"><mux-player data-mux-player-react-lazy-placeholder="" placeholder="" style="--controls:none;--media-object-fit:cover;aspect-ratio:1" class="" nohotkeys="" aria-hidden="" tabIndex="-1"><div data-mux-player-react-lazy-placeholder-overlay="true"></div></mux-player><style>
+        mux-player[data-mux-player-react-lazy-placeholder] {
+          aspect-ratio: 16/9;
+          display: block;
+          background-color: var(--media-background-color, #000);
+          width: 100%;
+          position: relative;
+          background-image: var(--mux-player-react-lazy-placeholder);
+          background-repeat: no-repeat;
+          background-size: var(--media-object-fit, contain);
+          background-position: var(--media-object-position, 50% 50%);
+          --controls: none;
+          --controls-backdrop-color: rgba(0, 0, 0, 0.6);
+        }
+        mux-player [data-mux-player-react-lazy-placeholder-overlay] {
+          position: absolute;
+          inset: 0;
+          background-color: var(--controls-backdrop-color);
+        }
+      </style><img src="images/mux-thumb-87tnV011w6Gk.webp?time=0" alt="Loading thumbnail for video" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/></div></figure></div></section><section class="sc-7d5757c9-0 fDNxUP"><div class="sc-910d0348-0 hXDUNb"><div class="sc-6e354259-0 gzVGyL"><div class="sc-f76ffe93-0 crAOth"><div variant="center" class="sc-6e354259-1 kaSEom"><p class="sc-413e5ea6-0 sc-413e5ea6-2 sc-6e354259-3 coCPJR Qqlry jdhFDc">Thousands of lives transformed (and counting).</p><div variant="center" class="sc-6e354259-2 fhgRWj"><p class="sc-413e5ea6-0 sc-413e5ea6-9 coCPJR cJfIGx">See how real people are transforming their bodies with AfterSlim.</p></div></div></div></div></div><div class="sc-7d5757c9-1 cEllkp"><div class="swiper"><div class="swiper-wrapper"><div class="swiper-slide"><div class="sc-7d5757c9-4 kiLDmu video-frame"><button class="sc-7d5757c9-10 iskmJY is-active"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="fullscreen"><title id="fullscreen-icon">Fullscreen</title><path d="M11 7H8C7.44772 7 7 7.44772 7 8V11" stroke="currentColor" stroke-width="1.4"></path><path d="M11 17H8C7.44772 17 7 16.5523 7 16V13" stroke="currentColor" stroke-width="1.4"></path><path d="M13 7H16C16.5523 7 17 7.44772 17 8V9V11" stroke="currentColor" stroke-width="1.4"></path><path d="M13 17H16C16.5523 17 17 16.5523 17 16V13" stroke="currentColor" stroke-width="1.4"></path></svg></button><div style="height:100%;width:100%" class="sc-ddd75f23-0 iZAgLW"><mux-player player-software-name="mux-player-react" player-software-version="3.5.1" player-init-time="1773259406186" thumbnail-time="3" style="--controls:none;height:100%"></mux-player><img src="images/mux-thumb-oB02r9BUIqkJ.webp?time=3" alt="Loading thumbnail for video" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/></div></div></div><div class="swiper-slide"><div class="sc-7d5757c9-4 kiLDmu video-frame"><button class="sc-7d5757c9-10 iskmJY"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="fullscreen"><title id="fullscreen-icon">Fullscreen</title><path d="M11 7H8C7.44772 7 7 7.44772 7 8V11" stroke="currentColor" stroke-width="1.4"></path><path d="M11 17H8C7.44772 17 7 16.5523 7 16V13" stroke="currentColor" stroke-width="1.4"></path><path d="M13 7H16C16.5523 7 17 7.44772 17 8V9V11" stroke="currentColor" stroke-width="1.4"></path><path d="M13 17H16C16.5523 17 17 16.5523 17 16V13" stroke="currentColor" stroke-width="1.4"></path></svg></button><div style="height:100%;width:100%" class="sc-ddd75f23-0 iZAgLW"><mux-player player-software-name="mux-player-react" player-software-version="3.5.1" player-init-time="1773259406186" thumbnail-time="2.5" style="--controls:none;height:100%"></mux-player><img src="images/mux-thumb-iM00sNT9JitD.webp?time=2.5" alt="Loading thumbnail for video" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/></div></div></div></div></div><div class="sc-f76ffe93-0 crAOth"><div class="sc-7d5757c9-2 hJmgET video-pagination"><svg style="display:none"><defs><filter id="filter"><feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"></feGaussianBlur><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -11" result="filter"></feColorMatrix><feComposite in="SourceGraphic" in2="filter"></feComposite></filter></defs></svg><div class="sc-7d5757c9-5 ljQnQM"><button color="seedgreen" type="button" class="sc-a5094583-1 bAsSQK"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><title id="sound-icon">Sound icon</title><path fill="#fcfcf7" d="M3 6h2v4H3zM5 6l3-2v8l-3-2V6Z"></path><path stroke="#fcfcf7" stroke-width="1.5" d="M10 6c1.1046 1.10457 1.1046 2.89543 0 4M13 5c1.7333 1.65685 1.7333 4.34315 0 6"></path></svg></button></div><div class="sc-7d5757c9-3 evYMhP"><div class="sc-7d5757c9-6 eeNhIE"><div class="sc-7d5757c9-7 kAmrhi"></div><div class="sc-7d5757c9-8 eMBChS"></div><button class="sc-7d5757c9-9 iyLOfV"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><title id="play-icon">Play icon</title><path d="M12.4231 8L5.5 12.5L5.5 3.5L12.4231 8Z" fill="currentColor"></path></svg>Zam</button></div><div style="--ratio:1 / 1" type="rounded" class="sc-7d5757c9-4 cbbiPn"><img src="images/reviews-alice_thumbnail.png" alt="Thumbnail 1"/></div></div></div></div></div></section><section class="sc-6e354259-0 gzVGyL"><div class="sc-f76ffe93-0 crAOth"><div variant="left" class="sc-6e354259-1 fMwsGW"><p class="sc-413e5ea6-0 sc-413e5ea6-2 sc-6e354259-3 coCPJR Qqlry jdfUDY">Stories from real customers like you.</p><div variant="left" class="sc-6e354259-2 fmaSxW"></div></div></div></section><section class="sc-6a2d7c8c-0 iuJaa"><div type="simple" class="sc-94052591-2 tavmx"><div target="_blank" style="--ratio:1/1;--width:430px" shape="round" type="simple" class="sc-94052591-1 kewNfF"><img alt="ds01 on bathroom sink" loading="lazy" width="524" height="860" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/scroller-Frame_1739333317.png 1x, images/scroller-Frame_1739333317.png 2x" src="images/scroller-Frame_1739333317.png"/></div><div target="_blank" style="--ratio:9/14;--width:276px" shape="vertical" type="simple" class="sc-94052591-1 gSKwZs"><img alt="dispensing two seed pills" loading="lazy" width="552" height="860" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/scroller-Frame_1739333315.png 1x, images/scroller-Frame_1739333315.png 2x" src="images/scroller-Frame_1739333315.png"/></div><div target="_blank" style="--ratio:9/14;--width:276px" shape="vertical" type="simple" class="sc-94052591-1 gSKwZs"><button color="seedgreen" class="sc-a5094583-1 iVgFZj sc-94052591-0 jDjBgJ" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><path fill="#fcfcf7" d="M12.4231 8 5.5 12.5v-9L12.4231 8Z"></path></svg></button><div><div style="position:relative" class="sc-ddd75f23-0 iZAgLW"><mux-player player-software-name="mux-player-react" player-software-version="3.5.1" player-init-time="1773259406190" thumbnail-time="0" preload="metadata" style="--controls:none"></mux-player><img src="images/mux-thumb-B7ii9VEdNofK.webp?time=0" alt="Loading thumbnail for video" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/></div></div></div><div target="_blank" style="--ratio:14/9;--width:322px" shape="horizontal-pill" type="simple" class="sc-94052591-1 lfzNbp"><img alt="ds-01 on a counter" loading="lazy" width="552" height="860" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/scroller-Frame_1739333318.png 1x, images/scroller-Frame_1739333318.png 2x" src="images/scroller-Frame_1739333318.png"/></div><a href="https://www.fastcompany.com/90813751/this-company-is-sending-plastic-eating-microbes-into-space" target="_blank" style="--ratio:14/9;--width:322px" shape="horizontal" type="simple" class="sc-94052591-1 dhzCDP"><button color="seedgreen" class="sc-a5094583-1 iVgFZj sc-94052591-0 jDjBgJ" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><path stroke="#fcfcf7" stroke-width="1.5" d="M12 3.99999V8m0-4.00001H8m4 0L8 8m3 2v2H4V5h2"></path></svg></button><img alt="quote from fast company" loading="lazy" width="552" height="860" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/scroller-ugc-5.png 1x, images/scroller-ugc-5.png 2x" src="images/scroller-ugc-5.png"/></a><div target="_blank" style="--ratio:9/14;--width:276px" shape="vertical" type="simple" class="sc-94052591-1 gSKwZs"><button color="seedgreen" class="sc-a5094583-1 iVgFZj sc-94052591-0 jDjBgJ" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><path fill="#fcfcf7" d="M12.4231 8 5.5 12.5v-9L12.4231 8Z"></path></svg></button><div><div style="position:relative" class="sc-ddd75f23-0 iZAgLW"><mux-player player-software-name="mux-player-react" player-software-version="3.5.1" player-init-time="1773259406190" thumbnail-time="0" preload="metadata" style="--controls:none"></mux-player><img src="images/mux-thumb-ulw3ww5UZIgd.webp?time=0" alt="Loading thumbnail for video" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/></div></div></div><div target="_blank" style="--ratio:9/14;--width:276px" shape="vertical" type="simple" class="sc-94052591-1 gSKwZs"><img alt="woman wearing seed merchandise" loading="lazy" width="552" height="860" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/scroller-Frame_1739333320.png 1x, images/scroller-Frame_1739333320.png 2x" src="images/scroller-Frame_1739333320.png"/></div><a href="https://www.forbes.com/sites/oliviaobryon/2022/11/06/how-can-microbes-support-wellness-and-save-the-planet-seed-health-co-founders-explain/" target="_blank" style="--ratio:14/9;--width:322px" shape="horizontal" type="simple" class="sc-94052591-1 dhzCDP"><button color="seedgreen" class="sc-a5094583-1 iVgFZj sc-94052591-0 jDjBgJ" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><path stroke="#fcfcf7" stroke-width="1.5" d="M12 3.99999V8m0-4.00001H8m4 0L8 8m3 2v2H4V5h2"></path></svg></button><img alt="quote from forbes" loading="lazy" width="552" height="860" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/scroller-ugc-8.png 1x, images/scroller-ugc-8.png 2x" src="images/scroller-ugc-8.png"/></a><div target="_blank" style="--ratio:14/9;--width:322px" shape="horizontal-pill" type="simple" class="sc-94052591-1 lfzNbp"><img alt="clip 5" loading="lazy" width="552" height="860" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/scroller-blobs.png 1x, images/scroller-blobs.png 2x" src="images/scroller-blobs.png"/></div></div></section><section class="sc-8a481476-0 brytll"><div class="sc-f76ffe93-0 crAOth"><div class="sc-a72cd7bc-0 gtnmyo"><div align="center" style="background-image:url(images/bookend-5f4e9939.jpg)" class="sc-8a481476-1 sc-91f3b0c8-0 cpDkWx"><p align="center" class="sc-413e5ea6-0 sc-413e5ea6-11 sc-8a481476-3 coCPJR cXegNI bwdHxJ eyebrow">● New York — USA</p><div class="sc-8a481476-2 hhPMoP"><div><p class="sc-413e5ea6-0 sc-413e5ea6-3 sc-8a481476-6 coCPJR bkcVyT fhqUbj">Seed<span class="sc-413e5ea6-0 sc-413e5ea6-3 sc-8a481476-4 OIZSz bkcVyT GbQHl is-visible" color="snowwhite"><span color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-3 sc-8a481476-5 OIZSz bkcVyT">Labs</span></span></p></div><div><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-9 OIZSz cJfIGx">Because health is more than appearance.</p></div><div><a color="snowwhite" class="sc-a5094583-2 GsxeN" href="/seedlabs">Read More</a></div></div></div><div align="center" style="background-image:url(images/force-life.png)" class="sc-8a481476-1 sc-91f3b0c8-0 cpDkWx"><div class="sc-8a481476-2 hhPMoP"><div style="margin-top:0;width:232px;height:142px;align-self:center"><img alt="Additional image" loading="lazy" width="232" height="142" decoding="async" data-nimg="1" style="color:transparent" srcSet="images/bookend-image_164.png 1x, images/bookend-image_164.png 2x" src="images/bookend-image_164.png"/></div><div><p class="sc-413e5ea6-0 sc-413e5ea6-3 sc-8a481476-6 coCPJR bkcVyT fhqUbj"><span style="font-weight:350;font-size:1.5rem;line-height:28px;color:#FFFFFF;margin-top:-32px">Transform your body for real.*</span></p></div><div><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-9 OIZSz cJfIGx">Feel the difference with AfterSlim Berberine®*</p></div><div><a color="snowwhite" class="sc-a5094583-2 GsxeN" href="#buy-1">Shop Now</a></div></div></div></div></div></section></main><footer role="contentinfo"><div class="sc-ba2bdb0f-1 ewSpsC"><div id="footer-content" class="sc-a72cd7bc-0 sc-ba2bdb0f-3 gtnmyo cPsJUc"><div class="sc-ba2bdb0f-4 cGkMzU"><a aria-label="Seed" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="108" height="26" fill="none"><path fill="#fcfcf7" d="M10.161 26C4.195 26 .506 22.58 0 17.808h3.652c.543 3.241 2.785 5.307 6.654 5.307 3.544 0 5.894-1.959 5.894-4.38 0-2.173-1.446-3.242-5.098-4.132L8.1 13.819C3.182 12.61.723 10.756.723 7.088.723 3.028 4.63 0 9.691 0c5.497 0 8.679 2.885 9.402 6.589h-3.508c-.687-2.386-2.748-3.775-5.966-3.775-3.11 0-5.388 1.674-5.388 4.096 0 2.03 1.266 2.849 4.7 3.704l2.966.783c5.388 1.354 7.847 3.42 7.847 6.946 0 4.38-3.941 7.657-9.583 7.657Zm20.576 0c-5.569 0-9.185-3.74-9.185-9.545 0-5.699 4.086-9.581 8.86-9.581 5.388 0 8.787 3.846 8.86 10.4H24.914c.181 3.633 2.532 6.09 5.895 6.09 2.422 0 3.869-1.14 4.52-2.528h3.543C37.97 23.756 35.15 26 30.737 26ZM50.3 26c-5.568 0-9.185-3.74-9.185-9.545 0-5.699 4.087-9.581 8.86-9.581 5.388 0 8.787 3.846 8.86 10.4H44.477c.181 3.633 2.532 6.09 5.895 6.09 2.423 0 3.869-1.14 4.52-2.528h3.544C57.533 23.756 54.712 26 50.3 26Zm18.443 0c-4.701 0-8.137-3.74-8.137-9.58 0-5.878 3.436-9.546 8.137-9.546 3.001 0 4.918 1.46 5.966 3.277V.534H78v24.932h-3.29v-2.743C73.66 24.575 71.743 26 68.742 26Zm.542-2.636c3.219 0 5.497-2.991 5.497-6.945 0-3.989-2.278-6.874-5.497-6.874-3.327 0-5.316 2.707-5.316 6.874 0 4.132 1.99 6.945 5.316 6.945Zm-44.297-8.69H35.98c-.433-3.134-2.422-5.129-5.496-5.129-2.82 0-5.099 2.066-5.497 5.129Zm19.563 0h10.993c-.434-3.134-2.423-5.129-5.497-5.129-2.82 0-5.098 2.066-5.496 5.129ZM96.518 26C90.158 26 85 20.877 85 14.518 85 8.158 90.158 3 96.518 3 102.877 3 108 8.158 108 14.518A11.46 11.46 0 0 1 96.518 26Z"></path></svg></a><div class="sc-ba2bdb0f-5 fzlNOd"><p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-5 sc-ba2bdb0f-6 OIZSz jSVdBp hcbBmV">Pioneering <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.0785 22.1018L6.86646 16.8897L8.95126 14.8049L14.1633 20.017L12.0785 22.1018Z" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path><path d="M1.65428 16.8905L12.0783 27.2098" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.82434 21.0594C5.82434 26.8164 10.4913 31.4834 16.2484 31.4834C22.0054 31.4834 26.6724 26.8164 26.6724 21.0594C26.6724 18.7123 25.8967 16.5463 24.5876 14.804" stroke="#FFFFFF" stroke-width="1.7"></path><circle cx="22.5029" cy="13.2413" r="2.60601" stroke="#FFFFFF" stroke-width="1.7"></circle><circle cx="22.5029" cy="13.2413" r="2.60601" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></circle><path d="M24.5875 11.6779L25.6299 10.6355L18.3331 3.33862L7.90906 13.7627L15.2059 21.0595L20.9391 15.3263" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path><path d="M23.0241 1.7749L19.8969 4.90212L24.0665 9.07173L27.1937 5.94452L23.0241 1.7749Z" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path></svg> premium supplementation [R+D] <svg xmlns="http://www.w3.org/2000/svg" width="35" height="33" viewBox="0 0 35 33" fill="none"><mask id="path-1-inside-1_8140_3689" fill="#FFFFFF"><path d="M17.498 0.0214844C21.5396 0.021607 24.8164 3.29823 24.8164 7.33984C24.8164 8.86583 24.3468 10.2811 23.5473 11.4533C23.3551 11.735 23.3039 12.095 23.4414 12.4071C23.6651 12.9151 24.2851 13.1044 24.7951 12.8852C25.6807 12.5047 26.6566 12.2939 27.6816 12.2939C31.7232 12.2941 35 15.5707 35 19.6123C34.9999 23.6538 31.7232 26.9305 27.6816 26.9307C24.7514 26.9307 22.2238 25.2076 21.055 22.7201C21.0522 22.714 21.0448 22.7114 21.0387 22.7143C21.0325 22.7173 21.025 22.7145 21.0223 22.7082L20.054 20.5078C19.3329 18.8692 17.1143 18.6131 16.0388 20.0444L15.2125 21.144C14.5689 22.0006 14.4556 23.1218 14.5839 24.1856C14.6187 24.4747 14.6367 24.7689 14.6367 25.0674C14.6366 29.1089 11.3599 32.3856 7.31836 32.3857C3.27674 32.3857 0.000122666 29.109 0 25.0674C0 21.0257 3.27667 17.749 7.31836 17.749C8.26379 17.7491 9.22097 17.4284 9.78897 16.6726L10.4141 15.8408C11.6874 14.1465 11.2915 11.7598 10.5899 9.75986C10.3242 9.00248 10.1797 8.18812 10.1797 7.33984C10.1797 3.29815 13.4564 0.0214844 17.498 0.0214844Z"></path></mask><path d="M17.498 0.0214844L17.4981 -1.75119H17.498V0.0214844ZM24.8164 7.33984L26.5891 7.3399V7.33984H24.8164ZM27.6816 12.2939L27.6817 10.5213H27.6816V12.2939ZM35 19.6123L36.7727 19.6124V19.6123H35ZM27.6816 26.9307V28.7033H27.6817L27.6816 26.9307ZM14.6367 25.0674L16.4094 25.0674V25.0674H14.6367ZM7.31836 32.3857V34.1584H7.31841L7.31836 32.3857ZM0 25.0674H-1.77268V25.0674L0 25.0674ZM10.1797 7.33984H8.40701L8.40701 7.3399L10.1797 7.33984ZM10.4141 15.8408L8.99702 14.7758L10.4141 15.8408ZM10.5899 9.75986L8.91718 10.3466L10.5899 9.75986ZM9.78897 16.6726L8.37188 15.6076L9.78897 16.6726ZM20.054 20.5078L21.6765 19.7938L20.054 20.5078ZM16.0388 20.0444L17.456 21.1093L16.0388 20.0444ZM21.0223 22.7082L19.3998 23.4222L21.0223 22.7082ZM24.7951 12.8852L25.4949 14.5139L24.7951 12.8852ZM21.055 22.7201L19.4506 23.474L21.055 22.7201ZM23.5473 11.4533L25.0117 12.4522L23.5473 11.4533ZM17.498 0.0214844L17.498 1.79416C20.5607 1.79426 23.0437 4.2773 23.0437 7.33984H24.8164H26.5891C26.5891 2.31915 22.5186 -1.75104 17.4981 -1.75119L17.498 0.0214844ZM24.8164 7.33984L23.0437 7.33979C23.0437 8.49624 22.6891 9.5655 22.0828 10.4544L23.5473 11.4533L25.0117 12.4522C26.0045 10.9966 26.589 9.23541 26.5891 7.3399L24.8164 7.33984ZM24.7951 12.8852L25.4949 14.5139C26.1636 14.2266 26.9017 14.0666 27.6816 14.0666V12.2939V10.5213C26.4116 10.5213 25.1979 10.7828 24.0953 11.2565L24.7951 12.8852ZM27.6816 12.2939L27.6816 14.0666C30.7442 14.0667 33.2273 16.5498 33.2273 19.6123H35H36.7727C36.7727 14.5916 32.7022 10.5214 27.6817 10.5213L27.6816 12.2939ZM35 19.6123L33.2273 19.6123C33.2272 22.6748 30.7441 25.1579 27.6816 25.158L27.6816 26.9307L27.6817 28.7033C32.7022 28.7032 36.7725 24.6329 36.7727 19.6124L35 19.6123ZM27.6816 26.9307V25.158C25.4643 25.158 23.5472 23.8557 22.6594 21.9663L21.055 22.7201L19.4506 23.474C20.9004 26.5595 24.0384 28.7033 27.6816 28.7033V26.9307ZM21.0223 22.7082L22.6448 21.9942L21.6765 19.7938L20.054 20.5078L18.4315 21.2219L19.3998 23.4222L21.0223 22.7082ZM16.0388 20.0444L14.6217 18.9795L13.7954 20.0791L15.2125 21.144L16.6297 22.2089L17.456 21.1093L16.0388 20.0444ZM14.5839 24.1856L12.824 24.3978C12.8504 24.6168 12.864 24.8402 12.864 25.0674H14.6367H16.4094C16.4094 24.6977 16.3871 24.3326 16.3438 23.9734L14.5839 24.1856ZM14.6367 25.0674L12.864 25.0673C12.8639 28.1299 10.3808 30.613 7.31831 30.6131L7.31836 32.3857L7.31841 34.1584C12.3389 34.1583 16.4092 30.0879 16.4094 25.0674L14.6367 25.0674ZM7.31836 32.3857V30.6131C4.25582 30.6131 1.77277 28.13 1.77268 25.0673L0 25.0674L-1.77268 25.0674C-1.77253 30.088 2.29767 34.1584 7.31836 34.1584V32.3857ZM0 25.0674H1.77268C1.77268 22.0047 4.25569 19.5217 7.31836 19.5217V17.749V15.9763C2.29764 15.9763 -1.77268 20.0467 -1.77268 25.0674H0ZM9.78897 16.6726L11.2061 17.7376L11.8312 16.9058L10.4141 15.8408L8.99702 14.7758L8.37188 15.6076L9.78897 16.6726ZM10.5899 9.75986L12.2627 9.17309C12.0622 8.6016 11.9524 7.98547 11.9524 7.33979L10.1797 7.33984L8.40701 7.3399C8.40704 8.39077 8.58629 9.40336 8.91718 10.3466L10.5899 9.75986ZM10.1797 7.33984H11.9524C11.9524 4.27717 14.4354 1.79416 17.498 1.79416V0.0214844V-1.75119C12.4773 -1.75119 8.40701 2.31913 8.40701 7.33984H10.1797ZM10.4141 15.8408L11.8312 16.9058C13.6994 14.42 12.9751 11.2041 12.2627 9.17309L10.5899 9.75986L8.91718 10.3466C9.60784 12.3155 9.67546 13.873 8.99702 14.7758L10.4141 15.8408ZM7.31836 17.749L7.31831 19.5217C8.6049 19.5217 10.1917 19.0873 11.2061 17.7376L9.78897 16.6726L8.37188 15.6076C8.25023 15.7695 7.92268 15.9764 7.31841 15.9763L7.31836 17.749ZM15.2125 21.144L13.7954 20.0791C12.7598 21.4572 12.6699 23.12 12.824 24.3978L14.5839 24.1856L16.3438 23.9734C16.2414 23.1236 16.3779 22.544 16.6297 22.2089L15.2125 21.144ZM20.054 20.5078L21.6765 19.7938C20.4095 16.9147 16.5113 16.4647 14.6217 18.9795L16.0388 20.0444L17.456 21.1093C17.7173 20.7616 18.2563 20.8238 18.4315 21.2219L20.054 20.5078ZM21.0387 22.7143L20.2739 21.1151C21.1706 20.6862 22.2444 21.0843 22.6448 21.9942L21.0223 22.7082L19.3998 23.4222C19.8057 24.3447 20.8943 24.7483 21.8035 24.3135L21.0387 22.7143ZM23.4414 12.4071L21.8191 13.1216C22.499 14.6652 24.2444 15.0512 25.4949 14.5139L24.7951 12.8852L24.0953 11.2565C24.2453 11.1921 24.4144 11.184 24.5787 11.2396C24.7536 11.2987 24.9548 11.4454 25.0637 11.6925L23.4414 12.4071ZM21.055 22.7201L22.6594 21.9663C22.2402 21.0741 21.1718 20.6857 20.2739 21.1151L21.0387 22.7143L21.8035 24.3135C20.9178 24.7371 19.8641 24.3539 19.4506 23.474L21.055 22.7201ZM23.5473 11.4533L22.0828 10.4544C21.5881 11.1797 21.4061 12.1839 21.8191 13.1216L23.4414 12.4071L25.0637 11.6925C25.2017 12.006 25.1221 12.2904 25.0117 12.4522L23.5473 11.4533Z" fill="#FCFCF7" mask="url(#path-1-inside-1_8140_3689)"></path></svg> <!-- -->for your health and wellness <svg xmlns="http://www.w3.org/2000/svg" width="31" height="18" fill="none" style="scale:1.3"><path fill="#FFFFFF" d="M22.248 16.003v1.5H8.75195v-1.5H22.248ZM29.5 8.75201c0-4.00493-3.247-7.252-7.252-7.252H8.75195c-4.0049 0-7.25195 3.24707-7.25195 7.252.00023 4.00469 3.24719 7.25099 7.25195 7.25099v1.5l-.45117-.0117C3.82619 17.2643.238684 13.6768.011719 9.20221L0 8.75201C0 4.06983 3.67693.246317 8.30078.011719L8.75195 0H22.248l.4512.011719C27.3231.246318 31 4.06983 31 8.75201l-.0117.4502c-.227 4.47459-3.8145 8.06209-8.2891 8.28909l-.4512.0117v-1.5c4.0048 0 7.2518-3.2463 7.252-7.25099Z"></path><path fill="#FFFFFF" d="M30.7207 8.00127v1.5H0v-1.5h30.7207Z"></path><path fill="#FFFFFF" d="M19.082 12.5468V5.04574c0-1.93348-1.5675-3.50097-3.501-3.50101-1.9334 0-3.5009 1.5675-3.5009 3.50101v7.50106c0 1.9335 1.5675 3.501 3.5009 3.501v1.5l-.2578-.0058c-2.5568-.1298-4.6065-2.1805-4.7362-4.7374l-.0069-.2578V5.04574c0-2.76195 2.2391-5.00103 5.0009-5.00103l.2569.006835c2.6424.133737 4.744 2.318425 4.744 4.994195v7.50106l-.0068.2578c-.134 2.6422-2.3186 4.7432-4.9941 4.7432v-1.5c1.9335 0 3.501-1.5675 3.501-3.501Z"></path><path fill="#FFFFFF" d="M17.7799 16.0029v1.5h-4.5595v-1.5h4.5595Zm7.252-7.25095c0-4.0049-3.2471-7.25195-7.252-7.25195h-4.5595c-4.00494 0-7.25198 3.24705-7.25198 7.25195.00023 4.00475 3.24718 7.25095 7.25198 7.25095v1.5l-.4512-.0117c-4.47459-.227-8.0621-3.8144-8.28907-8.28905l-.01171-.4502c0-4.68215 3.67693-8.505634 8.30078-8.740231L13.2204 0h4.5595l.4502.011719c4.6241.234318 8.3018 4.057891 8.3018 8.740231l-.0117.4502c-.227 4.47485-3.8152 8.06235-8.2901 8.28905l-.4502.0117v-1.5c4.0048 0 7.2518-3.2462 7.252-7.25095Z"></path><path fill="#FFFFFF" d="M14.4192.000723h1.5V17.5037h-1.5V.000723Z"></path></svg>since 2024.</p><form class="sc-ba2bdb0f-8 jnmlWu"><label for="newsletter">AfterSlim news straight to your inbox—</label><p class="sc-413e5ea6-0 sc-413e5ea6-12 sc-ba2bdb0f-7 coCPJR egNwcf iugReo">By signing up you consent to receive AfterSlim emails.</p><div class="sc-ba2bdb0f-10 gilQGW"><input type="email" id="newsletter" placeholder="Enter your email" class="sc-ba2bdb0f-9 huRjhJ"/><button type="submit" role="button" class="sc-ba2bdb0f-11 ckLfEX"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="none" viewBox="0 0 11 11"><path fill="#FCFCF7" fill-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" clip-rule="evenodd"></path></svg></button></div></form></div><p class="sc-ba2bdb0f-18 gUvxCH">*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease.</p></div><nav class="sc-bb622dc8-0 dVraTm"><ul class="sc-bb622dc8-1 fgVjzs"><li class="sc-bb622dc8-2 jByjNq"><p class="sc-413e5ea6-10 sc-bb622dc8-5 hzUlAx GkLCs">Products</p><ul class="sc-bb622dc8-3 lnQSJF"><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="#buy-1" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Shop All</a></li></ul></li><li class="sc-bb622dc8-2 jByjNq"><p class="sc-413e5ea6-10 sc-bb622dc8-5 hzUlAx GkLCs">About</p><ul class="sc-bb622dc8-3 lnQSJF"><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/approach" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Science</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/sustainability" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Sustainability</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/seedlabs" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">SeedLabs</a></li></ul></li><li class="sc-bb622dc8-2 jByjNq"><p class="sc-413e5ea6-10 sc-bb622dc8-5 hzUlAx GkLCs">Inquire</p><ul class="sc-bb622dc8-3 lnQSJF"><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/seeduniversity" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Partner</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/practitioners" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Practitioners</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/press" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Press</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/join-us" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Join</a></li></ul></li><li class="sc-bb622dc8-2 jByjNq"><p class="sc-413e5ea6-10 sc-bb622dc8-5 hzUlAx GkLCs">Help</p><ul class="sc-bb622dc8-3 lnQSJF"><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="https://help.seed.com/" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Help</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="https://help.seed.com/en-US/contact" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Contact</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/account/home" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">My Account</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/entire-world" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">International</a></li></ul></li><li class="sc-bb622dc8-2 jByjNq"><p class="sc-413e5ea6-10 sc-bb622dc8-5 hzUlAx GkLCs">Social</p><ul class="sc-bb622dc8-3 lnQSJF"><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="https://www.instagram.com/seed" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Instagram</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="https://twitter.com/seedhealth" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Twitter</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="https://www.linkedin.com/company/seedhealth" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Linkedin</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/account/refer?traffic_source=footer_referafriend" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Refer</a></li></ul></li><li class="sc-bb622dc8-2 jByjNq"><p class="sc-413e5ea6-10 sc-bb622dc8-5 hzUlAx GkLCs">Legal</p><ul class="sc-bb622dc8-3 lnQSJF"><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/terms-conditions" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Terms + Conditions</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/privacy-policy" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Privacy Policy</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="/accessibility" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Accessibility</a></li><li class="sc-413e5ea6-0 sc-413e5ea6-12 coCPJR egNwcf"><a href="#" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-bb622dc8-4 coCPJR egNwcf jeuLRB">Consent Preferences</a></li></ul></li></ul></nav></div><div style="background-image:url(images/footer-fpo.jpg)" class="sc-ba2bdb0f-12 fBEvrz"><div class="sc-ba2bdb0f-13 dGtHtq"><div class="sc-ba2bdb0f-0 hTQtFS"></div></div><p class="sc-413e5ea6-0 sc-413e5ea6-13 sc-ba2bdb0f-15 coCPJR gOdofi ixcaKn">© <!-- -->2026<!-- --> AfterSlim</p></div><div></div></div></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"products":[{"id":76,"name":"AfterSlim Bundle","code":"syn-dm-wk","description":"","price":"67.49","state":"ACTIVE","domesticAttributes":{},"internationalAttributes":{},"productSku":"syn-dm-wk","planId":null,"planCode":"syn-dm-wk","planName":"AfterSlim Bundle","planDescription":"","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"67.49","fullPrice":"67.49","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":75,"name":"PM-02™ Berberine 1200mg","code":"pm-wk","description":"Delivered monthly","price":"34.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"productSku":"pm-wk","planId":"x9xfn5nx9aha","planCode":"pm-wk","planName":"PM-02™ Berberine 1200mg","planDescription":"Delivered monthly","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"34.99","fullPrice":"34.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":74,"name":"PM-02™ Berberine 1200mg—Refill","code":"pm-rf","description":"PM-02™ Berberine 1200mg—Refill","price":"34.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"productSku":"pm-rf","planId":"x9xfn4vr0xh0","planCode":"pm-rf","planName":"PM-02™ Berberine 1200mg—Refill","planDescription":"PM-02™ Berberine 1200mg—Refill","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"34.99","fullPrice":"34.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":73,"name":"DM-02™ Berberine 1200mg—Refill","code":"dm-rf","description":"DM-02™ Berberine 1200mg—Refill","price":"39.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"productSku":"dm-rf","planId":"x9xfn424vbqk","planCode":"dm-rf","planName":"DM-02™ Berberine 1200mg—Refill","planDescription":"DM-02™ Berberine 1200mg—Refill","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"39.99","fullPrice":"39.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":72,"name":"DM-02™ Berberine 1200mg","code":"dm-wk","description":"Delivered monthly","price":"39.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"productSku":"dm-wk","planId":"x9xfn3b8yqfx","planCode":"dm-wk","planName":"DM-02™ Berberine 1200mg","planDescription":"Delivered monthly","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"39.99","fullPrice":"39.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":71,"name":"AM-02™ Berberine 1200mg—Refill","code":"am-rf","description":"AM-02™ Berberine 1200mg—Refill","price":"34.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"productSku":"am-rf","planId":"x9xfn2gyen6u","planCode":"am-rf","planName":"AM-02™ Berberine 1200mg—Refill","planDescription":"AM-02™ Berberine 1200mg—Refill","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"34.99","fullPrice":"34.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":70,"name":"AM-02™ Berberine 1200mg","code":"am-wk","description":"Delivered monthly","price":"34.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":34.99,"discountUnitPrice":34.99,"billingPeriodLength":30,"monthlyUnitPrice":34.99,"monthlyDiscountUnitPrice":34.99},"productSku":"am-wk","planId":"x9xfn1mjywja","planCode":"am-wk","planName":"AM-02™ Berberine 1200mg","planDescription":"Delivered monthly","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"34.99","fullPrice":"34.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":69,"name":"DS-01® 14 Day Gut Reset Trial","code":"syn-gr","description":"After trial, auto-renews as monthly subscription (30-day supply) at $49.99","price":"29.99","state":"ACTIVE","domesticAttributes":{},"internationalAttributes":{},"productSku":"syn-gr","planId":"x0sg5cqehrwi","planCode":"syn-gr","planName":"DS-01® 14 Day Gut Reset Trial","planDescription":"After trial, auto-renews as monthly subscription (30-day supply) at $49.99","billingPeriodLength":20,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"29.99","fullPrice":"29.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":67,"name":"VS-01™ Vaginal Synbiotic","code":"vs-wk","description":"2 Month Starter Kit, $39.99/month thereafter.","price":"99.00","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":null,"autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":99,"discountUnitPrice":99,"billingPeriodLength":60,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"internationalAttributes":{"defaultShippingMethod":null,"autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":99,"discountUnitPrice":99,"billingPeriodLength":60,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"productSku":"vs-wk","planId":"u7vp2yspczp3","planCode":"vs-wk","planName":"VS-01™ Vaginal Synbiotic","planDescription":"2 Month Starter Kit, $39.99/month thereafter.","billingPeriodLength":60,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"99.00","fullPrice":"99.00","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":66,"name":"VS-01™ 3-Month Sustain","code":"vs-rf-3mo","description":"$69.97 per subscription, billed every 90 days.","price":"119.97","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":null,"autoCouponCode":"vs_domestic_3_month_50","autoCouponType":"fixed","autoCouponAmount":50,"unitPrice":119.97,"discountUnitPrice":69.97,"billingPeriodLength":90,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":23.32},"internationalAttributes":{"defaultShippingMethod":null,"autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":119.97,"discountUnitPrice":119.97,"billingPeriodLength":90,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"productSku":"vs-rf-3mo","planId":"u7vp90nrg0kk","planCode":"vs-rf-3mo","planName":"VS-01™ 3-Month Sustain","planDescription":"$69.97 per subscription, billed every 90 days.","billingPeriodLength":90,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":true,"internationalPrice":"119.97","fullPrice":"119.97","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":65,"name":"VS-01™ Monthly Sustain","code":"vs-rf","description":"$39.99 per subscription, billed monthly.","price":"39.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":null,"autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"internationalAttributes":{"defaultShippingMethod":null,"autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"productSku":"vs-rf","planId":"u7vpgk8mav5s","planCode":"vs-rf","planName":"VS-01™ Monthly Sustain","planDescription":"$39.99 per subscription, billed monthly.","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"39.99","fullPrice":"39.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":64,"name":"DS-01® 6-Month Welcome Kit","code":"syn-wk-6mo","description":"$254.95 per subscription, billed every 180 days.","price":"299.94","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":"6month15","autoCouponType":"percent","autoCouponAmount":15,"unitPrice":299.94,"discountUnitPrice":254.95,"billingPeriodLength":180,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":42.49},"internationalAttributes":{"defaultShippingMethod":null,"autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":299.94,"discountUnitPrice":299.94,"billingPeriodLength":180,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":49.99},"productSku":"syn-wk-6mo","planId":"tazgrh045yi9","planCode":"syn-wk-6mo","planName":"DS-01® 6-Month Welcome Kit","planDescription":"$254.95 per subscription, billed every 180 days.","billingPeriodLength":180,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":true,"internationalPrice":"299.94","fullPrice":"299.94","currency":"USD","maxQuantity":1,"maxReactivationQuantity":3},{"id":63,"name":"DS-01® 3-Month Welcome Kit","code":"syn-wk-3mo","description":"$134.97 per subscription, billed every 90 days.","price":"149.97","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":"3month10","autoCouponType":"percent","autoCouponAmount":10,"unitPrice":149.97,"discountUnitPrice":134.97,"billingPeriodLength":90,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":44.99},"internationalAttributes":{"defaultShippingMethod":null,"autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":149.97,"discountUnitPrice":149.97,"billingPeriodLength":90,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":49.99},"productSku":"syn-wk-3mo","planId":"tazgebaqkll9","planCode":"syn-wk-3mo","planName":"DS-01® 3-Month Welcome Kit","planDescription":"$134.97 per subscription, billed every 90 days.","billingPeriodLength":90,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":true,"internationalPrice":"149.97","fullPrice":"149.97","currency":"USD","maxQuantity":2,"maxReactivationQuantity":3},{"id":21,"name":"DS-01® 6-Month Refill","code":"syn-rf-6mo","description":"$254.95 per subscription, billed every 180 days.","price":"299.94","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":"stp_domestic_6_month","autoCouponType":"percent","autoCouponAmount":15,"unitPrice":299.94,"discountUnitPrice":254.95,"billingPeriodLength":180,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":42.49},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":"stp_international_6_month","autoCouponType":"percent","autoCouponAmount":5,"unitPrice":299.94,"discountUnitPrice":284.94,"billingPeriodLength":180,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":47.49},"productSku":"syn-rf-6mo","planId":"rn4ykrzgpkco","planCode":"syn-rf-6mo","planName":"DS-01® 6-Month Refill","planDescription":"$254.95 per subscription, billed every 180 days.","billingPeriodLength":180,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":true,"internationalPrice":"299.94","fullPrice":"299.94","currency":"USD","maxQuantity":1,"maxReactivationQuantity":1},{"id":20,"name":"PDS-08® Pediatric Berberine 1200mg","code":"pds-wk","description":"$39.99 per subscription, billed monthly.","price":"39.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"productSku":"pds-wk","planId":"qn2vj14ini82","planCode":"pds-wk","planName":"PDS-08® Pediatric Berberine 1200mg","planDescription":"$39.99 per subscription, billed monthly.","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"39.99","fullPrice":"39.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":19,"name":"PDS-08® Monthly Refill","code":"pds-rf","description":"$39.99 per subscription, billed monthly.","price":"39.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":39.99,"discountUnitPrice":39.99,"billingPeriodLength":30,"monthlyUnitPrice":39.99,"monthlyDiscountUnitPrice":39.99},"productSku":"pds-rf","planId":"qn2w2wzeylhw","planCode":"pds-rf","planName":"PDS-08® Monthly Refill","planDescription":"$39.99 per subscription, billed monthly.","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"39.99","fullPrice":"39.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":16,"name":"DS-01® Berberine 1200mg","code":"syn-wk","description":"$49.99 per subscription, billed monthly.","price":"49.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":49.99,"discountUnitPrice":49.99,"billingPeriodLength":30,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":49.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":49.99,"discountUnitPrice":49.99,"billingPeriodLength":30,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":49.99},"productSku":"syn-wk","planId":"mtn50owh74s8","planCode":"syn-wk","planName":"DS-01® Berberine 1200mg","planDescription":"$49.99 per subscription, billed monthly.","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"49.99","fullPrice":"49.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":15,"name":"DS-01® 3-Month Refill","code":"syn-rf-3mo","description":"$134.97 per subscription, billed every 90 days.","price":"149.97","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":"stp_domestic_10_percent","autoCouponType":"percent","autoCouponAmount":10,"unitPrice":149.97,"discountUnitPrice":134.97,"billingPeriodLength":90,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":44.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":149.97,"discountUnitPrice":149.97,"billingPeriodLength":90,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":49.99},"productSku":"syn-rf-3mo","planId":"mv21zn6ye9n2","planCode":"syn-rf-3mo","planName":"DS-01® 3-Month Refill","planDescription":"$134.97 per subscription, billed every 90 days.","billingPeriodLength":90,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":true,"internationalPrice":"149.97","fullPrice":"149.97","currency":"USD","maxQuantity":2,"maxReactivationQuantity":2},{"id":13,"name":"DS-01® Monthly Refill","code":"syn-rf","description":"$49.99 per subscription, billed monthly.","price":"49.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":49.99,"discountUnitPrice":49.99,"billingPeriodLength":30,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":49.99},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":49.99,"discountUnitPrice":49.99,"billingPeriodLength":30,"monthlyUnitPrice":49.99,"monthlyDiscountUnitPrice":49.99},"productSku":"syn-rf","planId":"nbilc6ybt9wv","planCode":"syn-rf","planName":"DS-01® Monthly Refill","planDescription":"$49.99 per subscription, billed monthly.","billingPeriodLength":30,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"49.99","fullPrice":"49.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3},{"id":12,"name":"DS-01® 2-Month Refill","code":"syn-rf-2mo","description":"$49.99 per subscription, billed every 60 days.","price":"49.99","state":"ACTIVE","domesticAttributes":{"defaultShippingMethod":"free_shipping","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":49.99,"discountUnitPrice":49.99,"billingPeriodLength":60,"monthlyUnitPrice":25,"monthlyDiscountUnitPrice":25},"internationalAttributes":{"defaultShippingMethod":"passport_ddp_all","autoCouponCode":null,"autoCouponType":null,"autoCouponAmount":0,"unitPrice":49.99,"discountUnitPrice":49.99,"billingPeriodLength":60,"monthlyUnitPrice":25,"monthlyDiscountUnitPrice":25},"productSku":"syn-rf-2mo","planId":"nfo84dxkf9l5","planCode":"syn-rf-2mo","planName":"DS-01® 2-Month Refill","planDescription":"$49.99 per subscription, billed every 60 days.","billingPeriodLength":60,"billingPeriodUnit":"DA","autoRenew":true,"availability":"IMMEDIATE","isSrp":false,"internationalPrice":"49.99","fullPrice":"49.99","currency":"USD","maxQuantity":3,"maxReactivationQuantity":3}]},"__N_SSG":true},"page":"/","query":{},"buildId":"KEp7Xi8lR63js6u0Pu_qS","isFallback":false,"isExperimentalCompile":false,"dynamicIds":[80319],"gsp":true,"scriptLoader":[]}</script><script id="afterslim-hydration-fix">
+(function(){
+  var T=[
+    ['A healthy gut can','A healthy metabolism can'],['change your life.','change your body.'],
+    ['Shop DS-01','Shop Now'],['Shop AfterSlim','Shop Now'],['Take the Quiz','Learn More'],
+    ['The probiotic pioneering the future of gut health.','The berberine that is transforming lives.'],
+    ['Whole body health starts in the gut.','Choose your supply.'],
+    ['Daily Synbiotic','Berberine 1200mg'],['Daily Multivitamin','Berberine 1200mg'],
+    ['Energy + Focus','Berberine 1200mg'],['Sleep + Restore','Berberine 1200mg'],
+    ['Vaginal Synbiotic','3 Bottles Bundle'],['Vaginal Health','Weight Loss'],
+    ['Bestseller','Best Seller'],
+    ['Starting at $49.99 per month','Starting at $59.99'],['Starting at $49.99','Starting at $59.99'],
+    ['Starting at $39.99 per month','$49.99 each | Save 15%'],['Starting at $39.99','$49.99 each'],
+    ['Starting at $34.99 per month','$39.99 each | Best Value'],['Starting at $34.99','$39.99 each'],
+    ['Daily essentials for nutrition and digestive health.','Everything you need to transform your metabolism.'],
+    ['Shop Daily Essentials Duo','Shop Bundle'],['Daily Essentials Duo','AfterSlim Bundle'],
+    ["Most probiotics don\u2019t survive digestion",'Most supplements lose potency during digestion'],
+    ["Most probiotics don't survive digestion",'Most supplements lose potency during digestion'],
+    ['DS-01\u00ae does.','AfterSlim\u00ae doesn\u2019t.'],
+    ['Increases healthy bacteria','Boosts metabolism'],
+    ['Lactobacillus spp.','Clinically-tested Berberine HCl'],
+    ['OUTER LAYER','OUTER LAYER'],['INNER LAYER','INNER LAYER'],
+    ['You are more than human.','Your body deserves more.'],
+    ["Your body isn\u2019t yours alone",'Your metabolism works 24/7'],
+    ["Your body isn't yours alone",'Your metabolism works 24/7'],
+    ['Microbiome 101','How It Works'],
+    ['Over 1 million health transformations','Thousands of lives transformed'],
+    ['See how real people are changing their health with Seed.','See how real people are transforming their bodies with AfterSlim.'],
+    ['Stories from scientists, innovators, and members like you.','Stories from real customers like you.'],
+    ['Because health is not just human.','Because health is more than appearance.'],
+    ['Change your gut health for good.*','Transform your body for real.*'],
+    ['Feel lasting relief','Feel the difference with AfterSlim Berberine'],
+    ['microbiome science [R+D]','premium supplementation [R+D]'],
+    ['for human and planetary health','for your health and wellness'],['since 2015.','since 2024.'],
+    ['By signing up you consent to receive Seed emails.','By signing up you consent to receive AfterSlim emails.'],
+    ['Seed Health, Inc.','AfterSlim'],
+    ["Seed's ",'AfterSlim\u2019s '],['with Seed','with AfterSlim'],
+    ['DS\u201301','AS\u201301'],['DS-01','AfterSlim'],
+    ['Lipari, Panarea','New York'],['Italy','USA'],
+    ['Our clinically-studied daily synbiotic paired with our daily multivitamin reduces bloating, promotes healthy regularity and helps cover nutrient gaps.','Clinical-dose Berberine HCl 1200mg paired with our metabolism-boosting formula to maximize fat burning, control appetite, and support healthy weight management.'],
+    ['capsule-in-capsule','dual-action capsule'],
+    ['the right probiotic strains to the right places to ease bloating, gas, and irregularity','pure Berberine HCl 1200mg directly where your body needs it to boost metabolism, control appetite, and reduce body fat naturally and effectively'],
+    ['Delivers 24 live strains of probiotics to the colon','Delivers 1200mg of pure Berberine HCl directly'],
+    ["where they're needed most.",'where your body needs it most for faster results.'],
+    ['Shields probiotics from stomach acid in the digestive tract, while delivering prebiotics to stimulate the growth of beneficial bacteria.','Shields Berberine from stomach acid, ensuring it reaches the intestine intact for maximum absorption and effectiveness.'],
+    ['probiotic','berberine'],['Probiotic','Berberine'],
+    ['synbiotic','supplement'],['Synbiotic','Supplement'],
+    ['probiotics','active compounds'],['Probiotics','Active Compounds'],
+    ['gut health','metabolic health'],['Gut Health','Metabolic Health'],['gut','metabolism'],
+    ['Formulations that provide sustained support using key scientifically and clinically-studied ingredients','Premium Berberine HCl formulations backed by clinical studies for lasting metabolic results'],
+    ['Seed\u3010','AfterSlim\u3010'],['Seed ','AfterSlim '],
+    ['Read More','Learn More'],
+    ['DM\u201302','AS\u201302'],['DM-02','AfterSlim Plus'],
+    ['AM\u201302','AS\u201303'],['AM-02','AfterSlim Energy'],
+    ['PM\u201302','AS\u201304'],['PM-02','AfterSlim Night'],
+  ];
+  function fix(){
+    document.title='AfterSlim \u2022 Premium Berberine 1200mg';
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false);
+    while(w.nextNode()){
+      var n=w.currentNode,txt=n.textContent;
+      if(!txt||txt.length<2)continue;
+      for(var i=0;i<T.length;i++){
+        if(txt.indexOf(T[i][0])!==-1){txt=txt.split(T[i][0]).join(T[i][1]);}
+      }
+      if(txt!==n.textContent)n.textContent=txt;
+    }
+    var inp=document.querySelector('input[placeholder="Sign up for our Newsletter"]');
+    if(inp)inp.placeholder='Enter your email';
+    // Replace product carousel: 4 Seed cards -> 3 AfterSlim bottle cards
+    var carousel=document.querySelector('.sc-b3035f6c-2.jKlSPw');
+    if(carousel && !carousel.dataset.fixed){
+      carousel.dataset.fixed='1';
+      carousel.style.gridTemplateColumns='repeat(1,minmax(10px,1fr))';
+      if(window.innerWidth>=960)carousel.style.gridTemplateColumns='repeat(3,minmax(10px,1fr))';
+      carousel.innerHTML=
+        '<a class="sc-baccdee5-0 jXIGTY card in-view" href="#buy-1">'+
+        '<span color="seedgreen" class="sc-60b7c4e8-0 sc-baccdee5-3 gGAMkK bMONEt">Try It</span>'+
+        '<div class="sc-baccdee5-1 bCwiXP block-top" hoverColor="snowwhite" stackSize="xSmall">'+
+        '<div class="sc-baccdee5-2 fMLtWv"><span color="snowwhite" lineHeight="8px" font-weight="350" class="sc-3fd0a620-0 lpuDMx">1 Bottle</span></div>'+
+        '<p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-6 OIZSz dmRLuy">30-Day Supply</p></div>'+
+        '<div class="bottle-spin"><img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Berberine 1200mg" loading="lazy"/></div>'+
+        '<div hoverColor="snowwhite" class="sc-baccdee5-1 lhwQgV block-bottom">'+
+        '<button color="seedgreen" type="button" class="sc-a5094583-1 ewPaTi" tabindex="0">Shop Now</button>'+
+        '<p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-baccdee5-4 OIZSz egNwcf boCEsu">$59.99</p></div></a>'+
+        '<a class="sc-baccdee5-0 jXIGTY card in-view" href="#buy-3">'+
+        '<span color="seedgreen" class="sc-60b7c4e8-0 sc-baccdee5-3 gGAMkK bMONEt">Popular</span>'+
+        '<div class="sc-baccdee5-1 bCwiXP block-top" hoverColor="snowwhite" stackSize="xSmall">'+
+        '<div class="sc-baccdee5-2 fMLtWv"><span color="snowwhite" lineHeight="8px" font-weight="350" class="sc-3fd0a620-0 lpuDMx">3 Bottles</span></div>'+
+        '<p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-6 OIZSz dmRLuy">90-Day Supply</p></div>'+
+        '<div class="bottle-spin"><img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Berberine 1200mg - 3 bottles" loading="lazy"/></div>'+
+        '<div hoverColor="snowwhite" class="sc-baccdee5-1 lhwQgV block-bottom">'+
+        '<button color="seedgreen" type="button" class="sc-a5094583-1 ewPaTi" tabindex="0">Shop Now</button>'+
+        '<p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-baccdee5-4 OIZSz egNwcf boCEsu">$49.99/ea · Save 17%</p></div></a>'+
+        '<a class="sc-baccdee5-0 jXIGTY card in-view" href="#buy-6">'+
+        '<span color="seedgreen" class="sc-60b7c4e8-0 sc-baccdee5-3 gGAMkK bMONEt">Best Value</span>'+
+        '<div class="sc-baccdee5-1 bCwiXP block-top" hoverColor="snowwhite" stackSize="xSmall">'+
+        '<div class="sc-baccdee5-2 fMLtWv"><span color="snowwhite" lineHeight="8px" font-weight="350" class="sc-3fd0a620-0 lpuDMx">6 Bottles</span></div>'+
+        '<p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-6 OIZSz dmRLuy">180-Day Supply</p></div>'+
+        '<div class="bottle-spin"><img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Berberine 1200mg - 6 bottles" loading="lazy"/></div>'+
+        '<div hoverColor="snowwhite" class="sc-baccdee5-1 lhwQgV block-bottom">'+
+        '<button color="seedgreen" type="button" class="sc-a5094583-1 ewPaTi" tabindex="0">Shop Now</button>'+
+        '<p color="snowwhite" class="sc-413e5ea6-0 sc-413e5ea6-12 sc-baccdee5-4 OIZSz egNwcf boCEsu">$39.99/ea · Save 33%</p></div></a>';
+    }
+    // Fix carousel header
+    var hdr=document.querySelector('.sc-359548e0-2');
+    if(hdr)hdr.querySelector('p').textContent='Choose your supply.';
+    var sub=document.querySelector('.sc-359548e0-3');
+    if(sub)sub.querySelector('p').textContent='Clinical-dose Berberine HCl 1200mg. The more you buy, the more you save.';
+    var shopAll=document.getElementById('carousel-button-link');
+    if(shopAll)shopAll.style.display='none';
+    // Fix 38 trillion microbes section
+    var sciTxt=document.querySelector('.sc-53749a5a-18');
+    if(sciTxt){
+      var p=sciTxt.querySelectorAll('p');
+      for(var j=0;j<p.length;j++){
+        if(p[j].textContent.indexOf('38 trillion')!==-1 || p[j].textContent.indexOf('microbes')!==-1){
+          p[j].textContent='Your metabolism controls everything from energy levels to weight management. Clinical studies show that Berberine HCl activates AMPK, the enzyme that regulates how your body burns fat and processes sugar. Learn how AfterSlim works at the cellular level.';
+        }
+      }
+    }
+    // === ADAPT sections (keep structure, change content) ===
+    // Bundle section: update image alts for context
+    var bundleImgs=document.querySelectorAll('#homepage-product-highlight-control img');
+    for(var bi=0;bi<bundleImgs.length;bi++){
+      var oldAlt=bundleImgs[bi].getAttribute('alt')||'';
+      bundleImgs[bi].setAttribute('alt',oldAlt.replace(/DS-10|DM-02|DS-01/gi,'AfterSlim').replace(/Seed/gi,'AfterSlim'));
+    }
+    // Replace ALL remaining "Seed" text nodes with "AfterSlim"
+    var w2=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false);
+    while(w2.nextNode()){
+      var tn=w2.currentNode;
+      if(tn.textContent&&tn.textContent.indexOf('Seed')!==-1){
+        tn.textContent=tn.textContent.replace(/\bSeed\b/g,'AfterSlim');
+      }
+      if(tn.textContent&&tn.textContent.indexOf('Labs')!==-1){
+        tn.textContent=tn.textContent.replace(/Labs/g,'Research');
+      }
+    }
+    // Fix AfterSlim【】icon containers
+    var seedIcons=document.querySelectorAll('.sc-53749a5a-17,.gxKRHV');
+    for(var si=0;si<seedIcons.length;si++){
+      var svgEl=seedIcons[si].querySelector('svg');
+      seedIcons[si].innerHTML='AfterSlim\u3010 '+(svgEl?svgEl.outerHTML:'')+' \u3011';
+    }
+    // Fix UGC image alt texts (remove Seed references)
+    var allImgs=document.querySelectorAll('img');
+    for(var ii=0;ii<allImgs.length;ii++){
+      var alt=(allImgs[ii].getAttribute('alt')||'');
+      if(alt.match(/ds01|ds-01|seed pill|seed merch/i)){
+        allImgs[ii].setAttribute('alt',alt.replace(/ds01|ds-01|DS-01/gi,'AfterSlim').replace(/[Ss]eed\s*(pill|merch)/gi,'AfterSlim product'));
+      }
+    }
+    // Fix footer links - replace seed.com references
+    var footerLinks=document.querySelectorAll('a[href*="seed.com"],a[href*="seed"]');
+    for(var fl=0;fl<footerLinks.length;fl++){
+      var hr=footerLinks[fl].getAttribute('href');
+      if(hr && hr.indexOf('seed.com')!==-1){
+        footerLinks[fl].setAttribute('href','#');
+      }
+    }
+    // Replace [logo] with AfterSlim text logo
+    var logoLinks=document.querySelectorAll('.seed-logo,.sc-63c72040-0');
+    for(var lg=0;lg<logoLinks.length;lg++){
+      var logoEl=logoLinks[lg];
+      var srSpan=logoEl.querySelector('.screenreader-only');
+      logoEl.innerHTML='<span style="font-family:Satoshi,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.5px;color:#B8722D;">After<span style="color:#C17F2E;">Slim</span></span>';
+      if(srSpan)logoEl.appendChild(srSpan);
+    }
+    // Fix footer branding
+    var footerSeedLink=document.querySelector('footer a[href="/"]');
+    if(footerSeedLink){
+      footerSeedLink.textContent='AfterSlim';
+      var footerImg=footerSeedLink.querySelector('img');
+      if(footerImg)footerImg.style.display='none';
+    }
+    // Fix social links to # (no real socials yet)
+    var socialLinks=document.querySelectorAll('a[href*="instagram.com/seed"],a[href*="twitter.com/seed"],a[href*="linkedin.com/company/seed"],a[href*="refer"]');
+    for(var sl=0;sl<socialLinks.length;sl++){
+      socialLinks[sl].setAttribute('href','#');
+    }
+    // Hide irrelevant footer sections
+    var footerNav=document.querySelector('footer nav');
+    if(footerNav){
+      var footerItems=footerNav.querySelectorAll('li');
+      for(var fi=0;fi<footerItems.length;fi++){
+        var ftxt=footerItems[fi].textContent||'';
+        if(ftxt.indexOf('About')!==-1||ftxt.indexOf('Inquire')!==-1||ftxt.indexOf('SeedLabs')!==-1||ftxt.indexOf('Sustainability')!==-1||ftxt.indexOf('International')!==-1){
+          // Hide sub-items that don't apply
+          var subLinks=footerItems[fi].querySelectorAll('a');
+          for(var sli=0;sli<subLinks.length;sli++){
+            var slHref=subLinks[sli].getAttribute('href')||'';
+            if(slHref.indexOf('seedlabs')!==-1||slHref.indexOf('sustainability')!==-1||slHref.indexOf('practitioners')!==-1||slHref.indexOf('seeduniversity')!==-1||slHref.indexOf('press')!==-1||slHref.indexOf('join-us')!==-1||slHref.indexOf('entire-world')!==-1){
+              subLinks[sli].parentElement.style.display='none';
+            }
+          }
+        }
+      }
+    }
+    // Fix all internal Seed links -> AfterSlim equivalents
+    var linkMap={
+      '/daily-synbiotic':'#buy-1',
+      '/daily-multivitamin':'#buy-3',
+      '/energy-focus':'#buy-6',
+      '/sleep-restore':'#buy-6',
+      '/products':'#buy-1',
+      '/daily-essentials-duo':'#buy-6',
+      '/is-ds01-right-for-you':'#viacap',
+      '/approach':'#viacap',
+      '/seedlabs':'#',
+      '/seeduniversity':'#',
+      '/practitioners':'#',
+      '/press':'#',
+      '/join-us':'#',
+      '/sustainability':'#',
+      '/entire-world':'#',
+      '/account/home':'#',
+      '/account/refer?traffic_source=footer_referafriend':'#'
+    };
+    var allLinks=document.querySelectorAll('a[href]');
+    for(var li=0;li<allLinks.length;li++){
+      var h=allLinks[li].getAttribute('href');
+      if(linkMap[h]!==undefined){
+        allLinks[li].setAttribute('href',linkMap[h]);
+      }
+      // External Seed links
+      if(h&&(h.indexOf('seed.com')!==-1||h.indexOf('fastcompany.com')!==-1||h.indexOf('forbes.com')!==-1)){
+        allLinks[li].setAttribute('href','#');
+      }
+    }
+    // Add id anchor for ViaCap section
+    var viacapSec=document.querySelector('.sc-e74ce85f-0');
+    if(viacapSec)viacapSec.id='viacap';
+    // Fix top bar link
+    var topBar=document.querySelector('a[href="#viacap"]');
+    // Nav buttons - make Shop scroll to cards
+    var shopBtn=document.getElementById('tab-shop');
+    if(shopBtn){
+      shopBtn.addEventListener('click',function(e){
+        e.preventDefault();
+        var cards=document.querySelector('.sc-b3035f6c-0');
+        if(cards)cards.scrollIntoView({behavior:'smooth'});
+      });
+    }
+    var sciBtn=document.getElementById('tab-science');
+    if(sciBtn){
+      sciBtn.addEventListener('click',function(e){
+        e.preventDefault();
+        var viacap=document.getElementById('viacap');
+        if(viacap)viacap.scrollIntoView({behavior:'smooth'});
+      });
+    }
+    document.body.style.opacity='1';document.body.style.visibility='visible';
+  }
+  fix();[100,300,800,1500,3000,5000].forEach(function(t){setTimeout(fix,t);});
+})();
+</script>
+</body></html>
