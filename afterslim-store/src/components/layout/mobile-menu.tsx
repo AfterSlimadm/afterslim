@@ -36,7 +36,7 @@ export function MobileMenu() {
         <div className="px-4 pb-2">
           <Button
             asChild
-            className="w-full gap-2 rounded-full bg-[var(--color-brand-accent)] text-white hover:bg-[var(--color-brand-accent-light)]"
+            className="w-full gap-2 as-pill bg-as-orange text-as-snow font-display hover:bg-as-orange-bright"
             size="lg"
           >
             <Link href="/shop" onClick={() => setOpen(false)}>
@@ -56,7 +56,7 @@ export function MobileMenu() {
                 className={cn(
                   "flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors",
                   isActive
-                    ? "bg-[var(--color-brand-accent-subtle)] text-[var(--color-brand-accent)]"
+                    ? "bg-as-peach text-as-orange"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground",
                 )}
               >

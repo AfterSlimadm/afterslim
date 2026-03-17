@@ -1,9 +1,12 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import * as m from "motion/react-client";
 import { cn } from "@/lib/utils";
+
+/* ---------------------------------------------------------------------------
+   Seed-style testimonials — large heading, clean cards, generous padding
+   --------------------------------------------------------------------------- */
 
 const TESTIMONIALS = [
   {
@@ -42,18 +45,13 @@ const TESTIMONIALS = [
 
 function StarRating({ rating }: { rating: number }) {
   return (
-    <div
-      className="flex items-center gap-0.5"
-      aria-label={`${rating} out of 5 stars`}
-    >
+    <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
       {Array.from({ length: 5 }, (_, i) => (
         <Star
           key={i}
           className={cn(
             "size-4",
-            i < rating
-              ? "fill-[var(--color-brand-accent)] text-[var(--color-brand-accent)]"
-              : "fill-muted text-muted",
+            i < rating ? "fill-as-orange text-as-orange" : "fill-muted text-muted",
           )}
         />
       ))}
@@ -63,53 +61,50 @@ function StarRating({ rating }: { rating: number }) {
 
 export function Testimonials() {
   return (
-    <section className="py-20 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+    <section style={{ padding: "5rem 2rem 6rem" }}>
+      <div className="mx-auto max-w-[90rem]">
+        {/* Seed-style large heading */}
         <m.div
-          className="text-center"
+          className="mb-12 max-w-[700px]"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            What Our Customers Say
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Real results from real people on GLP-1 medications. From 2,000+
-            verified reviews.
+          <p className="font-display text-[2rem] font-bold leading-[1.1] tracking-[-0.015em] text-as-navy sm:text-[3rem]">
+            Real results from real
+            <br />
+            people (and counting).
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-as-navy/70">
+            See how people on GLP-1 medications are transforming their
+            experience with AfterSlim.
           </p>
         </m.div>
 
-        {/* Testimonials grid */}
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {TESTIMONIALS.map((testimonial, index) => (
+        {/* Cards grid */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {TESTIMONIALS.map((t, index) => (
             <m.div
-              key={testimonial.id}
+              key={t.id}
+              className="flex flex-col rounded-2xl border border-as-navy/10 bg-as-cream p-6"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
             >
-              <Card className="flex h-full flex-col">
-                <CardContent className="flex flex-1 flex-col gap-4 pt-6">
-                  <StarRating rating={testimonial.rating} />
-
-                  <blockquote className="flex-1 text-sm leading-relaxed text-muted-foreground">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </blockquote>
-
-                  <div className="border-t pt-4">
-                    <p className="text-sm font-semibold text-foreground">
-                      {testimonial.name}
-                    </p>
-                    <span className="text-xs font-medium text-[var(--color-brand-accent)]">
-                      {testimonial.label}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
+              <StarRating rating={t.rating} />
+              <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-as-navy/80">
+                &ldquo;{t.quote}&rdquo;
+              </blockquote>
+              <div className="mt-4 border-t border-as-navy/10 pt-4">
+                <p className="font-display text-sm font-semibold text-as-navy">
+                  {t.name}
+                </p>
+                <span className="text-xs font-medium text-as-orange">
+                  {t.label}
+                </span>
+              </div>
             </m.div>
           ))}
         </div>

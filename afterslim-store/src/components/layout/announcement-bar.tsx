@@ -1,39 +1,37 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Truck, Percent, ShieldCheck, X } from "lucide-react";
+import { X } from "lucide-react";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-// ---------------------------------------------------------------------------
-// Announcement messages with associated icons
-// ---------------------------------------------------------------------------
+/* ---------------------------------------------------------------------------
+   Seed-style announcement bar — orange-glow bg (#ffd699), navy text
+   Height: 2.5rem (40px), font-display 14px, centered link
+   --------------------------------------------------------------------------- */
 
 const ANNOUNCEMENTS = [
   {
     id: "free-shipping",
-    text: "Free Shipping on 3+ Bottles",
-    Icon: Truck,
+    text: "Free Shipping on 2+ Bottles. Subscribe & Save up to 30%.",
+    href: "/shop",
   },
   {
-    id: "subscribe-save",
-    text: "Subscribe & Save up to 30%",
-    Icon: Percent,
+    id: "berberine",
+    text: "Clinically Dosed Berberine HCl. 9 Science-Backed Ingredients.",
+    href: "/about",
   },
   {
-    id: "money-back",
-    text: "60-Day Money-Back Guarantee",
-    Icon: ShieldCheck,
+    id: "guarantee",
+    text: "60-Day Money-Back Guarantee. Try Risk-Free.",
+    href: "/shop",
   },
 ] as const;
 
 const STORAGE_KEY = "afterslim-announcement-dismissed";
 const ROTATION_INTERVAL = 4000;
-
-// ---------------------------------------------------------------------------
-// AnnouncementBar
-// ---------------------------------------------------------------------------
 
 export function AnnouncementBar({ className }: { className?: string }) {
   const [dismissed, setDismissed] = useState<boolean | null>(null);
@@ -41,13 +39,11 @@ export function AnnouncementBar({ className }: { className?: string }) {
   const isPaused = useRef(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Hydrate dismissed state from localStorage
   useEffect(() => {
     const stored = sessionStorage.getItem(STORAGE_KEY);
     setDismissed(stored === "true");
   }, []);
 
-  // Auto-rotate messages
   const startRotation = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
@@ -69,7 +65,6 @@ export function AnnouncementBar({ className }: { className?: string }) {
     sessionStorage.setItem(STORAGE_KEY, "true");
   };
 
-  // Wait for hydration before rendering (avoids flash)
   if (dismissed === null || dismissed) return null;
 
   const current = ANNOUNCEMENTS[index];
@@ -77,17 +72,13 @@ export function AnnouncementBar({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "relative z-50 flex h-9 w-full items-center justify-center bg-[var(--color-brand-primary)] px-10 text-white sm:h-10",
+        "relative z-50 flex h-10 w-full items-center justify-center bg-as-orange-glow px-10",
         className,
       )}
-      onMouseEnter={() => {
-        isPaused.current = true;
-      }}
-      onMouseLeave={() => {
-        isPaused.current = false;
-      }}
+      onMouseEnter={() => { isPaused.current = true; }}
+      onMouseLeave={() => { isPaused.current = false; }}
     >
-      {/* Rotating message */}
+      {/* Rotating message — Seed style: centered link, display font, 14px */}
       <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
         <AnimatePresence mode="wait">
           <m.div
@@ -96,19 +87,23 @@ export function AnnouncementBar({ className }: { className?: string }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="absolute flex items-center gap-2 text-xs font-medium sm:text-sm"
+            className="absolute"
           >
-            <current.Icon className="size-3.5 shrink-0 sm:size-4" />
-            <span>{current.text}</span>
+            <Link
+              href={current.href}
+              className="font-display text-sm font-medium tracking-[-0.035px] text-as-navy transition-colors hover:text-as-navy/70"
+            >
+              {current.text} ➞
+            </Link>
           </m.div>
         </AnimatePresence>
       </div>
 
-      {/* Dismiss button */}
+      {/* Dismiss */}
       <button
         onClick={handleDismiss}
         aria-label="Dismiss announcement"
-        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-white/70 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 sm:right-3"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1 text-as-navy/50 transition-colors hover:text-as-navy sm:right-3"
       >
         <X className="size-3.5 sm:size-4" />
       </button>

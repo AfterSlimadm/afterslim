@@ -69,7 +69,7 @@ export function LeadCapturePopup() {
     <Dialog open={open} onOpenChange={(v) => !v && handleDismiss()}>
       <DialogContent className="max-w-md gap-0 overflow-hidden p-0">
         {/* Header with gradient */}
-        <div className="bg-gradient-to-br from-[var(--color-brand-primary)] to-[var(--color-brand-primary-dark)] px-6 py-8 text-center text-white">
+        <div className="bg-gradient-to-br from-as-navy to-as-navy-deep px-6 py-8 text-center text-as-snow">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/20">
             <Gift className="size-7" />
           </div>

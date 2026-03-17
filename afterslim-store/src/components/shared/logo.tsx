@@ -26,7 +26,7 @@ export function Logo({
   const content = (
     <span
       className={cn(
-        "font-bold tracking-tight select-none",
+        "font-display font-bold tracking-tight select-none",
         sizeMap[size],
         variant === "dark" ? "text-foreground" : "text-white",
         className,
@@ -34,17 +34,14 @@ export function Logo({
     >
       <span
         className={cn(
-          variant === "dark"
-            ? "text-[var(--color-brand-primary)]"
-            : "text-white",
+          variant === "dark" ? "text-as-navy" : "text-white",
         )}
       >
         After
       </span>
       <span
         className={cn(
-          "font-extrabold",
-          "text-[var(--color-brand-accent)]",
+          "font-extrabold text-as-orange",
         )}
       >
         Slim

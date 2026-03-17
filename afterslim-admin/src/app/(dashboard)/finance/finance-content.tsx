@@ -27,48 +27,35 @@ import {
   Receipt,
   Target,
   FileText,
+  Package,
 } from "lucide-react";
 import { CashFlowChart } from "@/components/finance/cash-flow-chart";
 import { RevenueTrendChart } from "@/components/finance/revenue-trend-chart";
-import type { FinanceSummary } from "@/lib/queries/finance";
-
-/* -- Fallback mock KPI data ---------------------------------------------- */
-
-const MOCK_FINANCE_KPIS = {
-  totalRevenue: { value: 32847.5, trend: 12.5 },
-  totalExpenses: { value: 14623.8, trend: -3.2 },
-  netProfit: { value: 18223.7, trend: 22.8 },
-  profitMargin: { value: 55.5, trend: 4.1 },
-};
-
-/* -- Mock top products ------------------------------------------ */
-
-const TOP_PRODUCTS = [
-  { name: "AfterSlim Tea - 30 Day Supply", revenue: 12450, units: 415, avgPrice: 29.99 },
-  { name: "AfterSlim Capsules - 60ct", revenue: 8720, units: 218, avgPrice: 39.99 },
-  { name: "AfterSlim Bundle (Tea + Capsules)", revenue: 5940, units: 99, avgPrice: 59.99 },
-  { name: "AfterSlim Tea - 14 Day Trial", revenue: 3580, units: 239, avgPrice: 14.99 },
-  { name: "AfterSlim Gummies - 30ct", revenue: 2157.5, units: 123, avgPrice: 17.54 },
-];
+import type {
+  FinanceSummary,
+  CashFlowWeek,
+  RevenueTrendDay,
+  TopProduct,
+} from "@/lib/queries/finance";
 
 /* -- Quick link config ------------------------------------------ */
 
 const QUICK_LINKS = [
   {
-    title: "Transactions",
-    description: "View all income and expenses",
+    title: "Transacoes",
+    description: "Visualize receitas e despesas",
     href: "/finance/transactions",
     icon: Receipt,
   },
   {
-    title: "Financial Goals",
-    description: "Track revenue and spending targets",
+    title: "Metas Financeiras",
+    description: "Acompanhe metas de receita e gastos",
     href: "/finance/goals",
     icon: Target,
   },
   {
-    title: "Tax Records",
-    description: "Sales tax collection by state",
+    title: "Registros Fiscais",
+    description: "Impostos coletados por estado",
     href: "/finance/tax",
     icon: FileText,
   },
@@ -133,7 +120,7 @@ function FinanceKpiCard({
             {isPositive ? "+" : ""}
             {trend.toFixed(1)}%
           </span>
-          <span className="text-muted-foreground">vs last 30 days</span>
+          <span className="text-muted-foreground">vs ultimos 30 dias</span>
         </div>
       </CardContent>
     </Card>
@@ -144,55 +131,53 @@ function FinanceKpiCard({
 
 interface FinanceContentProps {
   summary: FinanceSummary | null;
+  cashFlow: CashFlowWeek[];
+  revenueTrend: RevenueTrendDay[];
+  topProducts: TopProduct[];
 }
 
 /* -- Page component --------------------------------------------- */
 
-export default function FinanceContent({ summary }: FinanceContentProps) {
-  const hasRealData = summary && summary.transactionCount > 0;
-
-  const totalRevenue = hasRealData
-    ? summary.totalIncome
-    : MOCK_FINANCE_KPIS.totalRevenue.value;
-  const totalExpenses = hasRealData
-    ? summary.totalExpense
-    : MOCK_FINANCE_KPIS.totalExpenses.value;
-  const netProfit = hasRealData
-    ? summary.netProfit
-    : MOCK_FINANCE_KPIS.netProfit.value;
+export default function FinanceContent({
+  summary,
+  cashFlow,
+  revenueTrend,
+  topProducts,
+}: FinanceContentProps) {
+  const totalRevenue = summary?.totalIncome ?? 0;
+  const totalExpenses = summary?.totalExpense ?? 0;
+  const netProfit = summary?.netProfit ?? 0;
   const profitMargin =
-    hasRealData && totalRevenue > 0
-      ? (netProfit / totalRevenue) * 100
-      : MOCK_FINANCE_KPIS.profitMargin.value;
+    totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
 
-  // Trends need historical comparison -- fallback to mock or 0
-  const revenueTrend = hasRealData ? 0 : MOCK_FINANCE_KPIS.totalRevenue.trend;
-  const expensesTrend = hasRealData ? 0 : MOCK_FINANCE_KPIS.totalExpenses.trend;
-  const profitTrend = hasRealData ? 0 : MOCK_FINANCE_KPIS.netProfit.trend;
-  const marginTrend = hasRealData ? 0 : MOCK_FINANCE_KPIS.profitMargin.trend;
+  // Trends need historical comparison, currently 0 (future improvement)
+  const revenueTrendPct = 0;
+  const expensesTrend = 0;
+  const profitTrend = 0;
+  const marginTrend = 0;
 
   return (
     <div className="space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Finance</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Financeiro</h1>
         <p className="text-muted-foreground">
-          Track revenue, expenses, profit margins, and financial goals.
+          Acompanhe receitas, despesas, margens de lucro e metas financeiras.
         </p>
       </div>
 
       {/* KPI Grid */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <FinanceKpiCard
-          title="Total Revenue"
+          title="Receita Total"
           value={totalRevenue}
-          trend={revenueTrend}
+          trend={revenueTrendPct}
           icon={DollarSign}
           bgClass="bg-emerald-100 dark:bg-emerald-900/30"
           iconClass="text-emerald-700 dark:text-emerald-400"
         />
         <FinanceKpiCard
-          title="Total Expenses"
+          title="Despesas Totais"
           value={totalExpenses}
           trend={expensesTrend}
           icon={TrendingDown}
@@ -200,7 +185,7 @@ export default function FinanceContent({ summary }: FinanceContentProps) {
           iconClass="text-red-700 dark:text-red-400"
         />
         <FinanceKpiCard
-          title="Net Profit"
+          title="Lucro Liquido"
           value={netProfit}
           trend={profitTrend}
           icon={TrendingUp}
@@ -208,7 +193,7 @@ export default function FinanceContent({ summary }: FinanceContentProps) {
           iconClass="text-blue-700 dark:text-blue-400"
         />
         <FinanceKpiCard
-          title="Profit Margin"
+          title="Margem de Lucro"
           value={profitMargin}
           trend={marginTrend}
           icon={Percent}
@@ -221,45 +206,52 @@ export default function FinanceContent({ summary }: FinanceContentProps) {
 
       {/* Charts row */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <CashFlowChart />
-        <RevenueTrendChart />
+        <CashFlowChart data={cashFlow} />
+        <RevenueTrendChart data={revenueTrend} />
       </div>
 
       {/* Top Products */}
       <Card>
         <CardHeader>
-          <CardTitle>Top Products by Revenue</CardTitle>
+          <CardTitle>Produtos por Receita</CardTitle>
           <CardDescription>
-            Best-selling products in the last 30 days
+            Produtos mais vendidos nos ultimos 30 dias
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[40%]">Product</TableHead>
-                <TableHead className="text-right">Revenue</TableHead>
-                <TableHead className="text-right">Units Sold</TableHead>
-                <TableHead className="text-right">Avg. Price</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {TOP_PRODUCTS.map((product) => (
-                <TableRow key={product.name}>
-                  <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell className="text-right font-mono">
-                    {formatCurrency(product.revenue)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {product.units.toLocaleString()}
-                  </TableCell>
-                  <TableCell className="text-right font-mono">
-                    {formatCurrency(product.avgPrice)}
-                  </TableCell>
+          {topProducts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground">
+              <Package className="h-10 w-10" />
+              <p className="text-sm">Nenhum dado de vendas ainda.</p>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[40%]">Produto</TableHead>
+                  <TableHead className="text-right">Receita</TableHead>
+                  <TableHead className="text-right">Unidades</TableHead>
+                  <TableHead className="text-right">Preco Medio</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {topProducts.map((product) => (
+                  <TableRow key={product.name}>
+                    <TableCell className="font-medium">{product.name}</TableCell>
+                    <TableCell className="text-right font-mono">
+                      {formatCurrency(product.revenue)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {product.units.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right font-mono">
+                      {formatCurrency(product.avgPrice)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
@@ -282,7 +274,7 @@ export default function FinanceContent({ summary }: FinanceContentProps) {
               <CardContent className="flex justify-end pb-4">
                 <Button variant="ghost" size="sm" className="gap-1" asChild>
                   <span>
-                    View <ArrowRight className="h-4 w-4" />
+                    Ver <ArrowRight className="h-4 w-4" />
                   </span>
                 </Button>
               </CardContent>

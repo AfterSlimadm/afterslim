@@ -8,8 +8,8 @@ import * as m from "motion/react-client";
 
 export function PackSelectorSection() {
   const [selectedTier, setSelectedTier] = useState<
-    "1-bottle" | "3-bottle" | "6-bottle"
-  >("3-bottle");
+    "1-bottle" | "2-bottle" | "3-bottle"
+  >("2-bottle");
   const [purchaseType, setPurchaseType] = useState<
     "subscription" | "one-time"
   >("subscription");
@@ -40,7 +40,7 @@ export function PackSelectorSection() {
   }
 
   return (
-    <section className="bg-muted/30 py-20 sm:py-24">
+    <section className="as-section-cream py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <m.div
@@ -50,10 +50,10 @@ export function PackSelectorSection() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-brand-accent)]">
+          <p className="as-label text-as-orange">
             Choose Your Supply
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="as-h2 mt-3 text-foreground">
             The More You Stock, the More You Save
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">

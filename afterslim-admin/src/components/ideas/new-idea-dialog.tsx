@@ -63,20 +63,20 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
 
   const handleSubmit = () => {
     if (!title.trim()) {
-      toast.error("Title is required");
+      toast.error("Titulo e obrigatorio");
       return;
     }
     if (!description.trim()) {
-      toast.error("Description is required");
+      toast.error("Descricao e obrigatoria");
       return;
     }
     if (!category) {
-      toast.error("Category is required");
+      toast.error("Categoria e obrigatoria");
       return;
     }
 
     // In a real app, this would send data to the API
-    toast.success("Idea created successfully");
+    toast.success("Ideia criada com sucesso");
     resetForm();
     setOpen(false);
   };
@@ -97,19 +97,19 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>New Idea</DialogTitle>
+          <DialogTitle>Nova Ideia</DialogTitle>
           <DialogDescription>
-            Add a new product idea to the pipeline for research and validation.
+            Adicione uma nova ideia ao pipeline para pesquisa e validacao.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-2">
           {/* Title */}
           <div className="grid gap-2">
-            <Label htmlFor="idea-title">Title</Label>
+            <Label htmlFor="idea-title">Titulo</Label>
             <Input
               id="idea-title"
-              placeholder="e.g. New Sleep Gummy Formula"
+              placeholder="Ex: Nova formula de goma para sono"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -117,10 +117,10 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
 
           {/* Description */}
           <div className="grid gap-2">
-            <Label htmlFor="idea-description">Description</Label>
+            <Label htmlFor="idea-description">Descricao</Label>
             <Textarea
               id="idea-description"
-              placeholder="Describe the idea, target audience, and expected impact..."
+              placeholder="Descreva a ideia, publico-alvo e impacto esperado..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
@@ -130,13 +130,13 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
           {/* Priority & Category */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label>Priority</Label>
+              <Label>Prioridade</Label>
               <Select
                 value={priority}
                 onValueChange={(val) => setPriority(val as IdeaPriority)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder="Selecionar" />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(PRIORITY_CONFIG).map(([key, config]) => (
@@ -148,10 +148,10 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label>Category</Label>
+              <Label>Categoria</Label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder="Selecionar" />
                 </SelectTrigger>
                 <SelectContent>
                   {IDEA_CATEGORIES.map((cat) => (
@@ -167,7 +167,7 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
           {/* Estimated Cost & Revenue */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="idea-cost">Estimated Cost (USD)</Label>
+              <Label htmlFor="idea-cost">Custo Estimado (R$)</Label>
               <Input
                 id="idea-cost"
                 type="number"
@@ -177,7 +177,7 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="idea-revenue">Estimated Revenue (USD)</Label>
+              <Label htmlFor="idea-revenue">Receita Estimada (R$)</Label>
               <Input
                 id="idea-revenue"
                 type="number"
@@ -194,7 +194,7 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
             <div className="flex gap-2">
               <Input
                 id="idea-tags"
-                placeholder="Add a tag and press Enter"
+                placeholder="Adicione uma tag e pressione Enter"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleTagKeyDown}
@@ -233,11 +233,11 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
 
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={handleSubmit}>
             <Plus className="h-4 w-4" />
-            Create Idea
+            Criar Ideia
           </Button>
         </DialogFooter>
       </DialogContent>

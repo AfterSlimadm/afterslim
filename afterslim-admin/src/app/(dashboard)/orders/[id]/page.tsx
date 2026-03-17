@@ -213,13 +213,13 @@ export default function OrderDetailPage({
   function handleStatusChange(newStatus: OrderStatus) {
     setOrder((prev) => ({ ...prev, status: newStatus }));
     toast.success(
-      `Order status updated to ${ORDER_STATUS_CONFIG[newStatus].label}`
+      `Status do pedido atualizado para ${ORDER_STATUS_CONFIG[newStatus].label}`
     );
   }
 
   function handleAddNote() {
     if (!noteText.trim()) return;
-    toast.success("Note added successfully");
+    toast.success("Nota adicionada com sucesso");
     setNoteText("");
     setNoteOpen(false);
   }
@@ -231,7 +231,7 @@ export default function OrderDetailPage({
         <Button variant="ghost" size="sm" asChild className="gap-1.5">
           <Link href="/orders">
             <ArrowLeft className="h-4 w-4" />
-            Back to Orders
+            Voltar para Pedidos
           </Link>
         </Button>
 
@@ -244,7 +244,7 @@ export default function OrderDetailPage({
               <OrderStatusBadge status={order.status} />
             </div>
             <p className="text-sm text-muted-foreground">
-              Placed on {formatDateTime(order.created_at)}
+              Realizado em {formatDateTime(order.created_at)}
             </p>
           </div>
 
@@ -254,7 +254,7 @@ export default function OrderDetailPage({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button className="gap-2">
-                    Update Status
+                    Atualizar Status
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -273,7 +273,7 @@ export default function OrderDetailPage({
                       >
                         {ORDER_STATUS_CONFIG[status].label}
                       </Badge>
-                      Mark as {ORDER_STATUS_CONFIG[status].label}
+                      Marcar como {ORDER_STATUS_CONFIG[status].label}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -284,22 +284,22 @@ export default function OrderDetailPage({
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <MessageSquarePlus className="h-4 w-4" />
-                  Add Note
+                  Adicionar Nota
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add Note</DialogTitle>
+                  <DialogTitle>Adicionar Nota</DialogTitle>
                   <DialogDescription>
-                    Add an internal note to this order. Notes are only visible to
-                    the admin team.
+                    Adicione uma nota interna a este pedido. Notas sao visiveis
+                    apenas para a equipe admin.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-2">
-                  <Label htmlFor="note">Note</Label>
+                  <Label htmlFor="note">Nota</Label>
                   <Textarea
                     id="note"
-                    placeholder="Enter your note..."
+                    placeholder="Digite sua nota..."
                     value={noteText}
                     onChange={(e) => setNoteText(e.target.value)}
                     rows={4}
@@ -310,9 +310,9 @@ export default function OrderDetailPage({
                     variant="outline"
                     onClick={() => setNoteOpen(false)}
                   >
-                    Cancel
+                    Cancelar
                   </Button>
-                  <Button onClick={handleAddNote}>Save Note</Button>
+                  <Button onClick={handleAddNote}>Salvar Nota</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -320,10 +320,10 @@ export default function OrderDetailPage({
             <Button
               variant="outline"
               className="gap-2"
-              onClick={() => toast.info("Print invoice coming soon")}
+              onClick={() => toast.info("Impressao de fatura em breve")}
             >
               <Printer className="h-4 w-4" />
-              Print Invoice
+              Imprimir Fatura
             </Button>
           </div>
         </div>
@@ -338,16 +338,16 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Package className="h-5 w-5 text-muted-foreground" />
-                Order Items
+                Itens do Pedido
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="pl-6">Product</TableHead>
-                    <TableHead className="text-center">Qty</TableHead>
-                    <TableHead className="text-right">Unit Price</TableHead>
+                    <TableHead className="pl-6">Produto</TableHead>
+                    <TableHead className="text-center">Qtd</TableHead>
+                    <TableHead className="text-right">Preco Unit.</TableHead>
                     <TableHead className="pr-6 text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -388,7 +388,7 @@ export default function OrderDetailPage({
                   {order.discount > 0 && (
                     <TableRow>
                       <TableCell colSpan={3} className="pl-6 text-right">
-                        Discount
+                        Desconto
                       </TableCell>
                       <TableCell className="pr-6 text-right font-mono text-red-600">
                         -{formatCurrency(order.discount)}
@@ -397,11 +397,11 @@ export default function OrderDetailPage({
                   )}
                   <TableRow>
                     <TableCell colSpan={3} className="pl-6 text-right">
-                      Shipping
+                      Frete
                     </TableCell>
                     <TableCell className="pr-6 text-right font-mono">
                       {order.shipping_cost === 0
-                        ? "Free"
+                        ? "Gratis"
                         : formatCurrency(order.shipping_cost)}
                     </TableCell>
                   </TableRow>
@@ -424,9 +424,9 @@ export default function OrderDetailPage({
           {/* Timeline */}
           <Card>
             <CardHeader>
-              <CardTitle>Order Timeline</CardTitle>
+              <CardTitle>Historico do Pedido</CardTitle>
               <CardDescription>
-                Activity history for this order
+                Historico de atividades deste pedido
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -434,7 +434,7 @@ export default function OrderDetailPage({
                 <OrderTimeline events={order.events} />
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  No events recorded.
+                  Nenhum evento registrado.
                 </p>
               )}
             </CardContent>
@@ -448,15 +448,15 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <User className="h-4 w-4 text-muted-foreground" />
-                Customer
+                Cliente
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
                 <p className="font-medium">{order.customer?.name}</p>
                 <p className="text-sm text-muted-foreground">
-                  {order.customer?.total_orders} orders &middot;{" "}
-                  {formatCurrency(order.customer?.total_spent ?? 0)} spent
+                  {order.customer?.total_orders} pedidos &middot;{" "}
+                  {formatCurrency(order.customer?.total_spent ?? 0)} gasto
                 </p>
               </div>
               <Separator />
@@ -480,7 +480,7 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
-                Shipping Address
+                Endereco de Entrega
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -501,7 +501,7 @@ export default function OrderDetailPage({
                 <>
                   <Separator className="my-3" />
                   <div className="text-sm">
-                    <p className="text-muted-foreground">Tracking Code</p>
+                    <p className="text-muted-foreground">Codigo de Rastreio</p>
                     <p className="font-mono font-medium">
                       {order.tracking_code}
                     </p>
@@ -516,12 +516,12 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
-                Payment
+                Pagamento
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Method</span>
+                <span className="text-sm text-muted-foreground">Metodo</span>
                 <span className="text-sm font-medium capitalize">
                   {order.payment_method}
                 </span>
@@ -539,7 +539,7 @@ export default function OrderDetailPage({
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Amount</span>
+                <span className="text-sm text-muted-foreground">Valor</span>
                 <span className="font-mono font-medium">
                   {formatCurrency(order.total)}
                 </span>
@@ -550,7 +550,7 @@ export default function OrderDetailPage({
           {/* Order summary */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Order Summary</CardTitle>
+              <CardTitle className="text-base">Resumo do Pedido</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex items-center justify-between text-sm">
@@ -561,17 +561,17 @@ export default function OrderDetailPage({
               </div>
               {order.discount > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Discount</span>
+                  <span className="text-muted-foreground">Desconto</span>
                   <span className="font-mono text-red-600">
                     -{formatCurrency(order.discount)}
                   </span>
                 </div>
               )}
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Shipping</span>
+                <span className="text-muted-foreground">Frete</span>
                 <span className="font-mono">
                   {order.shipping_cost === 0
-                    ? "Free"
+                    ? "Gratis"
                     : formatCurrency(order.shipping_cost)}
                 </span>
               </div>
@@ -589,7 +589,7 @@ export default function OrderDetailPage({
           {order.notes && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Notes</CardTitle>
+                <CardTitle className="text-base">Notas</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">{order.notes}</p>

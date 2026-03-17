@@ -30,32 +30,32 @@ interface QuickAction {
 
 const ACTIONS: QuickAction[] = [
   {
-    label: "New Order",
-    description: "Create a manual order",
+    label: "Novo Pedido",
+    description: "Criar pedido manual",
     href: "/orders",
     icon: ShoppingCart,
     bgClass: "bg-emerald-100 dark:bg-emerald-900/30",
     iconClass: "text-emerald-700 dark:text-emerald-400",
   },
   {
-    label: "Add Product",
-    description: "Add to inventory",
+    label: "Estoque",
+    description: "Ver estoque",
     href: "/inventory",
     icon: Package,
     bgClass: "bg-blue-100 dark:bg-blue-900/30",
     iconClass: "text-blue-700 dark:text-blue-400",
   },
   {
-    label: "Create Idea",
-    description: "New product idea",
+    label: "Nova Ideia",
+    description: "Registrar ideia",
     href: "/ideas",
     icon: Lightbulb,
     bgClass: "bg-amber-100 dark:bg-amber-900/30",
     iconClass: "text-amber-700 dark:text-amber-400",
   },
   {
-    label: "View Kanban",
-    description: "Task board overview",
+    label: "Ver Kanban",
+    description: "Quadro de tarefas",
     href: "/kanban",
     icon: KanbanSquare,
     bgClass: "bg-purple-100 dark:bg-purple-900/30",
@@ -69,8 +69,8 @@ export function QuickActions() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
-        <CardDescription>Common tasks and shortcuts</CardDescription>
+        <CardTitle>Acoes Rapidas</CardTitle>
+        <CardDescription>Tarefas e atalhos comuns</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

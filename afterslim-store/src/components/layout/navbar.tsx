@@ -7,10 +7,36 @@ import {
   MobileMenuButton,
 } from "./navbar-client";
 
+/* ---------------------------------------------------------------------------
+   Seed-style Navbar
+   Height: ~49px (h-12), transparent bg, glassmorphism on scroll
+   Logo left, nav center, CTA pill + cart right
+   --------------------------------------------------------------------------- */
+
+function ArrowIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="11"
+      height="11"
+      fill="none"
+      viewBox="0 0 11 11"
+      style={{ width: 11, height: 11 }}
+    >
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 export function Navbar() {
   return (
     <NavbarWrapper>
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto flex h-12 max-w-[90rem] items-center justify-between px-4 sm:px-8 lg:px-14">
         {/* Left: Mobile menu + Logo */}
         <div className="flex items-center gap-3">
           <MobileMenuButton />
@@ -23,7 +49,7 @@ export function Navbar() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                className="rounded-md px-3 py-2 font-display text-sm font-medium text-as-navy/70 transition-colors hover:text-as-navy"
               >
                 {item.label}
               </Link>
@@ -35,9 +61,12 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/shop"
-            className="hidden rounded-full bg-[var(--color-brand-accent)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-accent-light)] sm:inline-flex"
+            className="group hidden items-center gap-1.5 rounded-full bg-as-orange px-4 py-2 font-display text-sm font-medium text-as-snow transition-colors hover:bg-as-orange-bright sm:inline-flex"
           >
-            Get Started
+            Shop Now
+            <span className="inline-flex w-0 overflow-hidden opacity-0 transition-all duration-300 group-hover:w-3 group-hover:opacity-100">
+              <ArrowIcon />
+            </span>
           </Link>
           <CartButton />
         </div>

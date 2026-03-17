@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import { SITE } from "@/lib/constants";
 import { HeroSection } from "@/components/marketing/hero-section";
+import { ProductCardsSection } from "@/components/marketing/product-cards-section";
 import { TrustBadges } from "@/components/marketing/trust-badges";
 import { BenefitsSection } from "@/components/marketing/benefits-section";
-import { PackSelectorSection } from "@/components/marketing/pack-selector-section";
-import { BenefitsTimeline } from "@/components/marketing/benefits-timeline";
 import { BerberineSection } from "@/components/marketing/berberine-section";
-import { IngredientCards } from "@/components/marketing/ingredient-cards";
-import { PriceComparison } from "@/components/marketing/price-comparison";
 import { Testimonials } from "@/components/marketing/testimonials";
 import { CTASection } from "@/components/marketing/cta-section";
 
@@ -21,17 +18,25 @@ export const metadata: Metadata = {
   },
 };
 
+/* ---------------------------------------------------------------------------
+   Homepage — Seed-style section flow:
+   1. Hero (dark navy, full viewport)
+   2. Product Cards (dark navy, 3 pack cards with scaleY hover)
+   3. Benefits (rounded-top snow, split layout + 2x2 pillar grid)
+   4. Berberine (science/technology section, split layout)
+   5. Trust Badges (cream inline bar)
+   6. Testimonials (large heading + clean cards)
+   7. CTA (dark navy, rounded-top, final push)
+   --------------------------------------------------------------------------- */
+
 export default async function HomePage() {
   return (
     <>
       <HeroSection />
-      <TrustBadges />
+      <ProductCardsSection />
       <BenefitsSection />
-      <PackSelectorSection />
-      <BenefitsTimeline />
       <BerberineSection />
-      <IngredientCards />
-      <PriceComparison />
+      <TrustBadges />
       <Testimonials />
       <CTASection />
     </>

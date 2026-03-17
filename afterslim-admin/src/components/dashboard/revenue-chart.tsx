@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-import { formatCurrency, createSeededRandom } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -16,39 +15,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-/* ── Mock data generator ────────────────────────────────── */
-
-function generateRevenueData() {
-  const data: { date: string; revenue: number }[] = [];
-  const today = new Date();
-  // Use a seed based on today's date so server and client produce the same data
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  const random = createSeededRandom(seed);
-
-  for (let i = 29; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(today.getDate() - i);
-
-    // Generate realistic-looking revenue data with some variance
-    const baseRevenue = 1200 + Math.sin(i * 0.3) * 400;
-    const dayOfWeek = date.getDay();
-    // Weekends tend to have higher sales
-    const weekendBoost = dayOfWeek === 0 || dayOfWeek === 6 ? 300 : 0;
-    const noise = (random() - 0.5) * 500;
-    const revenue = Math.max(400, Math.round(baseRevenue + weekendBoost + noise));
-
-    data.push({
-      date: date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-      revenue,
-    });
-  }
-
-  return data;
-}
+import type { RevenueDataPoint } from "@/lib/queries/dashboard-charts";
 
 /* ── Chart config ───────────────────────────────────────── */
 
@@ -59,12 +26,32 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+/* ── Props ───────────────────────────────────────────────── */
+
+interface RevenueChartProps {
+  data: RevenueDataPoint[];
+}
+
 /* ── Component ──────────────────────────────────────────── */
 
-export function RevenueChart() {
-  const data = useMemo(() => generateRevenueData(), []);
-
+export function RevenueChart({ data }: RevenueChartProps) {
   const totalRevenue = data.reduce((sum, d) => sum + d.revenue, 0);
+
+  if (data.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Revenue Overview</CardTitle>
+          <CardDescription>Last 30 days</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex h-[280px] items-center justify-center text-muted-foreground">
+            Sem dados de receita ainda
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>

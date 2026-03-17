@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { IDEA_STATUS_CONFIG, PRIORITY_CONFIG } from "@/lib/constants";
+import { IDEA_STATUS_CONFIG, PRIORITY_CONFIG, IDEA_SOURCE_CONFIG } from "@/lib/constants";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import type { Idea, IdeaPriority } from "@/lib/types";
 
@@ -34,11 +34,7 @@ const PRIORITY_ICONS: Record<IdeaPriority, React.ReactNode> = {
   critical: <AlertTriangle className="h-3 w-3" />,
 };
 
-const SOURCE_CONFIG: Record<string, { label: string; color: string }> = {
-  manual: { label: "Manual", color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" },
-  after: { label: "After", color: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" },
-  agent: { label: "Agent", color: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400" },
-};
+// Usa IDEA_SOURCE_CONFIG de constants.ts
 
 function ScoreIndicator({ score }: { score: number | null }) {
   if (score === null) return null;
@@ -74,7 +70,7 @@ function ScoreIndicator({ score }: { score: number | null }) {
 export function IdeaCard({ idea, onClick }: IdeaCardProps) {
   const statusConfig = IDEA_STATUS_CONFIG[idea.status];
   const priorityConfig = PRIORITY_CONFIG[idea.priority];
-  const sourceConfig = idea.source ? SOURCE_CONFIG[idea.source] : null;
+  const sourceConfig = idea.source ? IDEA_SOURCE_CONFIG[idea.source] : null;
 
   return (
     <Card
@@ -124,13 +120,13 @@ export function IdeaCard({ idea, onClick }: IdeaCardProps) {
             {idea.estimated_cost !== null && (
               <div className="flex items-center gap-1 text-muted-foreground">
                 <DollarSign className="h-3 w-3 text-red-500" />
-                <span>Cost: {formatCurrency(idea.estimated_cost)}</span>
+                <span>Custo: {formatCurrency(idea.estimated_cost)}</span>
               </div>
             )}
             {idea.estimated_revenue !== null && (
               <div className="flex items-center gap-1 text-muted-foreground">
                 <TrendingUp className="h-3 w-3 text-emerald-500" />
-                <span>Rev: {formatCurrency(idea.estimated_revenue)}</span>
+                <span>Receita: {formatCurrency(idea.estimated_revenue)}</span>
               </div>
             )}
           </div>
@@ -167,7 +163,7 @@ export function IdeaCard({ idea, onClick }: IdeaCardProps) {
           }}
         >
           <KanbanSquare className="h-3 w-3" />
-          Create Task
+          Criar Tarefa
         </Button>
       </CardContent>
     </Card>

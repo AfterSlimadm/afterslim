@@ -46,7 +46,7 @@ const PDP_FAQ = [
   },
   {
     q: "How do the pack options work?",
-    a: "Choose between 1, 3, or 6 bottles. Each bottle contains 120 capsules (a full 30-day supply). Larger packs come with bigger savings and free shipping on 3+ bottles. Subscribe & Save locks in the lowest price with flexible cancellation.",
+    a: "Choose between 1, 2, or 3 bottles. Each bottle contains 120 capsules (a full 30-day supply). Larger packs come with bigger savings and free shipping on 2+ bottles. Subscribe & Save locks in the lowest price with flexible cancellation.",
   },
   {
     q: "Is it safe? Any side effects?",
@@ -60,8 +60,8 @@ const PDP_FAQ = [
 
 export function ShopPDP() {
   const [selectedTier, setSelectedTier] = useState<
-    "1-bottle" | "3-bottle" | "6-bottle"
-  >("3-bottle");
+    "1-bottle" | "2-bottle" | "3-bottle"
+  >("2-bottle");
   const [purchaseType, setPurchaseType] = useState<
     "subscription" | "one-time"
   >("subscription");
@@ -129,10 +129,10 @@ export function ShopPDP() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-brand-accent)]">
+              <p className="as-label text-as-orange">
                 Berberine-Powered Formula
               </p>
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h1 className="as-h1 mt-2 text-foreground">
                 AfterSlim
               </h1>
               <p className="mt-3 text-lg text-muted-foreground">
@@ -146,7 +146,7 @@ export function ShopPDP() {
                     key={benefit}
                     className="flex items-center gap-2 text-sm text-foreground"
                   >
-                    <Check className="size-4 shrink-0 text-[var(--color-brand-accent)]" />
+                    <Check className="size-4 shrink-0 text-as-orange" />
                     {benefit}
                   </li>
                 ))}
@@ -170,23 +170,23 @@ export function ShopPDP() {
       {/* ================================================================= */}
       {/* 2. TRUST LINE */}
       {/* ================================================================= */}
-      <section className="border-y bg-muted/30 py-6">
+      <section className="border-y as-section-cream py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground sm:gap-10">
             <span className="flex items-center gap-2">
-              <Shield className="size-4 text-[var(--color-brand-accent)]" />
+              <Shield className="size-4 text-as-orange" />
               60-Day Money-Back Guarantee
             </span>
             <span className="flex items-center gap-2">
-              <Check className="size-4 text-[var(--color-brand-accent)]" />
-              Free Shipping on 3+ Bottles
+              <Check className="size-4 text-as-orange" />
+              Free Shipping on 2+ Bottles
             </span>
             <span className="flex items-center gap-2">
-              <Check className="size-4 text-[var(--color-brand-accent)]" />
+              <Check className="size-4 text-as-orange" />
               Cancel Anytime
             </span>
             <span className="flex items-center gap-2">
-              <Check className="size-4 text-[var(--color-brand-accent)]" />
+              <Check className="size-4 text-as-orange" />
               cGMP Certified, Made in USA
             </span>
           </div>
@@ -220,10 +220,10 @@ export function ShopPDP() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-brand-accent)]">
+            <p className="as-label text-as-orange">
               Full Transparency
             </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="as-h2 mt-3 text-foreground">
               Supplement Facts
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
@@ -252,7 +252,7 @@ export function ShopPDP() {
       {/* ================================================================= */}
       {/* 8. FAQ ACCORDION */}
       {/* ================================================================= */}
-      <section className="bg-muted/30 py-20 sm:py-24">
+      <section className="as-section-cream py-20 sm:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <m.div
             className="text-center"
@@ -261,7 +261,7 @@ export function ShopPDP() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="as-h2 text-foreground">
               Frequently Asked Questions
             </h2>
           </m.div>

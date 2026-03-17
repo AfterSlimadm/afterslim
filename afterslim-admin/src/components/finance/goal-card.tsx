@@ -18,14 +18,14 @@ function getGoalStatus(percentage: number, daysRemaining: number, totalDays: num
 
   // If progress is ahead of time elapsed, on track
   if (progressRatio >= timeElapsedRatio * 0.85) {
-    return { label: "On Track", color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400" };
+    return { label: "No Caminho", color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400" };
   }
   // If progress is somewhat behind
   if (progressRatio >= timeElapsedRatio * 0.6) {
-    return { label: "Behind", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" };
+    return { label: "Atrasado", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" };
   }
   // Significantly behind
-  return { label: "At Risk", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" };
+  return { label: "Em Risco", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" };
 }
 
 function getDaysRemaining(endDate: string) {
@@ -43,11 +43,11 @@ function getTotalDays(startDate: string, endDate: string) {
 }
 
 const PERIOD_LABELS: Record<string, string> = {
-  daily: "Daily",
-  weekly: "Weekly",
-  monthly: "Monthly",
-  quarterly: "Quarterly",
-  yearly: "Yearly",
+  daily: "Diario",
+  weekly: "Semanal",
+  monthly: "Mensal",
+  quarterly: "Trimestral",
+  yearly: "Anual",
 };
 
 /* -- Component -------------------------------------------------- */
@@ -118,10 +118,10 @@ export function GoalCard({ goal, className }: GoalCardProps) {
         {/* Footer info */}
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>
-            Remaining: {formatCurrency(Math.max(0, targetAmount - currentAmount))}
+            Restante: {formatCurrency(Math.max(0, targetAmount - currentAmount))}
           </span>
           <span suppressHydrationWarning>
-            {daysRemaining} {daysRemaining === 1 ? "day" : "days"} left
+            {daysRemaining} {daysRemaining === 1 ? "dia" : "dias"} restantes
           </span>
         </div>
       </CardContent>

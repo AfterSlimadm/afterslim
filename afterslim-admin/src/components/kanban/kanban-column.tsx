@@ -74,7 +74,7 @@ export function KanbanColumn({ column, cards, onAddCard }: KanbanColumnProps) {
       {isOverLimit && (
         <div className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 border-b">
           <AlertCircle className="h-3 w-3 shrink-0" />
-          WIP limit exceeded ({cards.length}/{column.wip_limit})
+          Limite WIP excedido ({cards.length}/{column.wip_limit})
         </div>
       )}
 
@@ -93,10 +93,10 @@ export function KanbanColumn({ column, cards, onAddCard }: KanbanColumnProps) {
               {cards.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-8 text-center">
                   <p className="text-xs text-muted-foreground">
-                    No cards yet
+                    Nenhum card ainda
                   </p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">
-                    Drop cards here or add a new one
+                    Arraste cards aqui ou adicione um novo
                   </p>
                 </div>
               )}
@@ -114,7 +114,7 @@ export function KanbanColumn({ column, cards, onAddCard }: KanbanColumnProps) {
           onClick={() => onAddCard?.(column.id)}
         >
           <Plus className="h-3.5 w-3.5" />
-          Add Card
+          Novo Card
         </Button>
       </div>
     </div>

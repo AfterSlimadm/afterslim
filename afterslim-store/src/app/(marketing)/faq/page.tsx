@@ -104,7 +104,7 @@ const FAQ_CATEGORIES: FaqCategory[] = [
       {
         question: "How do the pack options work?",
         answer:
-          "AfterSlim comes in 3 pack sizes: 1 bottle ($59.99), 3 bottles ($49.99/each, save 17%), or 6 bottles ($39.99/each, save 33%). Each bottle contains 120 capsules for a full 30-day supply. Orders of 3+ bottles ship free.",
+          "AfterSlim comes in 3 pack sizes: 1 Bottle ($59.99), 2 Pack ($49.99/each, save 17%), or 3 Pack ($39.99/each, save 33%). Each bottle contains 120 capsules for a full 30-day supply. Orders of 2+ bottles ship free.",
       },
       {
         question: "What is your return policy?",
@@ -123,7 +123,7 @@ export default function FaqPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <Breadcrumbs items={[{ label: "FAQ" }]} />
-      <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+      <h1 className="as-h1 mt-4 text-foreground">
         Frequently Asked Questions
       </h1>
       <p className="mt-2 text-muted-foreground">
@@ -135,7 +135,7 @@ export default function FaqPage() {
       <div className="space-y-10">
         {FAQ_CATEGORIES.map((category) => (
           <section key={category.title}>
-            <h2 className="text-xl font-semibold">{category.title}</h2>
+            <h2 className="as-h4 text-foreground">{category.title}</h2>
             <Accordion type="single" collapsible className="mt-4">
               {category.items.map((item, index) => (
                 <AccordionItem
@@ -158,12 +158,12 @@ export default function FaqPage() {
       {/* ---- CTA ---- */}
       <Separator className="my-10" />
       <div className="text-center">
-        <h2 className="text-xl font-semibold">Still Have Questions?</h2>
+        <h2 className="as-h4 text-foreground">Still Have Questions?</h2>
         <p className="mt-2 text-muted-foreground">
           Our support team is happy to help. Reach out and we'll get back to you
           within 24 hours.
         </p>
-        <Button asChild size="lg" className="mt-4">
+        <Button variant="ds-primary" size="ds-lg" asChild className="mt-4">
           <Link href="/contact">Contact Us</Link>
         </Button>
       </div>

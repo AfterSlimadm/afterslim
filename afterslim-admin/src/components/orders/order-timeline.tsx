@@ -105,7 +105,7 @@ export function OrderTimeline({ events }: OrderTimelineProps) {
               </p>
               {event.created_by && (
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  by {event.created_by}
+                  por {event.created_by}
                 </p>
               )}
               {event.metadata && Object.keys(event.metadata).length > 0 && (

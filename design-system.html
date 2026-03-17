@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, height=device-height, initial-scale=1" name="viewport"/>
+  <title>AfterSlim Design System</title>
+
+  <!-- Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ===================================================================
+       AFTERSLIM DESIGN TOKENS (CSS Custom Properties)
+       Adapted from Seed.com — green → navy + orange
+       =================================================================== */
+    :root {
+      /* ---- Appearance / Measurements (copied from Seed) ---- */
+      --appearance-measurement-100: 4px;
+      --appearance-measurement-200: 8px;
+      --appearance-measurement-300: 12px;
+      --appearance-measurement-400: 16px;
+      --appearance-measurement-600: 24px;
+      --appearance-measurement-800: 32px;
+      --appearance-measurement-1000: 40px;
+      --appearance-measurement-1200: 48px;
+      --appearance-measurement-1400: 56px;
+      --appearance-measurement-1600: 64px;
+      --appearance-measurement-1800: 72px;
+      --appearance-measurement-2000: 80px;
+      --appearance-measurement-2500: 100px;
+      --appearance-measurement-00: 0px;
+      --appearance-measurement-025: 1px;
+      --appearance-measurement-050: 2px;
+
+      /* ---- Opacity (copied from Seed) ---- */
+      --appearance-opacity-10: 0.1;
+      --appearance-opacity-20: 0.2;
+      --appearance-opacity-30: 0.3;
+      --appearance-opacity-40: 0.4;
+      --appearance-opacity-50: 0.5;
+      --appearance-opacity-60: 0.6;
+      --appearance-opacity-70: 0.7;
+      --appearance-opacity-80: 0.8;
+      --appearance-opacity-90: 0.9;
+      --appearance-opacity-100: 1;
+      --appearance-opacity-00: 0;
+
+      /* ---- Primary Colors (Seed Green → Navy) ---- */
+      --color-primary-navy: #0d1b2a;
+      --color-primary-navy-t5: rgba(13,27,42,0.05);
+      --color-primary-navy-t10: rgba(13,27,42,0.1);
+      --color-primary-navy-t15: rgba(13,27,42,0.15);
+      --color-primary-navy-t20: rgba(13,27,42,0.2);
+      --color-primary-navy-t50: rgba(13,27,42,0.5);
+      --color-primary-navy-t70: rgba(13,27,42,0.7);
+      --color-primary-snow: #faf9f7;
+      --color-primary-snow-t10: rgba(250,249,247,0.1);
+      --color-primary-snow-t20: rgba(250,249,247,0.2);
+      --color-primary-snow-t50: rgba(250,249,247,0.5);
+      --color-primary-snow-t70: rgba(250,249,247,0.7);
+      --color-primary-navy-mid: #1a3050;
+      --color-primary-white: #ffffff;
+
+      /* ---- Orange Accent (Seed Fluorescent Green → Orange) ---- */
+      --color-accent-orange: #d08530;
+      --color-accent-orange-bright: #e8a040;
+      --color-accent-orange-glow: #ffd699;
+      --color-accent-orange-deep: #a86820;
+      --color-accent-peach: #fce8cc;
+      --color-accent-amber-soft: #e8cfa8;
+
+      /* ---- Neutral Colors ---- */
+      --color-neutral-cool-20: #f9f9f9;
+      --color-neutral-cool-40: #efefef;
+      --color-neutral-cool-60: #e6e6e6;
+      --color-neutral-faded-navy-20: #d0d5dc;
+      --color-neutral-faded-navy-40: #8b96a8;
+      --color-neutral-faded-navy-60: #5d6d82;
+      --color-neutral-cream: #f0ece4;
+      --color-neutral-frosted-glass-t35: rgba(13,27,42,0.35);
+      --color-neutral-frosted-glass-t8: rgba(13,27,42,0.08);
+      --color-neutral-linen: #f5f2ec;
+
+      /* ---- Guidance Colors ---- */
+      --color-guidance-error: #eb5757;
+      --color-guidance-orange-glow: #ffd699;
+      --color-guidance-peach: #fce8cc;
+      --color-guidance-warning: #ebb057;
+      --color-guidance-success: #4caf50;
+
+      /* ---- Dark / Light Opacity ---- */
+      --color-dark-opacity-08: rgba(0,0,0,0.08);
+      --color-dark-opacity-10: rgba(0,0,0,0.1);
+      --color-dark-opacity-12: rgba(0,0,0,0.12);
+      --color-dark-opacity-20: rgba(0,0,0,0.2);
+      --color-dark-opacity-30: rgba(0,0,0,0.3);
+      --color-dark-opacity-40: rgba(0,0,0,0.4);
+      --color-dark-opacity-50: rgba(0,0,0,0.5);
+      --color-light-opacity-08: rgba(255,255,255,0.08);
+      --color-light-opacity-10: rgba(255,255,255,0.1);
+      --color-light-opacity-12: rgba(255,255,255,0.12);
+      --color-light-opacity-20: rgba(255,255,255,0.2);
+      --color-light-opacity-50: rgba(255,255,255,0.5);
+
+      /* ---- Product Colors (Berberina) ---- */
+      --products-berberina-dark: #a86820;
+      --products-berberina-primary: #d08530;
+      --products-berberina-highlight: #ffd699;
+      --products-berberina-light: #fef4e6;
+      --products-berberina-secondary: #e8cfa8;
+
+      /* ---- Typography Tokens ---- */
+      --typography-font-display: 'Satoshi', system-ui, -apple-system, sans-serif;
+      --typography-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --typography-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --typography-size-250: 10px;
+      --typography-size-300: 12px;
+      --typography-size-350: 14px;
+      --typography-size-400: 16px;
+      --typography-size-450: 18px;
+      --typography-size-500: 20px;
+      --typography-size-600: 24px;
+      --typography-size-800: 32px;
+      --typography-size-1000: 40px;
+      --typography-size-1200: 48px;
+      --typography-size-1600: 64px;
+
+      /* ---- Shorthand Color Aliases ---- */
+      --color--navy: #0d1b2a;
+      --color--navy-active: #081320;
+      --color--navy-hover: #1a3050;
+      --color--navy-card: #1e3a5f;
+      --color--navy-pressed: #091520;
+      --color--navy-faded: rgba(13,27,42,0.5);
+      --color--navy-t10: rgba(13,27,42,0.10);
+      --color--navy-t5: rgba(13,27,42,0.05);
+      --color--navy-t20: rgba(13,27,42,0.2);
+      --color--navy-mid: #1a3050;
+      --color--navy-light: #2a4a70;
+      --color--frostedglass-t55: rgba(13,27,42,0.55);
+      --color--frostedglass-t35: rgba(13,27,42,0.35);
+      --color--frostedglass-t8: rgba(13,27,42,0.08);
+      --color--linen: #f5f2ec;
+      --color--amber-soft: #e8cfa8;
+      --color--snow: #faf9f7;
+      --color--cream: #f0ece4;
+      --color--snow-t10: rgba(250,249,247,0.1);
+      --color--snow-t20: rgba(250,249,247,0.2);
+      --color--snow-focus: rgba(250,249,247,0.5);
+      --color--black: #000000;
+      --color--white: #ffffff;
+      --color--orange: #d08530;
+      --color--orange-bright: #e8a040;
+      --color--orange-glow: #ffd699;
+
+      /* ---- Border Radius (copied from Seed) ---- */
+      --bdrs-s: 0.5rem;
+      --bdrs-sm: 0.75rem;
+      --bdrs-m: 1rem;
+      --bdrs-l: 2rem;
+      --bdrs-pill: 99em;
+
+      /* ---- Spacing (copied from Seed) ---- */
+      --space-fixed-1: 0.5rem;
+      --space-fixed-2: 1rem;
+      --space-fixed-2-5: 1.25rem;
+      --space-fixed-3: 1.5rem;
+      --space-fixed-3-5: 1.75rem;
+      --space-fixed-4: 2rem;
+      --space-fixed-4-5: 2.25rem;
+      --space-fixed-5: 2.5rem;
+      --space-fixed-6: 3.5rem;
+      --space-6: 5rem;
+      --space-5: 4rem;
+      --space-4: 2rem;
+      --space-3: 1.5rem;
+      --space-2: 1rem;
+      --space-1: 0.5rem;
+      --space-gutter: 1.25rem;
+      --space-gutter-s: calc(var(--space-gutter) / 2);
+      --space-gutter-v: var(--space-gutter);
+      --space-outer: var(--space-2);
+      --space-outer-v: var(--space-6);
+      --space-inner: var(--space-2);
+      --space-inner-v: var(--space-3);
+      --space-columns: 4;
+
+      /* ---- Layout (copied from Seed) ---- */
+      --maw: 90rem;
+      --maw-w: 68.75rem;
+      --maw-n: 55.3125rem;
+      --maw-xn: 40.8125rem;
+      --vp-h: 100dvh;
+      --nav-height: 3rem;
+      --banner-height: 2.5rem;
+      --grid: repeat(var(--space-columns), minmax(0,1fr));
+      --grid-width: calc(100vw - (2 * var(--space-outer)));
+      --total-gutter: 3;
+      --grid-col-width: calc((var(--grid-width) - var(--total-gutter) * var(--space-gutter)) / var(--space-columns));
+
+      /* ---- Transition (copied from Seed) ---- */
+      --trs-prop: all;
+      --trs-time: 0.3s;
+      --trs-tfunc: ease-in-out;
+      --trs: var(--trs-prop) var(--trs-time) var(--trs-tfunc);
+    }
+
+    @media (min-width: 37.5em) {
+      :root { --space-columns: 4; --space-outer: var(--space-3); }
+    }
+    @media (min-width: 60em) {
+      :root { --space-columns: 12; --space-outer: var(--space-5); }
+    }
+
+    /* ===================================================================
+       TYPOGRAPHY CLASSES
+       =================================================================== */
+    .as-on-light { --color-text: var(--color--navy); }
+    .as-on-dark { --color-text: var(--color--snow); }
+
+    .as-h1 { color: var(--color-text); font-family: var(--typography-font-display); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:700; --fz:2.5rem; --lh:1.05; --lts:-0.025em; }
+    @media (min-width: 37.5em) { .as-h1 { --fz:3rem; } }
+
+    .as-h2 { color: var(--color-text); font-family: var(--typography-font-display); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:700; --fz:2rem; --lh:1.1; --lts:-0.015em; }
+    @media (min-width: 37.5em) { .as-h2 { --fz:3rem; } }
+
+    .as-h3 { color: var(--color-text); font-family: var(--typography-font-display); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:500; --fz:1.75rem; --lh:1.1; --lts:-0.01em; }
+    @media (min-width: 37.5em) { .as-h3 { --fz:2.5rem; } }
+
+    .as-h4 { color: var(--color-text); font-family: var(--typography-font-display); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:500; --fz:1.75rem; --lh:1.1; --lts:-0.01em; }
+    @media (min-width: 37.5em) { .as-h4 { --fz:2rem; } }
+
+    .as-h5 { color: var(--color-text); font-family: var(--typography-font-display); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:500; --fz:1.5rem; --lh:1.2; --lts:-0.02em; }
+
+    .as-body-lg { color: var(--color-text); font-family: var(--typography-font-body); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:400; --fz:1.25rem; --lh:1.4; --lts:-0.01em; }
+
+    .as-body { color: var(--color-text); font-family: var(--typography-font-body); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:400; --fz:1rem; --lh:1.5; --lts:-0.01em; }
+
+    .as-label { color: var(--color-text); font-family: var(--typography-font-display); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); text-transform: uppercase; --fw:500; --fz:0.75rem; --lts:0.06em; }
+
+    .as-mono { color: var(--color-text); font-family: var(--typography-font-mono); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); text-transform: uppercase; --fw:400; --fz:0.75rem; --lts:0.02em; }
+
+    .as-small { color: var(--color-text); font-family: var(--typography-font-body); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:400; --fz:0.75rem; --lh:1.4; }
+    @media (min-width: 37.5em) { .as-small { --fz:1rem; } }
+
+    .as-caption { color: var(--color-text); font-family: var(--typography-font-body); font-size: var(--fz,1rem); font-weight: var(--fw,inherit); letter-spacing: var(--lts,normal); line-height: var(--lh,inherit); --fw:400; --fz:0.75rem; --lh:1.4; --lts:-0.003em; }
+
+    /* ===================================================================
+       COMPONENT CLASSES
+       =================================================================== */
+
+    /* -- Buttons -- */
+    .as-btn-primary { display:inline-flex; justify-content:center; align-items:center; border-radius:var(--bdrs-pill); border:none; cursor:pointer; text-align:center; font-family:var(--typography-font-display); font-weight:500; line-height:normal; letter-spacing:-0.0025em; text-decoration:none; background:var(--color--orange); color:var(--color--snow); padding:16px 24px; font-size:16px; gap:8px; transition:var(--trs); }
+    .as-btn-primary:hover,.as-btn-primary:focus { background:var(--color--orange-bright); }
+    .as-btn-primary:active { background:var(--color-accent-orange-deep); }
+    .as-btn-primary:focus-visible { outline:3px solid var(--color--orange); outline-offset:2px; }
+    .as-btn-primary:disabled { opacity:0.5; cursor:not-allowed; pointer-events:none; }
+
+    .as-btn-primary-dark { display:inline-flex; justify-content:center; align-items:center; border-radius:var(--bdrs-pill); border:none; cursor:pointer; text-align:center; font-family:var(--typography-font-display); font-weight:500; line-height:normal; letter-spacing:-0.0025em; text-decoration:none; background:var(--color--navy); color:var(--color--snow); padding:16px 24px; font-size:16px; gap:8px; transition:var(--trs); }
+    .as-btn-primary-dark:hover { background:var(--color--navy-hover); }
+    .as-btn-primary-dark:active { background:var(--color--navy-active); }
+
+    .as-btn-secondary { display:inline-flex; justify-content:center; align-items:center; border-radius:var(--bdrs-pill); border:none; cursor:pointer; text-align:center; font-family:var(--typography-font-display); font-weight:500; line-height:normal; letter-spacing:-0.0025em; text-decoration:none; background:var(--color--snow); color:var(--color--navy); padding:16px 24px; font-size:16px; transition:var(--trs); }
+    .as-btn-secondary:hover { background:var(--color--cream); }
+
+    .as-btn-small { display:inline-flex; justify-content:center; align-items:center; border-radius:var(--bdrs-pill); border:none; cursor:pointer; text-align:center; font-family:var(--typography-font-display); font-weight:500; line-height:normal; letter-spacing:-0.0025em; text-decoration:none; background:var(--color--navy); color:var(--color--snow); padding:10px 16px; font-size:14px; transition:var(--trs); }
+    .as-btn-small:hover { background:var(--color--navy-hover); }
+
+    .as-btn-text { align-items:center; display:inline-flex; justify-content:center; gap:8px; border-radius:var(--bdrs-pill); background:none; border:none; cursor:pointer; font-family:var(--typography-font-display); font-size:1rem; line-height:normal; letter-spacing:-0.04px; text-decoration:none; position:relative; font-weight:500; color:var(--color--navy); transition:var(--trs); }
+    .as-btn-text::after { content:""; background-color:currentcolor; position:absolute; bottom:-0.3em; left:0; height:1px; width:calc(100% - 20px); }
+    .as-btn-text:hover { color:var(--color--orange); }
+
+    .as-btn-outline { display:inline-flex; justify-content:center; align-items:center; border-radius:var(--bdrs-pill); border:1.5px solid var(--color--orange); cursor:pointer; text-align:center; font-family:var(--typography-font-display); font-weight:500; line-height:normal; letter-spacing:-0.0025em; text-decoration:none; background:transparent; color:var(--color--orange); padding:14px 24px; font-size:16px; transition:var(--trs); }
+    .as-btn-outline:hover { background:var(--color--orange); color:var(--color--snow); }
+
+    /* -- Badges / Pills -- */
+    .as-badge { display:inline-flex; justify-content:center; align-items:center; border-radius:var(--bdrs-pill); padding:0.5em 0.75em; font-family:var(--typography-font-display); font-size:0.75rem; font-weight:500; line-height:100%; color:var(--color--navy); background:var(--color--orange-glow); }
+    .as-badge-dark { display:inline-flex; justify-content:center; align-items:center; border-radius:var(--bdrs-pill); padding:0.5em 0.75em; font-family:var(--typography-font-display); font-size:0.75rem; font-weight:500; line-height:100%; color:var(--color--snow); background:var(--color--orange); }
+    .as-pill-dark { display:inline-flex; align-items:center; border:1px solid var(--color--navy); border-radius:var(--bdrs-pill); font-family:var(--typography-font-display); font-size:0.75rem; font-weight:500; letter-spacing:-0.24px; width:fit-content; color:var(--color--navy); padding:6px 10px; line-height:8px; }
+    .as-pill-light { display:inline-flex; align-items:center; border:1px solid var(--color--snow); border-radius:var(--bdrs-pill); font-family:var(--typography-font-display); font-size:0.75rem; font-weight:500; letter-spacing:-0.24px; width:fit-content; color:var(--color--snow); padding:6px 10px; line-height:8px; }
+
+    /* -- Sections -- */
+    .as-hero { background-color:var(--color--navy); height:min(calc(100vh - var(--nav-height)),900px); position:relative; overflow:hidden; border-radius:0 0 var(--bdrs-l) var(--bdrs-l); }
+    .as-hero-inner { display:flex; height:100%; align-items:center; position:relative; padding-inline:var(--space-fixed-2); padding-block:var(--space-fixed-2); width:100%; justify-content:start; }
+    @media (min-width: 60em) { .as-hero-inner { padding-inline:var(--space-fixed-6); } }
+    .as-hero-content { color:var(--color--snow); position:relative; max-width:46.875rem; z-index:5; }
+    .as-hero-stack > * + * { margin-top:1rem; }
+    .as-hero-desc { max-width:26.625rem; }
+    .as-hero-cta { align-items:center; display:flex; gap:var(--space-fixed-2); margin-top:var(--space-fixed-3); justify-content:start; }
+
+    /* -- Product Card (same hover as Seed) -- */
+    .as-product-card { background-color:transparent; border-radius:var(--bdrs-m); padding:var(--space-fixed-5); position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; text-decoration:none; color:var(--color--navy); }
+    .as-product-card::before { content:""; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scaleY(0.9); width:100%; height:calc(100% + 50px); transform-origin:center center; transition:transform 0.3s; background-color:var(--color--navy-card); border-radius:var(--bdrs-m); }
+    .as-product-card:hover::before { transform:translate(-50%,-50%) scaleY(1); }
+    .as-product-card:hover .card-top { transform:translateY(-20px); }
+    .as-product-card:hover .card-bottom { transform:translateY(20px); }
+    .card-top { z-index:1; text-align:center; transition:transform 0.3s; }
+    .card-top > * + * { margin-top:0.5rem; }
+    .as-product-card:hover .card-top p, .as-product-card:hover .card-top span { color:var(--color--snow); }
+    .card-bottom { z-index:1; text-align:center; transition:transform 0.3s; }
+    .card-bottom > * + * { margin-top:1rem; }
+    .as-product-card:hover .card-bottom p, .as-product-card:hover .card-bottom span { color:var(--color--snow); }
+    .card-badge-pos { position:absolute; top:var(--space-fixed-1); left:var(--space-fixed-1); transition:0.3s; z-index:2; }
+
+    /* -- Banner -- */
+    .as-banner { background-color:var(--color--orange-glow); color:var(--color--navy); padding-inline:var(--space-outer); text-align:center; position:relative; z-index:2; }
+    .as-banner-link { color:var(--color--navy); font-family:var(--typography-font-display); font-size:0.875rem; font-weight:500; line-height:140%; letter-spacing:-0.035px; display:flex; align-items:center; justify-content:center; height:var(--banner-height); text-decoration:none; }
+
+    /* -- Animations -- */
+    @keyframes slide-up { 0%{opacity:0;transform:translateY(20px)} 100%{opacity:1;transform:translateY(0)} }
+    @keyframes fade-in { 0%{opacity:0} 100%{opacity:1} }
+    @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    @keyframes blur-reveal { 0%{opacity:0;filter:blur(20px)} 100%{opacity:1;filter:blur(0)} }
+    @keyframes scale-in { 0%{opacity:0;transform:scale(0.95)} 100%{opacity:1;transform:scale(1)} }
+    @keyframes glow-pulse { 0%,100%{box-shadow:0 0 20px rgba(208,133,48,0.2)} 50%{box-shadow:0 0 40px rgba(208,133,48,0.4)} }
+
+    /* ===================================================================
+       SHOWCASE STYLES (only for this page)
+       =================================================================== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { background:var(--color--snow); scroll-behavior:smooth; }
+    body { font-family:var(--typography-font-body); background:var(--color--snow); color:var(--color--navy); }
+
+    .ds-nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; gap:1.5rem; padding:0.75rem var(--space-outer); background:rgba(13,27,42,0.85); backdrop-filter:blur(38px); -webkit-backdrop-filter:blur(38px); border-radius:0 0 var(--bdrs-m) var(--bdrs-m); overflow-x:auto; white-space:nowrap; scrollbar-width:none; }
+    .ds-nav::-webkit-scrollbar { display:none; }
+    .ds-nav a { color:var(--color--snow); text-decoration:none; font-size:0.875rem; font-weight:500; padding:0.5em 0.75em; border-radius:var(--bdrs-pill); transition:background 0.2s; font-family:var(--typography-font-display); }
+    .ds-nav a:hover { background:rgba(255,255,255,0.12); }
+    .ds-nav .ds-logo { font-family:var(--typography-font-display); font-weight:700; font-size:1.25rem; letter-spacing:-0.5px; color:var(--color--snow); }
+    .ds-nav .ds-logo span { color:var(--color--orange-glow); }
+
+    .ds-section { padding:var(--space-5) var(--space-outer); max-width:var(--maw); margin:0 auto; }
+    .ds-section + .ds-section { border-top:1px solid var(--color--navy-t10); }
+    .ds-section-title { font-family:var(--typography-font-mono); font-size:0.75rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em; opacity:0.5; margin-bottom:var(--space-fixed-3); }
+    .ds-grid { display:grid; gap:var(--space-fixed-3); }
+    .ds-grid-2 { grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
+    .ds-grid-3 { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+    .ds-grid-4 { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); }
+    .ds-grid-6 { grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); }
+
+    .ds-spec-table { width:100%; border-collapse:collapse; }
+    .ds-spec-table th { text-align:left; font-size:0.75rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em; opacity:0.5; padding:0.75rem 1rem; border-bottom:1px solid var(--color--navy-t10); font-family:var(--typography-font-mono); }
+    .ds-spec-table td { padding:1rem; border-bottom:1px solid var(--color--navy-t10); vertical-align:middle; }
+    .ds-spec-label { font-size:0.75rem; opacity:0.5; font-family:var(--typography-font-mono); }
+
+    .ds-swatch { width:100%; aspect-ratio:1; border-radius:var(--bdrs-m); display:flex; flex-direction:column; justify-content:flex-end; padding:0.75rem; font-size:0.625rem; font-family:var(--typography-font-mono); border:1px solid var(--color--navy-t10); }
+    .ds-swatch-name { font-weight:500; margin-bottom:2px; }
+    .ds-swatch-value { opacity:0.7; }
+
+    .ds-dark-bg { background:var(--color--navy); color:var(--color--snow); border-radius:var(--bdrs-l); padding:var(--space-fixed-4); }
+
+    .ds-motion-box { width:80px; height:80px; border-radius:var(--bdrs-m); background:var(--color--navy); display:flex; align-items:center; justify-content:center; color:var(--color--snow); font-size:0.625rem; font-family:var(--typography-font-mono); text-align:center; }
+    .ds-motion-box-orange { width:80px; height:80px; border-radius:var(--bdrs-m); background:var(--color--orange); display:flex; align-items:center; justify-content:center; color:var(--color--snow); font-size:0.625rem; font-family:var(--typography-font-mono); text-align:center; }
+
+    .ds-spacing-bar { background:var(--color--orange-glow); border-radius:4px; height:32px; display:flex; align-items:center; padding-left:8px; font-size:0.625rem; font-family:var(--typography-font-mono); color:var(--color--navy); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="ds-nav">
+  <span class="ds-logo">After<span>Slim</span></span>
+  <a href="#hero">Hero</a>
+  <a href="#typography">Typography</a>
+  <a href="#colors">Colors</a>
+  <a href="#components">Components</a>
+  <a href="#layout">Layout</a>
+  <a href="#motion">Motion</a>
+</nav>
+
+<!-- 0) HERO -->
+<section id="hero" class="as-hero" style="height:min(80vh,700px);">
+  <div class="as-hero-inner" style="padding-block-start:var(--space-fixed-6);">
+    <div class="as-hero-content">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <span class="as-pill-light">Design System</span>
+        <span style="font-family:var(--typography-font-display);font-size:24px;font-weight:500;letter-spacing:-0.36px;line-height:120%;color:var(--color--snow);">AfterSlim</span>
+      </div>
+      <div class="as-hero-stack">
+        <h1 class="as-h1 as-on-dark" style="--color-text:var(--color--snow);">Premium supplements,<br/>designed to perform.</h1>
+        <p class="as-body as-on-dark as-hero-desc" style="--color-text:var(--color--snow);opacity:0.8;">A comprehensive reference of typography, colors, components, layout tokens, and motion patterns for the AfterSlim product experience.</p>
+      </div>
+      <div class="as-hero-cta">
+        <a class="as-btn-primary" href="#typography" style="text-decoration:none;">Explore System <svg fill="none" height="11" width="11" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" fill="currentColor" fill-rule="evenodd"/></svg></a>
+        <a class="as-btn-text" href="#colors" style="color:var(--color--snow);text-decoration:none;">View Colors <svg fill="none" height="11" width="11" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" fill="currentColor" fill-rule="evenodd"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top,rgba(13,27,42,0.6),transparent);z-index:2;"></div>
+  <div style="position:absolute;top:20%;right:10%;width:300px;height:300px;background:radial-gradient(circle,rgba(208,133,48,0.15) 0%,transparent 70%);z-index:1;border-radius:50%;"></div>
+</section>
+
+<!-- 1) TYPOGRAPHY -->
+<section id="typography" class="ds-section">
+  <p class="ds-section-title">01 / Typography</p>
+  <table class="ds-spec-table">
+    <thead><tr><th>Style</th><th>Live Preview</th><th>Spec</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ds-spec-label">H1 (Display)</span><br/>.as-h1 / Satoshi</td><td><h2 class="as-h1 as-on-light">Your body deserves better</h2></td><td><span class="ds-spec-label">2.5rem / 3rem @600<br/>fw:700, lh:1.05, ls:-0.025em</span></td></tr>
+      <tr><td><span class="ds-spec-label">H2 (Heading)</span><br/>.as-h2 / Satoshi</td><td><p class="as-h2 as-on-light">Clinically proven berberine.</p></td><td><span class="ds-spec-label">2rem / 3rem @600<br/>fw:700, lh:1.1, ls:-0.015em</span></td></tr>
+      <tr><td><span class="ds-spec-label">H3 (Subheading)</span><br/>.as-h3 / Satoshi</td><td><p class="as-h3 as-on-light">Natural metabolic support.</p></td><td><span class="ds-spec-label">1.75rem / 2.5rem @600<br/>fw:500, lh:1.1, ls:-0.01em</span></td></tr>
+      <tr><td><span class="ds-spec-label">H4 (Display Alt)</span><br/>.as-h4 / Satoshi</td><td><p class="as-h4 as-on-light">Backed by science</p></td><td><span class="ds-spec-label">1.75rem / 2rem @600<br/>fw:500, lh:1.1, ls:-0.01em</span></td></tr>
+      <tr><td><span class="ds-spec-label">H5 (Product Title)</span><br/>.as-h5 / Satoshi</td><td><p class="as-h5 as-on-light">Berberina 120 Caps</p></td><td><span class="ds-spec-label">1.5rem<br/>fw:500, lh:1.2, ls:-0.02em</span></td></tr>
+      <tr><td><span class="ds-spec-label">Body Large</span><br/>.as-body-lg / Inter</td><td><p class="as-body-lg as-on-light">Supports healthy blood sugar levels and metabolic function naturally.</p></td><td><span class="ds-spec-label">1.25rem<br/>fw:400, lh:1.4, ls:-0.01em</span></td></tr>
+      <tr><td><span class="ds-spec-label">Body</span><br/>.as-body / Inter</td><td><p class="as-body as-on-light">Our premium berberine is extracted from Berberis aristata root and standardized to 97% purity.</p></td><td><span class="ds-spec-label">1rem<br/>fw:400, lh:1.5, ls:-0.01em</span></td></tr>
+      <tr><td><span class="ds-spec-label">Label</span><br/>.as-label / Satoshi</td><td><p class="as-label as-on-light">Supplement Facts</p></td><td><span class="ds-spec-label">0.75rem uppercase<br/>fw:500, ls:0.06em</span></td></tr>
+      <tr><td><span class="ds-spec-label">Mono</span><br/>.as-mono / JetBrains</td><td><p class="as-mono as-on-light">120 Capsules / 60 Servings</p></td><td><span class="ds-spec-label">0.75rem uppercase<br/>fw:400, ls:0.02em</span></td></tr>
+      <tr><td><span class="ds-spec-label">Small</span><br/>.as-small / Inter</td><td><p class="as-small as-on-light">Starting at $49.99 per month</p></td><td><span class="ds-spec-label">0.75rem / 1rem @600<br/>fw:400, lh:1.4</span></td></tr>
+      <tr><td><span class="ds-spec-label">Caption</span><br/>.as-caption / Inter</td><td><p class="as-caption as-on-light">*These statements have not been evaluated by the FDA.</p></td><td><span class="ds-spec-label">0.75rem<br/>fw:400, lh:1.4, ls:-0.003em</span></td></tr>
+    </tbody>
+  </table>
+  <div class="ds-dark-bg" style="margin-top:var(--space-fixed-4);">
+    <p class="ds-spec-label" style="color:var(--color--snow);opacity:0.5;margin-bottom:var(--space-fixed-2);">On Dark Background (.as-on-dark)</p>
+    <h2 class="as-h1 as-on-dark" style="margin-bottom:0.75rem;">Display on dark</h2>
+    <p class="as-h2 as-on-dark" style="margin-bottom:0.75rem;">Heading on dark</p>
+    <p class="as-body as-on-dark">Body text on dark uses --color--snow (#faf9f7) for contrast.</p>
+  </div>
+</section>
+
+<!-- 2) COLORS & SURFACES -->
+<section id="colors" class="ds-section">
+  <p class="ds-section-title">02 / Colors &amp; Surfaces</p>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Primary</p>
+  <div class="ds-grid ds-grid-6">
+    <div class="ds-swatch" style="background:#0d1b2a;color:#faf9f7;"><span class="ds-swatch-name">Navy</span><span class="ds-swatch-value">#0d1b2a</span></div>
+    <div class="ds-swatch" style="background:#faf9f7;"><span class="ds-swatch-name">Snow</span><span class="ds-swatch-value">#faf9f7</span></div>
+    <div class="ds-swatch" style="background:#1a3050;color:#faf9f7;"><span class="ds-swatch-name">Navy Mid</span><span class="ds-swatch-value">#1a3050</span></div>
+    <div class="ds-swatch" style="background:#1e3a5f;color:#faf9f7;"><span class="ds-swatch-name">Navy Card</span><span class="ds-swatch-value">#1e3a5f</span></div>
+    <div class="ds-swatch" style="background:#f0ece4;"><span class="ds-swatch-name">Cream</span><span class="ds-swatch-value">#f0ece4</span></div>
+    <div class="ds-swatch" style="background:#f5f2ec;"><span class="ds-swatch-name">Linen</span><span class="ds-swatch-value">#f5f2ec</span></div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin:var(--space-fixed-4) 0 var(--space-fixed-2);">Accent (Orange)</p>
+  <div class="ds-grid ds-grid-6">
+    <div class="ds-swatch" style="background:#a86820;color:#fff;"><span class="ds-swatch-name">Orange Deep</span><span class="ds-swatch-value">#a86820</span></div>
+    <div class="ds-swatch" style="background:#d08530;color:#fff;"><span class="ds-swatch-name">Orange</span><span class="ds-swatch-value">#d08530</span></div>
+    <div class="ds-swatch" style="background:#e8a040;color:#fff;"><span class="ds-swatch-name">Orange Bright</span><span class="ds-swatch-value">#e8a040</span></div>
+    <div class="ds-swatch" style="background:#ffd699;"><span class="ds-swatch-name">Orange Glow</span><span class="ds-swatch-value">#ffd699</span></div>
+    <div class="ds-swatch" style="background:#fce8cc;"><span class="ds-swatch-name">Peach</span><span class="ds-swatch-value">#fce8cc</span></div>
+    <div class="ds-swatch" style="background:#fff4e6;"><span class="ds-swatch-name">Peach Light</span><span class="ds-swatch-value">#fff4e6</span></div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin:var(--space-fixed-4) 0 var(--space-fixed-2);">Guidance</p>
+  <div class="ds-grid ds-grid-6">
+    <div class="ds-swatch" style="background:#4caf50;color:#fff;"><span class="ds-swatch-name">Success</span><span class="ds-swatch-value">#4caf50</span></div>
+    <div class="ds-swatch" style="background:#eb5757;color:#fff;"><span class="ds-swatch-name">Error</span><span class="ds-swatch-value">#eb5757</span></div>
+    <div class="ds-swatch" style="background:#ebb057;color:#fff;"><span class="ds-swatch-name">Warning</span><span class="ds-swatch-value">#ebb057</span></div>
+    <div class="ds-swatch" style="background:#ffd699;"><span class="ds-swatch-name">Accent Glow</span><span class="ds-swatch-value">#ffd699</span></div>
+    <div class="ds-swatch" style="background:#fce8cc;"><span class="ds-swatch-name">Peach</span><span class="ds-swatch-value">#fce8cc</span></div>
+    <div class="ds-swatch" style="background:#e8cfa8;"><span class="ds-swatch-name">Amber Soft</span><span class="ds-swatch-value">#e8cfa8</span></div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin:var(--space-fixed-4) 0 var(--space-fixed-2);">Neutrals</p>
+  <div class="ds-grid ds-grid-6">
+    <div class="ds-swatch" style="background:#d0d5dc;"><span class="ds-swatch-name">Faded Navy 20</span><span class="ds-swatch-value">#d0d5dc</span></div>
+    <div class="ds-swatch" style="background:#8b96a8;color:#fff;"><span class="ds-swatch-name">Faded Navy 40</span><span class="ds-swatch-value">#8b96a8</span></div>
+    <div class="ds-swatch" style="background:#5d6d82;color:#fff;"><span class="ds-swatch-name">Faded Navy 60</span><span class="ds-swatch-value">#5d6d82</span></div>
+    <div class="ds-swatch" style="background:#f9f9f9;"><span class="ds-swatch-name">Cool 20</span><span class="ds-swatch-value">#f9f9f9</span></div>
+    <div class="ds-swatch" style="background:#efefef;"><span class="ds-swatch-name">Cool 40</span><span class="ds-swatch-value">#efefef</span></div>
+    <div class="ds-swatch" style="background:#e6e6e6;"><span class="ds-swatch-name">Cool 60</span><span class="ds-swatch-value">#e6e6e6</span></div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin:var(--space-fixed-4) 0 var(--space-fixed-2);">Surfaces &amp; Glass</p>
+  <div class="ds-grid ds-grid-3">
+    <div style="background:var(--color--snow);border:1px solid var(--color--navy-t10);border-radius:var(--bdrs-m);padding:1.5rem;"><span class="ds-spec-label">Page BG</span><br/><span style="font-size:0.625rem;font-family:var(--typography-font-mono);">--color--snow<br/>#faf9f7</span></div>
+    <div style="background:var(--color--navy);color:var(--color--snow);border-radius:var(--bdrs-m);padding:1.5rem;"><span class="ds-spec-label" style="color:var(--color--snow);">Dark Section</span><br/><span style="font-size:0.625rem;font-family:var(--typography-font-mono);">--color--navy<br/>#0d1b2a</span></div>
+    <div style="background:rgba(13,27,42,0.30);backdrop-filter:blur(37.5px);color:var(--color--snow);border-radius:var(--bdrs-l);padding:1.5rem;"><span class="ds-spec-label" style="color:var(--color--snow);">Frosted Glass</span><br/><span style="font-size:0.625rem;font-family:var(--typography-font-mono);">rgba(navy,0.30)<br/>blur(37.5px)</span></div>
+    <div style="background:var(--color--orange-glow);border-radius:var(--bdrs-m);padding:1.5rem;"><span class="ds-spec-label">Banner / CTA</span><br/><span style="font-size:0.625rem;font-family:var(--typography-font-mono);">--color--orange-glow<br/>#ffd699</span></div>
+    <div style="background:var(--color--cream);border-radius:var(--bdrs-m);padding:1.5rem;"><span class="ds-spec-label">Cream Card</span><br/><span style="font-size:0.625rem;font-family:var(--typography-font-mono);">--color--cream<br/>#f0ece4</span></div>
+    <div style="background:var(--color--navy-card);color:var(--color--snow);border-radius:var(--bdrs-m);padding:1.5rem;"><span class="ds-spec-label" style="color:var(--color--snow);">Card Navy</span><br/><span style="font-size:0.625rem;font-family:var(--typography-font-mono);">--color--navy-card<br/>#1e3a5f</span></div>
+  </div>
+</section>
+
+<!-- 3) COMPONENTS -->
+<section id="components" class="ds-section">
+  <p class="ds-section-title">03 / UI Components</p>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Buttons</p>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-fixed-3);align-items:center;margin-bottom:var(--space-fixed-4);">
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <span class="ds-spec-label">Primary .as-btn-primary</span>
+      <button class="as-btn-primary" type="button">Shop Now <svg fill="none" height="11" width="11" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" fill="currentColor" fill-rule="evenodd"/></svg></button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <span class="ds-spec-label">Primary Dark .as-btn-primary-dark</span>
+      <button class="as-btn-primary-dark" type="button">Learn More</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <span class="ds-spec-label">Secondary .as-btn-secondary</span>
+      <a class="as-btn-secondary" href="#">Read More</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <span class="ds-spec-label">Outline .as-btn-outline</span>
+      <a class="as-btn-outline" href="#">Subscribe</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <span class="ds-spec-label">Small .as-btn-small</span>
+      <a class="as-btn-small" href="#">Get Started</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <span class="ds-spec-label">Text .as-btn-text</span>
+      <a class="as-btn-text" href="#">See Results <svg fill="none" height="11" width="11" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" fill="currentColor" fill-rule="evenodd"/></svg></a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <span class="ds-spec-label">Disabled</span>
+      <button class="as-btn-primary" type="button" disabled>Disabled</button>
+    </div>
+  </div>
+
+  <div class="ds-dark-bg" style="margin-bottom:var(--space-fixed-4);">
+    <p class="ds-spec-label" style="color:var(--color--snow);opacity:0.5;margin-bottom:var(--space-fixed-2);">On Dark Background</p>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-fixed-2);align-items:center;">
+      <a class="as-btn-primary" href="#">Shop Now</a>
+      <a class="as-btn-secondary" href="#">Read More</a>
+      <a class="as-btn-outline" href="#" style="border-color:var(--color--orange-glow);color:var(--color--orange-glow);">Subscribe</a>
+    </div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Badges &amp; Pills</p>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-fixed-3);align-items:center;margin-bottom:var(--space-fixed-4);">
+    <div style="display:flex;flex-direction:column;gap:8px;"><span class="ds-spec-label">.as-badge</span><span class="as-badge">Bestseller</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;"><span class="ds-spec-label">.as-badge-dark</span><span class="as-badge-dark">New Formula</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;"><span class="ds-spec-label">.as-pill-dark</span><span class="as-pill-dark">Berberina</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;"><span class="ds-spec-label">.as-pill-light</span><span style="background:var(--color--navy);padding:12px;border-radius:8px;"><span class="as-pill-light">120 Caps</span></span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;"><span class="ds-spec-label">Save %</span><span style="display:inline-flex;align-items:center;border-radius:var(--bdrs-pill);padding:0.5em 0.75em;font-family:var(--typography-font-display);font-size:0.75rem;font-weight:700;color:#fff;background:#4caf50;">Save 33%</span></div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Product Cards</p>
+  <div style="background:var(--color--navy);border-radius:var(--bdrs-l);padding:var(--space-fixed-4);overflow:hidden;">
+    <div style="display:flex;gap:var(--space-fixed-3);flex-wrap:wrap;justify-content:center;">
+      <a class="as-product-card" href="#" style="width:240px;">
+        <span class="as-badge card-badge-pos">Bestseller</span>
+        <div class="card-top"><span class="as-pill-light">1 Bottle</span><p class="as-h5 as-on-dark" style="--color-text:var(--color--snow);margin-top:8px;">Berberina</p></div>
+        <div style="width:120px;height:140px;z-index:1;display:flex;justify-content:center;align-items:center;margin:1rem 0;">
+          <svg width="60" height="120" viewBox="0 0 60 120" fill="none"><rect x="18" y="3" width="24" height="10" rx="3" fill="rgba(250,249,247,0.3)"/><rect x="10" y="13" width="40" height="95" rx="10" fill="rgba(250,249,247,0.12)" stroke="rgba(250,249,247,0.25)" stroke-width="1"/><rect x="14" y="42" width="32" height="24" rx="3" fill="var(--color--orange)" opacity="0.85"/></svg>
+        </div>
+        <div class="card-bottom"><button class="as-btn-primary" type="button" style="pointer-events:none;font-size:14px;padding:10px 20px;">Shop Now</button><p class="as-small as-on-dark" style="--color-text:var(--color--snow);opacity:0.7;">$59.99/bottle</p></div>
+      </a>
+      <a class="as-product-card" href="#" style="width:240px;">
+        <span class="as-badge-dark card-badge-pos">Popular</span>
+        <div class="card-top"><span class="as-pill-light">2 Pack</span><p class="as-h5 as-on-dark" style="--color-text:var(--color--snow);margin-top:8px;">Berberina</p></div>
+        <div style="width:120px;height:140px;z-index:1;display:flex;justify-content:center;align-items:center;margin:1rem 0;">
+          <svg width="80" height="120" viewBox="0 0 80 120" fill="none"><rect x="5" y="10" width="32" height="92" rx="8" fill="rgba(250,249,247,0.1)" stroke="rgba(250,249,247,0.2)"/><rect x="42" y="10" width="32" height="92" rx="8" fill="rgba(250,249,247,0.12)" stroke="rgba(250,249,247,0.25)"/><rect x="47" y="40" width="22" height="18" rx="2" fill="var(--color--orange)" opacity="0.85"/></svg>
+        </div>
+        <div class="card-bottom"><button class="as-btn-primary" type="button" style="pointer-events:none;font-size:14px;padding:10px 20px;">Shop Now</button><p class="as-small as-on-dark" style="--color-text:var(--color--snow);opacity:0.7;">$49.99/bottle</p></div>
+      </a>
+      <a class="as-product-card" href="#" style="width:240px;">
+        <span style="display:inline-flex;align-items:center;border-radius:var(--bdrs-pill);padding:0.5em 0.75em;font-family:var(--typography-font-display);font-size:0.75rem;font-weight:700;color:#fff;background:#4caf50;position:absolute;top:var(--space-fixed-1);left:var(--space-fixed-1);z-index:2;">Best Value</span>
+        <div class="card-top"><span class="as-pill-light">3 Pack</span><p class="as-h5 as-on-dark" style="--color-text:var(--color--snow);margin-top:8px;">Berberina</p></div>
+        <div style="width:140px;height:140px;z-index:1;display:flex;justify-content:center;align-items:center;margin:1rem 0;">
+          <svg width="100" height="120" viewBox="0 0 100 120" fill="none"><rect x="5" y="15" width="26" height="85" rx="7" fill="rgba(250,249,247,0.08)" stroke="rgba(250,249,247,0.18)"/><rect x="36" y="8" width="28" height="92" rx="7" fill="rgba(250,249,247,0.12)" stroke="rgba(250,249,247,0.25)"/><rect x="69" y="15" width="26" height="85" rx="7" fill="rgba(250,249,247,0.08)" stroke="rgba(250,249,247,0.18)"/><rect x="40" y="38" width="20" height="16" rx="2" fill="var(--color--orange)" opacity="0.85"/></svg>
+        </div>
+        <div class="card-bottom"><button class="as-btn-primary" type="button" style="pointer-events:none;font-size:14px;padding:10px 20px;">Shop Now</button><p class="as-small as-on-dark" style="--color-text:var(--color--snow);opacity:0.7;">$39.99/bottle</p></div>
+      </a>
+    </div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin:var(--space-fixed-4) 0 var(--space-fixed-2);">Top Banner</p>
+  <div class="as-banner" style="border-radius:var(--bdrs-m);"><a class="as-banner-link" href="#">Free shipping on orders over $150. Subscribe and save up to 33%. &#10132;</a></div>
+</section>
+
+<!-- 4) LAYOUT & SPACING -->
+<section id="layout" class="ds-section">
+  <p class="ds-section-title">04 / Layout &amp; Spacing</p>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Container Max-Widths</p>
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:var(--space-fixed-4);">
+    <div class="ds-spacing-bar" style="max-width:100%;">--maw: 90rem (1440px)</div>
+    <div class="ds-spacing-bar" style="max-width:76%;">--maw-w: 68.75rem (1100px)</div>
+    <div class="ds-spacing-bar" style="max-width:61%;">--maw-n: 55.3125rem (885px)</div>
+    <div class="ds-spacing-bar" style="max-width:45%;">--maw-xn: 40.8125rem (653px)</div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Grid System</p>
+  <table class="ds-spec-table" style="margin-bottom:var(--space-fixed-4);">
+    <thead><tr><th>Breakpoint</th><th>Columns</th><th>Outer Padding</th><th>Gutter</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ds-spec-label">Mobile (&lt;600px)</span></td><td>4</td><td>1rem</td><td>1.25rem</td></tr>
+      <tr><td><span class="ds-spec-label">Tablet (600px)</span></td><td>4</td><td>1.5rem</td><td>1.25rem</td></tr>
+      <tr><td><span class="ds-spec-label">Desktop (960px+)</span></td><td>12</td><td>2.5rem</td><td>1.25rem</td></tr>
+    </tbody>
+  </table>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Spacing Scale</p>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:var(--space-fixed-4);">
+    <div class="ds-spacing-bar" style="width:calc(0.5rem * 10);">--space-fixed-1: 0.5rem (8px)</div>
+    <div class="ds-spacing-bar" style="width:calc(1rem * 10);">--space-fixed-2: 1rem (16px)</div>
+    <div class="ds-spacing-bar" style="width:calc(1.5rem * 10);">--space-fixed-3: 1.5rem (24px)</div>
+    <div class="ds-spacing-bar" style="width:calc(2rem * 10);">--space-fixed-4: 2rem (32px)</div>
+    <div class="ds-spacing-bar" style="width:calc(2.5rem * 10);">--space-fixed-5: 2.5rem (40px)</div>
+    <div class="ds-spacing-bar" style="width:calc(3.5rem * 10);">--space-fixed-6: 3.5rem (56px)</div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Border Radius</p>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-fixed-3);align-items:flex-end;margin-bottom:var(--space-fixed-4);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:80px;height:80px;background:var(--color--navy);border-radius:var(--bdrs-s);"></div><span class="ds-spec-label">--bdrs-s<br/>0.5rem</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:80px;height:80px;background:var(--color--navy);border-radius:var(--bdrs-sm);"></div><span class="ds-spec-label">--bdrs-sm<br/>0.75rem</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:80px;height:80px;background:var(--color--navy);border-radius:var(--bdrs-m);"></div><span class="ds-spec-label">--bdrs-m<br/>1rem</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:80px;height:80px;background:var(--color--navy);border-radius:var(--bdrs-l);"></div><span class="ds-spec-label">--bdrs-l<br/>2rem</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:80px;height:80px;background:var(--color--navy);border-radius:var(--bdrs-pill);"></div><span class="ds-spec-label">--bdrs-pill<br/>99em</span></div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Section Patterns</p>
+  <table class="ds-spec-table">
+    <thead><tr><th>Section</th><th>Background</th><th>Padding</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ds-spec-label">Hero</span></td><td>--color--navy</td><td>height: min(100vh - nav, 900px)</td></tr>
+      <tr><td><span class="ds-spec-label">Product</span></td><td>--color--navy</td><td>padding-block: --space-fixed-6</td></tr>
+      <tr><td><span class="ds-spec-label">Content</span></td><td>--color--snow</td><td>padding: --space-outer</td></tr>
+      <tr><td><span class="ds-spec-label">Feature</span></td><td>--color--cream</td><td>padding-block: --space-5</td></tr>
+      <tr><td><span class="ds-spec-label">Glass</span></td><td>rgba(navy,0.30)+blur</td><td>padding: --space-5</td></tr>
+      <tr><td><span class="ds-spec-label">Banner</span></td><td>--color--orange-glow</td><td>height: --banner-height</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 5) MOTION -->
+<section id="motion" class="ds-section">
+  <p class="ds-section-title">05 / Motion &amp; Interaction</p>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Transitions</p>
+  <table class="ds-spec-table" style="margin-bottom:var(--space-fixed-4);">
+    <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr><td>--trs</td><td>all 0.3s ease-in-out</td><td>General</td></tr>
+      <tr><td>--trs-time</td><td>0.3s</td><td>Duration</td></tr>
+      <tr><td>--trs-tfunc</td><td>ease-in-out</td><td>Easing</td></tr>
+      <tr><td>cubic-bezier</td><td>0.75, 0, 0.25, 1</td><td>Image zoom, scroller</td></tr>
+    </tbody>
+  </table>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Keyframe Animations</p>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-fixed-3);margin-bottom:var(--space-fixed-4);">
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;"><div class="ds-motion-box" style="animation:slide-up 1.5s ease-in-out infinite;">slide-up</div><span class="ds-spec-label">translateY(20px)→0</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;"><div class="ds-motion-box" style="animation:fade-in 2s ease-in-out infinite;">fade-in</div><span class="ds-spec-label">opacity 0→1</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;"><div class="ds-motion-box-orange" style="animation:blur-reveal 2s ease-in-out infinite;">blur-reveal</div><span class="ds-spec-label">blur(20px)→0</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;"><div class="ds-motion-box" style="animation:scale-in 1.5s ease-in-out infinite;">scale-in</div><span class="ds-spec-label">scale(0.95)→1</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;"><div class="ds-motion-box-orange" style="animation:glow-pulse 2s ease-in-out infinite;">glow-pulse</div><span class="ds-spec-label">orange shadow</span></div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;"><div class="ds-motion-box" style="animation:spin 2s linear infinite;">spin</div><span class="ds-spec-label">0deg→360deg</span></div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Interactive Effects (Hover)</p>
+  <div style="display:flex;flex-wrap:wrap;gap:var(--space-fixed-3);margin-bottom:var(--space-fixed-4);">
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+      <button class="as-btn-primary" type="button">Button Hover <svg fill="none" height="11" width="11" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" fill="currentColor" fill-rule="evenodd"/></svg></button>
+      <span class="ds-spec-label">brighten on hover</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+      <div style="width:100px;height:100px;border-radius:var(--bdrs-m);overflow:hidden;cursor:pointer;background:var(--color--navy);"><div style="width:100%;height:100%;background:linear-gradient(135deg,var(--color--navy-card),var(--color--navy));transition:transform 0.6s cubic-bezier(0.75,0,0.25,1);display:flex;align-items:center;justify-content:center;color:var(--color--snow);font-size:0.625rem;font-family:var(--typography-font-mono);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">ZOOM</div></div>
+      <span class="ds-spec-label">scale(1.05) 0.6s</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+      <a class="as-btn-text" href="#">Underline <svg fill="none" height="11" width="11" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M5.5 0 11 5.5 5.5 11 4.406 9.906l3.631-3.632H0V4.726h8.037L4.406 1.094 5.5 0Z" fill="currentColor" fill-rule="evenodd"/></svg></a>
+      <span class="ds-spec-label">::after underline</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+      <button class="as-btn-outline" type="button">Outline Fill</button>
+      <span class="ds-spec-label">fill on hover</span>
+    </div>
+  </div>
+
+  <p class="as-h5 as-on-light" style="margin-bottom:var(--space-fixed-2);">Card Hover Effect</p>
+  <p class="as-body as-on-light" style="margin-bottom:var(--space-fixed-2);">::before scaleY(0.9)→1. Text translateY(+/-20px). 0.3s linear.</p>
+  <div style="background:var(--color--navy);border-radius:var(--bdrs-l);padding:var(--space-fixed-6);display:flex;justify-content:center;">
+    <a class="as-product-card" href="#" style="width:260px;">
+      <span class="as-badge card-badge-pos">Bestseller</span>
+      <div class="card-top"><span class="as-pill-light">1 Bottle</span><p class="as-h5 as-on-dark" style="--color-text:var(--color--snow);margin-top:8px;">Berberina 120 Caps</p></div>
+      <div style="width:120px;height:140px;z-index:1;display:flex;justify-content:center;align-items:center;margin:1rem 0;">
+        <svg width="60" height="120" viewBox="0 0 60 120" fill="none"><rect x="18" y="3" width="24" height="10" rx="3" fill="rgba(250,249,247,0.3)"/><rect x="10" y="13" width="40" height="95" rx="10" fill="rgba(250,249,247,0.12)" stroke="rgba(250,249,247,0.25)" stroke-width="1"/><rect x="14" y="42" width="32" height="24" rx="3" fill="var(--color--orange)" opacity="0.85"/></svg>
+      </div>
+      <div class="card-bottom"><button class="as-btn-primary" type="button" style="pointer-events:none;font-size:14px;padding:10px 20px;">Shop Now</button><p class="as-small as-on-dark" style="--color-text:var(--color--snow);opacity:0.7;">Starting at $49.99/mo</p></div>
+    </a>
+  </div>
+</section>
+
+<!-- 6) FONT STACK -->
+<section class="ds-section" style="border-top:1px solid var(--color--navy-t10);">
+  <p class="ds-section-title">06 / Font Stack</p>
+  <table class="ds-spec-table">
+    <thead><tr><th>Role</th><th>Font</th><th>Weights</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ds-spec-label">Display</span></td><td style="font-family:var(--typography-font-display);font-weight:700;font-size:1.25rem;">Satoshi</td><td>300, 400, 500, 700</td><td><span class="ds-spec-label">Fontshare</span></td></tr>
+      <tr><td><span class="ds-spec-label">Body / UI</span></td><td style="font-family:var(--typography-font-body);">Inter</td><td>300, 400, 500, 600</td><td><span class="ds-spec-label">Google Fonts</span></td></tr>
+      <tr><td><span class="ds-spec-label">Mono / Data</span></td><td style="font-family:var(--typography-font-mono);font-size:0.875rem;">JetBrains Mono</td><td>300, 400, 500</td><td><span class="ds-spec-label">Google Fonts</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div style="height:var(--space-6);"></div>
+</body>
+</html>

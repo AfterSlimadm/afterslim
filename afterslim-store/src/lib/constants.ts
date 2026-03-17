@@ -66,7 +66,7 @@ export const FOOTER_NAV = {
 // Product Data (One Product Store)
 // ---------------------------------------------------------------------------
 
-export type PackTier = "1-bottle" | "3-bottle" | "6-bottle";
+export type PackTier = "1-bottle" | "2-bottle" | "3-bottle";
 
 export interface PackOption {
   tier: PackTier;
@@ -138,27 +138,27 @@ export const PRODUCT: SingleProduct = {
       freeShipping: false,
     },
     {
-      tier: "3-bottle",
-      bottles: 3,
-      label: "3 Bottles",
-      supplyDays: 90,
+      tier: "2-bottle",
+      bottles: 2,
+      label: "2 Pack",
+      supplyDays: 60,
       pricePerBottleCents: 4999,
-      totalPriceCents: 14997,
-      compareAtTotalCents: 17997,
-      subscriptionPriceCents: 12997,
+      totalPriceCents: 9998,
+      compareAtTotalCents: 11998,
+      subscriptionPriceCents: 8998,
       badge: "Most Popular",
       savingsPercent: 17,
       freeShipping: true,
     },
     {
-      tier: "6-bottle",
-      bottles: 6,
-      label: "6 Bottles",
-      supplyDays: 180,
+      tier: "3-bottle",
+      bottles: 3,
+      label: "3 Pack",
+      supplyDays: 90,
       pricePerBottleCents: 3999,
-      totalPriceCents: 23994,
-      compareAtTotalCents: 35994,
-      subscriptionPriceCents: 20994,
+      totalPriceCents: 11997,
+      compareAtTotalCents: 17997,
+      subscriptionPriceCents: 10497,
       badge: "Best Value",
       savingsPercent: 33,
       freeShipping: true,

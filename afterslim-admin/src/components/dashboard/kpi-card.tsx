@@ -64,7 +64,7 @@ export function KpiCard({
   title,
   value,
   trend,
-  trendLabel = "vs last 30 days",
+  trendLabel = "vs ultimos 30 dias",
   className,
 }: KpiCardProps) {
   const config = VARIANT_CONFIG[variant];

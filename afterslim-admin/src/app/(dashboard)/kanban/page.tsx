@@ -24,10 +24,10 @@ export default async function KanbanPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Kanban Board</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Quadro Kanban</h1>
         <p className="text-muted-foreground">
-          Visual task management board with drag-and-drop columns for organizing
-          work across the team.
+          Quadro visual de gestao de tarefas com colunas arrastaveis para
+          organizar o trabalho do time.
         </p>
       </div>
 

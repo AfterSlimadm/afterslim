@@ -19,12 +19,23 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        "ds-primary":
+          "as-pill bg-as-orange text-as-snow font-display font-semibold shadow-lg shadow-as-orange/20 hover:bg-as-orange-bright active:bg-as-orange-deep",
+        "ds-primary-dark":
+          "as-pill bg-as-navy text-as-snow font-display font-semibold hover:bg-as-navy-hover",
+        "ds-secondary":
+          "as-pill bg-as-snow text-as-navy font-display font-semibold hover:bg-as-cream",
+        "ds-outline":
+          "as-pill border-2 border-as-orange bg-transparent text-as-orange font-display font-semibold hover:bg-as-orange/10",
+        "ds-text":
+          "text-as-navy font-display font-semibold underline-offset-4 hover:text-as-orange hover:underline bg-transparent",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        "ds-lg": "h-12 as-pill px-8 text-base font-display",
         icon: "size-9",
         "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",

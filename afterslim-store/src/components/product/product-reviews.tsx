@@ -121,7 +121,7 @@ function StarRating({ rating, size = "sm" }: { rating: number; size?: "sm" | "md
           className={cn(
             sizeClasses[size],
             star <= rating
-              ? "fill-[var(--color-brand-accent)] text-[var(--color-brand-accent)]"
+              ? "fill-as-orange text-as-orange"
               : "fill-none text-muted-foreground/30"
           )}
         />
@@ -140,7 +140,7 @@ function RatingBar({ stars, count, total }: { stars: number; count: number; tota
       </span>
       <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-[var(--color-brand-accent)] transition-all duration-500"
+          className="h-full rounded-full bg-as-orange transition-all duration-500"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -183,7 +183,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
       {/* Header */}
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h3 className="text-2xl font-bold text-foreground">
+          <h3 className="text-2xl font-display font-bold text-foreground">
             Customer Reviews
           </h3>
 

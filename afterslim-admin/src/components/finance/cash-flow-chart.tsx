@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-import { formatCurrency, createSeededRandom } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -18,66 +17,56 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-/* -- Mock data generator ---------------------------------------- */
-
-function generateCashFlowData() {
-  const data: { week: string; income: number; expense: number }[] = [];
-  const today = new Date();
-  // Use a seed based on today's date so server and client produce the same data
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  const random = createSeededRandom(seed + 13); // offset from other chart seeds
-
-  for (let i = 7; i >= 0; i--) {
-    const weekStart = new Date(today);
-    weekStart.setDate(today.getDate() - i * 7);
-
-    const weekLabel = weekStart.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-
-    // ~$7,500/week revenue with variance, expenses ~40-55% of revenue
-    const baseIncome = 7500 + Math.sin(i * 0.5) * 1500;
-    const incomeNoise = (random() - 0.5) * 2000;
-    const income = Math.max(4000, Math.round(baseIncome + incomeNoise));
-
-    const expenseRatio = 0.4 + random() * 0.15;
-    const expense = Math.round(income * expenseRatio);
-
-    data.push({ week: weekLabel, income, expense });
-  }
-
-  return data;
-}
+import { BarChart3 } from "lucide-react";
 
 /* -- Chart config ----------------------------------------------- */
 
 const chartConfig = {
   income: {
-    label: "Income",
+    label: "Receita",
     color: "var(--color-chart-1)",
   },
   expense: {
-    label: "Expenses",
+    label: "Despesas",
     color: "var(--color-chart-5)",
   },
 } satisfies ChartConfig;
 
+/* -- Props ------------------------------------------------------ */
+
+interface CashFlowChartProps {
+  data: { week: string; income: number; expense: number }[];
+}
+
 /* -- Component -------------------------------------------------- */
 
-export function CashFlowChart() {
-  const data = useMemo(() => generateCashFlowData(), []);
-
+export function CashFlowChart({ data }: CashFlowChartProps) {
   const totalIncome = data.reduce((sum, d) => sum + d.income, 0);
   const totalExpense = data.reduce((sum, d) => sum + d.expense, 0);
+
+  if (data.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Fluxo de Caixa</CardTitle>
+          <CardDescription>Ultimas 8 semanas</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex h-[300px] flex-col items-center justify-center gap-2 text-muted-foreground">
+            <BarChart3 className="h-10 w-10" />
+            <p className="text-sm">Nenhum dado de fluxo de caixa ainda.</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Cash Flow</CardTitle>
+        <CardTitle>Fluxo de Caixa</CardTitle>
         <CardDescription>
-          Last 8 weeks &mdash; Net:{" "}
+          Ultimas {data.length} semanas &mdash; Liquido:{" "}
           <span className="font-semibold text-foreground">
             {formatCurrency(totalIncome - totalExpense)}
           </span>

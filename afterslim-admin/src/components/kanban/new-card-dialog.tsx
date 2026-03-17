@@ -79,7 +79,7 @@ export function NewCardDialog({
 
   const handleSubmit = () => {
     if (!title.trim()) {
-      toast.error("Title is required");
+      toast.error("Titulo e obrigatorio");
       return;
     }
 
@@ -93,7 +93,7 @@ export function NewCardDialog({
       columnId,
     });
 
-    toast.success("Card created successfully");
+    toast.success("Card criado com sucesso");
     resetForm();
     onOpenChange(false);
   };
@@ -121,19 +121,19 @@ export function NewCardDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>New Card</DialogTitle>
+          <DialogTitle>Novo Card</DialogTitle>
           <DialogDescription>
-            Add a new task card to the board.
+            Adicione um novo card de tarefa ao quadro.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-2">
           {/* Title */}
           <div className="grid gap-2">
-            <Label htmlFor="card-title">Title</Label>
+            <Label htmlFor="card-title">Titulo</Label>
             <Input
               id="card-title"
-              placeholder="e.g. Design new product labels"
+              placeholder="Ex: Criar novos rotulos de produto"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -141,10 +141,10 @@ export function NewCardDialog({
 
           {/* Description */}
           <div className="grid gap-2">
-            <Label htmlFor="card-desc">Description</Label>
+            <Label htmlFor="card-desc">Descricao</Label>
             <Textarea
               id="card-desc"
-              placeholder="Describe the task..."
+              placeholder="Descreva a tarefa..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
@@ -154,13 +154,13 @@ export function NewCardDialog({
           {/* Priority & Column */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label>Priority</Label>
+              <Label>Prioridade</Label>
               <Select
                 value={priority}
                 onValueChange={(val) => setPriority(val as IdeaPriority)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder="Selecionar prioridade" />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(PRIORITY_CONFIG).map(([key, config]) => (
@@ -172,10 +172,10 @@ export function NewCardDialog({
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label>Column</Label>
+              <Label>Coluna</Label>
               <Select value={columnId} onValueChange={setColumnId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select column" />
+                  <SelectValue placeholder="Selecionar coluna" />
                 </SelectTrigger>
                 <SelectContent>
                   {columns.map((col) => (
@@ -191,16 +191,16 @@ export function NewCardDialog({
           {/* Assignee & Due Date */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="card-assignee">Assignee</Label>
+              <Label htmlFor="card-assignee">Responsavel</Label>
               <Input
                 id="card-assignee"
-                placeholder="e.g. John Doe"
+                placeholder="Ex: Joao Silva"
                 value={assignee}
                 onChange={(e) => setAssignee(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="card-due">Due Date</Label>
+              <Label htmlFor="card-due">Data Limite</Label>
               <Input
                 id="card-due"
                 type="date"
@@ -212,11 +212,11 @@ export function NewCardDialog({
 
           {/* Labels */}
           <div className="grid gap-2">
-            <Label htmlFor="card-labels">Labels</Label>
+            <Label htmlFor="card-labels">Etiquetas</Label>
             <div className="flex gap-2">
               <Input
                 id="card-labels"
-                placeholder="Add a label and press Enter"
+                placeholder="Adicione uma etiqueta e pressione Enter"
                 value={labelInput}
                 onChange={(e) => setLabelInput(e.target.value)}
                 onKeyDown={handleLabelKeyDown}
@@ -255,11 +255,11 @@ export function NewCardDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={handleSubmit}>
             <Plus className="h-4 w-4" />
-            Create Card
+            Adicionar
           </Button>
         </DialogFooter>
       </DialogContent>

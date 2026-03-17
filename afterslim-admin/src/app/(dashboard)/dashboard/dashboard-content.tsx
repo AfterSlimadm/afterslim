@@ -7,53 +7,41 @@ import { RecentOrders } from "@/components/dashboard/recent-orders";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { AlertsWidget } from "@/components/dashboard/alerts-widget";
 import type { DashboardStats } from "@/lib/queries/dashboard";
-
-/* ── Fallback mock KPI data ────────────────────────────────── */
-
-const MOCK_KPI_DATA = {
-  revenue: { value: 32847.5, trend: 12.5 },
-  orders: { value: 284, trend: 8.3 },
-  avgOrder: { value: 115.66, trend: 3.8 },
-  pending: { value: 12, trend: -15.2 },
-};
+import type {
+  RevenueDataPoint,
+  RecentOrder,
+  DashboardAlert,
+} from "@/lib/queries/dashboard-charts";
 
 /* ── Props ─────────────────────────────────────────────────── */
 
 interface DashboardContentProps {
   stats: DashboardStats | null;
+  revenueData: RevenueDataPoint[];
+  recentOrders: RecentOrder[];
+  alerts: DashboardAlert[];
 }
 
 /* ── Component ─────────────────────────────────────────────── */
 
-export default function DashboardContent({ stats }: DashboardContentProps) {
-  // When stats were fetched successfully, always use real data (even if zero).
-  // Only fall back to mock when the fetch failed entirely (stats === null).
-  const hasRealData = stats != null;
-
-  const revenue = hasRealData ? stats.totalRevenue : MOCK_KPI_DATA.revenue.value;
-  const ordersCount = hasRealData ? stats.ordersCount : MOCK_KPI_DATA.orders.value;
-  const avgOrder =
-    hasRealData && stats.ordersCount > 0
-      ? stats.totalRevenue / stats.ordersCount
-      : hasRealData
-        ? 0
-        : MOCK_KPI_DATA.avgOrder.value;
-  const lowStock = hasRealData ? stats.lowStockCount : MOCK_KPI_DATA.pending.value;
-
-  // Trends are not available from the query (would need historical comparison),
-  // so we use a placeholder 0 when real data is present, mock values otherwise.
-  const revenueTrend = hasRealData ? 0 : MOCK_KPI_DATA.revenue.trend;
-  const ordersTrend = hasRealData ? 0 : MOCK_KPI_DATA.orders.trend;
-  const avgOrderTrend = hasRealData ? 0 : MOCK_KPI_DATA.avgOrder.trend;
-  const lowStockTrend = hasRealData ? 0 : MOCK_KPI_DATA.pending.trend;
+export default function DashboardContent({
+  stats,
+  revenueData,
+  recentOrders,
+  alerts,
+}: DashboardContentProps) {
+  const revenue = stats?.totalRevenue ?? 0;
+  const ordersCount = stats?.ordersCount ?? 0;
+  const avgOrder = ordersCount > 0 ? revenue / ordersCount : 0;
+  const lowStock = stats?.lowStockCount ?? 0;
 
   return (
     <div className="space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Painel</h1>
         <p className="text-muted-foreground">
-          Welcome back! Here&apos;s an overview of your AfterSlim business.
+          Visao geral do seu negocio AfterSlim.
         </p>
       </div>
 
@@ -61,42 +49,42 @@ export default function DashboardContent({ stats }: DashboardContentProps) {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
           variant="revenue"
-          title="Total Revenue"
+          title="Receita Total"
           value={formatCurrency(revenue)}
-          trend={revenueTrend}
+          trend={0}
         />
         <KpiCard
           variant="orders"
-          title="Total Orders"
+          title="Total de Pedidos"
           value={ordersCount.toLocaleString()}
-          trend={ordersTrend}
+          trend={0}
         />
         <KpiCard
           variant="avgOrder"
-          title="Avg. Order Value"
+          title="Ticket Medio"
           value={formatCurrency(avgOrder)}
-          trend={avgOrderTrend}
+          trend={0}
         />
         <KpiCard
           variant="pending"
-          title="Low Stock Items"
+          title="Estoque Baixo"
           value={lowStock.toString()}
-          trend={lowStockTrend}
+          trend={0}
         />
       </div>
 
       {/* Revenue chart + Alerts side by side */}
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-3">
-          <RevenueChart />
+          <RevenueChart data={revenueData} />
         </div>
         <div className="lg:col-span-2">
-          <AlertsWidget />
+          <AlertsWidget alerts={alerts} />
         </div>
       </div>
 
       {/* Recent Orders */}
-      <RecentOrders />
+      <RecentOrders orders={recentOrders} />
 
       {/* Quick Actions */}
       <QuickActions />

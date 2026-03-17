@@ -26,7 +26,10 @@ export function PriceComparison() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <p className="as-label text-as-orange">
+            Compare &amp; Save
+          </p>
+          <h2 className="as-h2 mt-3 text-foreground">
             Why Pay More for Less?
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -44,7 +47,7 @@ export function PriceComparison() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="text-lg font-bold text-foreground">
+            <h3 className="text-lg font-display font-bold text-foreground">
               Buying Separately
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -61,7 +64,7 @@ export function PriceComparison() {
                     <X className="size-3.5 text-destructive" />
                     {item.name}
                   </span>
-                  <span className="font-medium text-foreground">
+                  <span className="as-mono font-medium text-foreground">
                     {formatCurrency(item.priceCents)}/mo
                   </span>
                 </li>
@@ -73,7 +76,7 @@ export function PriceComparison() {
                 <span className="text-sm font-semibold text-muted-foreground">
                   Total per month
                 </span>
-                <span className="text-xl font-bold text-destructive line-through">
+                <span className="as-mono text-xl font-bold text-destructive line-through">
                   {formatCurrency(separateTotal)}
                 </span>
               </div>
@@ -82,18 +85,18 @@ export function PriceComparison() {
 
           {/* AfterSlim */}
           <m.div
-            className="relative rounded-2xl border-2 border-[var(--color-brand-accent)] bg-card p-6 shadow-lg"
+            className="relative rounded-2xl border-2 border-as-orange bg-card p-6 shadow-lg"
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             {/* Savings badge */}
-            <span className="absolute -top-3 right-4 rounded-full bg-[var(--color-brand-accent)] px-4 py-1 text-xs font-bold text-white">
+            <span className="absolute -top-3 right-4 rounded-full bg-as-orange px-4 py-1 text-xs font-bold text-as-snow">
               SAVE {formatCurrency(savingsCents)}+/mo
             </span>
 
-            <h3 className="text-lg font-bold text-foreground">AfterSlim</h3>
+            <h3 className="text-lg font-display font-bold text-foreground">AfterSlim</h3>
             <p className="mt-1 text-sm text-muted-foreground">
               All-in-one formula, one bottle, one schedule
             </p>
@@ -104,20 +107,20 @@ export function PriceComparison() {
                   key={benefit}
                   className="flex items-center gap-2 text-sm text-foreground"
                 >
-                  <Check className="size-4 shrink-0 text-[var(--color-brand-accent)]" />
+                  <Check className="size-4 shrink-0 text-as-orange" />
                   {benefit}
                 </li>
               ))}
               <li className="flex items-center gap-2 text-sm text-foreground">
-                <Check className="size-4 shrink-0 text-[var(--color-brand-accent)]" />
+                <Check className="size-4 shrink-0 text-as-orange" />
                 9 ingredients in one formula
               </li>
               <li className="flex items-center gap-2 text-sm text-foreground">
-                <Check className="size-4 shrink-0 text-[var(--color-brand-accent)]" />
+                <Check className="size-4 shrink-0 text-as-orange" />
                 120 capsules, 30-day supply
               </li>
               <li className="flex items-center gap-2 text-sm text-foreground">
-                <Check className="size-4 shrink-0 text-[var(--color-brand-accent)]" />
+                <Check className="size-4 shrink-0 text-as-orange" />
                 Physician formulated
               </li>
             </ul>
@@ -127,14 +130,15 @@ export function PriceComparison() {
                 <span className="text-sm font-semibold text-foreground">
                   Starting at
                 </span>
-                <span className="text-2xl font-bold text-[var(--color-brand-accent)]">
+                <span className="as-mono text-2xl font-bold text-as-orange">
                   {formatCurrency(afterslimPrice)}/mo
                 </span>
               </div>
             </div>
 
             <Button
-              className="mt-4 w-full rounded-full bg-[var(--color-brand-accent)] font-semibold text-white hover:bg-[var(--color-brand-accent-light)]"
+              variant="ds-primary"
+              className="mt-4 w-full"
               asChild
             >
               <Link href="/shop">

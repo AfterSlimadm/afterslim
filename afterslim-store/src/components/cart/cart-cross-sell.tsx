@@ -14,7 +14,7 @@ import type { CartItem } from "@/types/database";
 // ---------------------------------------------------------------------------
 
 interface UpsellSuggestion {
-  tier: "3-bottle" | "6-bottle";
+  tier: "2-bottle" | "3-bottle";
   label: string;
   savingsPercent: number;
   pricePerBottle: number;
@@ -23,26 +23,26 @@ interface UpsellSuggestion {
 function getUpsellSuggestion(
   items: CartItem[],
 ): UpsellSuggestion | null {
-  const hasSixBottle = items.some((i) => i.pack_tier === "6-bottle");
-  if (hasSixBottle) return null;
-
   const hasThreeBottle = items.some((i) => i.pack_tier === "3-bottle");
+  if (hasThreeBottle) return null;
 
-  if (hasThreeBottle) {
-    const pack = PRODUCT.packOptions.find((p) => p.tier === "6-bottle")!;
+  const hasTwoBottle = items.some((i) => i.pack_tier === "2-bottle");
+
+  if (hasTwoBottle) {
+    const pack = PRODUCT.packOptions.find((p) => p.tier === "3-bottle")!;
     return {
-      tier: "6-bottle",
-      label: "Upgrade to 6 Bottles",
+      tier: "3-bottle",
+      label: "Upgrade to 3 Pack",
       savingsPercent: pack.savingsPercent,
       pricePerBottle: pack.pricePerBottleCents,
     };
   }
 
   // Has 1-bottle or no AfterSlim at all
-  const pack = PRODUCT.packOptions.find((p) => p.tier === "3-bottle")!;
+  const pack = PRODUCT.packOptions.find((p) => p.tier === "2-bottle")!;
   return {
-    tier: "3-bottle",
-    label: "Upgrade to 3 Bottles",
+    tier: "2-bottle",
+    label: "Upgrade to 2 Pack",
     savingsPercent: pack.savingsPercent,
     pricePerBottle: pack.pricePerBottleCents,
   };
@@ -83,11 +83,11 @@ export function CartCrossSell() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0.1 }}
-      className="rounded-lg border border-dashed border-[var(--color-brand-accent)]/30 bg-[var(--color-brand-accent-subtle)] p-3"
+      className="rounded-lg border border-dashed border-as-orange/30 bg-as-peach/30 p-3"
     >
       <div className="mb-2 flex items-center gap-1.5">
-        <Sparkles className="size-3.5 text-[var(--color-brand-accent)]" />
-        <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-brand-accent)]">
+        <Sparkles className="size-3.5 text-as-orange" />
+        <span className="as-label text-as-orange">
           Save {suggestion.savingsPercent}% More
         </span>
       </div>
@@ -104,7 +104,7 @@ export function CartCrossSell() {
 
         <Button
           size="sm"
-          className="shrink-0 bg-[var(--color-brand-accent)] text-white hover:bg-[var(--color-brand-accent-light)]"
+          className="shrink-0 bg-as-orange text-as-snow hover:bg-as-orange-bright"
           onClick={handleUpgrade}
         >
           <Plus className="size-3.5" />

@@ -40,7 +40,7 @@ interface IdeaFiltersProps {
 }
 
 const STATUS_OPTIONS: { value: IdeaStatus | "all"; label: string }[] = [
-  { value: "all", label: "All" },
+  { value: "all", label: "Todos" },
   ...Object.entries(IDEA_STATUS_CONFIG).map(([key, config]) => ({
     value: key as IdeaStatus,
     label: config.label,
@@ -68,7 +68,7 @@ export function IdeaFilters({
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search ideas..."
+            placeholder="Buscar ideias..."
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9"
@@ -85,7 +85,7 @@ export function IdeaFilters({
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Priorities</SelectItem>
+              <SelectItem value="all">Todas Prioridades</SelectItem>
               {Object.entries(PRIORITY_CONFIG).map(([key, config]) => (
                 <SelectItem key={key} value={key}>
                   {config.label}
@@ -103,7 +103,7 @@ export function IdeaFilters({
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">Todas Categorias</SelectItem>
               {IDEA_CATEGORIES.map((cat) => (
                 <SelectItem key={cat} value={cat}>
                   {cat}
@@ -121,9 +121,9 @@ export function IdeaFilters({
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="newest">Newest</SelectItem>
-              <SelectItem value="priority">Priority</SelectItem>
-              <SelectItem value="score">Score</SelectItem>
+              <SelectItem value="newest">Mais Recentes</SelectItem>
+              <SelectItem value="priority">Prioridade</SelectItem>
+              <SelectItem value="score">Pontuacao</SelectItem>
             </SelectContent>
           </Select>
 

@@ -67,7 +67,7 @@ const INGREDIENT_META: Record<string, IngredientInfo> = {
 
 export function IngredientCards() {
   return (
-    <section className="bg-muted/30 py-20 sm:py-24">
+    <section className="as-section-cream py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <m.div
@@ -77,10 +77,10 @@ export function IngredientCards() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-brand-accent)]">
+          <p className="as-label text-as-orange">
             What&apos;s Inside
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="as-h2 mt-3 text-foreground">
             9 Science-Backed Ingredients
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
@@ -105,14 +105,14 @@ export function IngredientCards() {
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--color-brand-accent-subtle)] transition-colors group-hover:bg-[var(--color-brand-accent)]/20">
-                    <Icon className="size-5 text-[var(--color-brand-accent)]" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-as-peach transition-colors group-hover:bg-as-peach/80">
+                    <Icon className="size-5 text-as-orange" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-foreground">
+                    <h3 className="text-sm font-display font-bold text-foreground">
                       {ingredient.name}
                     </h3>
-                    <p className="mt-0.5 text-xs font-medium text-[var(--color-brand-accent)]">
+                    <p className="as-mono mt-0.5 text-as-orange">
                       {ingredient.amount}
                       {ingredient.dailyValue && (
                         <span className="ml-1 text-muted-foreground">

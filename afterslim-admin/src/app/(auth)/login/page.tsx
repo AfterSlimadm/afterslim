@@ -49,17 +49,17 @@ function LoginForm() {
       });
 
       if (error) {
-        toast.error("Login failed", {
+        toast.error("Falha no login", {
           description: error.message,
         });
         return;
       }
 
-      toast.success("Welcome back!");
+      toast.success("Bem-vindo de volta!");
       router.push(redirectTo);
       router.refresh();
     } catch {
-      toast.error("An unexpected error occurred");
+      toast.error("Erro inesperado. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -76,15 +76,15 @@ function LoginForm() {
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             AfterSlim
           </h1>
-          <p className="text-sm text-muted-foreground">Admin Dashboard</p>
+          <p className="text-sm text-muted-foreground">Painel Administrativo</p>
         </div>
 
         {/* Login card */}
         <Card>
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-xl">Sign in</CardTitle>
+            <CardTitle className="text-xl">Entrar</CardTitle>
             <CardDescription>
-              Enter your credentials to access the admin panel
+              Insira suas credenciais para acessar o painel
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -104,11 +104,11 @@ function LoginForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Senha</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="Digite sua senha"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -121,10 +121,10 @@ function LoginForm() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
+                    Entrando...
                   </>
                 ) : (
-                  "Sign in"
+                  "Entrar"
                 )}
               </Button>
             </form>
@@ -132,7 +132,7 @@ function LoginForm() {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground">
-          Internal use only. Unauthorized access is prohibited.
+          Uso interno. Acesso nao autorizado e proibido.
         </p>
       </div>
     </div>

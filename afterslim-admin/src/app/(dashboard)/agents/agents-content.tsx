@@ -19,7 +19,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { AGENTS, type AgentInfo } from "@/lib/constants";
+import { ACTIVE_AGENTS, COMING_SOON_AGENTS, type AgentInfo } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 /* ── Types ── */
@@ -36,7 +36,7 @@ export interface AgentStatus {
 
 const STATUS_CONFIG = {
   online: { label: "Online", color: "bg-green-500", textColor: "text-green-700" },
-  idle: { label: "Idle", color: "bg-yellow-500", textColor: "text-yellow-700" },
+  idle: { label: "Inativo", color: "bg-yellow-500", textColor: "text-yellow-700" },
   offline: { label: "Offline", color: "bg-gray-400", textColor: "text-gray-500" },
 };
 
@@ -136,6 +136,35 @@ function AgentCard({
   );
 }
 
+/* ── Coming Soon Card ── */
+
+function ComingSoonCard({ agent }: { agent: AgentInfo }) {
+  return (
+    <Card className="opacity-60">
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar className="size-10 border">
+              <AvatarFallback className="bg-muted text-sm font-bold text-muted-foreground">
+                {agent.avatar}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle className="text-base">{agent.name}</CardTitle>
+              <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Em Breve
+              </span>
+            </div>
+          </div>
+        </div>
+        <CardDescription className="mt-2 text-xs">
+          {agent.description}
+        </CardDescription>
+      </CardHeader>
+    </Card>
+  );
+}
+
 /* ── Props ── */
 
 interface AgentsContentProps {
@@ -187,7 +216,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
-              {onlineCount}/{AGENTS.length}
+              {onlineCount}/{ACTIVE_AGENTS.length}
             </p>
           </CardContent>
         </Card>
@@ -228,15 +257,33 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
         </Card>
       </div>
 
-      {/* Agent grid */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {AGENTS.map((agent) => (
-          <AgentCard
-            key={agent.id}
-            agent={agent}
-            agentStatuses={statuses}
-          />
-        ))}
+      {/* Agentes Ativos */}
+      <div className="space-y-3">
+        <h2 className="text-lg font-semibold">Agentes Ativos</h2>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {ACTIVE_AGENTS.map((agent) => (
+            <AgentCard
+              key={agent.id}
+              agent={agent}
+              agentStatuses={statuses}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Em Breve */}
+      <div className="space-y-3">
+        <div>
+          <h2 className="text-lg font-semibold">Em Breve</h2>
+          <p className="text-sm text-muted-foreground">
+            Estes agentes estao em desenvolvimento
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {COMING_SOON_AGENTS.map((agent) => (
+            <ComingSoonCard key={agent.id} agent={agent} />
+          ))}
+        </div>
       </div>
     </div>
   );

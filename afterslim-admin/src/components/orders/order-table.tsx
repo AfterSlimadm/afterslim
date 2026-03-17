@@ -43,21 +43,21 @@ export function OrderTable({ orders }: OrderTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="pl-4">Order #</TableHead>
-          <TableHead>Customer</TableHead>
-          <TableHead className="hidden md:table-cell">Items</TableHead>
+          <TableHead className="pl-4">Pedido #</TableHead>
+          <TableHead>Cliente</TableHead>
+          <TableHead className="hidden md:table-cell">Itens</TableHead>
           <TableHead>Total</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="hidden sm:table-cell">Payment</TableHead>
-          <TableHead className="hidden lg:table-cell">Date</TableHead>
-          <TableHead className="w-[50px] pr-4 text-right">Actions</TableHead>
+          <TableHead className="hidden sm:table-cell">Pagamento</TableHead>
+          <TableHead className="hidden lg:table-cell">Data</TableHead>
+          <TableHead className="w-[50px] pr-4 text-right">Acoes</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {orders.length === 0 ? (
           <TableRow>
             <TableCell colSpan={8} className="h-32 text-center">
-              <p className="text-muted-foreground">No orders found.</p>
+              <p className="text-muted-foreground">Nenhum pedido encontrado.</p>
             </TableCell>
           </TableRow>
         ) : (
@@ -77,7 +77,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                 <TableCell>
                   <div>
                     <p className="font-medium">
-                      {order.customer?.name ?? "Unknown"}
+                      {order.customer?.name ?? "Desconhecido"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {order.customer?.email ?? ""}
@@ -85,7 +85,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                   </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  {itemCount} {itemCount === 1 ? "item" : "items"}
+                  {itemCount} {itemCount === 1 ? "item" : "itens"}
                 </TableCell>
                 <TableCell className="font-mono">
                   {formatCurrency(order.total)}
@@ -117,7 +117,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         onClick={(e) => e.stopPropagation()}
                       >
                         <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Actions</span>
+                        <span className="sr-only">Acoes</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -128,7 +128,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         }}
                       >
                         <Eye className="h-4 w-4" />
-                        View details
+                        Ver detalhes
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={(e) => {
@@ -136,7 +136,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         }}
                       >
                         <Truck className="h-4 w-4" />
-                        Update status
+                        Atualizar status
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -145,7 +145,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         }}
                       >
                         <Printer className="h-4 w-4" />
-                        Print invoice
+                        Imprimir fatura
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

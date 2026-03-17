@@ -117,9 +117,9 @@ export default function TransactionsContent({
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Transactions</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Transacoes</h1>
           <p className="text-muted-foreground">
-            View and manage all income and expense transactions.
+            Visualize e gerencie todas as transacoes de receita e despesa.
           </p>
         </div>
 
@@ -127,34 +127,34 @@ export default function TransactionsContent({
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              Add Transaction
+              Nova Transacao
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader>
-              <DialogTitle>Add Transaction</DialogTitle>
+              <DialogTitle>Nova Transacao</DialogTitle>
               <DialogDescription>
-                Record a new income or expense transaction.
+                Registre uma nova transacao de receita ou despesa.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="tx-type">Type</Label>
+                <Label htmlFor="tx-type">Tipo</Label>
                 <Select defaultValue="income">
                   <SelectTrigger id="tx-type">
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="income">Income</SelectItem>
-                    <SelectItem value="expense">Expense</SelectItem>
+                    <SelectItem value="income">Receita</SelectItem>
+                    <SelectItem value="expense">Despesa</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tx-category">Category</Label>
+                <Label htmlFor="tx-category">Categoria</Label>
                 <Select defaultValue="order_revenue">
                   <SelectTrigger id="tx-category">
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue placeholder="Selecione a categoria" />
                   </SelectTrigger>
                   <SelectContent>
                     {CATEGORY_OPTIONS.map((cat) => (
@@ -166,7 +166,7 @@ export default function TransactionsContent({
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tx-amount">Amount (USD)</Label>
+                <Label htmlFor="tx-amount">Valor (USD)</Label>
                 <Input
                   id="tx-amount"
                   type="number"
@@ -176,26 +176,26 @@ export default function TransactionsContent({
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tx-description">Description</Label>
+                <Label htmlFor="tx-description">Descricao</Label>
                 <Textarea
                   id="tx-description"
-                  placeholder="Enter transaction details..."
+                  placeholder="Detalhes da transacao..."
                   rows={3}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tx-date">Date</Label>
+                <Label htmlFor="tx-date">Data</Label>
                 <Input id="tx-date" type="date" />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tx-reference">Reference ID (optional)</Label>
+                <Label htmlFor="tx-reference">ID de Referencia (opcional)</Label>
                 <Input id="tx-reference" placeholder="e.g., ORD-1234" />
               </div>
               <Button
                 className="w-full"
                 onClick={() => setDialogOpen(false)}
               >
-                Save Transaction
+                Salvar Transacao
               </Button>
             </div>
           </DialogContent>
@@ -209,7 +209,7 @@ export default function TransactionsContent({
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search transactions..."
+                placeholder="Buscar transacoes..."
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
@@ -234,7 +234,7 @@ export default function TransactionsContent({
                         : "hover:bg-muted"
                     )}
                   >
-                    {t === "all" ? "All" : t === "income" ? "Income" : "Expense"}
+                    {t === "all" ? "Todos" : t === "income" ? "Receita" : "Despesa"}
                   </button>
                 ))}
               </div>
@@ -246,10 +246,10 @@ export default function TransactionsContent({
                 }}
               >
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="All categories" />
+                  <SelectValue placeholder="Todas categorias" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="all">Todas Categorias</SelectItem>
                   {CATEGORY_OPTIONS.map((cat) => (
                     <SelectItem key={cat.value} value={cat.value}>
                       {cat.label}
@@ -265,20 +265,20 @@ export default function TransactionsContent({
       {/* Results summary */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span>
-          Showing {paginated.length} of {filtered.length} transactions
+          Mostrando {paginated.length} de {filtered.length} transacoes
         </span>
         <div className="flex gap-3">
           <Badge
             variant="outline"
             className="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400"
           >
-            {filtered.filter((t) => t.type === "income").length} income
+            {filtered.filter((t) => t.type === "income").length} receitas
           </Badge>
           <Badge
             variant="outline"
             className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400"
           >
-            {filtered.filter((t) => t.type === "expense").length} expenses
+            {filtered.filter((t) => t.type === "expense").length} despesas
           </Badge>
         </div>
       </div>
@@ -294,7 +294,7 @@ export default function TransactionsContent({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
+            Pagina {page} de {totalPages}
           </span>
           <div className="flex gap-2">
             <Button
@@ -305,7 +305,7 @@ export default function TransactionsContent({
               className="gap-1"
             >
               <ChevronLeft className="h-4 w-4" />
-              Previous
+              Anterior
             </Button>
             <Button
               variant="outline"
@@ -314,7 +314,7 @@ export default function TransactionsContent({
               onClick={() => setPage((p) => p + 1)}
               className="gap-1"
             >
-              Next
+              Proximo
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

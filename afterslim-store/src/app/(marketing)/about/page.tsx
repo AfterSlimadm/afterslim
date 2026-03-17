@@ -64,7 +64,7 @@ const FOUR_PILLARS = [
   {
     icon: Flame,
     title: "Metabolism",
-    color: "bg-[var(--color-brand-accent-subtle)] text-[var(--color-brand-accent)]",
+    color: "bg-as-peach text-as-orange",
     points: [
       "Berberine HCl (1,200 mg) activates AMPK",
       "Chromium Picolinate for blood sugar support",
@@ -146,10 +146,10 @@ export default function AboutPage() {
   return (
     <>
       {/* ---- Hero ---- */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[var(--color-brand-accent-subtle)] via-background to-muted/30 py-20 sm:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-as-peach via-background to-muted/30 py-20 sm:py-28">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <Breadcrumbs items={[{ label: "Our Science" }]} />
-          <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
+          <h1 className="as-h1 mt-4 text-foreground">
             The Science Behind {SITE.name}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -195,7 +195,7 @@ export default function AboutPage() {
           {GLP1_CHALLENGES.map(({ icon: Icon, title, description }) => (
             <Card key={title} className="border-none bg-muted/50 shadow-sm">
               <CardContent className="flex gap-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-brand-accent-subtle)] text-[var(--color-brand-accent)]">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-as-peach text-as-orange">
                   <Icon className="size-5" />
                 </div>
                 <div>
@@ -238,7 +238,7 @@ export default function AboutPage() {
                         key={point}
                         className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
-                        <span className="mt-1.5 block size-1.5 shrink-0 rounded-full bg-[var(--color-brand-accent)]" />
+                        <span className="mt-1.5 block size-1.5 shrink-0 rounded-full bg-as-orange" />
                         {point}
                       </li>
                     ))}
@@ -263,7 +263,7 @@ export default function AboutPage() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {STANDARDS.map(({ icon: Icon, title, description }) => (
             <div key={title} className="flex gap-3">
-              <Icon className="mt-0.5 size-5 shrink-0 text-[var(--color-brand-accent)]" />
+              <Icon className="mt-0.5 size-5 shrink-0 text-as-orange" />
               <div>
                 <h3 className="font-semibold">{title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -279,7 +279,7 @@ export default function AboutPage() {
       <section id="transparency" className="bg-muted/50 py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <Eye className="size-7 text-[var(--color-brand-accent)]" />
+            <Eye className="size-7 text-as-orange" />
             <h2 className="text-3xl font-bold tracking-tight">Transparency</h2>
           </div>
           <Separator className="my-6" />
@@ -310,7 +310,7 @@ export default function AboutPage() {
       {/* ---- CTA ---- */}
       <section className="py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h2 className="as-h2 text-foreground">
             Ready to Support Your GLP-1 Journey?
           </h2>
           <p className="mt-3 text-muted-foreground">
@@ -320,8 +320,8 @@ export default function AboutPage() {
           <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Button
               asChild
-              size="lg"
-              className="rounded-full bg-[var(--color-brand-accent)] text-white hover:bg-[var(--color-brand-accent-light)]"
+              variant="ds-primary"
+              size="ds-lg"
             >
               <Link href="/shop">Get Started</Link>
             </Button>

@@ -35,7 +35,7 @@ export function Header() {
     const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     if (error) {
-      toast.error("Failed to sign out");
+      toast.error("Erro ao sair");
       return;
     }
     router.push("/login");
@@ -98,16 +98,16 @@ export function Header() {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => router.push("/settings")}>
             <Settings className="mr-2 h-4 w-4" />
-            Settings
+            Configuracoes
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/settings/profile")}>
+          <DropdownMenuItem onClick={() => router.push("/settings")}>
             <User className="mr-2 h-4 w-4" />
-            Profile
+            Perfil
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
             <LogOut className="mr-2 h-4 w-4" />
-            Sign out
+            Sair
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

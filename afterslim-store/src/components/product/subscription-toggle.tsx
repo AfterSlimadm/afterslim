@@ -63,8 +63,8 @@ export function SubscriptionToggle({
         className={cn(
           "relative flex flex-col rounded-xl border-2 p-4 text-left transition-all duration-200",
           selected === "one-time"
-            ? "border-[var(--color-brand-primary)] bg-[var(--color-brand-primary)]/5 shadow-sm"
-            : "border-border hover:border-[var(--color-brand-primary)]/40"
+            ? "border-as-navy bg-as-navy/5 shadow-sm"
+            : "border-border hover:border-as-navy/40"
         )}
       >
         <div className="flex items-center gap-2">
@@ -72,7 +72,7 @@ export function SubscriptionToggle({
             className={cn(
               "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors",
               selected === "one-time"
-                ? "border-[var(--color-brand-primary)] bg-[var(--color-brand-primary)]"
+                ? "border-as-navy bg-as-navy"
                 : "border-muted-foreground/30"
             )}
           >
@@ -97,12 +97,12 @@ export function SubscriptionToggle({
         className={cn(
           "relative flex flex-col rounded-xl border-2 p-4 text-left transition-all duration-200",
           selected === "subscription"
-            ? "border-[var(--color-brand-primary)] bg-[var(--color-brand-primary)]/5 shadow-sm"
-            : "border-border hover:border-[var(--color-brand-primary)]/40"
+            ? "border-as-navy bg-as-navy/5 shadow-sm"
+            : "border-border hover:border-as-navy/40"
         )}
       >
         {/* Savings badge */}
-        <div className="absolute -top-2.5 right-3 rounded-full bg-[var(--color-brand-accent)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-brand-primary-dark)]">
+        <div className="absolute -top-2.5 right-3 rounded-full bg-as-orange px-2.5 py-0.5 text-xs font-bold text-as-navy">
           Save {savingsPercent}%
         </div>
 
@@ -111,7 +111,7 @@ export function SubscriptionToggle({
             className={cn(
               "flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors",
               selected === "subscription"
-                ? "border-[var(--color-brand-primary)] bg-[var(--color-brand-primary)]"
+                ? "border-as-navy bg-as-navy"
                 : "border-muted-foreground/30"
             )}
           >
@@ -136,7 +136,7 @@ export function SubscriptionToggle({
               key={benefit.label}
               className="flex items-center gap-2 text-xs text-muted-foreground"
             >
-              <benefit.icon className="size-3.5 text-[var(--color-brand-primary)]" />
+              <benefit.icon className="size-3.5 text-as-navy" />
               {benefit.label}
             </li>
           ))}

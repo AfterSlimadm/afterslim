@@ -4,28 +4,19 @@
 -- ============================================================================
 
 -- ──────────────────────────────────────────────────────────────────────────────
--- 1. PRODUCTS (2 products — white-label via FullStack Fulfillment)
+-- 1. PRODUCTS (1 product — AfterSlim Berberine 1200mg)
 -- ──────────────────────────────────────────────────────────────────────────────
 
 INSERT INTO products (slug, name, short_description, description, category, product_type, price_cents, compare_at_price_cents, subscription_price_cents, subscription_interval, sku, weight_oz, stock_quantity, low_stock_threshold, is_active, is_featured, sort_order, supplement_facts, meta_title, meta_description, images, tags) VALUES
 
-('afterslim-biotin', 'AfterSlim Biotin',
- 'Premium hair, skin, and nails formula with 3,600 mcg Biotin, Vitamin C, Zinc, and Horsetail Extract for radiant beauty from within.',
- '<p>AfterSlim Biotin is a comprehensive beauty supplement formulated to support healthy hair growth, glowing skin, and strong nails. With 3,600 mcg of Biotin (12,000% Daily Value) as the star ingredient, this formula delivers powerful results you can see and feel.</p><p>Enhanced with Vitamin C for collagen synthesis, Zinc for skin repair, Niacin for healthy circulation, and Horsetail Extract rich in natural silica. Take 2 capsules daily with an 8 oz. glass of water as part of your beauty routine.</p>',
- 'Hair, Skin & Nails', 'single', 2499, 2999, 2124, 'month', 'AS-BIOT-60', 2.4, 200, 40, true, true, 1,
- '{"serving_size":"2 capsules","servings_per_container":30,"ingredients":[{"name":"Vitamin C (as ascorbic acid)","amount":"136 mg","daily_value":"151%"},{"name":"Niacin (as niacinamide)","amount":"27 mg","daily_value":"169%"},{"name":"Vitamin B6 (as pyridoxine hydrochloride)","amount":"1.5 mg","daily_value":"118%"},{"name":"Biotin","amount":"3,600 mcg","daily_value":"12,000%"},{"name":"Pantothenic acid (as d-calcium pantothenate)","amount":"12 mg","daily_value":"240%"},{"name":"Calcium (as dicalcium phosphate)","amount":"11 mg","daily_value":"1%"},{"name":"Zinc (as zinc oxide)","amount":"11 mg","daily_value":"100%"},{"name":"Horsetail (Equisetum arvense) Extract 10:1","amount":"24 mg","daily_value":""}],"other_ingredients":"Microcrystalline Cellulose, Gelatin, Magnesium Stearate, Silicon Dioxide, Titanium Dioxide."}'::jsonb,
- 'AfterSlim Biotin - Hair, Skin & Nails Supplement',
- 'Support healthy hair, glowing skin, and strong nails with 3,600 mcg Biotin, Vitamin C, Zinc, and Horsetail Extract. 60 capsules.',
- '[]'::jsonb, ARRAY['hair-skin-nails','biotin','beauty','best-seller']),
-
-('afterslim-nootropic', 'AfterSlim Nootropic',
- 'Advanced cognitive support with Bacopa Monnieri, Rhodiola Rosea, L-Theanine, BCAAs, and Panax Ginseng for focus and mental clarity.',
- '<p>AfterSlim Nootropic is a science-backed cognitive enhancement formula designed to support focus, memory, and mental clarity. Featuring Bacopa Monnieri for memory retention, Rhodiola Rosea (3% Salidroside) for stress resilience, and L-Theanine for calm focus without jitters.</p><p>Enhanced with Branched Chain Amino Acids (2:1:1 ratio) for brain fuel and Panax Ginseng for sustained mental energy. For best results, take 2 capsules 20-30 minutes before a meal with 8 oz. of water. Vegan-friendly capsule, contains no allergens.</p>',
- 'Cognitive Health', 'single', 3499, 3999, 2974, 'month', 'AS-NOOT-60', 2.6, 180, 40, true, true, 2,
- '{"serving_size":"2 capsules","servings_per_container":30,"ingredients":[{"name":"Branched Chain Amino Acids 2:1:1 (L-Leucine, L-Isoleucine, L-Valine)","amount":"540 mg","daily_value":""},{"name":"Bacopa Monnieri Extract","amount":"200 mg","daily_value":""},{"name":"Rhodiola Rosea Extract (3% Salidroside)","amount":"100 mg","daily_value":""},{"name":"L-Theanine","amount":"100 mg","daily_value":""},{"name":"Panax Ginseng Extract","amount":"90 mg","daily_value":""}],"other_ingredients":"Microcrystalline Cellulose, Hydroxypropyl Methylcellulose (Capsule), Magnesium Stearate."}'::jsonb,
- 'AfterSlim Nootropic - Cognitive Support Supplement',
- 'Boost focus and mental clarity with Bacopa Monnieri, Rhodiola Rosea, L-Theanine, and Panax Ginseng. Vegan. 60 capsules.',
- '[]'::jsonb, ARRAY['cognitive-health','nootropic','focus','best-seller'])
+('afterslim-berberine', 'AfterSlim Berberine 1200mg',
+ 'Clinical-dose Berberine HCl 1200mg. Boosts metabolism, controls appetite, and reduces body fat naturally.',
+ '<p>AfterSlim Berberine 1200mg is a premium weight management supplement delivering a clinical dose of Berberine HCl to help boost metabolism, control appetite, and reduce body fat naturally. Each serving provides 1200mg of pure Berberine HCl for maximum effectiveness.</p><p>Berberine has been extensively studied for its metabolic benefits, including supporting healthy blood sugar levels, promoting fat loss, and improving overall metabolic health. Take 2 capsules daily with meals for best results. 120 capsules per bottle (60-day supply).</p>',
+ 'Weight Management', 'single', 5999, 7999, 4999, 'month', 'AS-BERB-120', 3.2, 150, 30, true, true, 1,
+ '{"serving_size":"2 capsules","servings_per_container":60,"ingredients":[{"name":"Berberine HCl (from Berberis aristata root)","amount":"1200 mg","daily_value":""}],"other_ingredients":"Microcrystalline Cellulose, Hydroxypropyl Methylcellulose (Capsule), Magnesium Stearate, Silicon Dioxide."}'::jsonb,
+ 'AfterSlim Berberine 1200mg - Premium Metabolism Support',
+ 'Clinical-dose Berberine HCl 1200mg formula. Boosts metabolism, controls appetite, reduces body fat. 120 capsules.',
+ '[]'::jsonb, ARRAY['berberine','weight-loss','metabolism','best-seller'])
 
 ON CONFLICT (slug) DO UPDATE SET
   name = EXCLUDED.name,
@@ -65,12 +56,12 @@ ON CONFLICT (slug) DO NOTHING;
 -- ──────────────────────────────────────────────────────────────────────────────
 
 INSERT INTO ideas (title, description, category, priority, status, source, author, tags) VALUES
-  ('Launch TikTok Ads Targeting 25-34', 'Create vertical video ads highlighting Biotin hair transformation stories and Nootropic focus benefits for the 25-34 demographic on TikTok.', 'marketing', 'high', 'approved', 'after', 'Team Group', ARRAY['tiktok','ads','growth']),
-  ('Biotin + Nootropic Bundle', 'Create a discounted Beauty & Brains bundle combining Biotin and Nootropic for customers who want both beauty and cognitive benefits.', 'product', 'medium', 'under_review', 'manual', 'Vitor', ARRAY['bundle','biotin','nootropic']),
+  ('Launch TikTok Ads Targeting 25-34', 'Create vertical video ads highlighting Berberine weight-loss transformation stories and metabolism benefits for the 25-34 demographic on TikTok.', 'marketing', 'high', 'approved', 'after', 'Team Group', ARRAY['tiktok','ads','growth']),
+  ('Berberine Subscribe & Save Bundle', 'Create a discounted 3-month Berberine subscription bundle with bonus content (meal plan PDF + workout guide) for committed customers.', 'product', 'medium', 'under_review', 'manual', 'Vitor', ARRAY['bundle','berberine','subscription']),
   ('Loyalty Points Program', 'Implement a points-based reward system: 1 point per dollar, 100 points = $5 discount.', 'tech', 'high', 'new', 'agent', 'Management Agent', ARRAY['loyalty','rewards','retention']),
-  ('Hair Growth Challenge', '30-day Hair Growth Challenge on Instagram with daily tips, Biotin product integration, and before/after UGC contest.', 'marketing', 'high', 'approved', 'manual', 'Vitor', ARRAY['challenge','biotin','instagram','ugc']),
+  ('Weight Loss Challenge', '30-day Weight Loss Challenge on Instagram with daily tips, Berberine product integration, and before/after UGC contest.', 'marketing', 'high', 'approved', 'manual', 'Vitor', ARRAY['challenge','berberine','instagram','ugc']),
   ('Subscription Gift Option', 'Allow customers to gift a subscription to someone else with a personalized message.', 'tech', 'low', 'new', 'manual', 'Vitor', ARRAY['subscription','gifting']),
-  ('Expand Product Line', 'Research additional white-label products from FullStack Fulfillment catalog to expand beyond Biotin and Nootropic.', 'product', 'medium', 'under_review', 'manual', 'Vitor', ARRAY['expansion','fullstack','new-products']),
+  ('Expand Product Line', 'Research additional white-label products from FullStack Fulfillment catalog to complement Berberine (e.g., probiotics, fiber).', 'product', 'medium', 'under_review', 'manual', 'Vitor', ARRAY['expansion','fullstack','new-products']),
   ('Affiliate Program Launch', 'Set up an affiliate program with tiered commissions (10-20%) for content creators and wellness bloggers.', 'marketing', 'high', 'new', 'agent', 'Marketing Agent', ARRAY['affiliates','creators','growth']),
   ('Eco-Friendly Packaging', 'Switch to 100% recyclable packaging and biodegradable shipping materials. Get sustainability certification.', 'operations', 'medium', 'new', 'manual', 'Vitor', ARRAY['sustainability','packaging','eco'])
 ON CONFLICT DO NOTHING;
@@ -83,8 +74,7 @@ INSERT INTO products_inventory (product_id, sku, name, unit_cost, selling_price,
 SELECT
   p.id, p.sku, p.name,
   CASE p.sku
-    WHEN 'AS-BIOT-60' THEN 6.50
-    WHEN 'AS-NOOT-60' THEN 8.50
+    WHEN 'AS-BERB-120' THEN 8.50
   END,
   p.price_cents / 100.0,
   p.stock_quantity,
@@ -130,8 +120,8 @@ INSERT INTO transactions (type, category, description, amount, currency, referen
   ('expense', 'ad_spend', 'Meta Ads Feb 13-19', 980.00, 'USD', 'manual', '2026-02-19', 'system'),
   ('expense', 'ad_spend', 'TikTok Ads Feb', 450.00, 'USD', 'manual', '2026-02-26', 'system'),
   ('expense', 'ad_spend', 'Google Ads Feb', 320.00, 'USD', 'manual', '2026-02-26', 'system'),
-  ('expense', 'supplier_payment', 'FullStack Fulfillment - Biotin Feb order', 1950.00, 'USD', 'manual', '2026-02-15', 'system'),
-  ('expense', 'supplier_payment', 'FullStack Fulfillment - Nootropic Feb order', 1530.00, 'USD', 'manual', '2026-02-18', 'system'),
+  ('expense', 'supplier_payment', 'FullStack Fulfillment - Berberine Feb order', 1950.00, 'USD', 'manual', '2026-02-15', 'system'),
+  ('expense', 'supplier_payment', 'FullStack Fulfillment - Berberine restock Feb', 1530.00, 'USD', 'manual', '2026-02-18', 'system'),
   ('expense', 'creator_payment', 'Sarah Wellness - Spring campaign', 800.00, 'USD', 'manual', '2026-02-20', 'system'),
   ('expense', 'creator_payment', 'FitMom Katie - UGC Sprint', 500.00, 'USD', 'manual', '2026-02-22', 'system'),
   ('expense', 'platform_fee', 'Stripe processing fees Feb', 487.33, 'USD', 'manual', '2026-02-26', 'system'),
@@ -163,12 +153,12 @@ ON CONFLICT DO NOTHING;
 
 INSERT INTO as_agent_memory (agent_id, kind, content) VALUES
   ('as-analytics', 'insight', 'Instagram engagement peaks on Tuesdays and Thursdays between 6-8 PM EST. Recommend scheduling high-value posts during these windows.'),
-  ('as-marketing', 'insight', 'Competitor NatureMade Biotin at $12.99 has lower dosage (2500mcg vs our 3600mcg). Highlight our higher potency and complete vitamin blend as key differentiator.'),
-  ('as-management', 'summary', 'Week 8 Summary: Revenue $5,247 (+12% WoW), 72 orders, AOV $72.90. Top product: AfterSlim Biotin (45 units). Nootropic gaining traction (27 units).'),
+  ('as-marketing', 'insight', 'Competitor brands offer Berberine at 500-600mg per serving at $25-30. Our 1200mg clinical dose at $59.99 positions us as the premium, effective option. Highlight clinical dosage as key differentiator.'),
+  ('as-management', 'summary', 'Week 8 Summary: Revenue $5,247 (+12% WoW), 72 orders, AOV $72.90. Top product: AfterSlim Berberine 1200mg (72 units). Strong subscription conversion rate at 34%.'),
   ('as-after', 'classification', 'Message from team group classified as [idea]: "Launch TikTok ads targeting 25-34 demographic". Forwarded to Ideas Bank.'),
   ('as-legal', 'alert', 'FTC updated influencer disclosure guidelines effective March 2026. All creator contracts need updated disclosure language. Priority: HIGH.'),
-  ('as-content', 'action', 'Created content calendar for March 2026: 12 feed posts, 8 Reels, 4 Stories campaigns. Theme: Spring Renewal — hair growth & focus.'),
-  ('as-engagement', 'insight', 'Top 3 comment themes this week: 1) Shipping speed questions (38%), 2) Biotin results timeline (25%), 3) Nootropic ingredient inquiries (20%). Consider FAQ highlight reel.'),
+  ('as-content', 'action', 'Created content calendar for March 2026: 12 feed posts, 8 Reels, 4 Stories campaigns. Theme: Spring Renewal, metabolism boost & weight loss transformations.'),
+  ('as-engagement', 'insight', 'Top 3 comment themes this week: 1) Shipping speed questions (38%), 2) Berberine results timeline (25%), 3) Dosage and ingredient inquiries (20%). Consider FAQ highlight reel.'),
   ('as-management', 'alert', 'Profit margin dropped to 42% from 48% due to increased ad spend. Recommend reviewing Meta Ads ROI and pausing underperforming campaigns.')
 ON CONFLICT DO NOTHING;
 
@@ -177,12 +167,12 @@ ON CONFLICT DO NOTHING;
 -- ──────────────────────────────────────────────────────────────────────────────
 
 INSERT INTO as_agent_tasks (agent_id, task_type, input, output, status, started_at, completed_at) VALUES
-  ('as-after', 'classify_message', '{"text":"Hey, we need to push the Nootropic launch harder"}'::jsonb, '{"classification":"idea","title":"Boost Nootropic marketing push"}'::jsonb, 'completed', '2026-02-26T14:30:00Z', '2026-02-26T14:30:05Z'),
-  ('as-marketing', 'generate_ad_copy', '{"product":"AfterSlim Biotin","campaign":"spring"}'::jsonb, '{"variants":5}'::jsonb, 'completed', '2026-02-26T13:00:00Z', '2026-02-26T13:15:00Z'),
+  ('as-after', 'classify_message', '{"text":"Hey, we need to push Berberine harder on TikTok"}'::jsonb, '{"classification":"idea","title":"Boost Berberine TikTok marketing push"}'::jsonb, 'completed', '2026-02-26T14:30:00Z', '2026-02-26T14:30:05Z'),
+  ('as-marketing', 'generate_ad_copy', '{"product":"AfterSlim Berberine 1200mg","campaign":"spring"}'::jsonb, '{"variants":5}'::jsonb, 'completed', '2026-02-26T13:00:00Z', '2026-02-26T13:15:00Z'),
   ('as-content', 'generate_caption', '{"type":"daily_tip","topic":"morning routine"}'::jsonb, '{"caption":"Your morning routine just got an upgrade"}'::jsonb, 'completed', '2026-02-26T11:30:00Z', '2026-02-26T12:00:00Z'),
   ('as-analytics', 'weekly_report', '{"period":"2026-W08"}'::jsonb, NULL, 'running', '2026-02-26T09:00:00Z', NULL),
   ('as-management', 'daily_summary', '{"date":"2026-02-26"}'::jsonb, '{"orders":18,"revenue":2147.50}'::jsonb, 'completed', '2026-02-26T08:00:00Z', '2026-02-26T08:02:00Z'),
-  ('as-legal', 'compliance_review', '{"product":"Nootropic","document":"label_draft"}'::jsonb, '{"issues":0,"status":"approved"}'::jsonb, 'completed', '2026-02-25T15:00:00Z', '2026-02-25T16:00:00Z'),
+  ('as-legal', 'compliance_review', '{"product":"Berberine","document":"label_draft"}'::jsonb, '{"issues":0,"status":"approved"}'::jsonb, 'completed', '2026-02-25T15:00:00Z', '2026-02-25T16:00:00Z'),
   ('as-marketing', 'competitor_analysis', '{"competitor":"all","period":"2026-02"}'::jsonb, NULL, 'pending', NULL, NULL),
   ('as-engagement', 'reply_comments', '{"batch_size":8}'::jsonb, '{"error":"Rate limit exceeded"}'::jsonb, 'failed', '2026-02-25T14:00:00Z', '2026-02-25T14:01:00Z')
 ON CONFLICT DO NOTHING;
@@ -192,15 +182,15 @@ ON CONFLICT DO NOTHING;
 -- ──────────────────────────────────────────────────────────────────────────────
 
 INSERT INTO as_message_log (source_channel, source_group, sender_name, message_text, message_type, classification, processed, agent_response) VALUES
-  ('whatsapp', 'Team Group', 'Vitor', 'Hey, we need to push the Nootropic marketing harder. Let''s get some ad creatives ready.', 'text', 'idea', true, 'Idea captured: "Boost Nootropic marketing push". Added to Ideas Bank with high priority.'),
+  ('whatsapp', 'Team Group', 'Vitor', 'Hey, we need to push Berberine marketing harder. Let''s get some ad creatives ready.', 'text', 'idea', true, 'Idea captured: "Boost Berberine marketing push". Added to Ideas Bank with high priority.'),
   ('whatsapp', 'Team Group', 'Vitor', 'Launch TikTok ads targeting 25-34 demographic', 'text', 'idea', true, 'Idea captured: "Launch TikTok ads targeting 25-34 demographic". Forwarded to Ideas Bank.'),
   ('whatsapp', 'Customer', 'Customer', 'Where is my order AS-100042? It''s been 5 days.', 'text', 'order_inquiry', true, 'Order AS-100042 shipped on Feb 21 via USPS. Tracking: 9400111899223456789. Expected delivery: Feb 27.'),
   ('whatsapp', 'Team Group', 'Marketing Team', 'Instagram reach was up 23% this week, great job everyone!', 'text', 'info', true, NULL),
-  ('internal', NULL, 'as-marketing', 'Generated 5 ad copy variants for AfterSlim Biotin spring campaign. Saved to tasks queue.', 'text', NULL, true, NULL),
+  ('internal', NULL, 'as-marketing', 'Generated 5 ad copy variants for AfterSlim Berberine 1200mg spring campaign. Saved to tasks queue.', 'text', NULL, true, NULL),
   ('internal', NULL, 'as-content', 'Published Instagram caption: "Your morning routine just got an upgrade" with 12 hashtags.', 'text', NULL, true, NULL),
-  ('internal', NULL, 'as-analytics', 'Weekly performance report: Instagram reach up 23%, engagement rate 4.8%, top post: Biotin hair transformation reel (45K views).', 'text', NULL, true, NULL),
-  ('internal', NULL, 'as-management', 'Daily summary: 18 new orders ($2,147), 3 returns pending. Biotin (12 units) and Nootropic (6 units) sold today.', 'text', NULL, true, NULL),
-  ('internal', NULL, 'as-legal', 'FDA compliance check: Both Biotin and Nootropic labels approved. FDA disclaimer and supplement facts verified.', 'text', NULL, true, NULL),
+  ('internal', NULL, 'as-analytics', 'Weekly performance report: Instagram reach up 23%, engagement rate 4.8%, top post: Berberine weight-loss transformation reel (45K views).', 'text', NULL, true, NULL),
+  ('internal', NULL, 'as-management', 'Daily summary: 18 new orders ($2,147), 3 returns pending. Berberine 1200mg (18 units) sold today.', 'text', NULL, true, NULL),
+  ('internal', NULL, 'as-legal', 'FDA compliance check: Berberine 1200mg label approved. FDA disclaimer and supplement facts verified.', 'text', NULL, true, NULL),
   ('internal', NULL, 'as-engagement', 'Replied to 15 Instagram comments. Flagged 2 negative mentions for review. Generated 3 DM templates.', 'text', NULL, true, NULL)
 ON CONFLICT DO NOTHING;
 

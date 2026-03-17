@@ -28,13 +28,13 @@ export function PackSelector({
   return (
     <div className={cn("w-full", className)}>
       {/* Purchase type toggle */}
-      <div className="mx-auto mb-6 flex w-fit rounded-full bg-muted p-1">
+      <div className="mx-auto mb-6 flex w-fit rounded-full bg-as-cream p-1">
         <button
           onClick={() => onPurchaseTypeChange("subscription")}
           className={cn(
-            "rounded-full px-5 py-2 text-sm font-semibold transition-all",
+            "rounded-full px-5 py-2 text-sm font-display font-semibold transition-all",
             purchaseType === "subscription"
-              ? "bg-[var(--color-brand-accent)] text-white shadow-sm"
+              ? "bg-as-orange text-as-snow shadow-sm"
               : "text-muted-foreground hover:text-foreground",
           )}
         >
@@ -43,9 +43,9 @@ export function PackSelector({
         <button
           onClick={() => onPurchaseTypeChange("one-time")}
           className={cn(
-            "rounded-full px-5 py-2 text-sm font-semibold transition-all",
+            "rounded-full px-5 py-2 text-sm font-display font-semibold transition-all",
             purchaseType === "one-time"
-              ? "bg-[var(--color-brand-accent)] text-white shadow-sm"
+              ? "bg-as-orange text-as-snow shadow-sm"
               : "text-muted-foreground hover:text-foreground",
           )}
         >
@@ -76,14 +76,14 @@ export function PackSelector({
               className={cn(
                 "relative flex flex-col items-center rounded-2xl border-2 p-5 text-center transition-all",
                 isSelected
-                  ? "border-[var(--color-brand-accent)] bg-[var(--color-brand-accent-subtle)] shadow-lg"
-                  : "border-border bg-card hover:border-[var(--color-brand-accent)]/40 hover:shadow-md",
+                  ? "border-as-orange bg-as-peach shadow-lg"
+                  : "border-border bg-card hover:border-as-orange/40 hover:shadow-md",
                 pack.badge === "Most Popular" && "sm:scale-[1.03]",
               )}
             >
               {/* Badge */}
               {pack.badge && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--color-brand-accent)] px-3 py-1 text-xs font-bold text-white">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-as-orange px-3 py-1 text-xs font-bold text-as-snow">
                   {pack.badge}
                 </span>
               )}
@@ -91,7 +91,7 @@ export function PackSelector({
               {/* Bottle SVG */}
               <div className="mb-3 mt-2 flex items-center justify-center">
                 <BottleVisual
-                  count={pack.bottles as 1 | 3 | 6}
+                  count={pack.bottles as 1 | 2 | 3}
                   size={pack.bottles === 1 ? "md" : "sm"}
                   animated={false}
                 />
@@ -104,7 +104,7 @@ export function PackSelector({
 
               {/* Price per bottle */}
               <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="text-lg font-bold text-foreground">
+                <span className="as-mono text-lg font-bold text-foreground">
                   {formatCurrency(perBottle)}
                 </span>
                 <span className="text-xs text-muted-foreground">/bottle</span>
@@ -112,26 +112,26 @@ export function PackSelector({
 
               {/* Compare price */}
               {pack.compareAtTotalCents > price && (
-                <p className="mt-1 text-xs text-muted-foreground line-through">
+                <p className="as-mono mt-1 text-xs text-muted-foreground line-through">
                   {formatCurrency(pack.compareAtTotalCents)}
                 </p>
               )}
 
               {/* Total */}
-              <p className="mt-1 text-sm font-semibold text-foreground">
+              <p className="as-mono mt-1 text-sm font-semibold text-foreground">
                 {formatCurrency(price)} total
               </p>
 
               {/* Savings */}
               {pack.savingsPercent > 0 && (
-                <span className="mt-2 inline-block rounded-full bg-[var(--color-brand-accent)]/10 px-2.5 py-0.5 text-xs font-bold text-[var(--color-brand-accent)]">
+                <span className="mt-2 inline-block rounded-full bg-as-orange/10 px-2.5 py-0.5 text-xs font-bold text-as-orange">
                   Save {pack.savingsPercent}%
                 </span>
               )}
 
               {/* Free shipping */}
               {pack.freeShipping && (
-                <div className="mt-2 flex items-center gap-1 text-xs text-[var(--color-brand-accent)]">
+                <div className="mt-2 flex items-center gap-1 text-xs text-as-orange">
                   <Truck className="size-3" />
                   <span className="font-medium">Free Shipping</span>
                 </div>
@@ -139,8 +139,8 @@ export function PackSelector({
 
               {/* Selected check */}
               {isSelected && (
-                <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-brand-accent)]">
-                  <Check className="size-3 text-white" />
+                <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-as-orange">
+                  <Check className="size-3 text-as-snow" />
                 </div>
               )}
             </m.button>
@@ -157,15 +157,15 @@ export function PackSelector({
         <span>Cancel anytime</span>
         <span className="flex items-center gap-1">
           <Truck className="size-3.5" />
-          Free shipping on 3+ bottles
+          Free shipping on 2+ bottles
         </span>
       </div>
 
       {/* CTA Button */}
       <Button
         onClick={onAddToCart}
-        size="lg"
-        className="mt-6 h-14 w-full rounded-full bg-[var(--color-brand-accent)] text-lg font-semibold text-white hover:bg-[var(--color-brand-accent-light)]"
+        variant="ds-primary"
+        className="mt-6 h-14 w-full text-lg"
       >
         Get Started
         <ArrowRight className="ml-2 size-5" />

@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-import { formatCurrency, createSeededRandom } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -16,62 +15,51 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-/* -- Mock data generator ---------------------------------------- */
-
-function generateRevenueTrendData() {
-  const data: { date: string; revenue: number }[] = [];
-  const today = new Date();
-  // Use a seed based on today's date so server and client produce the same data
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  const random = createSeededRandom(seed + 7); // offset from dashboard chart seed
-
-  for (let i = 29; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(today.getDate() - i);
-
-    // ~$1,000/day base revenue for a ~$30k/month supplement business
-    const baseRevenue = 1000 + Math.sin(i * 0.3) * 300;
-    const dayOfWeek = date.getDay();
-    // Weekends have slightly higher sales
-    const weekendBoost = dayOfWeek === 0 || dayOfWeek === 6 ? 250 : 0;
-    const noise = (random() - 0.5) * 400;
-    const revenue = Math.max(300, Math.round(baseRevenue + weekendBoost + noise));
-
-    data.push({
-      date: date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      }),
-      revenue,
-    });
-  }
-
-  return data;
-}
+import { TrendingUp } from "lucide-react";
 
 /* -- Chart config ----------------------------------------------- */
 
 const chartConfig = {
   revenue: {
-    label: "Revenue",
+    label: "Receita",
     color: "var(--color-chart-2)",
   },
 } satisfies ChartConfig;
 
+/* -- Props ------------------------------------------------------ */
+
+interface RevenueTrendChartProps {
+  data: { date: string; revenue: number }[];
+}
+
 /* -- Component -------------------------------------------------- */
 
-export function RevenueTrendChart() {
-  const data = useMemo(() => generateRevenueTrendData(), []);
-
+export function RevenueTrendChart({ data }: RevenueTrendChartProps) {
   const totalRevenue = data.reduce((sum, d) => sum + d.revenue, 0);
+
+  if (data.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Tendencia de Receita</CardTitle>
+          <CardDescription>Ultimos 30 dias</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex h-[300px] flex-col items-center justify-center gap-2 text-muted-foreground">
+            <TrendingUp className="h-10 w-10" />
+            <p className="text-sm">Nenhum dado de receita ainda.</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Revenue Trend</CardTitle>
+        <CardTitle>Tendencia de Receita</CardTitle>
         <CardDescription>
-          Last 30 days &mdash; Total:{" "}
+          Ultimos {data.length} dias &mdash; Total:{" "}
           <span className="font-semibold text-foreground">
             {formatCurrency(totalRevenue)}
           </span>

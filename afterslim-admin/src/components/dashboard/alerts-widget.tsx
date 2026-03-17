@@ -13,22 +13,11 @@ import {
   Trophy,
   Bot,
   Package,
-  TrendingUp,
   type LucideIcon,
 } from "lucide-react";
+import type { DashboardAlert, AlertLevel } from "@/lib/queries/dashboard-charts";
 
-/* ── Alert type definitions ─────────────────────────────── */
-
-type AlertLevel = "warning" | "success" | "info" | "neutral";
-
-interface Alert {
-  id: string;
-  title: string;
-  description: string;
-  level: AlertLevel;
-  icon: LucideIcon;
-  time: string;
-}
+/* ── Style mappings ─────────────────────────────────────── */
 
 const LEVEL_STYLES: Record<AlertLevel, { dot: string; iconClass: string }> = {
   warning: {
@@ -43,68 +32,39 @@ const LEVEL_STYLES: Record<AlertLevel, { dot: string; iconClass: string }> = {
     dot: "bg-blue-500",
     iconClass: "text-blue-600 dark:text-blue-400",
   },
-  neutral: {
-    dot: "bg-gray-400",
-    iconClass: "text-gray-500 dark:text-gray-400",
-  },
 };
 
-/* ── Mock alerts ────────────────────────────────────────── */
+const ICON_MAP: Record<DashboardAlert["icon"], LucideIcon> = {
+  package: Package,
+  trophy: Trophy,
+  bot: Bot,
+};
 
-const MOCK_ALERTS: Alert[] = [
-  {
-    id: "1",
-    title: "Low Stock Warning",
-    description: "AfterSlim 30-Day Supply is below 15 units",
-    level: "warning",
-    icon: Package,
-    time: "12 min ago",
-  },
-  {
-    id: "2",
-    title: "Monthly Goal Reached",
-    description: "February revenue target of $25,000 achieved!",
-    level: "success",
-    icon: Trophy,
-    time: "2 hours ago",
-  },
-  {
-    id: "3",
-    title: "New Idea from After",
-    description: "Customer feedback suggests a sleep supplement line",
-    level: "info",
-    icon: Bot,
-    time: "4 hours ago",
-  },
-  {
-    id: "4",
-    title: "Inventory Restocked",
-    description: "60 units of Detox Bundle received from supplier",
-    level: "neutral",
-    icon: Package,
-    time: "6 hours ago",
-  },
-  {
-    id: "5",
-    title: "Sales Spike Detected",
-    description: "Orders up 45% in the last 2 hours from Instagram ad",
-    level: "success",
-    icon: TrendingUp,
-    time: "8 hours ago",
-  },
-  {
-    id: "6",
-    title: "Shipping Delay",
-    description: "Carrier reports 1-2 day delays in the Southeast region",
-    level: "warning",
-    icon: AlertTriangle,
-    time: "Yesterday",
-  },
-];
+/* ── Props ───────────────────────────────────────────────── */
+
+interface AlertsWidgetProps {
+  alerts: DashboardAlert[];
+}
 
 /* ── Component ──────────────────────────────────────────── */
 
-export function AlertsWidget() {
+export function AlertsWidget({ alerts }: AlertsWidgetProps) {
+  if (alerts.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Alerts & Notifications</CardTitle>
+          <CardDescription>Recent events requiring attention</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex h-24 items-center justify-center text-muted-foreground">
+            Nenhum alerta no momento
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -113,9 +73,9 @@ export function AlertsWidget() {
       </CardHeader>
       <CardContent>
         <div className="space-y-1">
-          {MOCK_ALERTS.map((alert) => {
+          {alerts.map((alert) => {
             const style = LEVEL_STYLES[alert.level];
-            const Icon = alert.icon;
+            const Icon = ICON_MAP[alert.icon];
 
             return (
               <div

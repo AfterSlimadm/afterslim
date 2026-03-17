@@ -128,8 +128,8 @@ export interface CartItem {
   price_cents: number;
   quantity: number;
   image: string | null;
-  /** Pack tier for one-product store (1-bottle, 3-bottle, 6-bottle). */
-  pack_tier?: "1-bottle" | "3-bottle" | "6-bottle";
+  /** Pack tier for one-product store (1-bottle, 2-bottle, 3-bottle). */
+  pack_tier?: "1-bottle" | "2-bottle" | "3-bottle";
   /** Number of bottles in this pack. */
   bottles?: number;
   /** Whether this is a subscription purchase. */

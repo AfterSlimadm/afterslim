@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Lightbulb,
   Plus,
@@ -18,6 +18,9 @@ import {
   Zap,
   User,
   Tag,
+  MessageSquare,
+  Send,
+  Loader2,
 } from "lucide-react";
 import {
   Card,
@@ -43,10 +46,11 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { IdeaCard } from "@/components/ideas/idea-card";
 import { IdeaFilters, type ViewMode, type SortOption } from "@/components/ideas/idea-filters";
 import { NewIdeaDialog } from "@/components/ideas/new-idea-dialog";
-import { IDEA_STATUS_CONFIG, PRIORITY_CONFIG } from "@/lib/constants";
+import { IDEA_STATUS_CONFIG, PRIORITY_CONFIG, IDEA_SOURCE_CONFIG } from "@/lib/constants";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import type { Idea, IdeaStatus, IdeaPriority } from "@/lib/types";
 import type { IdeaRow } from "@/lib/queries/ideas";
@@ -178,16 +182,16 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Ideas Bank</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Banco de Ideias</h1>
           <p className="text-muted-foreground">
-            Product idea pipeline from research to launch. Score, prioritize,
-            and track new product concepts.
+            Pipeline de ideias da pesquisa ao lancamento. Avalie, priorize
+            e acompanhe novos conceitos.
           </p>
         </div>
         <NewIdeaDialog>
           <Button>
             <Plus className="h-4 w-4" />
-            New Idea
+            Nova Ideia
           </Button>
         </NewIdeaDialog>
       </div>
@@ -197,7 +201,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Ideas
+              Total de Ideias
             </CardTitle>
             <Lightbulb className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -208,7 +212,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              In Research
+              Em Pesquisa
             </CardTitle>
             <FlaskConical className="h-4 w-4 text-blue-500" />
           </CardHeader>
@@ -219,7 +223,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Approved
+              Aprovadas
             </CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
@@ -230,7 +234,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              In Production
+              Em Producao
             </CardTitle>
             <Factory className="h-4 w-4 text-purple-500" />
           </CardHeader>
@@ -258,7 +262,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
 
       {/* Results Count */}
       <div className="text-sm text-muted-foreground">
-        Showing {filteredIdeas.length} of {ideas.length} ideas
+        Mostrando {filteredIdeas.length} de {ideas.length} ideias
       </div>
 
       {/* Grid View */}
@@ -271,10 +275,10 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
             <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
               <Search className="h-10 w-10 text-muted-foreground mb-3" />
               <p className="text-muted-foreground font-medium">
-                No ideas found
+                Nenhuma ideia encontrada
               </p>
               <p className="text-sm text-muted-foreground">
-                Try adjusting your search or filters
+                Tente ajustar sua busca ou filtros
               </p>
             </div>
           )}
@@ -288,14 +292,15 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
+                  <TableHead>Titulo</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead className="text-right">Est. Cost</TableHead>
-                  <TableHead className="text-right">Est. Revenue</TableHead>
-                  <TableHead className="text-center">Score</TableHead>
-                  <TableHead>Date</TableHead>
+                  <TableHead>Prioridade</TableHead>
+                  <TableHead>Categoria</TableHead>
+                  <TableHead>Origem</TableHead>
+                  <TableHead className="text-right">Custo Est.</TableHead>
+                  <TableHead className="text-right">Receita Est.</TableHead>
+                  <TableHead className="text-center">Pontuacao</TableHead>
+                  <TableHead>Data</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -341,6 +346,20 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
                           {idea.category}
                         </Badge>
                       </TableCell>
+                      <TableCell>
+                        {idea.source && IDEA_SOURCE_CONFIG[idea.source] ? (
+                          <Badge
+                            variant="secondary"
+                            className={cn("text-[10px]", IDEA_SOURCE_CONFIG[idea.source].color)}
+                          >
+                            {IDEA_SOURCE_CONFIG[idea.source].label}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-[10px] bg-gray-100 text-gray-700">
+                            Manual
+                          </Badge>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right text-sm">
                         {idea.estimated_cost !== null
                           ? formatCurrency(idea.estimated_cost)
@@ -380,14 +399,14 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
                 })}
                 {filteredIdeas.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-12">
+                    <TableCell colSpan={9} className="text-center py-12">
                       <div className="flex flex-col items-center gap-2">
                         <Search className="h-8 w-8 text-muted-foreground" />
                         <p className="text-muted-foreground font-medium">
-                          No ideas found
+                          Nenhuma ideia encontrada
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          Try adjusting your search or filters
+                          Tente ajustar sua busca ou filtros
                         </p>
                       </div>
                     </TableCell>
@@ -400,150 +419,324 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
       )}
 
       {/* Idea Detail Sheet */}
-      <Sheet
-        open={selectedIdea !== null}
-        onOpenChange={(open) => {
-          if (!open) setSelectedIdea(null);
-        }}
-      >
-        <SheetContent side="right" className="sm:max-w-lg overflow-y-auto">
-          {selectedIdea && (() => {
-            const statusConfig = IDEA_STATUS_CONFIG[selectedIdea.status];
-            const priorityConfig = PRIORITY_CONFIG[selectedIdea.priority];
-            return (
-              <>
-                <SheetHeader>
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      variant="secondary"
-                      className={cn("text-[10px] font-medium", statusConfig.color)}
-                    >
-                      {statusConfig.label}
-                    </Badge>
-                    <Badge
-                      variant="secondary"
-                      className={cn("text-[10px] font-medium gap-1", priorityConfig.color)}
-                    >
-                      {PRIORITY_ICONS[selectedIdea.priority]}
-                      {priorityConfig.label}
-                    </Badge>
-                  </div>
-                  <SheetTitle className="text-lg">
-                    {selectedIdea.title}
-                  </SheetTitle>
-                  <SheetDescription>
-                    {selectedIdea.description}
-                  </SheetDescription>
-                </SheetHeader>
-
-                <Separator />
-
-                <div className="space-y-4 px-4">
-                  {/* Category */}
-                  <div className="flex items-center gap-2">
-                    <Tag className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">Category:</span>
-                    <Badge variant="outline" className="text-xs">
-                      {selectedIdea.category}
-                    </Badge>
-                  </div>
-
-                  {/* Assignee */}
-                  {selectedIdea.assignee && (
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">Assignee:</span>
-                      <span className="text-sm font-medium">{selectedIdea.assignee}</span>
-                    </div>
-                  )}
-
-                  {/* Financial Estimates */}
-                  {(selectedIdea.estimated_cost !== null || selectedIdea.estimated_revenue !== null) && (
-                    <div className="rounded-lg border p-3 space-y-2">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                        Financial Estimates
-                      </p>
-                      <div className="grid grid-cols-2 gap-3">
-                        {selectedIdea.estimated_cost !== null && (
-                          <div className="flex items-center gap-1.5">
-                            <DollarSign className="h-4 w-4 text-red-500" />
-                            <div>
-                              <p className="text-[10px] text-muted-foreground">Cost</p>
-                              <p className="text-sm font-semibold">{formatCurrency(selectedIdea.estimated_cost)}</p>
-                            </div>
-                          </div>
-                        )}
-                        {selectedIdea.estimated_revenue !== null && (
-                          <div className="flex items-center gap-1.5">
-                            <TrendingUp className="h-4 w-4 text-emerald-500" />
-                            <div>
-                              <p className="text-[10px] text-muted-foreground">Revenue</p>
-                              <p className="text-sm font-semibold">{formatCurrency(selectedIdea.estimated_revenue)}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Score */}
-                  {selectedIdea.score !== null && (
-                    <div className="flex items-center gap-2">
-                      <Zap className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">Score:</span>
-                      <span
-                        className={cn(
-                          "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold",
-                          selectedIdea.score >= 80
-                            ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
-                            : selectedIdea.score >= 60
-                            ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-                            : selectedIdea.score >= 40
-                            ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400"
-                            : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
-                        )}
-                      >
-                        <Zap className="h-3 w-3" />
-                        {selectedIdea.score}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Tags */}
-                  {selectedIdea.tags.length > 0 && (
-                    <div className="space-y-1.5">
-                      <p className="text-sm text-muted-foreground">Tags</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {selectedIdea.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Notes */}
-                  {selectedIdea.notes && (
-                    <div className="space-y-1.5">
-                      <p className="text-sm text-muted-foreground">Notes</p>
-                      <p className="text-sm whitespace-pre-wrap rounded-lg border p-3 bg-muted/30">
-                        {selectedIdea.notes}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Date */}
-                  <div className="flex items-center gap-2 pt-2 text-xs text-muted-foreground">
-                    <Calendar className="h-3.5 w-3.5" />
-                    Created {formatDate(selectedIdea.created_at)}
-                  </div>
-                </div>
-              </>
-            );
-          })()}
-        </SheetContent>
-      </Sheet>
+      <IdeaDetailSheet
+        idea={selectedIdea}
+        onClose={() => setSelectedIdea(null)}
+      />
     </div>
+  );
+}
+
+// ─── Comments Section ────────────────────────────────────────
+
+interface IdeaComment {
+  id: string;
+  idea_id: string;
+  content: string;
+  user_id: string | null;
+  agent_id: string | null;
+  created_at: string;
+}
+
+function CommentsSection({ ideaId }: { ideaId: string }) {
+  const [comments, setComments] = useState<IdeaComment[]>([]);
+  const [newComment, setNewComment] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  const fetchComments = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/ideas/${ideaId}/comments`);
+      if (res.ok) {
+        const data = await res.json();
+        setComments(data);
+      }
+    } catch (err) {
+      console.error("[comments] fetch failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [ideaId]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
+
+  const handleSubmit = async () => {
+    const trimmed = newComment.trim();
+    if (!trimmed) return;
+
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/ideas/${ideaId}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: trimmed }),
+      });
+      if (res.ok) {
+        const created = await res.json();
+        setComments((prev) => [...prev, created]);
+        setNewComment("");
+      }
+    } catch (err) {
+      console.error("[comments] submit failed:", err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <MessageSquare className="h-4 w-4 text-muted-foreground" />
+        <p className="text-sm font-medium">Comentarios</p>
+        {comments.length > 0 && (
+          <Badge variant="secondary" className="text-[10px]">
+            {comments.length}
+          </Badge>
+        )}
+      </div>
+
+      {/* Comments list */}
+      <div className="space-y-2 max-h-48 overflow-y-auto">
+        {loading ? (
+          <p className="text-xs text-muted-foreground">Carregando comentarios...</p>
+        ) : comments.length === 0 ? (
+          <p className="text-xs text-muted-foreground">Nenhum comentario ainda.</p>
+        ) : (
+          comments.map((comment) => (
+            <div
+              key={comment.id}
+              className="rounded-lg border p-2.5 bg-muted/20 space-y-1"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-medium text-muted-foreground">
+                  {comment.agent_id
+                    ? `Agente: ${comment.agent_id}`
+                    : comment.user_id ?? "Admin"}
+                </span>
+                <span className="text-[10px] text-muted-foreground">
+                  {formatDate(comment.created_at)}
+                </span>
+              </div>
+              <p className="text-xs whitespace-pre-wrap">{comment.content}</p>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* New comment */}
+      <div className="flex gap-2">
+        <Textarea
+          placeholder="Adicionar comentario..."
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          rows={2}
+          className="text-xs resize-none"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
+        />
+        <Button
+          size="icon"
+          variant="outline"
+          className="shrink-0 self-end"
+          onClick={handleSubmit}
+          disabled={submitting || !newComment.trim()}
+        >
+          {submitting ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Send className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Idea Detail Sheet ───────────────────────────────────────
+
+function IdeaDetailSheet({
+  idea,
+  onClose,
+}: {
+  idea: Idea | null;
+  onClose: () => void;
+}) {
+  if (!idea) {
+    return (
+      <Sheet open={false} onOpenChange={() => onClose()}>
+        <SheetContent side="right" className="sm:max-w-lg" />
+      </Sheet>
+    );
+  }
+
+  const statusConfig = IDEA_STATUS_CONFIG[idea.status];
+  const priorityConfig = PRIORITY_CONFIG[idea.priority];
+  const sourceConfig = idea.source ? IDEA_SOURCE_CONFIG[idea.source] : null;
+
+  return (
+    <Sheet
+      open={true}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <SheetContent side="right" className="sm:max-w-lg overflow-y-auto">
+        <SheetHeader>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge
+              variant="secondary"
+              className={cn("text-[10px] font-medium", statusConfig.color)}
+            >
+              {statusConfig.label}
+            </Badge>
+            <Badge
+              variant="secondary"
+              className={cn("text-[10px] font-medium gap-1", priorityConfig.color)}
+            >
+              {PRIORITY_ICONS[idea.priority]}
+              {priorityConfig.label}
+            </Badge>
+            {sourceConfig && (
+              <Badge
+                variant="secondary"
+                className={cn("text-[10px] font-medium", sourceConfig.color)}
+              >
+                {sourceConfig.label}
+              </Badge>
+            )}
+          </div>
+          <SheetTitle className="text-lg">
+            {idea.title}
+          </SheetTitle>
+          <SheetDescription>
+            {idea.description}
+          </SheetDescription>
+        </SheetHeader>
+
+        <Separator />
+
+        <div className="space-y-4 px-4">
+          {/* Categoria */}
+          <div className="flex items-center gap-2">
+            <Tag className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">Categoria:</span>
+            <Badge variant="outline" className="text-xs">
+              {idea.category}
+            </Badge>
+          </div>
+
+          {/* Origem */}
+          <div className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">Origem:</span>
+            <span className="text-sm font-medium">
+              {sourceConfig ? sourceConfig.label : "Manual"}
+            </span>
+          </div>
+
+          {/* Responsavel */}
+          {idea.assignee && (
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Responsavel:</span>
+              <span className="text-sm font-medium">{idea.assignee}</span>
+            </div>
+          )}
+
+          {/* Estimativas Financeiras */}
+          {(idea.estimated_cost !== null || idea.estimated_revenue !== null) && (
+            <div className="rounded-lg border p-3 space-y-2">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                Estimativas Financeiras
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                {idea.estimated_cost !== null && (
+                  <div className="flex items-center gap-1.5">
+                    <DollarSign className="h-4 w-4 text-red-500" />
+                    <div>
+                      <p className="text-[10px] text-muted-foreground">Custo</p>
+                      <p className="text-sm font-semibold">{formatCurrency(idea.estimated_cost)}</p>
+                    </div>
+                  </div>
+                )}
+                {idea.estimated_revenue !== null && (
+                  <div className="flex items-center gap-1.5">
+                    <TrendingUp className="h-4 w-4 text-emerald-500" />
+                    <div>
+                      <p className="text-[10px] text-muted-foreground">Receita</p>
+                      <p className="text-sm font-semibold">{formatCurrency(idea.estimated_revenue)}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Pontuacao */}
+          {idea.score !== null && (
+            <div className="flex items-center gap-2">
+              <Zap className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Pontuacao:</span>
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold",
+                  idea.score >= 80
+                    ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+                    : idea.score >= 60
+                    ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                    : idea.score >= 40
+                    ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400"
+                    : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                )}
+              >
+                <Zap className="h-3 w-3" />
+                {idea.score}
+              </span>
+            </div>
+          )}
+
+          {/* Tags */}
+          {idea.tags.length > 0 && (
+            <div className="space-y-1.5">
+              <p className="text-sm text-muted-foreground">Tags</p>
+              <div className="flex flex-wrap gap-1.5">
+                {idea.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Notas */}
+          {idea.notes && (
+            <div className="space-y-1.5">
+              <p className="text-sm text-muted-foreground">Notas</p>
+              <p className="text-sm whitespace-pre-wrap rounded-lg border p-3 bg-muted/30">
+                {idea.notes}
+              </p>
+            </div>
+          )}
+
+          {/* Data */}
+          <div className="flex items-center gap-2 pt-2 text-xs text-muted-foreground">
+            <Calendar className="h-3.5 w-3.5" />
+            Criada em {formatDate(idea.created_at)}
+          </div>
+
+          <Separator />
+
+          {/* Comentarios */}
+          <CommentsSection ideaId={idea.id} />
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }

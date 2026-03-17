@@ -8,7 +8,6 @@ import {
   Bot,
   Settings,
   Package,
-  FileText,
   type LucideIcon,
 } from "lucide-react";
 import type {
@@ -37,37 +36,35 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   {
-    label: "Dashboard",
+    label: "Painel",
     href: "/",
     icon: LayoutDashboard,
   },
   {
-    label: "Orders",
+    label: "Pedidos",
     href: "/orders",
     icon: ShoppingCart,
     children: [
-      { label: "All Orders", href: "/orders" },
-      { label: "Returns", href: "/orders/returns" },
+      { label: "Todos os Pedidos", href: "/orders" },
     ],
   },
   {
-    label: "Finance",
+    label: "Financeiro",
     href: "/finance",
     icon: DollarSign,
     children: [
-      { label: "Overview", href: "/finance" },
-      { label: "Transactions", href: "/finance/transactions" },
-      { label: "Goals", href: "/finance/goals" },
-      { label: "Tax", href: "/finance/tax" },
+      { label: "Visao Geral", href: "/finance" },
+      { label: "Transacoes", href: "/finance/transactions" },
+      { label: "Metas", href: "/finance/goals" },
     ],
   },
   {
-    label: "Inventory",
+    label: "Estoque",
     href: "/inventory",
     icon: Package,
   },
   {
-    label: "Ideas",
+    label: "Ideias",
     href: "/ideas",
     icon: Lightbulb,
   },
@@ -77,66 +74,60 @@ export const NAV_ITEMS: NavItem[] = [
     icon: KanbanSquare,
   },
   {
-    label: "Creators",
+    label: "Criadores",
     href: "/creators",
     icon: Users,
     children: [
-      { label: "All Creators", href: "/creators" },
-      { label: "Campaigns", href: "/creators/campaigns" },
+      { label: "Todos os Criadores", href: "/creators" },
     ],
   },
   {
-    label: "Agents",
+    label: "Agentes",
     href: "/agents",
     icon: Bot,
     children: [
-      { label: "Overview", href: "/agents" },
-      { label: "Messages", href: "/agents/messages" },
-      { label: "Tasks", href: "/agents/tasks" },
-      { label: "Memory", href: "/agents/memory" },
+      { label: "Visao Geral", href: "/agents" },
+      { label: "Mensagens", href: "/agents/messages" },
+      { label: "Tarefas", href: "/agents/tasks" },
+      { label: "Memoria", href: "/agents/memory" },
     ],
   },
   {
-    label: "Reports",
-    href: "/reports",
-    icon: FileText,
-  },
-  {
-    label: "Settings",
+    label: "Configuracoes",
     href: "/settings",
     icon: Settings,
   },
 ];
 
 /* =============================================================
-   Order statuses (English - US market)
+   Status de pedidos
    ============================================================= */
 
 export const ORDER_STATUS_CONFIG: Record<
   OrderStatus,
   { label: string; color: string; icon: string }
 > = {
-  pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800", icon: "Clock" },
-  confirmed: { label: "Confirmed", color: "bg-blue-100 text-blue-800", icon: "CheckCircle" },
-  processing: { label: "Processing", color: "bg-indigo-100 text-indigo-800", icon: "Loader" },
-  shipped: { label: "Shipped", color: "bg-purple-100 text-purple-800", icon: "Truck" },
-  delivered: { label: "Delivered", color: "bg-green-100 text-green-800", icon: "PackageCheck" },
-  cancelled: { label: "Cancelled", color: "bg-red-100 text-red-800", icon: "XCircle" },
-  refunded: { label: "Refunded", color: "bg-gray-100 text-gray-800", icon: "RotateCcw" },
+  pending: { label: "Pendente", color: "bg-yellow-100 text-yellow-800", icon: "Clock" },
+  confirmed: { label: "Confirmado", color: "bg-blue-100 text-blue-800", icon: "CheckCircle" },
+  processing: { label: "Processando", color: "bg-indigo-100 text-indigo-800", icon: "Loader" },
+  shipped: { label: "Enviado", color: "bg-purple-100 text-purple-800", icon: "Truck" },
+  delivered: { label: "Entregue", color: "bg-green-100 text-green-800", icon: "PackageCheck" },
+  cancelled: { label: "Cancelado", color: "bg-red-100 text-red-800", icon: "XCircle" },
+  refunded: { label: "Reembolsado", color: "bg-gray-100 text-gray-800", icon: "RotateCcw" },
 };
 
 export const PAYMENT_STATUS_CONFIG: Record<
   PaymentStatus,
   { label: string; color: string }
 > = {
-  pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800" },
-  paid: { label: "Paid", color: "bg-green-100 text-green-800" },
-  failed: { label: "Failed", color: "bg-red-100 text-red-800" },
-  refunded: { label: "Refunded", color: "bg-gray-100 text-gray-800" },
+  pending: { label: "Pendente", color: "bg-yellow-100 text-yellow-800" },
+  paid: { label: "Pago", color: "bg-green-100 text-green-800" },
+  failed: { label: "Falhou", color: "bg-red-100 text-red-800" },
+  refunded: { label: "Reembolsado", color: "bg-gray-100 text-gray-800" },
 };
 
 /* =============================================================
-   Idea statuses (English)
+   Status de ideias
    ============================================================= */
 
 export const IDEA_STATUS_CONFIG: Record<
@@ -144,69 +135,69 @@ export const IDEA_STATUS_CONFIG: Record<
   { label: string; color: string }
 > = {
   backlog: { label: "Backlog", color: "bg-gray-100 text-gray-800" },
-  researching: { label: "Researching", color: "bg-blue-100 text-blue-800" },
-  validating: { label: "Validating", color: "bg-indigo-100 text-indigo-800" },
-  approved: { label: "Approved", color: "bg-green-100 text-green-800" },
-  in_production: { label: "In Production", color: "bg-purple-100 text-purple-800" },
-  launched: { label: "Launched", color: "bg-emerald-100 text-emerald-800" },
-  rejected: { label: "Rejected", color: "bg-red-100 text-red-800" },
+  researching: { label: "Pesquisando", color: "bg-blue-100 text-blue-800" },
+  validating: { label: "Validando", color: "bg-indigo-100 text-indigo-800" },
+  approved: { label: "Aprovada", color: "bg-green-100 text-green-800" },
+  in_production: { label: "Em Producao", color: "bg-purple-100 text-purple-800" },
+  launched: { label: "Lancada", color: "bg-emerald-100 text-emerald-800" },
+  rejected: { label: "Rejeitada", color: "bg-red-100 text-red-800" },
 };
 
 /* =============================================================
-   Priority (English)
+   Prioridade
    ============================================================= */
 
 export const PRIORITY_CONFIG: Record<
   IdeaPriority,
   { label: string; color: string; icon: string }
 > = {
-  low: { label: "Low", color: "bg-slate-100 text-slate-700", icon: "ArrowDown" },
-  medium: { label: "Medium", color: "bg-blue-100 text-blue-700", icon: "ArrowRight" },
-  high: { label: "High", color: "bg-orange-100 text-orange-700", icon: "ArrowUp" },
-  critical: { label: "Critical", color: "bg-red-100 text-red-700", icon: "AlertTriangle" },
+  low: { label: "Baixa", color: "bg-slate-100 text-slate-700", icon: "ArrowDown" },
+  medium: { label: "Media", color: "bg-blue-100 text-blue-700", icon: "ArrowRight" },
+  high: { label: "Alta", color: "bg-orange-100 text-orange-700", icon: "ArrowUp" },
+  critical: { label: "Critica", color: "bg-red-100 text-red-700", icon: "AlertTriangle" },
 };
 
 /* =============================================================
-   Campaign statuses (English)
+   Status de campanhas
    ============================================================= */
 
 export const CAMPAIGN_STATUS_CONFIG: Record<
   CampaignStatus,
   { label: string; color: string }
 > = {
-  draft: { label: "Draft", color: "bg-gray-100 text-gray-800" },
-  active: { label: "Active", color: "bg-green-100 text-green-800" },
-  paused: { label: "Paused", color: "bg-yellow-100 text-yellow-800" },
-  completed: { label: "Completed", color: "bg-blue-100 text-blue-800" },
-  cancelled: { label: "Cancelled", color: "bg-red-100 text-red-800" },
+  draft: { label: "Rascunho", color: "bg-gray-100 text-gray-800" },
+  active: { label: "Ativa", color: "bg-green-100 text-green-800" },
+  paused: { label: "Pausada", color: "bg-yellow-100 text-yellow-800" },
+  completed: { label: "Concluida", color: "bg-blue-100 text-blue-800" },
+  cancelled: { label: "Cancelada", color: "bg-red-100 text-red-800" },
 };
 
 export const CREATOR_CAMPAIGN_STATUS_CONFIG: Record<
   CreatorCampaignStatus,
   { label: string; color: string }
 > = {
-  invited: { label: "Invited", color: "bg-blue-100 text-blue-800" },
-  accepted: { label: "Accepted", color: "bg-indigo-100 text-indigo-800" },
-  content_submitted: { label: "Content Submitted", color: "bg-purple-100 text-purple-800" },
-  content_approved: { label: "Content Approved", color: "bg-green-100 text-green-800" },
-  published: { label: "Published", color: "bg-emerald-100 text-emerald-800" },
-  paid: { label: "Paid", color: "bg-teal-100 text-teal-800" },
-  rejected: { label: "Rejected", color: "bg-red-100 text-red-800" },
+  invited: { label: "Convidado", color: "bg-blue-100 text-blue-800" },
+  accepted: { label: "Aceito", color: "bg-indigo-100 text-indigo-800" },
+  content_submitted: { label: "Conteudo Enviado", color: "bg-purple-100 text-purple-800" },
+  content_approved: { label: "Conteudo Aprovado", color: "bg-green-100 text-green-800" },
+  published: { label: "Publicado", color: "bg-emerald-100 text-emerald-800" },
+  paid: { label: "Pago", color: "bg-teal-100 text-teal-800" },
+  rejected: { label: "Rejeitado", color: "bg-red-100 text-red-800" },
 };
 
 /* =============================================================
-   Agent task statuses (English)
+   Status de tarefas dos agentes
    ============================================================= */
 
 export const AGENT_TASK_STATUS_CONFIG: Record<
   AgentTaskStatus,
   { label: string; color: string }
 > = {
-  pending: { label: "Pending", color: "bg-yellow-100 text-yellow-800" },
-  running: { label: "Running", color: "bg-blue-100 text-blue-800" },
-  completed: { label: "Completed", color: "bg-green-100 text-green-800" },
-  failed: { label: "Failed", color: "bg-red-100 text-red-800" },
-  cancelled: { label: "Cancelled", color: "bg-gray-100 text-gray-800" },
+  pending: { label: "Pendente", color: "bg-yellow-100 text-yellow-800" },
+  running: { label: "Executando", color: "bg-blue-100 text-blue-800" },
+  completed: { label: "Concluida", color: "bg-green-100 text-green-800" },
+  failed: { label: "Falhou", color: "bg-red-100 text-red-800" },
+  cancelled: { label: "Cancelada", color: "bg-gray-100 text-gray-800" },
 };
 
 /* =============================================================
@@ -218,52 +209,63 @@ export interface AgentInfo {
   name: string;
   description: string;
   avatar: string;
+  active: boolean;
 }
 
 export const AGENTS: AgentInfo[] = [
   {
     id: "as-after",
     name: "After",
-    description: "WhatsApp bot - message classification, daily summaries, order notifications",
+    description: "Bot WhatsApp - classificacao de mensagens, resumos diarios, notificacoes de pedidos",
     avatar: "AF",
+    active: true,
   },
   {
     id: "as-legal",
-    name: "Legal Team",
-    description: "FDA regulations, FTC guidelines, contracts, privacy policies, LLC guidance",
+    name: "Equipe Juridica",
+    description: "Regulamentacoes, contratos, politicas de privacidade, orientacao juridica",
     avatar: "LG",
+    active: false,
   },
   {
     id: "as-marketing",
-    name: "Marketing Team",
-    description: "Ad copies, launch strategies, Reels scripts, competitor analysis, content calendar",
+    name: "Equipe Marketing",
+    description: "Copys de anuncios, estrategias de lancamento, Reels, analise de concorrentes",
     avatar: "MK",
+    active: false,
   },
   {
     id: "as-management",
-    name: "Management",
-    description: "KPIs, executive reports, weekly priorities, SWOT analysis",
+    name: "Gestao",
+    description: "KPIs, relatorios executivos, prioridades semanais, analise SWOT",
     avatar: "MG",
+    active: false,
   },
   {
     id: "as-content",
-    name: "Content Agent",
-    description: "Instagram captions, Reels scripts, hashtags, content calendar",
+    name: "Agente de Conteudo",
+    description: "Legendas Instagram, roteiros de Reels, hashtags, calendario de conteudo",
     avatar: "CT",
+    active: false,
   },
   {
     id: "as-engagement",
-    name: "Engagement Agent",
-    description: "Comment replies, DM templates, mention monitoring, social proof",
+    name: "Agente de Engajamento",
+    description: "Respostas a comentarios, templates de DM, monitoramento de mencoes",
     avatar: "EG",
+    active: false,
   },
   {
     id: "as-analytics",
-    name: "Analytics Agent",
-    description: "Post metrics, best times, performance reports, competitor tracking",
+    name: "Agente de Analytics",
+    description: "Metricas de posts, melhores horarios, relatorios de performance",
     avatar: "AN",
+    active: false,
   },
 ];
+
+export const ACTIVE_AGENTS = AGENTS.filter((a) => a.active);
+export const COMING_SOON_AGENTS = AGENTS.filter((a) => !a.active);
 
 /* =============================================================
    Transaction categories (English)
@@ -290,15 +292,49 @@ export const TRANSACTION_CATEGORY_CONFIG: Record<
    ============================================================= */
 
 export const IDEA_CATEGORIES = [
-  "Supplements",
-  "Cosmetics",
-  "Fitness",
-  "Health",
-  "Accessories",
-  "Digital",
-  "Kit/Bundle",
-  "Other",
+  "Marketing",
+  "Produto",
+  "Operacoes",
+  "Tecnologia",
+  "Cliente",
+  "Crescimento",
 ] as const;
+
+export const IDEA_CATEGORY_DESCRIPTIONS: Record<
+  (typeof IDEA_CATEGORIES)[number],
+  string
+> = {
+  Marketing: "Campanhas, anuncios, conteudo",
+  Produto: "Formulacao, embalagem, novos SKUs",
+  Operacoes: "Fulfillment, envio, fornecedor",
+  Tecnologia: "Site, admin, automacao",
+  Cliente: "Feedback, suporte, retencao",
+  Crescimento: "Parcerias, afiliados, novos canais",
+};
+
+export const IDEA_SOURCE_CONFIG: Record<
+  string,
+  { label: string; color: string }
+> = {
+  manual: {
+    label: "Manual",
+    color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+  },
+  whatsapp: {
+    label: "WhatsApp",
+    color:
+      "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  },
+  agent: {
+    label: "Agente",
+    color: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400",
+  },
+  after: {
+    label: "After",
+    color:
+      "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
+  },
+};
 
 /* =============================================================
    Misc

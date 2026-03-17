@@ -32,14 +32,14 @@ interface OrderFiltersBarProps {
 /* ── Status options ───────────────────────────────────────── */
 
 const STATUS_OPTIONS: { value: OrderStatus | "all"; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "pending", label: "Pending" },
-  { value: "confirmed", label: "Confirmed" },
-  { value: "processing", label: "Processing" },
-  { value: "shipped", label: "Shipped" },
-  { value: "delivered", label: "Delivered" },
-  { value: "cancelled", label: "Cancelled" },
-  { value: "refunded", label: "Refunded" },
+  { value: "all", label: "Todos" },
+  { value: "pending", label: "Pendente" },
+  { value: "confirmed", label: "Confirmado" },
+  { value: "processing", label: "Processando" },
+  { value: "shipped", label: "Enviado" },
+  { value: "delivered", label: "Entregue" },
+  { value: "cancelled", label: "Cancelado" },
+  { value: "refunded", label: "Reembolsado" },
 ];
 
 /* ── Component ────────────────────────────────────────────── */
@@ -75,7 +75,7 @@ export function OrderFiltersBar({ filters, onChange }: OrderFiltersBarProps) {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search by order number or customer..."
+            placeholder="Buscar por numero do pedido ou cliente..."
             value={filters.search}
             onChange={(e) =>
               onChange({ ...filters, search: e.target.value })
@@ -101,13 +101,13 @@ export function OrderFiltersBar({ filters, onChange }: OrderFiltersBarProps) {
           }
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by" />
+            <SelectValue placeholder="Ordenar por" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="newest">Newest first</SelectItem>
-            <SelectItem value="oldest">Oldest first</SelectItem>
-            <SelectItem value="highest">Highest value</SelectItem>
-            <SelectItem value="lowest">Lowest value</SelectItem>
+            <SelectItem value="newest">Mais recentes</SelectItem>
+            <SelectItem value="oldest">Mais antigos</SelectItem>
+            <SelectItem value="highest">Maior valor</SelectItem>
+            <SelectItem value="lowest">Menor valor</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -126,7 +126,7 @@ export function OrderFiltersBar({ filters, onChange }: OrderFiltersBarProps) {
                   variant={isActive ? "default" : "outline"}
                   className="cursor-pointer"
                 >
-                  All
+                  Todos
                 </Badge>
               </button>
             );
@@ -161,7 +161,7 @@ export function OrderFiltersBar({ filters, onChange }: OrderFiltersBarProps) {
             onClick={clearAll}
             className="ml-2 h-7 gap-1 px-2 text-xs"
           >
-            Clear all
+            Limpar filtros
             <Badge variant="secondary" className="h-5 min-w-5 px-1 text-xs">
               {activeFilterCount}
             </Badge>

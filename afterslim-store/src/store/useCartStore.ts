@@ -26,7 +26,21 @@ function persistCart(items: CartItem[]) {
 function loadCart(): CartItem[] {
   try {
     const raw = Cookies.get(CART_COOKIE);
-    return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    if (!raw) return [];
+    const items = JSON.parse(raw) as CartItem[];
+    // Migrate old 6-bottle tier to 3-bottle
+    return items
+      .map((item) => {
+        if (item.pack_tier === ("6-bottle" as string)) {
+          return { ...item, pack_tier: "3-bottle" as const, bottles: 3 };
+        }
+        return item;
+      })
+      .filter(
+        (item) =>
+          !item.pack_tier ||
+          ["1-bottle", "2-bottle", "3-bottle"].includes(item.pack_tier),
+      );
   } catch {
     return [];
   }

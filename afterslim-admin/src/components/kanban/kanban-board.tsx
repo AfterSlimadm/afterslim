@@ -37,7 +37,7 @@ const INITIAL_COLUMNS: KanbanColumnType[] = [
   },
   {
     id: "col-progress",
-    title: "In Progress",
+    title: "Em Progresso",
     position: 1,
     color: "#eab308",
     wip_limit: 5,
@@ -46,7 +46,7 @@ const INITIAL_COLUMNS: KanbanColumnType[] = [
   },
   {
     id: "col-review",
-    title: "Review",
+    title: "Revisao",
     position: 2,
     color: "#8b5cf6",
     wip_limit: 3,
@@ -55,7 +55,7 @@ const INITIAL_COLUMNS: KanbanColumnType[] = [
   },
   {
     id: "col-done",
-    title: "Done",
+    title: "Concluido",
     position: 3,
     color: "#22c55e",
     wip_limit: null,

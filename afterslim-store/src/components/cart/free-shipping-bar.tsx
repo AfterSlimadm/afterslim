@@ -4,7 +4,7 @@ import { CheckCircle, Truck } from "lucide-react";
 import * as m from "motion/react-client";
 import { formatCurrency } from "@/lib/utils";
 
-/** Free shipping on 3+ bottles (≥ $149.97). Threshold set at $100 for UX. */
+/** Free shipping on 2+ bottles (≥ $99.98). Threshold set at $100 for UX. */
 const FREE_SHIPPING_THRESHOLD_CENTS = 10000;
 
 interface FreeShippingBarProps {

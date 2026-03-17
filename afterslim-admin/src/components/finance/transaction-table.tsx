@@ -124,19 +124,19 @@ export function TransactionTable({
       <TableHeader>
         <TableRow>
           <TableHead>
-            <SortButton field="date">Date</SortButton>
+            <SortButton field="date">Data</SortButton>
           </TableHead>
-          <TableHead>Description</TableHead>
+          <TableHead>Descricao</TableHead>
           <TableHead>
-            <SortButton field="category">Category</SortButton>
+            <SortButton field="category">Categoria</SortButton>
           </TableHead>
           <TableHead>
-            <SortButton field="type">Type</SortButton>
+            <SortButton field="type">Tipo</SortButton>
           </TableHead>
           <TableHead className="text-right">
-            <SortButton field="amount">Amount</SortButton>
+            <SortButton field="amount">Valor</SortButton>
           </TableHead>
-          <TableHead>Reference</TableHead>
+          <TableHead>Referencia</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -194,7 +194,7 @@ export function TransactionTable({
         <TableFooter>
           <TableRow>
             <TableCell colSpan={4} className="text-right font-medium">
-              Totals
+              Totais
             </TableCell>
             <TableCell className="text-right">
               <div className="space-y-1">

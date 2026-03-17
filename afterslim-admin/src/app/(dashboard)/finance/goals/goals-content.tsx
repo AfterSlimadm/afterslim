@@ -107,11 +107,11 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            Financial Goals
+            Metas Financeiras
           </h1>
           <p className="text-muted-foreground">
-            Set targets and track progress for revenue, expenses, and key
-            metrics.
+            Defina metas e acompanhe o progresso de receita, despesas e
+            metricas-chave.
           </p>
         </div>
 
@@ -119,27 +119,27 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              Create Goal
+              Criar Meta
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader>
-              <DialogTitle>Create Financial Goal</DialogTitle>
+              <DialogTitle>Criar Meta Financeira</DialogTitle>
               <DialogDescription>
-                Set a new target for your business metrics.
+                Defina uma nova meta para suas metricas de negocio.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="goal-name">Goal Name</Label>
+                <Label htmlFor="goal-name">Nome da Meta</Label>
                 <Input
                   id="goal-name"
-                  placeholder="e.g., Monthly Revenue Target"
+                  placeholder="Ex: Meta de Receita Mensal"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="goal-target">Target Amount</Label>
+                  <Label htmlFor="goal-target">Valor da Meta</Label>
                   <Input
                     id="goal-target"
                     type="number"
@@ -149,28 +149,28 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="goal-period">Period</Label>
+                  <Label htmlFor="goal-period">Periodo</Label>
                   <Select defaultValue="monthly">
                     <SelectTrigger id="goal-period">
-                      <SelectValue placeholder="Select period" />
+                      <SelectValue placeholder="Selecione o periodo" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="quarterly">Quarterly</SelectItem>
-                      <SelectItem value="yearly">Yearly</SelectItem>
+                      <SelectItem value="daily">Diario</SelectItem>
+                      <SelectItem value="weekly">Semanal</SelectItem>
+                      <SelectItem value="monthly">Mensal</SelectItem>
+                      <SelectItem value="quarterly">Trimestral</SelectItem>
+                      <SelectItem value="yearly">Anual</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="goal-start">Start Date</Label>
+                  <Label htmlFor="goal-start">Data Inicio</Label>
                   <Input id="goal-start" type="date" />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="goal-end">End Date</Label>
+                  <Label htmlFor="goal-end">Data Fim</Label>
                   <Input id="goal-end" type="date" />
                 </div>
               </div>
@@ -178,7 +178,7 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
                 className="w-full"
                 onClick={() => setDialogOpen(false)}
               >
-                Create Goal
+                Criar Meta
               </Button>
             </div>
           </DialogContent>
@@ -192,16 +192,16 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
             <Target className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <CardTitle className="text-base">Goals Overview</CardTitle>
+            <CardTitle className="text-base">Visao Geral das Metas</CardTitle>
             <CardDescription>
-              {activeGoals.length} active goals &ndash;{" "}
+              {activeGoals.length} metas ativas &ndash;{" "}
               {activeGoals.filter((g) => {
                 const pct = g.target_amount > 0
                   ? (g.current_amount / g.target_amount) * 100
                   : 0;
                 return pct >= 70;
               }).length}{" "}
-              on track
+              no caminho
             </CardDescription>
           </div>
         </CardHeader>
@@ -217,9 +217,9 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
       {activeGoals.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <Target className="h-10 w-10 text-muted-foreground mb-3" />
-          <p className="text-muted-foreground font-medium">No active goals</p>
+          <p className="text-muted-foreground font-medium">Nenhuma meta ativa</p>
           <p className="text-sm text-muted-foreground">
-            Create a goal to start tracking your financial targets.
+            Crie uma meta para comecar a acompanhar seus objetivos financeiros.
           </p>
         </div>
       )}

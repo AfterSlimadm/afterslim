@@ -22,60 +22,7 @@ import {
 } from "@/components/ui/table";
 import { ArrowRight } from "lucide-react";
 import type { OrderStatus } from "@/lib/types";
-
-/* ── Mock data ──────────────────────────────────────────── */
-
-interface MockOrder {
-  id: string;
-  orderNumber: string;
-  customer: string;
-  total: number;
-  status: OrderStatus;
-  date: string;
-}
-
-const MOCK_ORDERS: MockOrder[] = [
-  {
-    id: "1",
-    orderNumber: "AS-100047",
-    customer: "Sarah Johnson",
-    total: 89.97,
-    status: "delivered",
-    date: "2026-02-25T14:30:00Z",
-  },
-  {
-    id: "2",
-    orderNumber: "AS-100046",
-    customer: "Michael Chen",
-    total: 149.99,
-    status: "shipped",
-    date: "2026-02-25T11:15:00Z",
-  },
-  {
-    id: "3",
-    orderNumber: "AS-100045",
-    customer: "Emily Davis",
-    total: 59.99,
-    status: "processing",
-    date: "2026-02-24T22:45:00Z",
-  },
-  {
-    id: "4",
-    orderNumber: "AS-100044",
-    customer: "James Wilson",
-    total: 199.95,
-    status: "confirmed",
-    date: "2026-02-24T18:20:00Z",
-  },
-  {
-    id: "5",
-    orderNumber: "AS-100043",
-    customer: "Lisa Anderson",
-    total: 44.99,
-    status: "pending",
-    date: "2026-02-24T09:10:00Z",
-  },
-];
+import type { RecentOrder } from "@/lib/queries/dashboard-charts";
 
 /* ── Status badge config ────────────────────────────────── */
 
@@ -113,14 +60,36 @@ const STATUS_STYLES: Record<
   },
 };
 
+/* ── Props ───────────────────────────────────────────────── */
+
+interface RecentOrdersProps {
+  orders: RecentOrder[];
+}
+
 /* ── Component ──────────────────────────────────────────── */
 
-export function RecentOrders() {
+export function RecentOrders({ orders }: RecentOrdersProps) {
+  if (orders.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Orders</CardTitle>
+          <CardDescription>Latest orders placed in the store</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex h-24 items-center justify-center text-muted-foreground">
+            Nenhum pedido recente
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Recent Orders</CardTitle>
-        <CardDescription>Latest 5 orders placed in the store</CardDescription>
+        <CardDescription>Latest {orders.length} orders placed in the store</CardDescription>
         <CardAction>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/orders" className="gap-1">
@@ -142,7 +111,7 @@ export function RecentOrders() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {MOCK_ORDERS.map((order) => {
+            {orders.map((order) => {
               const statusStyle = STATUS_STYLES[order.status];
               return (
                 <TableRow key={order.id}>

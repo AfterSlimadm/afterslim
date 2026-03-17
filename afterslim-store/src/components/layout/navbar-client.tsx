@@ -131,8 +131,8 @@ export function NavbarWrapper({ children }: NavbarWrapperProps) {
       className={cn(
         "sticky top-0 z-40 w-full transition-all duration-300",
         scrolled
-          ? "border-b border-border/50 bg-background/80 shadow-sm backdrop-blur-lg"
-          : "bg-background/0",
+          ? "border-b border-border/50 bg-as-snow/80 shadow-sm backdrop-blur-lg"
+          : "bg-as-snow/0",
       )}
     >
       {children}

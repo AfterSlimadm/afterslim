@@ -3,8 +3,8 @@
 import * as m from "motion/react-client";
 import { cn } from "@/lib/utils";
 
-type BottleCount = 1 | 3 | 6;
-type BottleSize = "sm" | "md" | "lg" | "xl" | "2xl" | "hero";
+type BottleCount = 1 | 2 | 3;
+type BottleSize = "sm" | "md" | "lg" | "xl" | "2xl" | "hero" | "card";
 
 interface BottleVisualProps {
   count?: BottleCount;
@@ -21,6 +21,7 @@ const sizeMap: Record<BottleSize, string> = {
   xl: "h-80",
   "2xl": "h-96",
   hero: "h-[28rem]",
+  card: "h-36",
 };
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -404,7 +405,7 @@ function SingleBottle({ id = "bottle" }: { id?: string }) {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
- * BottleVisual — wrapper que suporta 1, 3 ou 6 bottles com arranjo
+ * BottleVisual — wrapper que suporta 1, 2 ou 3 bottles com arranjo
  * ──────────────────────────────────────────────────────────────────────────── */
 
 export function BottleVisual({
@@ -434,7 +435,7 @@ export function BottleVisual({
     >
       {/* Glow effect behind the bottle(s) */}
       {glowEffect && (
-        <div className="absolute h-3/4 w-3/4 rounded-full bg-[var(--color-brand-accent)] opacity-15 blur-[80px]" />
+        <div className="absolute h-3/4 w-3/4 rounded-full bg-as-orange opacity-15 blur-[80px]" />
       )}
 
       {/* Bottles arrangement */}
@@ -468,54 +469,19 @@ export function BottleVisual({
           </>
         )}
 
-        {count === 6 && (
+        {count === 2 && (
           <>
-            {/* Back row: 3 smaller */}
             <div
-              className={cn("relative opacity-50", sizeMap[size])}
-              style={{
-                transform: "translateX(30px) translateY(-10px) scale(0.75)",
-                zIndex: 0,
-              }}
+              className={cn("relative opacity-80", sizeMap[size])}
+              style={{ transform: "translateX(12px) scale(0.92)", zIndex: 1 }}
             >
-              <SingleBottle id="b6a" />
+              <SingleBottle id="b2a" />
             </div>
             <div
-              className={cn("relative opacity-50", sizeMap[size])}
-              style={{
-                transform: "translateY(-10px) scale(0.75)",
-                zIndex: 0,
-              }}
+              className={cn("relative", sizeMap[size])}
+              style={{ transform: "translateX(-12px)", zIndex: 3 }}
             >
-              <SingleBottle id="b6b" />
-            </div>
-            <div
-              className={cn("relative opacity-50", sizeMap[size])}
-              style={{
-                transform: "translateX(-30px) translateY(-10px) scale(0.75)",
-                zIndex: 0,
-              }}
-            >
-              <SingleBottle id="b6c" />
-            </div>
-            {/* Front row: 3 larger */}
-            <div
-              className={cn("absolute left-0 opacity-80", sizeMap[size])}
-              style={{ transform: "translateX(15px) scale(0.88)", zIndex: 1 }}
-            >
-              <SingleBottle id="b6d" />
-            </div>
-            <div
-              className={cn("absolute", sizeMap[size])}
-              style={{ zIndex: 3 }}
-            >
-              <SingleBottle id="b6e" />
-            </div>
-            <div
-              className={cn("absolute right-0 opacity-80", sizeMap[size])}
-              style={{ transform: "translateX(-15px) scale(0.88)", zIndex: 1 }}
-            >
-              <SingleBottle id="b6f" />
+              <SingleBottle id="b2b" />
             </div>
           </>
         )}

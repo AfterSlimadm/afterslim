@@ -52,12 +52,12 @@ const TIER_CONFIG: Record<string, { label: string; color: string }> = {
 /* -- Status config -- */
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  prospect: { label: "Prospect", color: "bg-gray-100 text-gray-800" },
-  contacted: { label: "Contacted", color: "bg-blue-100 text-blue-800" },
-  negotiating: { label: "Negotiating", color: "bg-yellow-100 text-yellow-800" },
-  active: { label: "Active", color: "bg-green-100 text-green-800" },
-  paused: { label: "Paused", color: "bg-orange-100 text-orange-800" },
-  ended: { label: "Ended", color: "bg-gray-100 text-gray-800" },
+  prospect: { label: "Prospecto", color: "bg-gray-100 text-gray-800" },
+  contacted: { label: "Contatado", color: "bg-blue-100 text-blue-800" },
+  negotiating: { label: "Negociando", color: "bg-yellow-100 text-yellow-800" },
+  active: { label: "Ativo", color: "bg-green-100 text-green-800" },
+  paused: { label: "Pausado", color: "bg-orange-100 text-orange-800" },
+  ended: { label: "Encerrado", color: "bg-gray-100 text-gray-800" },
 };
 
 interface CreatorsContentProps {
@@ -88,18 +88,18 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Creators</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Criadores</h1>
           <p className="text-muted-foreground">
-            Manage influencer partnerships and UGC campaigns.
+            Gerencie parcerias com influencers e campanhas UGC.
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
-            <Link href="/creators/campaigns">Campaigns</Link>
+            <Link href="/creators/campaigns">Campanhas</Link>
           </Button>
           <Button>
             <Plus className="size-4" />
-            Add Creator
+            Novo Criador
           </Button>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Creators
+              Total de Criadores
             </CardTitle>
             <Users className="size-4 text-muted-foreground" />
           </CardHeader>
@@ -120,7 +120,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Active
+              Ativos
             </CardTitle>
             <TrendingUp className="size-4 text-muted-foreground" />
           </CardHeader>
@@ -131,7 +131,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Reach
+              Alcance Total
             </CardTitle>
             <Eye className="size-4 text-muted-foreground" />
           </CardHeader>
@@ -144,7 +144,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Avg Engagement
+              Engajamento Medio
             </CardTitle>
             <TrendingUp className="size-4 text-muted-foreground" />
           </CardHeader>
@@ -161,7 +161,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
         <div className="relative flex-1 sm:max-w-xs">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search creators..."
+            placeholder="Buscar criadores..."
             className="pl-9"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -169,7 +169,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
         </div>
         <div className="flex gap-1">
           {[
-            { value: "all", label: "All" },
+            { value: "all", label: "Todos" },
             { value: "nano", label: "Nano" },
             { value: "micro", label: "Micro" },
             { value: "macro", label: "Macro" },
@@ -192,13 +192,13 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="pl-6">Creator</TableHead>
+                <TableHead className="pl-6">Criador</TableHead>
                 <TableHead>Handle</TableHead>
-                <TableHead>Platform</TableHead>
+                <TableHead>Plataforma</TableHead>
                 <TableHead>Tier</TableHead>
-                <TableHead>Followers</TableHead>
-                <TableHead>Engagement</TableHead>
-                <TableHead>Niche</TableHead>
+                <TableHead>Seguidores</TableHead>
+                <TableHead>Engajamento</TableHead>
+                <TableHead>Nicho</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="w-10" />
               </TableRow>
@@ -278,9 +278,9 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>View Profile</DropdownMenuItem>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Add to Campaign</DropdownMenuItem>
+                          <DropdownMenuItem>Ver Perfil</DropdownMenuItem>
+                          <DropdownMenuItem>Editar</DropdownMenuItem>
+                          <DropdownMenuItem>Adicionar a Campanha</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -290,7 +290,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
               {filtered.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
-                    No creators found
+                    Nenhum criador encontrado
                   </TableCell>
                 </TableRow>
               )}
