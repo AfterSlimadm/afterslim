@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed | AfterSlim</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Seed Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .success-card {
+      text-align: center;
+      max-width: 480px;
+      padding: 3rem 2rem;
+    }
+    .check-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(76,175,80,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .check-circle svg {
+      width: 40px;
+      height: 40px;
+      stroke: #4CAF50;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .desc {
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.875rem 2rem;
+      background: #4CAF50;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #43A047; }
+    .order-id {
+      margin-top: 1.5rem;
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="success-card">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h1>Order Confirmed!</h1>
+    <p class="desc">
+      Thank you for your purchase. You'll receive a confirmation email shortly with your order details and tracking information.
+    </p>
+    <a href="/" class="btn">Back to AfterSlim</a>
+    <div class="order-id" id="order-id"></div>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (sessionId) {
+      document.getElementById('order-id').textContent = 'Session: ' + sessionId.slice(0, 20) + '...';
+    }
+  </script>
+</body>
+</html>

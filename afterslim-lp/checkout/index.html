@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | AfterSlim</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Seed Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      width: 100%;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .header a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.875rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .header a:hover { opacity: 1; }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .checkout-container {
+      width: 100%;
+      max-width: 600px;
+      padding: 2rem 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .checkout-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .checkout-subtitle {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+    #checkout-mount {
+      flex: 1;
+      min-height: 400px;
+    }
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      color: rgba(255,255,255,0.5);
+    }
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid rgba(255,255,255,0.1);
+      border-top-color: #4CAF50;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.75rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-msg {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #ef4444;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.5rem;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.75rem;
+    }
+    .secure-badge svg { width: 14px; height: 14px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="/">&#8592; Back to store</a>
+    <div class="logo">AfterSlim</div>
+    <div style="width:80px"></div>
+  </div>
+
+  <div class="checkout-container">
+    <h1 class="checkout-title">Checkout</h1>
+    <p class="checkout-subtitle">Complete your order securely.</p>
+    <div id="checkout-mount">
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        Loading checkout...
+      </div>
+    </div>
+  </div>
+
+  <div class="secure-badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    Secured by Stripe. Your payment info is encrypted.
+  </div>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    const STRIPE_PK = 'pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
+    const API_URL = 'https://admin.afterslim.com/api/checkout';
+
+    async function initCheckout() {
+      const loadingEl = document.getElementById('loading');
+      const mountEl = document.getElementById('checkout-mount');
+
+      try {
+        // Get quantity from URL params
+        const params = new URLSearchParams(window.location.search);
+        const quantity = parseInt(params.get('qty')) || 1;
+
+        // Create checkout session
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ quantity }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Failed to create checkout session');
+        }
+
+        const { clientSecret } = await res.json();
+
+        // Initialize Stripe Embedded Checkout
+        const stripe = Stripe(STRIPE_PK);
+        const checkout = await stripe.initEmbeddedCheckout({ clientSecret });
+
+        // Clear loading and mount
+        loadingEl.remove();
+        checkout.mount('#checkout-mount');
+      } catch (err) {
+        mountEl.innerHTML = '<div class="error-msg">' + (err.message || 'Something went wrong. Please try again.') + '</div>';
+      }
+    }
+
+    initCheckout();
+  </script>
+</body>
+</html>
