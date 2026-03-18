@@ -120,6 +120,7 @@ export interface Transaction {
   amount: number;
   reference_id: string | null;
   reference_type: string | null;
+  attachment_url: string | null;
   date: string;
   created_at: string;
   updated_at: string;

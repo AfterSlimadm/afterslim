@@ -11,6 +11,7 @@ export interface TransactionRow {
   currency: string;
   reference_id: string | null;
   reference_type: string | null;
+  attachment_url: string | null;
   date: string;
   tags: string[];
   notes: string | null;

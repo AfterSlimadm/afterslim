@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { TRANSACTION_CATEGORY_CONFIG } from "@/lib/constants";
 import type { Transaction, TransactionType, TransactionCategory } from "@/lib/types";
@@ -36,6 +36,9 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
+  Paperclip,
+  X,
+  Loader2,
 } from "lucide-react";
 import { TransactionTable } from "@/components/finance/transaction-table";
 import type { TransactionRow } from "@/lib/queries/finance";
@@ -51,6 +54,7 @@ function mapRowToTransaction(row: TransactionRow): Transaction {
     amount: Number(row.amount),
     reference_id: row.reference_id,
     reference_type: row.reference_type,
+    attachment_url: row.attachment_url ?? null,
     date: row.date,
     created_at: row.created_at,
     updated_at: row.created_at,
@@ -86,6 +90,65 @@ export default function TransactionsContent({
   const [categoryFilter, setCategoryFilter] = useState<"all" | TransactionCategory>("all");
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // File upload state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [uploadedName, setUploadedName] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    setUploadError(null);
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setUploadError(data.error ?? "Erro ao fazer upload.");
+        setSelectedFile(null);
+      } else {
+        setUploadedUrl(data.url);
+        setUploadedName(data.name);
+      }
+    } catch {
+      setUploadError("Erro de conexao ao fazer upload.");
+      setSelectedFile(null);
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  function handleRemoveFile() {
+    setSelectedFile(null);
+    setUploadedUrl(null);
+    setUploadedName(null);
+    setUploadError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }
+
+  function handleDialogChange(open: boolean) {
+    setDialogOpen(open);
+    if (!open) {
+      handleRemoveFile();
+    }
+  }
 
   /* -- Filtering ------------------------------------------------ */
 
@@ -123,7 +186,7 @@ export default function TransactionsContent({
           </p>
         </div>
 
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Dialog open={dialogOpen} onOpenChange={handleDialogChange}>
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
@@ -190,6 +253,46 @@ export default function TransactionsContent({
               <div className="grid gap-2">
                 <Label htmlFor="tx-reference">ID de Referência (opcional)</Label>
                 <Input id="tx-reference" placeholder="e.g., ORD-1234" />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="tx-attachment">Anexo (opcional)</Label>
+                <p className="text-xs text-muted-foreground">
+                  PDF, PNG, JPG ou WEBP. Maximo 10MB.
+                </p>
+                {!uploadedUrl && !isUploading && (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="tx-attachment"
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf,.png,.jpg,.jpeg,.webp"
+                      onChange={handleFileSelect}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                )}
+                {isUploading && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Enviando arquivo...
+                  </div>
+                )}
+                {uploadedUrl && uploadedName && (
+                  <div className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
+                    <Paperclip className="h-4 w-4 text-muted-foreground" />
+                    <span className="flex-1 truncate">{uploadedName}</span>
+                    <button
+                      type="button"
+                      onClick={handleRemoveFile}
+                      className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+                {uploadError && (
+                  <p className="text-xs text-red-500">{uploadError}</p>
+                )}
               </div>
               <Button
                 className="w-full"

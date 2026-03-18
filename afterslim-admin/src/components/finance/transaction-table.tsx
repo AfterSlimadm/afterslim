@@ -26,6 +26,7 @@ import {
   Receipt,
   Wrench,
   MoreHorizontal,
+  Paperclip,
   type LucideIcon,
 } from "lucide-react";
 
@@ -137,6 +138,7 @@ export function TransactionTable({
             <SortButton field="amount">Valor</SortButton>
           </TableHead>
           <TableHead>Referência</TableHead>
+          <TableHead className="w-[50px]">Anexo</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -186,6 +188,19 @@ export function TransactionTable({
               <TableCell className="text-muted-foreground text-sm">
                 {tx.reference_id ?? "\u2014"}
               </TableCell>
+              <TableCell>
+                {tx.attachment_url ? (
+                  <a
+                    href={tx.attachment_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Ver anexo"
+                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <Paperclip className="h-4 w-4" />
+                  </a>
+                ) : null}
+              </TableCell>
             </TableRow>
           );
         })}
@@ -209,6 +224,7 @@ export function TransactionTable({
                 </div>
               </div>
             </TableCell>
+            <TableCell />
             <TableCell />
           </TableRow>
         </TableFooter>
