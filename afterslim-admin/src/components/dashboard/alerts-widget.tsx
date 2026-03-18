@@ -53,8 +53,8 @@ export function AlertsWidget({ alerts }: AlertsWidgetProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Alerts & Notifications</CardTitle>
-          <CardDescription>Recent events requiring attention</CardDescription>
+          <CardTitle>Alertas e Notificações</CardTitle>
+          <CardDescription>Eventos recentes que precisam de atenção</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex h-24 items-center justify-center text-muted-foreground">
@@ -68,8 +68,8 @@ export function AlertsWidget({ alerts }: AlertsWidgetProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Alerts & Notifications</CardTitle>
-        <CardDescription>Recent events requiring attention</CardDescription>
+        <CardTitle>Alertas e Notificações</CardTitle>
+        <CardDescription>Eventos recentes que precisam de atenção</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-1">

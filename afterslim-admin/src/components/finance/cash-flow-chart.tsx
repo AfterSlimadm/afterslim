@@ -49,7 +49,7 @@ export function CashFlowChart({ data }: CashFlowChartProps) {
       <Card>
         <CardHeader>
           <CardTitle>Fluxo de Caixa</CardTitle>
-          <CardDescription>Ultimas 8 semanas</CardDescription>
+          <CardDescription>Últimas 8 semanas</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex h-[300px] flex-col items-center justify-center gap-2 text-muted-foreground">
@@ -66,7 +66,7 @@ export function CashFlowChart({ data }: CashFlowChartProps) {
       <CardHeader>
         <CardTitle>Fluxo de Caixa</CardTitle>
         <CardDescription>
-          Ultimas {data.length} semanas &mdash; Liquido:{" "}
+          Últimas {data.length} semanas &mdash; Líquido:{" "}
           <span className="font-semibold text-foreground">
             {formatCurrency(totalIncome - totalExpense)}
           </span>

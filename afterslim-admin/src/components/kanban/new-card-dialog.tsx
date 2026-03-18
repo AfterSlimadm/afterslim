@@ -79,7 +79,7 @@ export function NewCardDialog({
 
   const handleSubmit = () => {
     if (!title.trim()) {
-      toast.error("Titulo e obrigatorio");
+      toast.error("Título é obrigatório");
       return;
     }
 
@@ -130,10 +130,10 @@ export function NewCardDialog({
         <div className="grid gap-4 py-2">
           {/* Title */}
           <div className="grid gap-2">
-            <Label htmlFor="card-title">Titulo</Label>
+            <Label htmlFor="card-title">Título</Label>
             <Input
               id="card-title"
-              placeholder="Ex: Criar novos rotulos de produto"
+              placeholder="Ex: Criar novos rótulos de produto"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -141,7 +141,7 @@ export function NewCardDialog({
 
           {/* Description */}
           <div className="grid gap-2">
-            <Label htmlFor="card-desc">Descricao</Label>
+            <Label htmlFor="card-desc">Descrição</Label>
             <Textarea
               id="card-desc"
               placeholder="Descreva a tarefa..."

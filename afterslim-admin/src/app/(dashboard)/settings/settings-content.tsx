@@ -182,7 +182,7 @@ export default function SettingsContent({
         currency,
         timezone,
       });
-      toast.success("Configuracoes da loja salvas");
+      toast.success("Configurações da loja salvas");
     } catch (err) {
       toast.error(
         `Erro ao salvar: ${err instanceof Error ? err.message : "desconhecido"}`
@@ -201,7 +201,7 @@ export default function SettingsContent({
         notify_agent_alerts: notifyAgents,
         notify_weekly_summary: notifyWeekly,
       });
-      toast.success("Preferencias de notificacao salvas");
+      toast.success("Preferências de notificação salvas");
     } catch (err) {
       toast.error(
         `Erro ao salvar: ${err instanceof Error ? err.message : "desconhecido"}`
@@ -215,7 +215,7 @@ export default function SettingsContent({
     setSavingAppearance(true);
     try {
       await saveSetting("theme", theme);
-      toast.success("Preferencias de aparencia salvas");
+      toast.success("Preferências de aparência salvas");
     } catch (err) {
       toast.error(
         `Erro ao salvar: ${err instanceof Error ? err.message : "desconhecido"}`
@@ -231,11 +231,11 @@ export default function SettingsContent({
       return;
     }
     if (newPassword.length < 6) {
-      toast.error("A senha deve ter no minimo 6 caracteres");
+      toast.error("A senha deve ter no mínimo 6 caracteres");
       return;
     }
     if (newPassword !== confirmPassword) {
-      toast.error("As senhas nao coincidem");
+      toast.error("As senhas não coincidem");
       return;
     }
     setSavingPassword(true);
@@ -300,7 +300,7 @@ export default function SettingsContent({
     try {
       // POST setting to flag reset
       await saveSetting("agent_memory_reset_at", new Date().toISOString());
-      toast.success("Memoria dos agentes resetada");
+      toast.success("Memória dos agentes resetada");
       setConfirmReset(false);
     } catch (err) {
       toast.error(
@@ -337,10 +337,10 @@ export default function SettingsContent({
       <div>
         <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
           <Settings className="size-6 text-muted-foreground" />
-          Configuracoes
+          Configurações
         </h1>
         <p className="text-muted-foreground">
-          Gerencie preferencias da loja, equipe e notificacoes.
+          Gerencie preferências da loja, equipe e notificações.
         </p>
       </div>
 
@@ -356,11 +356,11 @@ export default function SettingsContent({
           </TabsTrigger>
           <TabsTrigger value="notifications">
             <Bell className="size-4" />
-            Notificacoes
+            Notificações
           </TabsTrigger>
           <TabsTrigger value="appearance">
             <Palette className="size-4" />
-            Aparencia
+            Aparência
           </TabsTrigger>
           <TabsTrigger value="team">
             <Users className="size-4" />
@@ -387,7 +387,7 @@ export default function SettingsContent({
                   Perfil
                 </CardTitle>
                 <CardDescription>
-                  Informacoes da conta logada.
+                  Informações da conta logada.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -395,7 +395,7 @@ export default function SettingsContent({
                   <Label>Email</Label>
                   <Input value={currentUser.email} disabled />
                   <p className="text-xs text-muted-foreground">
-                    Este e o email usado para login. Para alterar, entre em contato com o suporte.
+                    Este é o email usado para login. Para alterar, entre em contato com o suporte.
                   </p>
                 </div>
               </CardContent>
@@ -419,7 +419,7 @@ export default function SettingsContent({
                     <Input
                       id="newPassword"
                       type="password"
-                      placeholder="Minimo 6 caracteres"
+                      placeholder="Mínimo 6 caracteres"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                     />
@@ -459,10 +459,10 @@ export default function SettingsContent({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Store className="size-5 text-muted-foreground" />
-                Configuracoes da Loja
+                Configurações da Loja
               </CardTitle>
               <CardDescription>
-                Informacoes basicas e preferencias globais da loja.
+                Informações básicas e preferências globais da loja.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -498,7 +498,7 @@ export default function SettingsContent({
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="timezone">Fuso horario</Label>
+                  <Label htmlFor="timezone">Fuso horário</Label>
                   <Select value={timezone} onValueChange={setTimezone}>
                     <SelectTrigger id="timezone">
                       <SelectValue />
@@ -535,16 +535,16 @@ export default function SettingsContent({
           </Card>
         </TabsContent>
 
-        {/* ─── Notificacoes ────────────────────────────────── */}
+        {/* ─── Notificações ────────────────────────────────── */}
         <TabsContent value="notifications">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Bell className="size-5 text-muted-foreground" />
-                Notificacoes
+                Notificações
               </CardTitle>
               <CardDescription>
-                Escolha quais notificacoes voce deseja receber.
+                Escolha quais notificações você deseja receber.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -553,7 +553,7 @@ export default function SettingsContent({
                   id: "orders",
                   label: "Novos pedidos",
                   description:
-                    "Receber notificacao quando um novo pedido for feito",
+                    "Receber notificação quando um novo pedido for feito",
                   checked: notifyOrders,
                   onChange: setNotifyOrders,
                 },
@@ -561,7 +561,7 @@ export default function SettingsContent({
                   id: "lowStock",
                   label: "Estoque baixo",
                   description:
-                    "Alertar quando produtos ficarem abaixo do ponto de reposicao",
+                    "Alertar quando produtos ficarem abaixo do ponto de reposição",
                   checked: notifyStock,
                   onChange: setNotifyStock,
                 },
@@ -569,7 +569,7 @@ export default function SettingsContent({
                   id: "agents",
                   label: "Alertas de agentes",
                   description:
-                    "Receber notificacao quando um agente sinalizar um problema",
+                    "Receber notificação quando um agente sinalizar um problema",
                   checked: notifyAgents,
                   onChange: setNotifyAgents,
                 },
@@ -577,7 +577,7 @@ export default function SettingsContent({
                   id: "weekly",
                   label: "Resumo semanal",
                   description:
-                    "Receber um email com o desempenho semanal do negocio",
+                    "Receber um email com o desempenho semanal do negócio",
                   checked: notifyWeekly,
                   onChange: setNotifyWeekly,
                 },
@@ -606,23 +606,23 @@ export default function SettingsContent({
                   ) : (
                     <Save className="size-4" />
                   )}
-                  {savingNotif ? "Salvando..." : "Salvar Notificacoes"}
+                  {savingNotif ? "Salvando..." : "Salvar Notificações"}
                 </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* ─── Aparencia ───────────────────────────────────── */}
+        {/* ─── Aparência ───────────────────────────────────── */}
         <TabsContent value="appearance">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Palette className="size-5 text-muted-foreground" />
-                Aparencia
+                Aparência
               </CardTitle>
               <CardDescription>
-                Personalize a aparencia do painel administrativo.
+                Personalize a aparência do painel administrativo.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -650,7 +650,7 @@ export default function SettingsContent({
                   ) : (
                     <Save className="size-4" />
                   )}
-                  {savingAppearance ? "Salvando..." : "Salvar Aparencia"}
+                  {savingAppearance ? "Salvando..." : "Salvar Aparência"}
                 </Button>
               </div>
             </CardContent>
@@ -750,7 +750,7 @@ export default function SettingsContent({
                       <TableHead>Nome</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Perfil</TableHead>
-                      <TableHead>Ultimo acesso</TableHead>
+                      <TableHead>Último acesso</TableHead>
                       <TableHead>Status</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -796,7 +796,7 @@ export default function SettingsContent({
                 Log de Atividades
               </CardTitle>
               <CardDescription>
-                Ultimas 20 acoes registradas no sistema.
+                Últimas 20 ações registradas no sistema.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -810,7 +810,7 @@ export default function SettingsContent({
                   <TableHeader>
                     <TableRow>
                       <TableHead>Quem</TableHead>
-                      <TableHead>Acao</TableHead>
+                      <TableHead>Ação</TableHead>
                       <TableHead>Quando</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -842,7 +842,7 @@ export default function SettingsContent({
                 Zona de Perigo
               </CardTitle>
               <CardDescription>
-                Acoes irreversiveis. Prossiga com cautela.
+                Ações irreversíveis. Prossiga com cautela.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -850,7 +850,7 @@ export default function SettingsContent({
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">
-                    Resetar memoria dos agentes
+                    Resetar memória dos agentes
                   </p>
                   <p className="text-xs text-muted-foreground">
                     Limpar todos os insights e resumos armazenados pelos agentes
@@ -863,7 +863,7 @@ export default function SettingsContent({
                     className="text-red-600 hover:bg-red-50"
                     onClick={() => setConfirmReset(true)}
                   >
-                    Resetar Memoria
+                    Resetar Memória
                   </Button>
                 ) : (
                   <div className="flex items-center gap-2">

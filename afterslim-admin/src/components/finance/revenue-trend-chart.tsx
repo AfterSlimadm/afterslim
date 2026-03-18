@@ -41,8 +41,8 @@ export function RevenueTrendChart({ data }: RevenueTrendChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Tendencia de Receita</CardTitle>
-          <CardDescription>Ultimos 30 dias</CardDescription>
+          <CardTitle>Tendência de Receita</CardTitle>
+          <CardDescription>Últimos 30 dias</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex h-[300px] flex-col items-center justify-center gap-2 text-muted-foreground">
@@ -57,9 +57,9 @@ export function RevenueTrendChart({ data }: RevenueTrendChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tendencia de Receita</CardTitle>
+        <CardTitle>Tendência de Receita</CardTitle>
         <CardDescription>
-          Ultimos {data.length} dias &mdash; Total:{" "}
+          Últimos {data.length} dias &mdash; Total:{" "}
           <span className="font-semibold text-foreground">
             {formatCurrency(totalRevenue)}
           </span>

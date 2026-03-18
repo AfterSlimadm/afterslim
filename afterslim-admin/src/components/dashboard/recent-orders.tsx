@@ -31,31 +31,31 @@ const STATUS_STYLES: Record<
   { label: string; className: string }
 > = {
   pending: {
-    label: "Pending",
+    label: "Pendente",
     className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
   },
   confirmed: {
-    label: "Confirmed",
+    label: "Confirmado",
     className: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
   },
   processing: {
-    label: "Processing",
+    label: "Processando",
     className: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
   },
   shipped: {
-    label: "Shipped",
+    label: "Enviado",
     className: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
   },
   delivered: {
-    label: "Delivered",
+    label: "Entregue",
     className: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
   },
   cancelled: {
-    label: "Cancelled",
+    label: "Cancelado",
     className: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
   },
   refunded: {
-    label: "Refunded",
+    label: "Reembolsado",
     className: "bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-400",
   },
 };
@@ -73,8 +73,8 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Recent Orders</CardTitle>
-          <CardDescription>Latest orders placed in the store</CardDescription>
+          <CardTitle>Pedidos Recentes</CardTitle>
+          <CardDescription>Últimos pedidos feitos na loja</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex h-24 items-center justify-center text-muted-foreground">
@@ -88,12 +88,12 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Orders</CardTitle>
-        <CardDescription>Latest {orders.length} orders placed in the store</CardDescription>
+        <CardTitle>Pedidos Recentes</CardTitle>
+        <CardDescription>Últimos {orders.length} pedidos feitos na loja</CardDescription>
         <CardAction>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/orders" className="gap-1">
-              View all
+              Ver todos
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </Button>
@@ -103,11 +103,11 @@ export function RecentOrders({ orders }: RecentOrdersProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="pl-6">Order</TableHead>
-              <TableHead>Customer</TableHead>
+              <TableHead className="pl-6">Pedido</TableHead>
+              <TableHead>Cliente</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead className="pr-6 text-right">Date</TableHead>
+              <TableHead className="pr-6 text-right">Data</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

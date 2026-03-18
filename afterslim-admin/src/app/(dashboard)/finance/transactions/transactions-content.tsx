@@ -117,9 +117,9 @@ export default function TransactionsContent({
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Transacoes</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Transações</h1>
           <p className="text-muted-foreground">
-            Visualize e gerencie todas as transacoes de receita e despesa.
+            Visualize e gerencie todas as transações de receita e despesa.
           </p>
         </div>
 
@@ -127,14 +127,14 @@ export default function TransactionsContent({
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
-              Nova Transacao
+              Nova Transação
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader>
-              <DialogTitle>Nova Transacao</DialogTitle>
+              <DialogTitle>Nova Transação</DialogTitle>
               <DialogDescription>
-                Registre uma nova transacao de receita ou despesa.
+                Registre uma nova transação de receita ou despesa.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -176,10 +176,10 @@ export default function TransactionsContent({
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tx-description">Descricao</Label>
+                <Label htmlFor="tx-description">Descrição</Label>
                 <Textarea
                   id="tx-description"
-                  placeholder="Detalhes da transacao..."
+                  placeholder="Detalhes da transação..."
                   rows={3}
                 />
               </div>
@@ -188,14 +188,14 @@ export default function TransactionsContent({
                 <Input id="tx-date" type="date" />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="tx-reference">ID de Referencia (opcional)</Label>
+                <Label htmlFor="tx-reference">ID de Referência (opcional)</Label>
                 <Input id="tx-reference" placeholder="e.g., ORD-1234" />
               </div>
               <Button
                 className="w-full"
                 onClick={() => setDialogOpen(false)}
               >
-                Salvar Transacao
+                Salvar Transação
               </Button>
             </div>
           </DialogContent>
@@ -209,7 +209,7 @@ export default function TransactionsContent({
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Buscar transacoes..."
+                placeholder="Buscar transações..."
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
@@ -265,7 +265,7 @@ export default function TransactionsContent({
       {/* Results summary */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span>
-          Mostrando {paginated.length} de {filtered.length} transacoes
+          Mostrando {paginated.length} de {filtered.length} transações
         </span>
         <div className="flex gap-3">
           <Badge

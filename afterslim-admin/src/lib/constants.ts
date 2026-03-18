@@ -53,8 +53,8 @@ export const NAV_ITEMS: NavItem[] = [
     href: "/finance",
     icon: DollarSign,
     children: [
-      { label: "Visao Geral", href: "/finance" },
-      { label: "Transacoes", href: "/finance/transactions" },
+      { label: "Visão Geral", href: "/finance" },
+      { label: "Transações", href: "/finance/transactions" },
       { label: "Metas", href: "/finance/goals" },
     ],
   },
@@ -86,14 +86,14 @@ export const NAV_ITEMS: NavItem[] = [
     href: "/agents",
     icon: Bot,
     children: [
-      { label: "Visao Geral", href: "/agents" },
+      { label: "Visão Geral", href: "/agents" },
       { label: "Mensagens", href: "/agents/messages" },
       { label: "Tarefas", href: "/agents/tasks" },
-      { label: "Memoria", href: "/agents/memory" },
+      { label: "Memória", href: "/agents/memory" },
     ],
   },
   {
-    label: "Configuracoes",
+    label: "Configurações",
     href: "/settings",
     icon: Settings,
   },
@@ -138,8 +138,8 @@ export const IDEA_STATUS_CONFIG: Record<
   researching: { label: "Pesquisando", color: "bg-blue-100 text-blue-800" },
   validating: { label: "Validando", color: "bg-indigo-100 text-indigo-800" },
   approved: { label: "Aprovada", color: "bg-green-100 text-green-800" },
-  in_production: { label: "Em Producao", color: "bg-purple-100 text-purple-800" },
-  launched: { label: "Lancada", color: "bg-emerald-100 text-emerald-800" },
+  in_production: { label: "Em Produção", color: "bg-purple-100 text-purple-800" },
+  launched: { label: "Lançada", color: "bg-emerald-100 text-emerald-800" },
   rejected: { label: "Rejeitada", color: "bg-red-100 text-red-800" },
 };
 
@@ -152,9 +152,9 @@ export const PRIORITY_CONFIG: Record<
   { label: string; color: string; icon: string }
 > = {
   low: { label: "Baixa", color: "bg-slate-100 text-slate-700", icon: "ArrowDown" },
-  medium: { label: "Media", color: "bg-blue-100 text-blue-700", icon: "ArrowRight" },
+  medium: { label: "Média", color: "bg-blue-100 text-blue-700", icon: "ArrowRight" },
   high: { label: "Alta", color: "bg-orange-100 text-orange-700", icon: "ArrowUp" },
-  critical: { label: "Critica", color: "bg-red-100 text-red-700", icon: "AlertTriangle" },
+  critical: { label: "Crítica", color: "bg-red-100 text-red-700", icon: "AlertTriangle" },
 };
 
 /* =============================================================
@@ -168,7 +168,7 @@ export const CAMPAIGN_STATUS_CONFIG: Record<
   draft: { label: "Rascunho", color: "bg-gray-100 text-gray-800" },
   active: { label: "Ativa", color: "bg-green-100 text-green-800" },
   paused: { label: "Pausada", color: "bg-yellow-100 text-yellow-800" },
-  completed: { label: "Concluida", color: "bg-blue-100 text-blue-800" },
+  completed: { label: "Concluída", color: "bg-blue-100 text-blue-800" },
   cancelled: { label: "Cancelada", color: "bg-red-100 text-red-800" },
 };
 
@@ -178,8 +178,8 @@ export const CREATOR_CAMPAIGN_STATUS_CONFIG: Record<
 > = {
   invited: { label: "Convidado", color: "bg-blue-100 text-blue-800" },
   accepted: { label: "Aceito", color: "bg-indigo-100 text-indigo-800" },
-  content_submitted: { label: "Conteudo Enviado", color: "bg-purple-100 text-purple-800" },
-  content_approved: { label: "Conteudo Aprovado", color: "bg-green-100 text-green-800" },
+  content_submitted: { label: "Conteúdo Enviado", color: "bg-purple-100 text-purple-800" },
+  content_approved: { label: "Conteúdo Aprovado", color: "bg-green-100 text-green-800" },
   published: { label: "Publicado", color: "bg-emerald-100 text-emerald-800" },
   paid: { label: "Pago", color: "bg-teal-100 text-teal-800" },
   rejected: { label: "Rejeitado", color: "bg-red-100 text-red-800" },
@@ -195,7 +195,7 @@ export const AGENT_TASK_STATUS_CONFIG: Record<
 > = {
   pending: { label: "Pendente", color: "bg-yellow-100 text-yellow-800" },
   running: { label: "Executando", color: "bg-blue-100 text-blue-800" },
-  completed: { label: "Concluida", color: "bg-green-100 text-green-800" },
+  completed: { label: "Concluída", color: "bg-green-100 text-green-800" },
   failed: { label: "Falhou", color: "bg-red-100 text-red-800" },
   cancelled: { label: "Cancelada", color: "bg-gray-100 text-gray-800" },
 };
@@ -216,34 +216,34 @@ export const AGENTS: AgentInfo[] = [
   {
     id: "as-after",
     name: "After",
-    description: "Bot WhatsApp - classificacao de mensagens, resumos diarios, notificacoes de pedidos",
+    description: "Bot WhatsApp - classificação de mensagens, resumos diários, notificações de pedidos",
     avatar: "AF",
     active: true,
   },
   {
     id: "as-legal",
     name: "Equipe Juridica",
-    description: "Regulamentacoes, contratos, politicas de privacidade, orientacao juridica",
+    description: "Regulamentações, contratos, políticas de privacidade, orientação jurídica",
     avatar: "LG",
     active: false,
   },
   {
     id: "as-marketing",
     name: "Equipe Marketing",
-    description: "Copys de anuncios, estrategias de lancamento, Reels, analise de concorrentes",
+    description: "Copys de anúncios, estratégias de lançamento, Reels, análise de concorrentes",
     avatar: "MK",
     active: false,
   },
   {
     id: "as-management",
     name: "Gestao",
-    description: "KPIs, relatorios executivos, prioridades semanais, analise SWOT",
+    description: "KPIs, relatórios executivos, prioridades semanais, análise SWOT",
     avatar: "MG",
     active: false,
   },
   {
     id: "as-content",
-    name: "Agente de Conteudo",
+    name: "Agente de Conteúdo",
     description: "Legendas Instagram, roteiros de Reels, hashtags, calendario de conteudo",
     avatar: "CT",
     active: false,
@@ -251,14 +251,14 @@ export const AGENTS: AgentInfo[] = [
   {
     id: "as-engagement",
     name: "Agente de Engajamento",
-    description: "Respostas a comentarios, templates de DM, monitoramento de mencoes",
+    description: "Respostas a comentários, templates de DM, monitoramento de menções",
     avatar: "EG",
     active: false,
   },
   {
     id: "as-analytics",
     name: "Agente de Analytics",
-    description: "Metricas de posts, melhores horarios, relatorios de performance",
+    description: "Métricas de posts, melhores horários, relatórios de performance",
     avatar: "AN",
     active: false,
   },
@@ -275,16 +275,16 @@ export const TRANSACTION_CATEGORY_CONFIG: Record<
   TransactionCategory,
   { label: string; icon: string }
 > = {
-  order_revenue: { label: "Order Revenue", icon: "ShoppingCart" },
-  shipping_revenue: { label: "Shipping Revenue", icon: "Truck" },
-  refund: { label: "Refund", icon: "RotateCcw" },
-  ad_spend: { label: "Ad Spend", icon: "Megaphone" },
-  creator_payment: { label: "Creator Payment", icon: "Users" },
-  supplier_payment: { label: "Supplier Payment", icon: "Factory" },
-  platform_fee: { label: "Platform Fee", icon: "CreditCard" },
-  tax: { label: "Tax", icon: "Receipt" },
-  operational: { label: "Operational", icon: "Wrench" },
-  other: { label: "Other", icon: "MoreHorizontal" },
+  order_revenue: { label: "Receita de Pedidos", icon: "ShoppingCart" },
+  shipping_revenue: { label: "Receita de Frete", icon: "Truck" },
+  refund: { label: "Reembolso", icon: "RotateCcw" },
+  ad_spend: { label: "Gastos com Anúncios", icon: "Megaphone" },
+  creator_payment: { label: "Pagamento a Criadores", icon: "Users" },
+  supplier_payment: { label: "Pagamento a Fornecedor", icon: "Factory" },
+  platform_fee: { label: "Taxa de Plataforma", icon: "CreditCard" },
+  tax: { label: "Imposto", icon: "Receipt" },
+  operational: { label: "Operacional", icon: "Wrench" },
+  other: { label: "Outros", icon: "MoreHorizontal" },
 };
 
 /* =============================================================
@@ -294,7 +294,7 @@ export const TRANSACTION_CATEGORY_CONFIG: Record<
 export const IDEA_CATEGORIES = [
   "Marketing",
   "Produto",
-  "Operacoes",
+  "Operações",
   "Tecnologia",
   "Cliente",
   "Crescimento",
@@ -305,10 +305,10 @@ export const IDEA_CATEGORY_DESCRIPTIONS: Record<
   string
 > = {
   Marketing: "Campanhas, anuncios, conteudo",
-  Produto: "Formulacao, embalagem, novos SKUs",
+  Produto: "Formulação, embalagem, novos SKUs",
   Operacoes: "Fulfillment, envio, fornecedor",
-  Tecnologia: "Site, admin, automacao",
-  Cliente: "Feedback, suporte, retencao",
+  Tecnologia: "Site, admin, automação",
+  Cliente: "Feedback, suporte, retenção",
   Crescimento: "Parcerias, afiliados, novos canais",
 };
 

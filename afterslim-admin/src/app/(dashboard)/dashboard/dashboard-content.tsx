@@ -41,7 +41,7 @@ export default function DashboardContent({
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Painel</h1>
         <p className="text-muted-foreground">
-          Visao geral do seu negocio AfterSlim.
+          Visão geral do seu negócio AfterSlim.
         </p>
       </div>
 
@@ -61,7 +61,7 @@ export default function DashboardContent({
         />
         <KpiCard
           variant="avgOrder"
-          title="Ticket Medio"
+          title="Ticket Médio"
           value={formatCurrency(avgOrder)}
           trend={0}
         />

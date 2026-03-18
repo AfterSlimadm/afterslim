@@ -126,7 +126,7 @@ export function TransactionTable({
           <TableHead>
             <SortButton field="date">Data</SortButton>
           </TableHead>
-          <TableHead>Descricao</TableHead>
+          <TableHead>Descrição</TableHead>
           <TableHead>
             <SortButton field="category">Categoria</SortButton>
           </TableHead>
@@ -136,7 +136,7 @@ export function TransactionTable({
           <TableHead className="text-right">
             <SortButton field="amount">Valor</SortButton>
           </TableHead>
-          <TableHead>Referencia</TableHead>
+          <TableHead>Referência</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

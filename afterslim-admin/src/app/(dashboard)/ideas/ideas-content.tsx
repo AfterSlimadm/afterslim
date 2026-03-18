@@ -234,7 +234,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Em Producao
+              Em Produção
             </CardTitle>
             <Factory className="h-4 w-4 text-purple-500" />
           </CardHeader>
@@ -292,14 +292,14 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Titulo</TableHead>
+                  <TableHead>Título</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Prioridade</TableHead>
                   <TableHead>Categoria</TableHead>
                   <TableHead>Origem</TableHead>
                   <TableHead className="text-right">Custo Est.</TableHead>
                   <TableHead className="text-right">Receita Est.</TableHead>
-                  <TableHead className="text-center">Pontuacao</TableHead>
+                  <TableHead className="text-center">Pontuação</TableHead>
                   <TableHead>Data</TableHead>
                 </TableRow>
               </TableHeader>

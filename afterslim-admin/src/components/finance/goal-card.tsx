@@ -43,7 +43,7 @@ function getTotalDays(startDate: string, endDate: string) {
 }
 
 const PERIOD_LABELS: Record<string, string> = {
-  daily: "Diario",
+  daily: "Diário",
   weekly: "Semanal",
   monthly: "Mensal",
   quarterly: "Trimestral",

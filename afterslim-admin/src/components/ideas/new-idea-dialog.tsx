@@ -63,15 +63,15 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
 
   const handleSubmit = () => {
     if (!title.trim()) {
-      toast.error("Titulo e obrigatorio");
+      toast.error("Título é obrigatório");
       return;
     }
     if (!description.trim()) {
-      toast.error("Descricao e obrigatoria");
+      toast.error("Descrição é obrigatória");
       return;
     }
     if (!category) {
-      toast.error("Categoria e obrigatoria");
+      toast.error("Categoria é obrigatória");
       return;
     }
 
@@ -99,17 +99,17 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
         <DialogHeader>
           <DialogTitle>Nova Ideia</DialogTitle>
           <DialogDescription>
-            Adicione uma nova ideia ao pipeline para pesquisa e validacao.
+            Adicione uma nova ideia ao pipeline para pesquisa e validação.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-2">
           {/* Title */}
           <div className="grid gap-2">
-            <Label htmlFor="idea-title">Titulo</Label>
+            <Label htmlFor="idea-title">Título</Label>
             <Input
               id="idea-title"
-              placeholder="Ex: Nova formula de goma para sono"
+              placeholder="Ex: Nova fórmula de goma para sono"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -117,10 +117,10 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
 
           {/* Description */}
           <div className="grid gap-2">
-            <Label htmlFor="idea-description">Descricao</Label>
+            <Label htmlFor="idea-description">Descrição</Label>
             <Textarea
               id="idea-description"
-              placeholder="Descreva a ideia, publico-alvo e impacto esperado..."
+              placeholder="Descreva a ideia, público-alvo e impacto esperado..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}

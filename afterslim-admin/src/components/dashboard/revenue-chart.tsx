@@ -21,7 +21,7 @@ import type { RevenueDataPoint } from "@/lib/queries/dashboard-charts";
 
 const chartConfig = {
   revenue: {
-    label: "Revenue",
+    label: "Receita",
     color: "var(--color-chart-1)",
   },
 } satisfies ChartConfig;
@@ -41,8 +41,8 @@ export function RevenueChart({ data }: RevenueChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Revenue Overview</CardTitle>
-          <CardDescription>Last 30 days</CardDescription>
+          <CardTitle>Visão de Receita</CardTitle>
+          <CardDescription>Últimos 30 dias</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex h-[280px] items-center justify-center text-muted-foreground">
@@ -56,9 +56,9 @@ export function RevenueChart({ data }: RevenueChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Revenue Overview</CardTitle>
+        <CardTitle>Visão de Receita</CardTitle>
         <CardDescription>
-          Last 30 days &mdash; Total:{" "}
+          Últimos 30 dias &mdash; Total:{" "}
           <span className="font-semibold text-foreground">
             {formatCurrency(totalRevenue)}
           </span>

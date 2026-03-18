@@ -26,7 +26,7 @@ export default async function KanbanPage() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Quadro Kanban</h1>
         <p className="text-muted-foreground">
-          Quadro visual de gestao de tarefas com colunas arrastaveis para
+          Quadro visual de gestão de tarefas com colunas arrastáveis para
           organizar o trabalho do time.
         </p>
       </div>

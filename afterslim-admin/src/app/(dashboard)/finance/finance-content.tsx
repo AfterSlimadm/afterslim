@@ -42,7 +42,7 @@ import type {
 
 const QUICK_LINKS = [
   {
-    title: "Transacoes",
+    title: "Transações",
     description: "Visualize receitas e despesas",
     href: "/finance/transactions",
     icon: Receipt,
@@ -120,7 +120,7 @@ function FinanceKpiCard({
             {isPositive ? "+" : ""}
             {trend.toFixed(1)}%
           </span>
-          <span className="text-muted-foreground">vs ultimos 30 dias</span>
+          <span className="text-muted-foreground">vs últimos 30 dias</span>
         </div>
       </CardContent>
     </Card>
@@ -185,7 +185,7 @@ export default function FinanceContent({
           iconClass="text-red-700 dark:text-red-400"
         />
         <FinanceKpiCard
-          title="Lucro Liquido"
+          title="Lucro Líquido"
           value={netProfit}
           trend={profitTrend}
           icon={TrendingUp}
@@ -215,7 +215,7 @@ export default function FinanceContent({
         <CardHeader>
           <CardTitle>Produtos por Receita</CardTitle>
           <CardDescription>
-            Produtos mais vendidos nos ultimos 30 dias
+            Produtos mais vendidos nos últimos 30 dias
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -231,7 +231,7 @@ export default function FinanceContent({
                   <TableHead className="w-[40%]">Produto</TableHead>
                   <TableHead className="text-right">Receita</TableHead>
                   <TableHead className="text-right">Unidades</TableHead>
-                  <TableHead className="text-right">Preco Medio</TableHead>
+                  <TableHead className="text-right">Preço Médio</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

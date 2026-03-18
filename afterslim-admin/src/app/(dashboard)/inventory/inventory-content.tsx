@@ -155,7 +155,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
             {isLow && (
               <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
                 <AlertTriangle className="size-3" />
-                Abaixo do ponto de reposicao ({product.reorder_point})
+                Abaixo do ponto de reposição ({product.reorder_point})
               </p>
             )}
           </CardContent>
@@ -174,7 +174,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Preco de Venda
+              Preço de Venda
             </CardTitle>
             <TrendingUp className="size-4 text-muted-foreground" />
           </CardHeader>
@@ -221,7 +221,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
               </Badge>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Ponto de Reposicao</p>
+              <p className="text-sm text-muted-foreground">Ponto de Reposição</p>
               <p className="text-lg font-semibold mt-1">{product.reorder_point} unidades</p>
             </div>
             <div>

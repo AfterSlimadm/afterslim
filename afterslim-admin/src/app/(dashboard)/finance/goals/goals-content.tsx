@@ -126,7 +126,7 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
             <DialogHeader>
               <DialogTitle>Criar Meta Financeira</DialogTitle>
               <DialogDescription>
-                Defina uma nova meta para suas metricas de negocio.
+                Defina uma nova meta para suas métricas de negócio.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -149,13 +149,13 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="goal-period">Periodo</Label>
+                  <Label htmlFor="goal-period">Período</Label>
                   <Select defaultValue="monthly">
                     <SelectTrigger id="goal-period">
-                      <SelectValue placeholder="Selecione o periodo" />
+                      <SelectValue placeholder="Selecione o período" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="daily">Diario</SelectItem>
+                      <SelectItem value="daily">Diário</SelectItem>
                       <SelectItem value="weekly">Semanal</SelectItem>
                       <SelectItem value="monthly">Mensal</SelectItem>
                       <SelectItem value="quarterly">Trimestral</SelectItem>
@@ -166,7 +166,7 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="goal-start">Data Inicio</Label>
+                  <Label htmlFor="goal-start">Data Início</Label>
                   <Input id="goal-start" type="date" />
                 </div>
                 <div className="grid gap-2">
@@ -192,7 +192,7 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
             <Target className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <CardTitle className="text-base">Visao Geral das Metas</CardTitle>
+            <CardTitle className="text-base">Visão Geral das Metas</CardTitle>
             <CardDescription>
               {activeGoals.length} metas ativas &ndash;{" "}
               {activeGoals.filter((g) => {

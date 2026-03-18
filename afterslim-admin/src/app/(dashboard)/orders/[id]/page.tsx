@@ -317,7 +317,7 @@ export default function OrderDetailPage({
                     <TableRow>
                       <TableHead className="pl-6">Produto</TableHead>
                       <TableHead className="text-center">Qtd</TableHead>
-                      <TableHead className="text-right">Preco Unit.</TableHead>
+                      <TableHead className="text-right">Preço Unit.</TableHead>
                       <TableHead className="pr-6 text-right">Total</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -400,9 +400,9 @@ export default function OrderDetailPage({
           {/* Timeline */}
           <Card>
             <CardHeader>
-              <CardTitle>Historico do Pedido</CardTitle>
+              <CardTitle>Histórico do Pedido</CardTitle>
               <CardDescription>
-                Historico de atividades deste pedido
+                Histórico de atividades deste pedido
               </CardDescription>
             </CardHeader>
             <CardContent>

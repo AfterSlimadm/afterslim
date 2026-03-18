@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
   if (!email || !role) {
     return NextResponse.json(
-      { error: "Campos 'email' e 'role' obrigatorios" },
+      { error: "Campos 'email' e 'role' obrigatórios" },
       { status: 400 }
     );
   }
