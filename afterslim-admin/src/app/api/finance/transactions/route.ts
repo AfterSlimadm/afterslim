@@ -38,6 +38,7 @@ const txSchema = z.object({
   currency: z.string().default("USD"),
   reference_type: z.enum(["order", "refund", "manual"]).default("manual"),
   reference_id: z.string().optional(),
+  attachment_url: z.string().url().optional(),
   date: z.string(),
   notes: z.string().optional(),
   created_by: z.string().default("admin"),

@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { TRANSACTION_CATEGORY_CONFIG } from "@/lib/constants";
+import { toast } from "sonner";
 import type { Transaction, TransactionType, TransactionCategory } from "@/lib/types";
 import {
   Card,
@@ -90,6 +92,16 @@ export default function TransactionsContent({
   const [categoryFilter, setCategoryFilter] = useState<"all" | TransactionCategory>("all");
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const router = useRouter();
+
+  // Form state
+  const [formType, setFormType] = useState<TransactionType>("income");
+  const [formCategory, setFormCategory] = useState<TransactionCategory>("order_revenue");
+  const [formAmount, setFormAmount] = useState("");
+  const [formDescription, setFormDescription] = useState("");
+  const [formDate, setFormDate] = useState("");
+  const [formReference, setFormReference] = useState("");
 
   // File upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -143,10 +155,66 @@ export default function TransactionsContent({
     }
   }
 
+  function resetForm() {
+    setFormType("income");
+    setFormCategory("order_revenue");
+    setFormAmount("");
+    setFormDescription("");
+    setFormDate("");
+    setFormReference("");
+    handleRemoveFile();
+  }
+
   function handleDialogChange(open: boolean) {
     setDialogOpen(open);
-    if (!open) {
-      handleRemoveFile();
+    if (!open) resetForm();
+  }
+
+  async function handleSaveTransaction() {
+    if (!formAmount || Number(formAmount) <= 0) {
+      toast.error("Insira um valor valido");
+      return;
+    }
+    if (!formDescription || formDescription.length < 3) {
+      toast.error("Insira uma descricao (minimo 3 caracteres)");
+      return;
+    }
+    if (!formDate) {
+      toast.error("Selecione uma data");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/finance/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: formType,
+          category: formCategory,
+          amount: Number(formAmount),
+          description: formDescription,
+          date: formDate,
+          reference_id: formReference || undefined,
+          attachment_url: uploadedUrl || undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error ?? "Erro ao salvar");
+      }
+
+      toast.success("Transacao salva com sucesso");
+      setDialogOpen(false);
+      resetForm();
+      router.refresh();
+    } catch (err) {
+      toast.error(
+        `Erro: ${err instanceof Error ? err.message : "desconhecido"}`
+      );
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -203,7 +271,7 @@ export default function TransactionsContent({
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="tx-type">Tipo</Label>
-                <Select defaultValue="income">
+                <Select value={formType} onValueChange={(v) => setFormType(v as TransactionType)}>
                   <SelectTrigger id="tx-type">
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>
@@ -215,7 +283,7 @@ export default function TransactionsContent({
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="tx-category">Categoria</Label>
-                <Select defaultValue="order_revenue">
+                <Select value={formCategory} onValueChange={(v) => setFormCategory(v as TransactionCategory)}>
                   <SelectTrigger id="tx-category">
                     <SelectValue placeholder="Selecione a categoria" />
                   </SelectTrigger>
@@ -236,6 +304,8 @@ export default function TransactionsContent({
                   placeholder="0.00"
                   step="0.01"
                   min="0"
+                  value={formAmount}
+                  onChange={(e) => setFormAmount(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -244,15 +314,27 @@ export default function TransactionsContent({
                   id="tx-description"
                   placeholder="Detalhes da transação..."
                   rows={3}
+                  value={formDescription}
+                  onChange={(e) => setFormDescription(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="tx-date">Data</Label>
-                <Input id="tx-date" type="date" />
+                <Input
+                  id="tx-date"
+                  type="date"
+                  value={formDate}
+                  onChange={(e) => setFormDate(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="tx-reference">ID de Referência (opcional)</Label>
-                <Input id="tx-reference" placeholder="e.g., ORD-1234" />
+                <Input
+                  id="tx-reference"
+                  placeholder="Ex: ORD-1234"
+                  value={formReference}
+                  onChange={(e) => setFormReference(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="tx-attachment">Anexo (opcional)</Label>
@@ -296,9 +378,13 @@ export default function TransactionsContent({
               </div>
               <Button
                 className="w-full"
-                onClick={() => setDialogOpen(false)}
+                onClick={handleSaveTransaction}
+                disabled={isSaving}
               >
-                Salvar Transação
+                {isSaving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : null}
+                {isSaving ? "Salvando..." : "Salvar Transação"}
               </Button>
             </div>
           </DialogContent>
