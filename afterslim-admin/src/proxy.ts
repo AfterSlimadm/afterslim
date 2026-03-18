@@ -14,9 +14,31 @@ export async function proxy(request: NextRequest) {
   if (
     pathname === "/login" ||
     pathname === "/api/health" ||
+    pathname.startsWith("/api/checkout") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon")
   ) {
+    // Handle CORS preflight for public API routes
+    if (request.method === "OPTIONS") {
+      const origin = request.headers.get("origin") ?? "";
+      const allowed = [
+        "https://afterslim.com",
+        "https://www.afterslim.com",
+        "http://localhost:3000",
+      ].includes(origin)
+        ? origin
+        : "https://afterslim.com";
+
+      return new NextResponse(null, {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": allowed,
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Max-Age": "86400",
+        },
+      });
+    }
     return NextResponse.next();
   }
 
