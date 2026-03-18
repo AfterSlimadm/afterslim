@@ -9,6 +9,7 @@ import {
   Settings,
   Package,
   FileText,
+  Store,
   type LucideIcon,
 } from "lucide-react";
 import type {
@@ -61,6 +62,11 @@ export const NAV_ITEMS: NavItem[] = [
       { label: "Custos", href: "/finance/costs" },
       { label: "Metas", href: "/finance/goals" },
     ],
+  },
+  {
+    label: "Canais de Venda",
+    href: "/sales-channels",
+    icon: Store,
   },
   {
     label: "Estoque",
