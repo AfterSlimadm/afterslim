@@ -2,6 +2,28 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getAdminClient } from "@/lib/supabase/admin";
 
+const ALLOWED_ORIGINS = [
+  "https://afterslim.com",
+  "https://www.afterslim.com",
+  "http://localhost:3000",
+];
+
+function corsHeaders(origin: string | null) {
+  const allowed = ALLOWED_ORIGINS.includes(origin ?? "")
+    ? origin!
+    : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
+
+export async function OPTIONS(request: Request) {
+  const origin = request.headers.get("origin");
+  return new NextResponse(null, { status: 204, headers: corsHeaders(origin) });
+}
+
 /**
  * POST /api/checkout
  * Creates a Stripe Checkout Session for a product purchase.
@@ -9,6 +31,7 @@ import { getAdminClient } from "@/lib/supabase/admin";
  * If no product_id, defaults to the main Berberine product.
  */
 export async function POST(request: Request) {
+  const origin = request.headers.get("origin") ?? "https://afterslim.com";
   try {
     const body = await request.json().catch(() => ({}));
     const quantity = Math.max(1, Math.min(10, Number(body.quantity) || 1));
@@ -38,7 +61,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const origin = request.headers.get("origin") ?? "https://afterslim.com";
     const images = product.images as string[] | null;
 
     // Create Stripe Checkout Session
@@ -70,12 +92,15 @@ export async function POST(request: Request) {
       cancel_url: `${origin}`,
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json(
+      { url: session.url },
+      { headers: corsHeaders(origin) }
+    );
   } catch (err) {
     console.error("[checkout] error:", err);
     return NextResponse.json(
       { error: "Erro ao criar sessao de checkout" },
-      { status: 500 }
+      { status: 500, headers: corsHeaders(origin) }
     );
   }
 }
