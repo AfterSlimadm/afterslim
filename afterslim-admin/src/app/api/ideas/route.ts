@@ -28,13 +28,25 @@ export async function GET(request: Request) {
   return NextResponse.json(data);
 }
 
+// DB constraints: category IN (general, product, marketing, operations, tech)
+// DB constraints: status IN (new, under_review, approved, discarded)
+// DB constraints: source IN (manual, hermes, agent)
+const CATEGORY_MAP: Record<string, string> = {
+  Marketing: "marketing",
+  Produto: "product",
+  "Operações": "operations",
+  Tecnologia: "tech",
+  Cliente: "general",
+  Crescimento: "marketing",
+};
+
 const ideaSchema = z.object({
   title: z.string().min(3),
   description: z.string().min(10),
   category: z.string(),
   priority: z.enum(["low", "medium", "high", "critical"]).default("medium"),
   tags: z.array(z.string()).default([]),
-  source: z.enum(["manual", "after", "agent"]).default("manual"),
+  source: z.enum(["manual", "hermes", "agent"]).default("manual"),
   author: z.string().optional(),
 });
 
@@ -44,16 +56,28 @@ export async function POST(request: Request) {
 
   if (!parsed.success) {
     return NextResponse.json(
-      { error: "Invalid data", details: parsed.error.flatten() },
+      { error: "Dados invalidos", details: parsed.error.flatten() },
       { status: 400 }
     );
   }
+
+  const dbCategory = CATEGORY_MAP[parsed.data.category] ?? parsed.data.category.toLowerCase();
 
   const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from("ideas")
-    .insert({ ...parsed.data, status: "new" })
+    .insert({
+      title: parsed.data.title,
+      description: parsed.data.description,
+      category: dbCategory,
+      priority: parsed.data.priority,
+      tags: parsed.data.tags,
+      source: parsed.data.source,
+      author: parsed.data.author ?? null,
+      status: "new",
+      votes: 0,
+    })
     .select()
     .single();
 

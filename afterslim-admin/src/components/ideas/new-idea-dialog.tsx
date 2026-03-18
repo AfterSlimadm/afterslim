@@ -61,7 +61,9 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
     }
   };
 
-  const handleSubmit = () => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
     if (!title.trim()) {
       toast.error("Título é obrigatório");
       return;
@@ -75,10 +77,35 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
       return;
     }
 
-    // In a real app, this would send data to the API
-    toast.success("Ideia criada com sucesso");
-    resetForm();
-    setOpen(false);
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/ideas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.trim(),
+          description: description.trim(),
+          category,
+          priority,
+          tags,
+          source: "manual",
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Erro ao criar ideia");
+      }
+
+      toast.success("Ideia criada com sucesso");
+      resetForm();
+      setOpen(false);
+      window.location.reload();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao criar ideia");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const resetForm = () => {
@@ -235,9 +262,9 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancelar
           </Button>
-          <Button onClick={handleSubmit}>
+          <Button onClick={handleSubmit} disabled={submitting}>
             <Plus className="h-4 w-4" />
-            Criar Ideia
+            {submitting ? "Criando..." : "Criar Ideia"}
           </Button>
         </DialogFooter>
       </DialogContent>
