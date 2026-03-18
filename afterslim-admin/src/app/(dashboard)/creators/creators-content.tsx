@@ -42,22 +42,22 @@ import type { CreatorRow } from "@/lib/queries/creators";
 /* -- Tier config -- */
 
 const TIER_CONFIG: Record<string, { label: string; color: string }> = {
-  nano: { label: "Nano", color: "bg-green-100 text-green-800" },
-  micro: { label: "Micro", color: "bg-blue-100 text-blue-800" },
-  mid: { label: "Médio", color: "bg-purple-100 text-purple-800" },
-  macro: { label: "Macro", color: "bg-orange-100 text-orange-800" },
-  mega: { label: "Mega", color: "bg-red-100 text-red-800" },
+  nano: { label: "Nano", color: "badge-success" },
+  micro: { label: "Micro", color: "badge-info" },
+  mid: { label: "Médio", color: "badge-purple" },
+  macro: { label: "Macro", color: "badge-warning" },
+  mega: { label: "Mega", color: "badge-error" },
 };
 
 /* -- Status config -- */
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  prospect: { label: "Prospecto", color: "bg-gray-100 text-gray-800" },
-  contacted: { label: "Contatado", color: "bg-blue-100 text-blue-800" },
-  negotiating: { label: "Negociando", color: "bg-yellow-100 text-yellow-800" },
-  active: { label: "Ativo", color: "bg-green-100 text-green-800" },
-  paused: { label: "Pausado", color: "bg-orange-100 text-orange-800" },
-  ended: { label: "Encerrado", color: "bg-gray-100 text-gray-800" },
+  prospect: { label: "Prospecto", color: "badge-neutral" },
+  contacted: { label: "Contatado", color: "badge-info" },
+  negotiating: { label: "Negociando", color: "badge-warning" },
+  active: { label: "Ativo", color: "badge-success" },
+  paused: { label: "Pausado", color: "badge-warning" },
+  ended: { label: "Encerrado", color: "badge-neutral" },
 };
 
 interface CreatorsContentProps {
@@ -85,11 +85,11 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
       : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Criadores</h1>
-          <p className="text-muted-foreground">
+        <div className="page-header">
+          <h1 className="page-title">Criadores</h1>
+          <p className="page-description">
             Gerencie parcerias com influencers e campanhas UGC.
           </p>
         </div>
@@ -105,7 +105,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="kpi-grid">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">

@@ -17,11 +17,11 @@ import type { AgentMemoryRow } from "@/lib/queries/agents";
 type MemoryKind = "insight" | "action" | "summary" | "alert" | "classification";
 
 const KIND_CONFIG: Record<MemoryKind, { label: string; icon: typeof Brain; color: string }> = {
-  insight: { label: "Insight", icon: Lightbulb, color: "bg-yellow-100 text-yellow-800" },
-  action: { label: "Action", icon: Zap, color: "bg-blue-100 text-blue-800" },
-  summary: { label: "Summary", icon: FileText, color: "bg-purple-100 text-purple-800" },
-  alert: { label: "Alert", icon: AlertTriangle, color: "bg-red-100 text-red-800" },
-  classification: { label: "Classification", icon: Brain, color: "bg-indigo-100 text-indigo-800" },
+  insight: { label: "Insight", icon: Lightbulb, color: "badge-warning" },
+  action: { label: "Ação", icon: Zap, color: "badge-info" },
+  summary: { label: "Resumo", icon: FileText, color: "badge-purple" },
+  alert: { label: "Alerta", icon: AlertTriangle, color: "badge-error" },
+  classification: { label: "Classificação", icon: Brain, color: "badge-info" },
 };
 
 function getAgentName(agentId: string): string {

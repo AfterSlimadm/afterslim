@@ -176,12 +176,12 @@ export default function TransactionsContent({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Transações</h1>
-          <p className="text-muted-foreground">
+        <div className="page-header">
+          <h1 className="page-title">Transações</h1>
+          <p className="page-description">
             Visualize e gerencie todas as transações de receita e despesa.
           </p>
         </div>

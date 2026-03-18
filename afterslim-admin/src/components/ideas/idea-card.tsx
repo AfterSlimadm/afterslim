@@ -39,26 +39,18 @@ const PRIORITY_ICONS: Record<IdeaPriority, React.ReactNode> = {
 function ScoreIndicator({ score }: { score: number | null }) {
   if (score === null) return null;
 
-  const getScoreColor = (s: number) => {
-    if (s >= 80) return "text-emerald-600 dark:text-emerald-400";
-    if (s >= 60) return "text-blue-600 dark:text-blue-400";
-    if (s >= 40) return "text-yellow-600 dark:text-yellow-400";
-    return "text-red-600 dark:text-red-400";
-  };
-
-  const getScoreBg = (s: number) => {
-    if (s >= 80) return "bg-emerald-100 dark:bg-emerald-900/30";
-    if (s >= 60) return "bg-blue-100 dark:bg-blue-900/30";
-    if (s >= 40) return "bg-yellow-100 dark:bg-yellow-900/30";
-    return "bg-red-100 dark:bg-red-900/30";
+  const getScoreClass = (s: number) => {
+    if (s >= 80) return "badge-success";
+    if (s >= 60) return "badge-info";
+    if (s >= 40) return "badge-warning";
+    return "badge-error";
   };
 
   return (
     <div
       className={cn(
         "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold",
-        getScoreBg(score),
-        getScoreColor(score)
+        getScoreClass(score)
       )}
     >
       <Zap className="h-3 w-3" />

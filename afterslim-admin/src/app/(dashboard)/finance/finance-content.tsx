@@ -86,17 +86,15 @@ function FinanceKpiCard({
 
   return (
     <Card className="gap-0 py-0">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
         </CardTitle>
-        <div
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${bgClass}`}
-        >
+        <div className={`icon-box-sm ${bgClass}`}>
           <Icon className={`h-4 w-4 ${iconClass}`} />
         </div>
       </CardHeader>
-      <CardContent className="pb-5">
+      <CardContent className="pb-5 px-5">
         <div className="text-2xl font-bold tracking-tight">
           {isCurrency
             ? formatCurrency(value)
@@ -104,17 +102,17 @@ function FinanceKpiCard({
             ? `${value.toFixed(1)}%`
             : value.toLocaleString()}
         </div>
-        <div className="mt-1 flex items-center gap-1 text-xs">
+        <div className="mt-1.5 flex items-center gap-1.5 text-xs">
           {isPositive ? (
-            <TrendingUp className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <TrendingUp className="h-3.5 w-3.5 trend-positive" />
           ) : (
-            <TrendingDown className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
+            <TrendingDown className="h-3.5 w-3.5 trend-negative" />
           )}
           <span
             className={
               isPositive
-                ? "font-medium text-emerald-600 dark:text-emerald-400"
-                : "font-medium text-red-600 dark:text-red-400"
+                ? "font-medium trend-positive"
+                : "font-medium trend-negative"
             }
           >
             {isPositive ? "+" : ""}
@@ -157,17 +155,17 @@ export default function FinanceContent({
   const marginTrend = 0;
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Financeiro</h1>
-        <p className="text-muted-foreground">
+      <div className="page-header">
+        <h1 className="page-title">Financeiro</h1>
+        <p className="page-description">
           Acompanhe receitas, despesas, margens de lucro e metas financeiras.
         </p>
       </div>
 
       {/* KPI Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="kpi-grid">
         <FinanceKpiCard
           title="Receita Total"
           value={totalRevenue}
@@ -261,7 +259,7 @@ export default function FinanceContent({
           <Card key={link.href} className="transition-colors hover:bg-muted/50">
             <Link href={link.href} className="block">
               <CardHeader className="flex flex-row items-center gap-3 pb-2">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <div className="icon-box bg-primary/10">
                   <link.icon className="h-5 w-5 text-primary" />
                 </div>
                 <div>

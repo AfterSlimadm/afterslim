@@ -178,12 +178,12 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
   }, [ideas]);
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Page Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Banco de Ideias</h1>
-          <p className="text-muted-foreground">
+        <div className="page-header">
+          <h1 className="page-title">Banco de Ideias</h1>
+          <p className="page-description">
             Pipeline de ideias da pesquisa ao lancamento. Avalie, priorize
             e acompanhe novos conceitos.
           </p>
@@ -197,7 +197,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
       </div>
 
       {/* Stats Row */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="kpi-grid">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -267,7 +267,7 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
 
       {/* Grid View */}
       {viewMode === "grid" && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {filteredIdeas.map((idea) => (
             <IdeaCard key={idea.id} idea={idea} onClick={setSelectedIdea} />
           ))}
@@ -376,12 +376,12 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
                             className={cn(
                               "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold",
                               idea.score >= 80
-                                ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+                                ? "badge-success"
                                 : idea.score >= 60
-                                ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                                ? "badge-info"
                                 : idea.score >= 40
-                                ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                : "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                                ? "badge-warning"
+                                : "badge-error"
                             )}
                           >
                             <Zap className="h-3 w-3" />

@@ -102,14 +102,14 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
   const activeGoals = goals.filter((g) => g.is_active);
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
+        <div className="page-header">
+          <h1 className="page-title">
             Metas Financeiras
           </h1>
-          <p className="text-muted-foreground">
+          <p className="page-description">
             Defina metas e acompanhe o progresso de receita, despesas e
             metricas-chave.
           </p>
@@ -188,7 +188,7 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
       {/* Summary card */}
       <Card>
         <CardHeader className="flex flex-row items-center gap-3 pb-2">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+          <div className="icon-box bg-primary/10">
             <Target className="h-5 w-5 text-primary" />
           </div>
           <div>
@@ -215,10 +215,10 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
       </div>
 
       {activeGoals.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Target className="h-10 w-10 text-muted-foreground mb-3" />
-          <p className="text-muted-foreground font-medium">Nenhuma meta ativa</p>
-          <p className="text-sm text-muted-foreground">
+        <div className="empty-state">
+          <Target />
+          <p className="font-medium">Nenhuma meta ativa</p>
+          <p className="text-sm">
             Crie uma meta para comecar a acompanhar seus objetivos financeiros.
           </p>
         </div>

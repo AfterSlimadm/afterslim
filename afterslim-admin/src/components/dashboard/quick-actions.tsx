@@ -69,7 +69,7 @@ export function QuickActions() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Acoes Rapidas</CardTitle>
+        <CardTitle>Ações Rápidas</CardTitle>
         <CardDescription>Tarefas e atalhos comuns</CardDescription>
       </CardHeader>
       <CardContent>
@@ -87,7 +87,7 @@ export function QuickActions() {
               >
                 <div
                   className={cn(
-                    "flex h-10 w-10 items-center justify-center rounded-lg transition-transform group-hover:scale-105",
+                    "icon-box transition-transform group-hover:scale-105",
                     action.bgClass
                   )}
                 >

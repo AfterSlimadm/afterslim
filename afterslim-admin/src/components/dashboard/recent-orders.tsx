@@ -30,34 +30,13 @@ const STATUS_STYLES: Record<
   OrderStatus,
   { label: string; className: string }
 > = {
-  pending: {
-    label: "Pendente",
-    className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-  },
-  confirmed: {
-    label: "Confirmado",
-    className: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-  },
-  processing: {
-    label: "Processando",
-    className: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
-  },
-  shipped: {
-    label: "Enviado",
-    className: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-  },
-  delivered: {
-    label: "Entregue",
-    className: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-  },
-  cancelled: {
-    label: "Cancelado",
-    className: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-  },
-  refunded: {
-    label: "Reembolsado",
-    className: "bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-400",
-  },
+  pending: { label: "Pendente", className: "badge-warning" },
+  confirmed: { label: "Confirmado", className: "badge-info" },
+  processing: { label: "Processando", className: "badge-info" },
+  shipped: { label: "Enviado", className: "badge-purple" },
+  delivered: { label: "Entregue", className: "badge-success" },
+  cancelled: { label: "Cancelado", className: "badge-error" },
+  refunded: { label: "Reembolsado", className: "badge-neutral" },
 };
 
 /* ── Props ───────────────────────────────────────────────── */

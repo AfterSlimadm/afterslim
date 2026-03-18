@@ -181,11 +181,11 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
   const onlineCount = statuses.filter((a) => a.status === "online").length;
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Agentes IA</h1>
-          <p className="text-muted-foreground">
+        <div className="page-header">
+          <h1 className="page-title">Agentes IA</h1>
+          <p className="page-description">
             Monitore e gerencie o time de agentes IA da AfterSlim.
           </p>
         </div>
@@ -206,7 +206,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
       </div>
 
       {/* Overview stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="kpi-grid">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -259,7 +259,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
 
       {/* Agentes Ativos */}
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold">Agentes Ativos</h2>
+        <h2 className="section-title">Agentes Ativos</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {ACTIVE_AGENTS.map((agent) => (
             <AgentCard
@@ -274,7 +274,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
       {/* Em Breve */}
       <div className="space-y-3">
         <div>
-          <h2 className="text-lg font-semibold">Em Breve</h2>
+          <h2 className="section-title">Em Breve</h2>
           <p className="text-sm text-muted-foreground">
             Estes agentes estao em desenvolvimento
           </p>

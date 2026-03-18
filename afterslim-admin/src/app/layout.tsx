@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | AfterSlim Admin",
   },
   description:
-    "Internal management dashboard for AfterSlim - orders, finance, inventory, creators, and AI agents.",
+    "Painel administrativo interno da AfterSlim. Pedidos, financeiro, estoque, criadores e agentes IA.",
   robots: { index: false, follow: false },
 };
 
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"

@@ -36,17 +36,17 @@ export default function DashboardContent({
   const lowStock = stats?.lowStockCount ?? 0;
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Painel</h1>
-        <p className="text-muted-foreground">
+      <div className="page-header">
+        <h1 className="page-title">Painel</h1>
+        <p className="page-description">
           Visão geral do seu negócio AfterSlim.
         </p>
       </div>
 
       {/* KPI Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="kpi-grid">
         <KpiCard
           variant="revenue"
           title="Receita Total"

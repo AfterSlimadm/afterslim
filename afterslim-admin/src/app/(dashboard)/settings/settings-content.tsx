@@ -332,14 +332,14 @@ export default function SettingsContent({
   // ─── Render ─────────────────────────────────────────────────
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+      <div className="page-header">
+        <h1 className="page-title flex items-center gap-2">
           <Settings className="size-6 text-muted-foreground" />
           Configurações
         </h1>
-        <p className="text-muted-foreground">
+        <p className="page-description">
           Gerencie preferências da loja, equipe e notificações.
         </p>
       </div>

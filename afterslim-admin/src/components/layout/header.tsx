@@ -43,7 +43,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 border-b bg-background px-4 lg:px-6">
+    <header className="flex h-14 shrink-0 items-center gap-3 border-b bg-background px-5 lg:px-8">
       {/* Mobile menu toggle */}
       <Button
         variant="ghost"
@@ -52,7 +52,7 @@ export function Header() {
         onClick={() => setSidebarOpen(true)}
       >
         <Menu className="h-5 w-5" />
-        <span className="sr-only">Open sidebar</span>
+        <span className="sr-only">Abrir menu</span>
       </Button>
 
       <Separator orientation="vertical" className="mr-1 h-5 lg:hidden" />

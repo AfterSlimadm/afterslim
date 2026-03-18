@@ -135,3 +135,123 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ============================================================
+   AfterSlim Design System
+   ============================================================ */
+
+/* -- Semantic status colors (use via classes below) --------- */
+:root {
+  --status-success: oklch(0.55 0.16 145);
+  --status-success-muted: oklch(0.95 0.04 145);
+  --status-warning: oklch(0.70 0.16 80);
+  --status-warning-muted: oklch(0.95 0.04 80);
+  --status-error: oklch(0.58 0.22 27);
+  --status-error-muted: oklch(0.95 0.04 27);
+  --status-info: oklch(0.55 0.15 250);
+  --status-info-muted: oklch(0.95 0.04 250);
+  --status-purple: oklch(0.55 0.18 300);
+  --status-purple-muted: oklch(0.95 0.04 300);
+}
+.dark {
+  --status-success: oklch(0.70 0.16 145);
+  --status-success-muted: oklch(0.25 0.04 145);
+  --status-warning: oklch(0.75 0.14 80);
+  --status-warning-muted: oklch(0.25 0.04 80);
+  --status-error: oklch(0.70 0.19 27);
+  --status-error-muted: oklch(0.25 0.04 27);
+  --status-info: oklch(0.70 0.14 250);
+  --status-info-muted: oklch(0.25 0.04 250);
+  --status-purple: oklch(0.72 0.15 300);
+  --status-purple-muted: oklch(0.25 0.04 300);
+}
+
+/* -- Page layout helpers ------------------------------------ */
+.page-container {
+  @apply space-y-8;
+}
+.page-header {
+  @apply space-y-1;
+}
+.page-title {
+  @apply text-2xl font-bold tracking-tight;
+}
+.page-description {
+  @apply text-sm text-muted-foreground;
+}
+.section-title {
+  @apply text-lg font-semibold tracking-tight;
+}
+
+/* -- KPI grid ----------------------------------------------- */
+.kpi-grid {
+  @apply grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+}
+
+/* -- Card polish -------------------------------------------- */
+.card-elevated {
+  @apply shadow-md border-border/60;
+}
+
+/* -- Table polish ------------------------------------------- */
+[data-slot="table-container"] {
+  @apply -mx-0 rounded-lg;
+}
+[data-slot="table-head"] {
+  @apply px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground;
+}
+[data-slot="table-cell"] {
+  @apply px-4 py-3 text-sm;
+}
+[data-slot="table-row"]:hover {
+  @apply bg-muted/40;
+}
+
+/* -- Status badge classes (replace hardcoded colors) -------- */
+.badge-success {
+  background: var(--status-success-muted);
+  color: var(--status-success);
+}
+.badge-warning {
+  background: var(--status-warning-muted);
+  color: var(--status-warning);
+}
+.badge-error {
+  background: var(--status-error-muted);
+  color: var(--status-error);
+}
+.badge-info {
+  background: var(--status-info-muted);
+  color: var(--status-info);
+}
+.badge-purple {
+  background: var(--status-purple-muted);
+  color: var(--status-purple);
+}
+.badge-neutral {
+  @apply bg-muted text-muted-foreground;
+}
+
+/* -- Icon container (KPI cards, quick actions) -------------- */
+.icon-box {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl;
+}
+.icon-box-sm {
+  @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg;
+}
+
+/* -- Empty state -------------------------------------------- */
+.empty-state {
+  @apply flex flex-col items-center justify-center gap-3 py-16 text-center text-muted-foreground;
+}
+.empty-state svg {
+  @apply size-12 opacity-40;
+}
+
+/* -- Trend indicator ---------------------------------------- */
+.trend-positive {
+  color: var(--status-success);
+}
+.trend-negative {
+  color: var(--status-error);
+}

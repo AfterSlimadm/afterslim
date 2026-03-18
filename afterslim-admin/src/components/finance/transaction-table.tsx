@@ -165,21 +165,15 @@ export function TransactionTable({
               <TableCell>
                 <Badge
                   variant={isIncome ? "default" : "destructive"}
-                  className={cn(
-                    "capitalize",
-                    isIncome &&
-                      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400"
-                  )}
+                  className={isIncome ? "badge-success" : "badge-error"}
                 >
-                  {tx.type}
+                  {isIncome ? "Receita" : "Despesa"}
                 </Badge>
               </TableCell>
               <TableCell
                 className={cn(
                   "text-right font-mono font-medium",
-                  isIncome
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-red-600 dark:text-red-400"
+                  isIncome ? "trend-positive" : "trend-negative"
                 )}
               >
                 {isIncome ? "+" : "-"}
@@ -213,10 +207,10 @@ export function TransactionTable({
             </TableCell>
             <TableCell className="text-right">
               <div className="space-y-1">
-                <div className="font-mono font-medium text-emerald-600 dark:text-emerald-400">
+                <div className="font-mono font-medium trend-positive">
                   +{formatCurrency(totalIncome)}
                 </div>
-                <div className="font-mono font-medium text-red-600 dark:text-red-400">
+                <div className="font-mono font-medium trend-negative">
                   -{formatCurrency(totalExpense)}
                 </div>
                 <div className="border-t pt-1 font-mono font-semibold">

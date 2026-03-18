@@ -17,14 +17,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar />
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="w-72 p-0" showCloseButton={false}>
-          <SheetTitle className="sr-only">Navigation</SheetTitle>
+        <SheetContent side="left" className="w-[85vw] max-w-xs p-0" showCloseButton={false}>
+          <SheetTitle className="sr-only">Navegação</SheetTitle>
           <MobileSidebarContent />
         </SheetContent>
       </Sheet>
       <div className="flex flex-1 flex-col overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        <main className="flex-1 overflow-y-auto p-5 lg:p-8">
           {children}
         </main>
       </div>

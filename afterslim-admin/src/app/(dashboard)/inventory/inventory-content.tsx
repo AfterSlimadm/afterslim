@@ -45,8 +45,8 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
 
   if (!product) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-        <Package className="size-12 mb-4" />
+      <div className="empty-state">
+        <Package />
         <p className="text-lg font-medium">Nenhum produto no estoque</p>
         <p className="text-sm">Execute o seed SQL para adicionar o Berberine.</p>
       </div>
@@ -90,12 +90,12 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Estoque</h1>
-          <p className="text-muted-foreground">
+        <div className="page-header">
+          <h1 className="page-title">Estoque</h1>
+          <p className="page-description">
             Controle do estoque do AfterSlim Berberine 1200mg
           </p>
         </div>
@@ -140,7 +140,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="kpi-grid">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">

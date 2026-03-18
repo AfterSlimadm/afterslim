@@ -38,8 +38,8 @@ interface StatCardProps {
 function StatCard({ label, value, icon, description }: StatCardProps) {
   return (
     <Card>
-      <CardContent className="flex items-center gap-4 p-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
+      <CardContent className="flex items-center gap-4 p-5">
+        <div className="icon-box bg-muted">
           {icon}
         </div>
         <div>
@@ -141,13 +141,13 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Pedidos</h1>
-          <p className="text-muted-foreground">
-            Gerencie pedidos, acompanhe envios e processe devolucoes.
+        <div className="page-header">
+          <h1 className="page-title">Pedidos</h1>
+          <p className="page-description">
+            Gerencie pedidos, acompanhe envios e processe devoluções.
           </p>
         </div>
         <Button
@@ -161,7 +161,7 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
       </div>
 
       {/* Stats row */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="kpi-grid">
         <StatCard
           label="Total de Pedidos"
           value={stats.total}

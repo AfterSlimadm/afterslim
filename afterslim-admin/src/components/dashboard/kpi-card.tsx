@@ -73,35 +73,23 @@ export function KpiCard({
 
   return (
     <Card className={cn("gap-0 py-0", className)}>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
         </CardTitle>
-        <div
-          className={cn(
-            "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg",
-            config.bgClass
-          )}
-        >
+        <div className={cn("icon-box-sm", config.bgClass)}>
           <Icon className={cn("h-4 w-4", config.iconClass)} />
         </div>
       </CardHeader>
-      <CardContent className="pb-5">
+      <CardContent className="pb-5 px-5">
         <div className="text-2xl font-bold tracking-tight">{value}</div>
-        <div className="mt-1 flex items-center gap-1 text-xs">
+        <div className="mt-1.5 flex items-center gap-1.5 text-xs">
           {isPositive ? (
-            <TrendingUp className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <TrendingUp className="h-3.5 w-3.5 trend-positive" />
           ) : (
-            <TrendingDown className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
+            <TrendingDown className="h-3.5 w-3.5 trend-negative" />
           )}
-          <span
-            className={cn(
-              "font-medium",
-              isPositive
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-red-600 dark:text-red-400"
-            )}
-          >
+          <span className={cn("font-medium", isPositive ? "trend-positive" : "trend-negative")}>
             {isPositive ? "+" : ""}
             {trend.toFixed(1)}%
           </span>
