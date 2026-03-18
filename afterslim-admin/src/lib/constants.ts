@@ -22,6 +22,7 @@ import type {
   AgentId,
   TransactionCategory,
   DocumentCategory,
+  CostCategory,
 } from "./types";
 
 /* =============================================================
@@ -57,6 +58,7 @@ export const NAV_ITEMS: NavItem[] = [
     children: [
       { label: "Visão Geral", href: "/finance" },
       { label: "Transações", href: "/finance/transactions" },
+      { label: "Custos", href: "/finance/costs" },
       { label: "Metas", href: "/finance/goals" },
     ],
   },
@@ -339,6 +341,30 @@ export const DEFAULT_PAGE_SIZE = 25;
 /* =============================================================
    Categorias de documentos
    ============================================================= */
+
+/* =============================================================
+   Categorias de custos
+   ============================================================= */
+
+export const COST_CATEGORY_CONFIG: Record<
+  CostCategory,
+  { label: string; color: string }
+> = {
+  supplier: { label: "Fornecedor", color: "badge-info" },
+  ads: { label: "Anúncios", color: "badge-warning" },
+  platform: { label: "Plataforma", color: "badge-purple" },
+  shipping: { label: "Frete/Envio", color: "badge-info" },
+  tools: { label: "Ferramentas", color: "badge-neutral" },
+  legal: { label: "Jurídico", color: "badge-purple" },
+  other: { label: "Outros", color: "badge-neutral" },
+};
+
+export const PARTNERS = [
+  { id: "henrique", name: "Henrique", share: 30 },
+  { id: "fernando", name: "Fernando", share: 30 },
+  { id: "vitor", name: "Vitor", share: 15 },
+  { id: "allan", name: "Allan", share: 15 },
+] as const;
 
 export const DOCUMENT_CATEGORY_CONFIG: Record<
   DocumentCategory,

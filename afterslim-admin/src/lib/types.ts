@@ -368,6 +368,22 @@ export interface PaginatedResponse<T> {
   total_pages: number;
 }
 
+// ─── Costs ────────────────────────────────────────────────────
+
+export type CostCategory = "supplier" | "ads" | "platform" | "shipping" | "tools" | "legal" | "other";
+
+export interface Cost {
+  id: string;
+  description: string;
+  amount: number;
+  category: CostCategory;
+  paid_by: string;
+  date: string;
+  notes: string | null;
+  receipt_url: string | null;
+  created_at: string;
+}
+
 // ─── Documents ────────────────────────────────────────────────
 
 export type DocumentCategory = "contract" | "invoice" | "receipt" | "legal" | "other";
