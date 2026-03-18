@@ -8,6 +8,7 @@ import {
   Bot,
   Settings,
   Package,
+  FileText,
   type LucideIcon,
 } from "lucide-react";
 import type {
@@ -20,6 +21,7 @@ import type {
   CreatorCampaignStatus,
   AgentId,
   TransactionCategory,
+  DocumentCategory,
 } from "./types";
 
 /* =============================================================
@@ -62,6 +64,11 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Estoque",
     href: "/inventory",
     icon: Package,
+  },
+  {
+    label: "Documentos",
+    href: "/documents",
+    icon: FileText,
   },
   {
     label: "Ideias",
@@ -328,3 +335,18 @@ export const IDEA_SOURCE_CONFIG: Record<
 
 export const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100] as const;
 export const DEFAULT_PAGE_SIZE = 25;
+
+/* =============================================================
+   Categorias de documentos
+   ============================================================= */
+
+export const DOCUMENT_CATEGORY_CONFIG: Record<
+  DocumentCategory,
+  { label: string; icon: string; color: string }
+> = {
+  contract: { label: "Contrato", icon: "FileText", color: "badge-info" },
+  invoice: { label: "Nota Fiscal", icon: "Receipt", color: "badge-success" },
+  receipt: { label: "Recibo", icon: "CreditCard", color: "badge-warning" },
+  legal: { label: "Jurídico", icon: "Shield", color: "badge-purple" },
+  other: { label: "Outros", icon: "MoreHorizontal", color: "badge-neutral" },
+};

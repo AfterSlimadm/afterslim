@@ -368,6 +368,26 @@ export interface PaginatedResponse<T> {
   total_pages: number;
 }
 
+// ─── Documents ────────────────────────────────────────────────
+
+export type DocumentCategory = "contract" | "invoice" | "receipt" | "legal" | "other";
+
+export interface Document {
+  id: string;
+  title: string;
+  description: string | null;
+  category: DocumentCategory;
+  file_name: string;
+  file_url: string;
+  file_path: string;
+  file_type: string | null;
+  file_size: number | null;
+  uploaded_by: string;
+  created_at: string;
+}
+
+// ─── Misc ─────────────────────────────────────────────────────
+
 export interface DateRange {
   from: Date | undefined;
   to: Date | undefined;

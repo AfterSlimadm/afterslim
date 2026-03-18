@@ -7,6 +7,10 @@ const ALLOWED_TYPES = [
   "image/png",
   "image/jpeg",
   "image/webp",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-excel",
 ];
 
 export async function POST(request: NextRequest) {
@@ -32,7 +36,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Tipo de arquivo nao permitido. Aceitos: PDF, PNG, JPG, WEBP.",
+            "Tipo de arquivo nao permitido. Aceitos: PDF, PNG, JPG, WEBP, DOC, DOCX, XLS, XLSX.",
         },
         { status: 400 }
       );
@@ -40,10 +44,11 @@ export async function POST(request: NextRequest) {
 
     const supabase = getAdminClient();
 
-    // Build a unique path: transactions/{timestamp}-{filename}
+    // Build a unique path: {folder}/{timestamp}-{filename}
+    const folder = (formData.get("folder") as string) || "transactions";
     const timestamp = Date.now();
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const filePath = `transactions/${timestamp}-${safeName}`;
+    const filePath = `${folder}/${timestamp}-${safeName}`;
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
