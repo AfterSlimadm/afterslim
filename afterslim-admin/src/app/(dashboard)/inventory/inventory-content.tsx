@@ -53,8 +53,11 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
     );
   }
 
-  const costPrice = Number(product.unit_cost);
-  const sellPrice = Number(product.selling_price);
+  // Prices stored in cents (e.g. 5999 = $59.99)
+  const costCents = Number(product.unit_cost);
+  const sellCents = Number(product.selling_price);
+  const costPrice = costCents / 100;
+  const sellPrice = sellCents / 100;
   const margin = sellPrice > 0
     ? ((sellPrice - costPrice) / sellPrice * 100).toFixed(0)
     : "0";

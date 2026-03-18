@@ -42,29 +42,29 @@ export function formatCurrency(value: number, fromCents = false): string {
 }
 
 /**
- * Format an ISO date string into a localized date (US English).
+ * Format an ISO date string into a localized date (PT-BR).
  */
 export function formatDate(
   date: string | Date,
   options?: Intl.DateTimeFormatOptions
 ): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
+  return d.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
     year: "numeric",
     ...options,
   });
 }
 
 /**
- * Format date with time (US English).
+ * Format date with time (PT-BR).
  */
 export function formatDateTime(date: string | Date): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
+  return d.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
@@ -78,28 +78,25 @@ export function getStatusColor(
   status: OrderStatus | IdeaStatus | PaymentStatus | string
 ): string {
   const map: Record<string, string> = {
-    // Order statuses
-    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-    confirmed: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-    processing: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
-    shipped: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-    delivered: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    cancelled: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    refunded: "bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-400",
-    // Payment
-    paid: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    failed: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    // Idea statuses
-    backlog: "bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-400",
-    researching: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-    validating: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
-    approved: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    in_production: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-    launched: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-    rejected: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+    pending: "badge-warning",
+    confirmed: "badge-info",
+    processing: "badge-info",
+    shipped: "badge-purple",
+    delivered: "badge-success",
+    cancelled: "badge-error",
+    refunded: "badge-neutral",
+    paid: "badge-success",
+    failed: "badge-error",
+    backlog: "badge-neutral",
+    researching: "badge-info",
+    validating: "badge-info",
+    approved: "badge-success",
+    in_production: "badge-purple",
+    launched: "badge-success",
+    rejected: "badge-error",
   };
 
-  return map[status] ?? "bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-400";
+  return map[status] ?? "badge-neutral";
 }
 
 /**
