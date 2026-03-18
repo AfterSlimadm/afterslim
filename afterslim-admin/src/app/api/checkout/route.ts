@@ -63,8 +63,9 @@ export async function POST(request: Request) {
 
     const images = product.images as string[] | null;
 
-    // Create Stripe Checkout Session
+    // Create Stripe Checkout Session (embedded mode)
     const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded",
       mode: "payment",
       payment_method_types: ["card"],
       line_items: [
@@ -88,12 +89,11 @@ export async function POST(request: Request) {
         product_slug: product.slug,
         quantity: String(quantity),
       },
-      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}`,
+      return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     return NextResponse.json(
-      { url: session.url },
+      { clientSecret: session.client_secret },
       { headers: corsHeaders(origin) }
     );
   } catch (err) {

@@ -366,10 +366,10 @@ export const COST_CATEGORY_CONFIG: Record<
 };
 
 export const PARTNERS = [
-  { id: "henrique", name: "Henrique", share: 30 },
-  { id: "fernando", name: "Fernando", share: 30 },
-  { id: "vitor", name: "Vitor", share: 15 },
-  { id: "allan", name: "Allan", share: 15 },
+  { id: "fernando", name: "Fernando Quintas", role: "CEO", share: 35, contributes: true },
+  { id: "henrique", name: "Henrique Vaz", role: "COO", share: 35, contributes: true },
+  { id: "allan", name: "Allan Godoy", role: "CMO", share: 15, contributes: false },
+  { id: "vitor", name: "Vitor Araujo", role: "CTO", share: 15, contributes: false },
 ] as const;
 
 export const DOCUMENT_CATEGORY_CONFIG: Record<
