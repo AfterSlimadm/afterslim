@@ -1107,20 +1107,18 @@ body, p, span, a, button, input, label, h1, h2, h3, h4, h5, h6, div {
         footerLinks[fl].setAttribute('href','#');
       }
     }
-    // Replace [logo] with AfterSlim text logo
+    // Replace [logo] with AfterSlim SVG logo
     var logoLinks=document.querySelectorAll('.seed-logo,.sc-63c72040-0');
     for(var lg=0;lg<logoLinks.length;lg++){
       var logoEl=logoLinks[lg];
       var srSpan=logoEl.querySelector('.screenreader-only');
-      logoEl.innerHTML='<span style="font-family:Satoshi,sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.5px;color:#B8722D;">After<span style="color:#C17F2E;">Slim</span></span>';
+      logoEl.innerHTML='<img src="/logo-afterslim.svg" alt="AfterSlim" style="height:28px;width:auto;display:inline-block;vertical-align:middle;"/>';
       if(srSpan)logoEl.appendChild(srSpan);
     }
     // Fix footer branding
     var footerSeedLink=document.querySelector('footer a[href="/"]');
     if(footerSeedLink){
-      footerSeedLink.textContent='AfterSlim';
-      var footerImg=footerSeedLink.querySelector('img');
-      if(footerImg)footerImg.style.display='none';
+      footerSeedLink.innerHTML='<img src="/logo-afterslim.svg" alt="AfterSlim" style="height:24px;width:auto;"/>';
     }
     // Fix social links to # (no real socials yet)
     var socialLinks=document.querySelectorAll('a[href*="instagram.com/seed"],a[href*="twitter.com/seed"],a[href*="linkedin.com/company/seed"],a[href*="refer"]');
