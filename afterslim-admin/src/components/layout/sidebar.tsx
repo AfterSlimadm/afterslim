@@ -20,6 +20,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -36,13 +37,19 @@ export function Sidebar() {
       {/* Logo */}
       <div className="flex h-14 items-center border-b border-sidebar-border px-4">
         <Link href="/" className="flex items-center gap-2 overflow-hidden">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
-            <span className="text-sm font-bold text-primary-foreground">A</span>
-          </div>
-          {!collapsed && (
-            <span className="text-base font-semibold text-sidebar-foreground truncate">
-              AfterSlim
-            </span>
+          {collapsed ? (
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
+              <span className="text-sm font-bold text-primary-foreground">A</span>
+            </div>
+          ) : (
+            <Image
+              src="/logo-afterslim.svg"
+              alt="AfterSlim"
+              width={140}
+              height={36}
+              className="h-8 w-auto"
+              priority
+            />
           )}
         </Link>
       </div>
@@ -205,10 +212,13 @@ export function MobileSidebarContent() {
           className="flex items-center gap-2"
           onClick={() => setSidebarOpen(false)}
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <span className="text-sm font-bold text-primary-foreground">A</span>
-          </div>
-          <span className="text-base font-semibold">AfterSlim</span>
+          <Image
+            src="/logo-afterslim.svg"
+            alt="AfterSlim"
+            width={140}
+            height={36}
+            className="h-8 w-auto"
+          />
         </Link>
       </div>
 

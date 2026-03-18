@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -69,13 +70,15 @@ function LoginForm() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm space-y-6">
         {/* Brand logo */}
-        <div className="flex flex-col items-center space-y-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-            <span className="text-xl font-bold text-primary-foreground">A</span>
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            AfterSlim
-          </h1>
+        <div className="flex flex-col items-center space-y-3">
+          <Image
+            src="/logo-afterslim.svg"
+            alt="AfterSlim"
+            width={200}
+            height={52}
+            className="h-12 w-auto"
+            priority
+          />
           <p className="text-sm text-muted-foreground">Painel Administrativo</p>
         </div>
 

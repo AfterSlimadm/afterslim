@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 72" fill="none">
+  <defs>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00BFFF"/>
+      <stop offset="50%" stop-color="#3BB8E0"/>
+      <stop offset="100%" stop-color="#E0E0E0"/>
+    </linearGradient>
+    <linearGradient id="swooshGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#0088CC"/>
+      <stop offset="50%" stop-color="#00C8FF"/>
+      <stop offset="100%" stop-color="#66DDFF"/>
+    </linearGradient>
+  </defs>
+  <!-- Swoosh -->
+  <path d="M8 52 C8 52, 20 12, 70 12 C120 12, 45 58, 8 52 Z" fill="none" stroke="url(#swooshGrad)" stroke-width="2.5" opacity="0.8"/>
+  <path d="M4 56 C4 56, 24 8, 74 8 C124 8, 48 62, 4 56 Z" fill="none" stroke="url(#swooshGrad)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Text -->
+  <text x="32" y="52" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="46" font-weight="300" font-style="italic" fill="url(#textGrad)">
+    <tspan fill="#00BFFF" font-weight="400">After</tspan><tspan fill="#E8E8E8" font-weight="300">Slim</tspan>
+  </text>
+  <!-- TM -->
+  <text x="248" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#888">&#8482;</text>
+</svg>
