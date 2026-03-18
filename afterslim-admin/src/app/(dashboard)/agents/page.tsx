@@ -37,7 +37,7 @@ export default async function AgentsPage() {
       // Determine agent status based on recent activity
       const lastTask = agentTasks[0]; // already sorted by newest first
       let status: "online" | "idle" | "offline" = "offline";
-      let lastActive = "No activity";
+      let lastActive = "Sem atividade";
 
       if (lastTask) {
         const lastTaskDate = new Date(lastTask.created_at);

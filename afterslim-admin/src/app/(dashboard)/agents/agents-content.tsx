@@ -37,7 +37,7 @@ export interface AgentStatus {
 const STATUS_CONFIG = {
   online: { label: "Online", color: "bg-green-500", textColor: "text-green-700" },
   idle: { label: "Inativo", color: "bg-yellow-500", textColor: "text-yellow-700" },
-  offline: { label: "Offline", color: "bg-gray-400", textColor: "text-gray-500" },
+  offline: { label: "Desconectado", color: "bg-gray-400", textColor: "text-gray-500" },
 };
 
 /* ── Agent Card ── */

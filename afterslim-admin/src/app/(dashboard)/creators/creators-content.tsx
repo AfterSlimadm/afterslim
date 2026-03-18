@@ -44,7 +44,7 @@ import type { CreatorRow } from "@/lib/queries/creators";
 const TIER_CONFIG: Record<string, { label: string; color: string }> = {
   nano: { label: "Nano", color: "bg-green-100 text-green-800" },
   micro: { label: "Micro", color: "bg-blue-100 text-blue-800" },
-  mid: { label: "Mid-Tier", color: "bg-purple-100 text-purple-800" },
+  mid: { label: "Médio", color: "bg-purple-100 text-purple-800" },
   macro: { label: "Macro", color: "bg-orange-100 text-orange-800" },
   mega: { label: "Mega", color: "bg-red-100 text-red-800" },
 };
@@ -193,9 +193,9 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
             <TableHeader>
               <TableRow>
                 <TableHead className="pl-6">Criador</TableHead>
-                <TableHead>Handle</TableHead>
+                <TableHead>Perfil</TableHead>
                 <TableHead>Plataforma</TableHead>
-                <TableHead>Tier</TableHead>
+                <TableHead>Nível</TableHead>
                 <TableHead>Seguidores</TableHead>
                 <TableHead>Engajamento</TableHead>
                 <TableHead>Nicho</TableHead>
