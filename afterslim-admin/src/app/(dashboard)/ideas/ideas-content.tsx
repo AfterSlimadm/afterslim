@@ -803,6 +803,36 @@ function IdeaDetailSheet({
 
           <Separator />
 
+          {/* Criar Tarefa no Kanban */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={async () => {
+              try {
+                const res = await fetch("/api/kanban/cards", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    column_id: "e247ae16-be85-4673-b57a-ce3bbbb3915e",
+                    title: idea.title,
+                    description: idea.description,
+                    priority: idea.priority,
+                    tags: idea.tags,
+                    idea_id: idea.id,
+                  }),
+                });
+                if (!res.ok) throw new Error("Erro ao criar tarefa");
+                toast.success("Tarefa criada no Kanban (A Fazer)");
+              } catch {
+                toast.error("Erro ao criar tarefa");
+              }
+            }}
+          >
+            <Factory className="h-4 w-4" />
+            Criar Tarefa no Kanban
+          </Button>
+
           {/* Deletar */}
           <Button
             variant="outline"
