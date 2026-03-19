@@ -49,6 +49,13 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { IdeaCard } from "@/components/ideas/idea-card";
 import { IdeaFilters, type ViewMode, type SortOption } from "@/components/ideas/idea-filters";
 import { NewIdeaDialog } from "@/components/ideas/new-idea-dialog";
@@ -64,6 +71,22 @@ const DB_STATUS_MAP: Record<string, IdeaStatus> = {
   under_review: "researching",
   approved: "approved",
   discarded: "rejected",
+  researching: "researching",
+  validating: "validating",
+  in_production: "in_production",
+  launched: "launched",
+  rejected: "rejected",
+};
+
+// ─── Map front-end status back to DB ─────────────────────────
+const STATUS_TO_DB: Record<IdeaStatus, string> = {
+  backlog: "new",
+  researching: "researching",
+  validating: "validating",
+  approved: "approved",
+  in_production: "in_production",
+  launched: "launched",
+  rejected: "rejected",
 };
 
 // ─── Map DB idea row to front-end Idea type ──────────────────
@@ -437,6 +460,21 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
             toast.error("Erro ao excluir ideia");
           }
         }}
+        onStatusChange={async (id, newStatus) => {
+          try {
+            const res = await fetch(`/api/ideas/${id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: STATUS_TO_DB[newStatus] }),
+            });
+            if (!res.ok) throw new Error("Erro ao atualizar");
+            toast.success(`Status alterado para ${IDEA_STATUS_CONFIG[newStatus].label}`);
+            setSelectedIdea({ ...selectedIdea!, status: newStatus });
+            router.refresh();
+          } catch {
+            toast.error("Erro ao atualizar status");
+          }
+        }}
       />
     </div>
   );
@@ -579,10 +617,12 @@ function IdeaDetailSheet({
   idea,
   onClose,
   onDelete,
+  onStatusChange,
 }: {
   idea: Idea | null;
   onClose: () => void;
   onDelete: (id: string) => void;
+  onStatusChange: (id: string, status: IdeaStatus) => void;
 }) {
   if (!idea) {
     return (
@@ -592,7 +632,6 @@ function IdeaDetailSheet({
     );
   }
 
-  const statusConfig = IDEA_STATUS_CONFIG[idea.status];
   const priorityConfig = PRIORITY_CONFIG[idea.priority];
   const sourceConfig = idea.source ? IDEA_SOURCE_CONFIG[idea.source] : null;
 
@@ -606,12 +645,21 @@ function IdeaDetailSheet({
       <SheetContent side="right" className="sm:max-w-lg overflow-y-auto">
         <SheetHeader>
           <div className="flex items-center gap-2 flex-wrap">
-            <Badge
-              variant="secondary"
-              className={cn("text-[10px] font-medium", statusConfig.color)}
+            <Select
+              value={idea.status}
+              onValueChange={(val) => onStatusChange(idea.id, val as IdeaStatus)}
             >
-              {statusConfig.label}
-            </Badge>
+              <SelectTrigger className="w-[160px] h-7 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {(Object.keys(IDEA_STATUS_CONFIG) as IdeaStatus[]).map((s) => (
+                  <SelectItem key={s} value={s} className="text-xs">
+                    {IDEA_STATUS_CONFIG[s].label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Badge
               variant="secondary"
               className={cn("text-[10px] font-medium gap-1", priorityConfig.color)}
