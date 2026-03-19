@@ -48,6 +48,7 @@ import {
   Users,
   Paperclip,
   File,
+  Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -82,6 +83,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
   const [paidByFilter, setPaidByFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingCost, setEditingCost] = useState<Cost | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
@@ -175,6 +177,21 @@ export default function CostsContent({ costs }: CostsContentProps) {
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
+  /* -- Open edit ---------------------------------------------- */
+
+  function openEdit(cost: Cost) {
+    setEditingCost(cost);
+    setFormDesc(cost.description);
+    setFormAmount(String(cost.amount));
+    setFormCategory(cost.category as CostCategory);
+    setFormPaidBy(cost.paid_by);
+    setFormDate(cost.date);
+    setFormNotes(cost.notes ?? "");
+    setReceiptUrl(cost.receipt_url ?? null);
+    setReceiptName(cost.receipt_url ? "comprovante" : null);
+    setDialogOpen(true);
+  }
+
   /* -- Save --------------------------------------------------- */
 
   async function handleSave() {
@@ -190,18 +207,23 @@ export default function CostsContent({ costs }: CostsContentProps) {
 
     setIsSaving(true);
     try {
-      const res = await fetch("/api/costs", {
-        method: "POST",
+      const payload = {
+        description: formDesc.trim(),
+        amount,
+        category: formCategory,
+        paid_by: formPaidBy,
+        date: formDate,
+        notes: formNotes.trim() || undefined,
+        receipt_url: receiptUrl || undefined,
+      };
+
+      const url = editingCost ? `/api/costs/${editingCost.id}` : "/api/costs";
+      const method = editingCost ? "PATCH" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          description: formDesc.trim(),
-          amount,
-          category: formCategory,
-          paid_by: formPaidBy,
-          date: formDate,
-          notes: formNotes.trim() || undefined,
-          receipt_url: receiptUrl || undefined,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -209,8 +231,9 @@ export default function CostsContent({ costs }: CostsContentProps) {
         throw new Error(data.error ?? "Erro ao salvar");
       }
 
-      toast.success("Custo registrado");
+      toast.success(editingCost ? "Custo atualizado" : "Custo registrado");
       setDialogOpen(false);
+      setEditingCost(null);
       resetForm();
       router.refresh();
     } catch (err) {
@@ -256,7 +279,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
           open={dialogOpen}
           onOpenChange={(open) => {
             setDialogOpen(open);
-            if (!open) resetForm();
+            if (!open) { resetForm(); setEditingCost(null); }
           }}
         >
           <DialogTrigger asChild>
@@ -267,9 +290,9 @@ export default function CostsContent({ costs }: CostsContentProps) {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader>
-              <DialogTitle>Registrar Custo</DialogTitle>
+              <DialogTitle>{editingCost ? "Editar Custo" : "Registrar Custo"}</DialogTitle>
               <DialogDescription>
-                Registre um gasto e quem pagou.
+                {editingCost ? "Altere os dados do custo." : "Registre um gasto e quem pagou."}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -391,7 +414,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                 disabled={isSaving}
               >
                 {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
-                {isSaving ? "Salvando..." : "Registrar Custo"}
+                {isSaving ? "Salvando..." : editingCost ? "Salvar Alteracoes" : "Registrar Custo"}
               </Button>
             </div>
           </DialogContent>
@@ -552,6 +575,14 @@ export default function CostsContent({ costs }: CostsContentProps) {
                               </a>
                             </Button>
                           )}
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-8 w-8"
+                            onClick={() => openEdit(cost)}
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
                           <Button
                             size="icon"
                             variant="ghost"
