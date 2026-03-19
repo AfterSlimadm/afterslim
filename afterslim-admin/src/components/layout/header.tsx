@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { useAdminStore } from "@/store/use-admin-store";
@@ -28,6 +29,32 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const setSidebarOpen = useAdminStore((s) => s.setSidebarOpen);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userInitials, setUserInitials] = useState("AD");
+
+  useEffect(() => {
+    async function loadUser() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      setUserEmail(user.email ?? "");
+      const { data: adminUser } = await supabase
+        .from("admin_users")
+        .select("display_name")
+        .eq("id", user.id)
+        .single();
+      const name = adminUser?.display_name ?? user.email?.split("@")[0] ?? "Admin";
+      setUserName(name);
+      const parts = name.split(" ");
+      setUserInitials(
+        parts.length >= 2
+          ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+          : name.substring(0, 2).toUpperCase()
+      );
+    }
+    loadUser();
+  }, []);
 
   const breadcrumbs = buildBreadcrumbs(pathname);
 
@@ -81,7 +108,7 @@ export function Header() {
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
-                AD
+                {userInitials}
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -89,9 +116,9 @@ export function Header() {
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium">Admin</p>
+              <p className="text-sm font-medium">{userName || "Admin"}</p>
               <p className="text-xs text-muted-foreground">
-                admin@afterslim.com
+                {userEmail || "admin@afterslim.com"}
               </p>
             </div>
           </DropdownMenuLabel>
