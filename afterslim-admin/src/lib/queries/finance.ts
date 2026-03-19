@@ -167,9 +167,9 @@ export async function getCashFlowByWeek(
     const day = txDate.getDay();
     const monday = new Date(txDate);
     monday.setDate(txDate.getDate() - ((day + 6) % 7));
-    const weekLabel = monday.toLocaleDateString("en-US", {
+    const weekLabel = monday.toLocaleDateString("pt-BR", {
+      day: "2-digit",
       month: "short",
-      day: "numeric",
     });
 
     if (!weekMap.has(weekLabel)) {
@@ -227,9 +227,9 @@ export async function getRevenueTrend(
   const dayMap = new Map<string, number>();
 
   for (const tx of data ?? []) {
-    const dateStr = new Date(tx.date).toLocaleDateString("en-US", {
+    const dateStr = new Date(tx.date).toLocaleDateString("pt-BR", {
+      day: "2-digit",
       month: "short",
-      day: "numeric",
     });
 
     dayMap.set(dateStr, (dayMap.get(dateStr) ?? 0) + Number(tx.amount));

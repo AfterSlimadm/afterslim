@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   Lightbulb,
   Plus,
@@ -21,6 +22,7 @@ import {
   MessageSquare,
   Send,
   Loader2,
+  Trash2,
 } from "lucide-react";
 import {
   Card,
@@ -53,6 +55,7 @@ import { NewIdeaDialog } from "@/components/ideas/new-idea-dialog";
 import { IDEA_STATUS_CONFIG, PRIORITY_CONFIG, IDEA_SOURCE_CONFIG } from "@/lib/constants";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 import type { Idea, IdeaStatus, IdeaPriority } from "@/lib/types";
+import { toast } from "sonner";
 import type { IdeaRow } from "@/lib/queries/ideas";
 
 // ─── Map DB status to front-end IdeaStatus ───────────────────
@@ -106,6 +109,7 @@ interface IdeasContentProps {
 
 // ─── Component ───────────────────────────────────────────────
 export default function IdeasContent({ ideaRows }: IdeasContentProps) {
+  const router = useRouter();
   const ideas = useMemo(() => ideaRows.map(mapIdeaRowToIdea), [ideaRows]);
 
   const [search, setSearch] = useState("");
@@ -422,6 +426,17 @@ export default function IdeasContent({ ideaRows }: IdeasContentProps) {
       <IdeaDetailSheet
         idea={selectedIdea}
         onClose={() => setSelectedIdea(null)}
+        onDelete={async (id) => {
+          try {
+            const res = await fetch(`/api/ideas/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error("Erro ao excluir");
+            toast.success("Ideia excluida");
+            setSelectedIdea(null);
+            router.refresh();
+          } catch {
+            toast.error("Erro ao excluir ideia");
+          }
+        }}
       />
     </div>
   );
@@ -563,9 +578,11 @@ function CommentsSection({ ideaId }: { ideaId: string }) {
 function IdeaDetailSheet({
   idea,
   onClose,
+  onDelete,
 }: {
   idea: Idea | null;
   onClose: () => void;
+  onDelete: (id: string) => void;
 }) {
   if (!idea) {
     return (
@@ -735,6 +752,23 @@ function IdeaDetailSheet({
 
           {/* Comentarios */}
           <CommentsSection ideaId={idea.id} />
+
+          <Separator />
+
+          {/* Deletar */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-destructive hover:bg-destructive/10"
+            onClick={() => {
+              if (confirm("Tem certeza que deseja excluir esta ideia?")) {
+                onDelete(idea.id);
+              }
+            }}
+          >
+            <Trash2 className="h-4 w-4" />
+            Excluir Ideia
+          </Button>
         </div>
       </SheetContent>
     </Sheet>

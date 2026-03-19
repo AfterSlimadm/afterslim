@@ -748,6 +748,7 @@ export default function SettingsContent({
                   <TableHeader>
                     <TableRow>
                       <TableHead>Nome</TableHead>
+                      <TableHead>Cargo</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Perfil</TableHead>
                       <TableHead>Último acesso</TableHead>
@@ -759,6 +760,9 @@ export default function SettingsContent({
                       <TableRow key={member.id}>
                         <TableCell className="font-medium">
                           {member.display_name || "Sem nome"}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {member.title || "—"}
                         </TableCell>
                         <TableCell>{member.email || "N/A"}</TableCell>
                         <TableCell>

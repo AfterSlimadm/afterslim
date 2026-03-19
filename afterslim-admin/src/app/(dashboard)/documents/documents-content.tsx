@@ -337,9 +337,9 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
                   </div>
                 )}
                 {uploadedUrl && uploadedName && (
-                  <div className="flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm">
-                    <File className="h-4 w-4 text-muted-foreground" />
-                    <span className="flex-1 truncate">{uploadedName}</span>
+                  <div className="flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm min-w-0 overflow-hidden">
+                    <File className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span className="flex-1 min-w-0 truncate">{uploadedName}</span>
                     <span className="text-xs text-muted-foreground">
                       {formatFileSize(uploadedSize)}
                     </span>

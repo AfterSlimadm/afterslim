@@ -7,6 +7,8 @@ import {
   DollarSign,
   Plus,
   TrendingUp,
+  Pencil,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +41,12 @@ interface InventoryContentProps {
 export default function InventoryContent({ inventory }: InventoryContentProps) {
   const [restockOpen, setRestockOpen] = useState(false);
   const [restockQty, setRestockQty] = useState("");
+  const [editOpen, setEditOpen] = useState(false);
+  const [editStock, setEditStock] = useState("");
+  const [editCost, setEditCost] = useState("");
+  const [editSell, setEditSell] = useState("");
+  const [editReorder, setEditReorder] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   // Single product - take first item or show empty state
   const product = inventory[0];
@@ -92,6 +100,41 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
     }
   };
 
+  const openEdit = () => {
+    setEditStock(String(product.stock_qty));
+    setEditCost(String(costPrice));
+    setEditSell(String(sellPrice));
+    setEditReorder(String(product.reorder_point));
+    setEditOpen(true);
+  };
+
+  const handleEdit = async () => {
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/inventory", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: product.id,
+          stock_qty: parseInt(editStock) || 0,
+          unit_cost: Math.round(parseFloat(editCost) * 100) || 0,
+          selling_price: Math.round(parseFloat(editSell) * 100) || 0,
+          reorder_point: parseInt(editReorder) || 0,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Erro ao salvar");
+
+      toast.success("Estoque atualizado");
+      setEditOpen(false);
+      window.location.reload();
+    } catch {
+      toast.error("Erro ao atualizar estoque");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="page-container">
       {/* Header */}
@@ -102,6 +145,11 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
             Controle do estoque do AfterSlim Berberine 1200mg
           </p>
         </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={openEdit}>
+            <Pencil className="size-4" />
+            Editar
+          </Button>
         <Dialog open={restockOpen} onOpenChange={setRestockOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -140,7 +188,73 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Editar Estoque</DialogTitle>
+            <DialogDescription>
+              Ajuste os valores do {product.name}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-2">
+            <div className="grid gap-2">
+              <Label htmlFor="edit-stock">Quantidade em Estoque</Label>
+              <Input
+                id="edit-stock"
+                type="number"
+                min="0"
+                value={editStock}
+                onChange={(e) => setEditStock(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-cost">Preco de Custo ($)</Label>
+              <Input
+                id="edit-cost"
+                type="number"
+                min="0"
+                step="0.01"
+                value={editCost}
+                onChange={(e) => setEditCost(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-sell">Preco de Venda ($)</Label>
+              <Input
+                id="edit-sell"
+                type="number"
+                min="0"
+                step="0.01"
+                value={editSell}
+                onChange={(e) => setEditSell(e.target.value)}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-reorder">Ponto de Reposicao</Label>
+              <Input
+                id="edit-reorder"
+                type="number"
+                min="0"
+                value={editReorder}
+                onChange={(e) => setEditReorder(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleEdit} disabled={isSaving}>
+              {isSaving && <Loader2 className="size-4 animate-spin" />}
+              {isSaving ? "Salvando..." : "Salvar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* KPI Cards */}
       <div className="kpi-grid">

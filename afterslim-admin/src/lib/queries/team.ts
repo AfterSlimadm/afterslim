@@ -5,6 +5,7 @@ export interface TeamMember {
   email: string | null;
   display_name: string | null;
   role: string;
+  title: string | null;
   last_login_at: string | null;
   is_active: boolean;
   created_at: string;
@@ -18,7 +19,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 
   const { data, error } = await supabase
     .from("admin_users")
-    .select("id, email, display_name, role, last_login_at, is_active, created_at")
+    .select("id, email, display_name, role, title, last_login_at, is_active, created_at")
     .order("created_at", { ascending: true });
 
   if (error) {

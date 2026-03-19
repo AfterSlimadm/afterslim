@@ -72,9 +72,9 @@ export async function getRevenueByDay(
   return Array.from(byDate.entries()).map(([dateStr, revenue]) => {
     const d = new Date(dateStr + "T12:00:00Z");
     return {
-      date: d.toLocaleDateString("en-US", {
+      date: d.toLocaleDateString("pt-BR", {
+        day: "2-digit",
         month: "short",
-        day: "numeric",
       }),
       revenue: Math.round(revenue * 100) / 100,
     };
