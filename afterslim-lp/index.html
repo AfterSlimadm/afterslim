@@ -814,37 +814,17 @@ a[color="seedgreen"]:hover {
   background-color: #f5a623 !important;
   color: #2C1810 !important;
 }
-/* Recolor ViaCap capsule video (green -> amber) - hide until filter applied */
-.sc-e74ce85f-12 video, .sc-e74ce85f-0 video {
-  filter: hue-rotate(160deg) saturate(1.3) brightness(0.95) !important;
-  opacity: 0;
-  animation: fadeInVideo 0.3s ease-in 0.2s forwards;
-}
-@keyframes fadeInVideo {
-  to { opacity: 1; }
-}
-/* Recolor Seed jar/product images in bundle and other sections */
-#homepage-product-highlight-control img,
-.sc-77e450dc-3 img {
-  filter: hue-rotate(160deg) saturate(1.1) brightness(1.05) !important;
-}
-/* Recolor Seed SVG icon */
+/* SVG icon color */
 .sc-53749a5a-15 svg path { fill: #B8722D !important; }
 .sc-53749a5a-15 svg rect { fill: #B8722D !important; }
-/* Recolor play button green */
+/* Play button color */
 .sc-53749a5a-25 svg rect { fill: #B8722D !important; }
-/* UGC grid images - amber tint */
-.sc-dd5765e8-0 img, .sc-91f3b0c8-0 img {
-  filter: sepia(0.2) hue-rotate(-10deg) saturate(1.1) !important;
-}
-/* Seed Labs section images */
-.sc-53749a5a-19 { filter: hue-rotate(160deg) saturate(1.2) brightness(0.95) !important; }
-/* Video thumbnails */
-.sc-ddd75f23-0 img, mux-player { filter: hue-rotate(160deg) saturate(1.1) !important; }
 /* Product cards hover */
 .sc-bf485308-0:hover {
   border-color: #C17F2E !important;
 }
+/* Hide video frames in Stories section */
+.kiLDmu.video-frame, .sc-ddd75f23-0 { display: none !important; }
 /* Footer */
 .sc-ba2bdb0f-1 {
   background-color: #B8722D !important;
