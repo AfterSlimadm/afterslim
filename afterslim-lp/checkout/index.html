@@ -7,9 +7,9 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Seed Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0a0a0a;
-      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fafafa;
+      color: #111;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -21,42 +21,109 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid #e5e5e5;
+      background: #fff;
     }
     .header a {
-      color: #fff;
+      color: #555;
       text-decoration: none;
       font-size: 0.875rem;
-      opacity: 0.7;
-      transition: opacity 0.2s;
+      transition: color 0.2s;
     }
-    .header a:hover { opacity: 1; }
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-    .checkout-container {
+    .header a:hover { color: #111; }
+    .main {
       width: 100%;
-      max-width: 600px;
+      max-width: 960px;
       padding: 2rem 1rem;
       flex: 1;
       display: flex;
-      flex-direction: column;
+      gap: 2.5rem;
     }
-    .checkout-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
+    .order-summary {
+      width: 320px;
+      flex-shrink: 0;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 1.5rem;
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
     }
-    .checkout-subtitle {
-      color: rgba(255,255,255,0.5);
+    .order-summary h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+      margin-bottom: 1rem;
+    }
+    .product-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      margin-bottom: 1rem;
+    }
+    .product-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: #f5f5f5;
+      padding: 4px;
+    }
+    .product-info { flex: 1; }
+    .product-name {
       font-size: 0.875rem;
-      margin-bottom: 2rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 0.25rem;
+    }
+    .product-variant {
+      font-size: 0.75rem;
+      color: #888;
+      margin-bottom: 0.25rem;
+    }
+    .product-price {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      font-weight: 700;
+      padding-top: 0.75rem;
+      border-top: 1px solid #e5e5e5;
+    }
+    .trust-list {
+      list-style: none;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid #f0f0f0;
+    }
+    .trust-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #888;
+      margin-bottom: 0.4rem;
+    }
+    .trust-list svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .checkout-col {
+      flex: 1;
+      min-width: 0;
     }
     #checkout-mount {
-      flex: 1;
       min-height: 400px;
     }
     .loading {
@@ -64,57 +131,109 @@
       align-items: center;
       justify-content: center;
       min-height: 300px;
-      color: rgba(255,255,255,0.5);
+      color: #999;
+      font-size: 0.875rem;
     }
     .spinner {
-      width: 24px;
-      height: 24px;
-      border: 2px solid rgba(255,255,255,0.1);
-      border-top-color: #4CAF50;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #e5e5e5;
+      border-top-color: #111;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin-right: 0.75rem;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     .error-msg {
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.3);
-      color: #ef4444;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
       padding: 1rem;
       border-radius: 8px;
       text-align: center;
+      font-size: 0.875rem;
     }
-    .secure-badge {
+    .secure-footer {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
       padding: 1.5rem;
-      color: rgba(255,255,255,0.35);
+      color: #aaa;
       font-size: 0.75rem;
     }
-    .secure-badge svg { width: 14px; height: 14px; }
+    .secure-footer svg { width: 14px; height: 14px; }
+
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1rem;
+      }
+      .order-summary {
+        width: 100%;
+        position: static;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <a href="/">&#8592; Back to store</a>
-    <div class="logo"><img src="/logo-afterslim.svg" alt="AfterSlim" style="height:24px;width:auto;"/></div>
+    <img src="/logo-afterslim.svg" alt="AfterSlim" style="height:24px;width:auto;"/>
     <div style="width:80px"></div>
   </div>
 
-  <div class="checkout-container">
-    <h1 class="checkout-title">Checkout</h1>
-    <p class="checkout-subtitle">Complete your order securely.</p>
-    <div id="checkout-mount">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        Loading checkout...
+  <div class="main">
+    <div class="order-summary" id="order-summary">
+      <h2>Order Summary</h2>
+      <div class="product-row">
+        <img src="/images/afterslim-bottle-nobg.png" alt="AfterSlim Berberine 1200mg" class="product-img"/>
+        <div class="product-info">
+          <div class="product-name">AfterSlim Berberine 1200mg</div>
+          <div class="product-variant">120 capsules - 30 day supply</div>
+          <div class="product-price" id="unit-price">$59.99</div>
+        </div>
+      </div>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">$59.99</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span style="color:#16a34a;">Free</span>
+      </div>
+      <div class="summary-total">
+        <span>Total</span>
+        <span id="total">$59.99</span>
+      </div>
+      <ul class="trust-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Encrypted payment via Stripe
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          90-day money-back guarantee
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          Free shipping to US, CA, GB, AU
+        </li>
+      </ul>
+    </div>
+
+    <div class="checkout-col">
+      <div id="checkout-mount">
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          Loading secure checkout...
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="secure-badge">
+  <div class="secure-footer">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
       <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -127,16 +246,30 @@
     const STRIPE_PK = 'pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
     const API_URL = 'https://admin.afterslim.com/api/checkout';
 
+    const PRICES = { 1: 59.99, 3: 149.97, 6: 239.94 };
+    const UNIT_PRICES = { 1: '$59.99', 3: '$49.99/ea', 6: '$39.99/ea' };
+
+    function updateSummary(qty) {
+      const total = PRICES[qty] || qty * 59.99;
+      document.getElementById('unit-price').textContent = UNIT_PRICES[qty] || '$59.99';
+      document.getElementById('subtotal').textContent = '$' + total.toFixed(2);
+      document.getElementById('total').textContent = '$' + total.toFixed(2);
+      if (qty > 1) {
+        const variant = document.querySelector('.product-variant');
+        variant.textContent = qty + ' bottles - ' + (qty * 30) + ' day supply';
+      }
+    }
+
     async function initCheckout() {
       const loadingEl = document.getElementById('loading');
       const mountEl = document.getElementById('checkout-mount');
 
       try {
-        // Get quantity from URL params
         const params = new URLSearchParams(window.location.search);
         const quantity = parseInt(params.get('qty')) || 1;
 
-        // Create checkout session
+        updateSummary(quantity);
+
         const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -150,11 +283,9 @@
 
         const { clientSecret } = await res.json();
 
-        // Initialize Stripe Embedded Checkout
         const stripe = Stripe(STRIPE_PK);
         const checkout = await stripe.initEmbeddedCheckout({ clientSecret });
 
-        // Clear loading and mount
         loadingEl.remove();
         checkout.mount('#checkout-mount');
       } catch (err) {
