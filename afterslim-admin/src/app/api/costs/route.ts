@@ -52,5 +52,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  // Create matching transaction (expense)
+  await supabase.from("transactions").insert({
+    type: "expense",
+    category: parsed.data.category,
+    description: parsed.data.description,
+    amount: parsed.data.amount,
+    currency: "USD",
+    date: parsed.data.date,
+    notes: parsed.data.notes ?? null,
+    reference_id: data.id,
+    reference_type: "cost",
+  });
+
   return NextResponse.json(data, { status: 201 });
 }

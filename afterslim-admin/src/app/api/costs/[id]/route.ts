@@ -8,6 +8,13 @@ export async function DELETE(
   const { id } = await params;
   const supabase = getAdminClient();
 
+  // Delete linked transaction first
+  await supabase
+    .from("transactions")
+    .delete()
+    .eq("reference_id", id)
+    .eq("reference_type", "cost");
+
   const { error } = await supabase
     .from("costs")
     .delete()
