@@ -246,8 +246,8 @@
     const STRIPE_PK = 'pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
     const API_URL = 'https://admin.afterslim.com/api/checkout';
 
-    const PRICES = { 1: 59.99, 3: 149.97, 6: 239.94 };
-    const UNIT_PRICES = { 1: '$59.99', 3: '$49.99/ea', 6: '$39.99/ea' };
+    const PRICES = { 1: 59.99, 2: 99.98, 3: 119.97 };
+    const UNIT_PRICES = { 1: '$59.99', 2: '$49.99/ea', 3: '$39.99/ea' };
 
     function updateSummary(qty) {
       const total = PRICES[qty] || qty * 59.99;

@@ -1,12 +1,14 @@
 /**
- * AfterSlim Checkout — redirects "Shop Now" buttons to embedded checkout page.
+ * AfterSlim Checkout — redirects pricing buttons to checkout page.
+ * Works with lp-v3 button texts: "Try AfterSlim", "Get 2 Bottles", "Get 3 Bottles"
  */
 (function () {
-  // Map button text to quantities
   var QTY_MAP = {
-    "shop now": 1,
-    "shop afterslim": 1,
-    "shop bundle": 6,
+    "try afterslim": 1,
+    "get 2 bottles": 2,
+    "get 3 bottles": 3,
+    "order now": 1,
+    "start protecting your gut": 2,
   };
 
   document.addEventListener("click", function (e) {
@@ -14,23 +16,11 @@
     if (!btn) return;
     var text = (btn.textContent || "").trim().toLowerCase();
 
-    // Check if this is a shop button
     var qty = QTY_MAP[text];
     if (qty === undefined) return;
 
     e.preventDefault();
     e.stopPropagation();
-
-    // Figure out quantity from context (parent card position)
-    var card = btn.closest("[class*='card'], [class*='Card'], [class*='product']");
-    if (card) {
-      var allCards = card.parentElement ? Array.from(card.parentElement.children) : [];
-      var idx = allCards.indexOf(card);
-      // 0=1 bottle, 1=3 bottles, 2=6 bottles
-      if (idx === 1) qty = 3;
-      else if (idx === 2) qty = 6;
-    }
-
     window.location.href = "/checkout?qty=" + qty;
   });
 })();
