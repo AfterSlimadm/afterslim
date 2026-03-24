@@ -37,6 +37,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { NewCreatorDialog } from "@/components/creators/new-creator-dialog";
 import type { CreatorRow } from "@/lib/queries/creators";
 
 /* -- Tier config -- */
@@ -97,10 +98,12 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
           <Button variant="outline" asChild>
             <Link href="/creators/campaigns">Campanhas</Link>
           </Button>
-          <Button>
-            <Plus className="size-4" />
-            Novo Criador
-          </Button>
+          <NewCreatorDialog>
+            <Button>
+              <Plus className="size-4" />
+              Novo Criador
+            </Button>
+          </NewCreatorDialog>
         </div>
       </div>
 
