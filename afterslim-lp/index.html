@@ -250,11 +250,14 @@ ul, ol {
 .nav-inner {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 8px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+}
+
+.logo img {
+  display: block;
 }
 
 .logo {
@@ -1868,7 +1871,7 @@ ul, ol {
 <!-- ========== STICKY NAV ========== -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="logo">After<span>Slim</span></a>
+    <a href="#" class="logo"><img src="images/logo-afterslim.png" alt="AfterSlim" style="height: 180px; margin: -50px 0;"></a>
     <a href="#pricing" class="btn-primary">Order Now</a>
   </div>
 </nav>
@@ -2251,13 +2254,13 @@ ul, ol {
           <span class="bundle-option-badge popular">Most Popular</span>
           <div class="bundle-option-qty">2 Bottles</div>
           <div class="bundle-option-label">60-day supply</div>
-          <div class="bundle-option-shipping">Free Delivery</div>
+          <div class="bundle-option-shipping">Free Shipping</div>
         </div>
         <div class="bundle-option" data-qty="3" data-price="119.97" data-original="179.97" data-save="60.00" data-percent="33">
           <span class="bundle-option-badge best">Best Deal</span>
           <div class="bundle-option-qty">3 Bottles</div>
           <div class="bundle-option-label">90-day supply</div>
-          <div class="bundle-option-shipping">Free Delivery</div>
+          <div class="bundle-option-shipping">Free Shipping</div>
         </div>
       </div>
 
@@ -2267,7 +2270,7 @@ ul, ol {
         <div class="bundle-price-current"><sup>$</sup><span id="bundle-price">99</span><sup>.98</sup></div>
         <div class="bundle-discount" id="bundle-discount">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
-          <span>FREE Delivery + Save 17%</span>
+          <span>FREE Shipping + Save 17%</span>
         </div>
       </div>
 
@@ -2387,7 +2390,7 @@ ul, ol {
 <footer class="footer">
   <div class="footer-grid">
     <div>
-      <div class="footer-logo">After<span>Slim</span></div>
+      <div class="footer-logo"><img src="images/logo-afterslim.png" alt="AfterSlim" style="height: 32px; filter: brightness(0) invert(1);"></div>
       <p class="footer-desc">The science-backed GLP-1 companion supplement. Protect your gut microbiome while you lose weight.</p>
     </div>
     <div class="footer-col">
@@ -2589,7 +2592,7 @@ ul, ol {
     if (data.percent > 0) {
       bundleOriginal.textContent = '$' + data.original;
       bundleOriginal.style.display = 'block';
-      var discountText = (data.freeShip ? 'FREE Delivery + ' : '') + 'Save ' + data.percent + '%';
+      var discountText = (data.freeShip ? 'FREE Shipping + ' : '') + 'Save ' + data.percent + '%';
       bundleDiscount.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg><span>' + discountText + '</span>';
       bundleDiscount.style.display = 'inline-flex';
     } else {
