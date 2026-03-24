@@ -1494,6 +1494,368 @@ ul, ol {
     gap: 12px;
   }
 }
+
+/* ========== BUNDLE SELECTOR (Happy Sweet Bubble Style) ========== */
+.bundle-section {
+  background: var(--warm);
+  position: relative;
+}
+
+.bundle-container {
+  max-width: 480px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+.bundle-title {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.bundle-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.bundle-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+  height: 180px;
+}
+
+.bundle-image img {
+  max-height: 160px;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.12));
+  transition: transform 0.3s ease;
+}
+
+.bundle-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.bundle-option {
+  position: relative;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.bundle-option:hover {
+  border-color: var(--orange);
+}
+
+.bundle-option.selected {
+  border-color: var(--orange);
+  background: rgba(234,88,12,0.04);
+}
+
+.bundle-option-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+
+.bundle-option-badge.popular {
+  background: var(--orange);
+  color: #fff;
+}
+
+.bundle-option-badge.best {
+  background: var(--success);
+  color: #fff;
+}
+
+.bundle-option-qty {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.bundle-option-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.bundle-option-shipping {
+  font-size: 11px;
+  color: var(--success);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.bundle-pricing {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bundle-price-original {
+  font-size: 18px;
+  color: var(--text-secondary);
+  text-decoration: line-through;
+  margin-bottom: 4px;
+}
+
+.bundle-price-current {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.bundle-price-current sup {
+  font-size: 24px;
+  font-weight: 700;
+  top: -16px;
+}
+
+.bundle-discount {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 14px;
+  background: rgba(22,163,74,0.1);
+  color: var(--success);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 50px;
+}
+
+.bundle-discount svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bundle-cta {
+  margin-bottom: 20px;
+}
+
+.btn-bundle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 18px 32px;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(22,163,74,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-bundle:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(22,163,74,0.4);
+}
+
+.btn-bundle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.bundle-guarantees {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bundle-guarantee {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.bundle-guarantee svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.bundle-guarantee.success svg {
+  color: var(--success);
+}
+
+.bundle-guarantee.orange svg {
+  color: var(--orange);
+}
+
+/* Bundle Purchase Type Toggle */
+.bundle-purchase-toggle {
+  display: flex;
+  background: var(--light);
+  border-radius: 50px;
+  padding: 4px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+}
+
+.bundle-toggle-btn {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.bundle-toggle-btn:hover {
+  color: var(--text-primary);
+}
+
+.bundle-toggle-btn.active {
+  background: #fff;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.bundle-toggle-btn .toggle-label {
+  font-size: 14px;
+}
+
+.bundle-toggle-btn .toggle-sublabel {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.bundle-toggle-btn.active .toggle-sublabel {
+  color: var(--success);
+}
+
+.bundle-toggle-btn:not(.active) .toggle-sublabel {
+  color: var(--text-secondary);
+}
+
+/* Subscribe badge */
+.subscribe-extra-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: linear-gradient(135deg, var(--success), #22c55e);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50px;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Subscription info */
+.bundle-subscription-info {
+  display: none;
+  background: rgba(22,163,74,0.08);
+  border: 1px solid rgba(22,163,74,0.2);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.bundle-subscription-info.visible {
+  display: block;
+}
+
+.bundle-subscription-info strong {
+  color: var(--success);
+}
+
+.bundle-subscription-info ul {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bundle-subscription-info li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bundle-subscription-info li svg {
+  width: 14px;
+  height: 14px;
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+/* Bundle Responsive */
+@media (max-width: 768px) {
+  .bundle-container {
+    padding: 32px 20px;
+    margin: 0 16px;
+  }
+
+  .bundle-title {
+    font-size: 24px;
+  }
+
+  .bundle-options {
+    gap: 8px;
+  }
+
+  .bundle-option {
+    padding: 14px 8px;
+  }
+
+  .bundle-option-qty {
+    font-size: 18px;
+  }
+
+  .bundle-price-current {
+    font-size: 40px;
+  }
+
+  .btn-bundle {
+    font-size: 16px;
+    padding: 16px 24px;
+  }
+}
 </style>
 </head>
 <body>
@@ -1833,54 +2195,102 @@ ul, ol {
 </section>
 <!-- END PLACEHOLDER REVIEWS -->
 
-<!-- ========== PRICING ========== -->
-<section class="pricing-section section-padding dot-grid" id="pricing">
+<!-- ========== BUNDLE SELECTOR (Happy Sweet Bubble Style) ========== -->
+<section class="bundle-section section-padding" id="pricing">
   <div class="container">
-    <div class="reveal">
-      <span class="label">PRICING</span>
-      <h2 class="section-title">Protect Your Gut While You Lose Weight</h2>
-      <p class="section-subtitle">Choose the plan that fits your treatment timeline. Every order includes free shipping on 2+ bottles.</p>
+    <div class="bundle-container reveal">
+      <h2 class="bundle-title">Choose Your Bundle</h2>
+      <p class="bundle-subtitle">Select quantity to see savings!</p>
+
+      <!-- Purchase Type Toggle -->
+      <div class="bundle-purchase-toggle">
+        <button class="bundle-toggle-btn active" data-type="onetime">
+          <span class="toggle-label">One-Time Purchase</span>
+        </button>
+        <button class="bundle-toggle-btn" data-type="subscribe">
+          <span class="toggle-label">Subscribe<span class="subscribe-extra-badge">Extra 15% OFF</span></span>
+          <span class="toggle-sublabel">Cancel anytime</span>
+        </button>
+      </div>
+
+      <!-- Subscription Info (hidden by default) -->
+      <div class="bundle-subscription-info" id="subscription-info">
+        <strong>Subscription Benefits:</strong>
+        <ul>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            Extra 15% off every order
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            Free shipping always
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            Cancel or pause anytime
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            Delivered every 30/60/90 days
+          </li>
+        </ul>
+      </div>
+
+      <!-- Product Image -->
+      <div class="bundle-image">
+        <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Balance" id="bundle-product-image">
+      </div>
+
+      <!-- Quantity Options -->
+      <div class="bundle-options">
+        <div class="bundle-option" data-qty="1" data-price="59.99" data-original="59.99" data-save="0" data-percent="0">
+          <div class="bundle-option-qty">1 Bottle</div>
+          <div class="bundle-option-label">30-day supply</div>
+        </div>
+        <div class="bundle-option selected" data-qty="2" data-price="99.98" data-original="119.98" data-save="20.00" data-percent="17">
+          <span class="bundle-option-badge popular">Most Popular</span>
+          <div class="bundle-option-qty">2 Bottles</div>
+          <div class="bundle-option-label">60-day supply</div>
+          <div class="bundle-option-shipping">Free Delivery</div>
+        </div>
+        <div class="bundle-option" data-qty="3" data-price="119.97" data-original="179.97" data-save="60.00" data-percent="33">
+          <span class="bundle-option-badge best">Best Deal</span>
+          <div class="bundle-option-qty">3 Bottles</div>
+          <div class="bundle-option-label">90-day supply</div>
+          <div class="bundle-option-shipping">Free Delivery</div>
+        </div>
+      </div>
+
+      <!-- Dynamic Pricing -->
+      <div class="bundle-pricing">
+        <div class="bundle-price-original" id="bundle-original">$119.98</div>
+        <div class="bundle-price-current"><sup>$</sup><span id="bundle-price">99</span><sup>.98</sup></div>
+        <div class="bundle-discount" id="bundle-discount">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+          <span>FREE Delivery + Save 17%</span>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <div class="bundle-cta">
+        <button class="btn-bundle" id="bundle-buy-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          BUY NOW & SAVE 17%
+        </button>
+      </div>
+
+      <!-- Guarantees -->
+      <div class="bundle-guarantees">
+        <div class="bundle-guarantee success">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>90-Day Money-Back Guarantee</span>
+        </div>
+        <div class="bundle-guarantee orange">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span>Tracked and Insured Delivery</span>
+        </div>
+      </div>
     </div>
-    <div class="pricing-grid reveal-children">
-      <!-- 1 BOTTLE -->
-      <div class="pricing-card">
-        <div class="pricing-bottles">
-          <img src="images/afterslim-bottle-nobg.png" alt="1 bottle of AfterSlim">
-        </div>
-        <div class="pricing-amount"><sup>$</sup>59<small style="font-size:24px;font-weight:700">.99</small></div>
-        <div class="pricing-per">per bottle</div>
-        <div class="pricing-savings">&nbsp;</div>
-        <a href="#" class="btn-primary" href="/checkout?qty=1">Try AfterSlim</a>
-        <p class="pricing-note">30-day supply</p>
-      </div>
-      <!-- 2 BOTTLES (POPULAR) -->
-      <div class="pricing-card popular">
-        <div class="pricing-badge">MOST POPULAR</div>
-        <div class="pricing-bottles">
-          <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim bottle">
-          <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim bottle">
-        </div>
-        <div class="pricing-amount"><sup>$</sup>49<small style="font-size:24px;font-weight:700">.99</small></div>
-        <div class="pricing-per">per bottle</div>
-        <div class="pricing-savings">Save $20.00</div>
-        <a href="#" class="btn-primary" href="/checkout?qty=2">Get 2 Bottles</a>
-        <p class="pricing-note">60-day supply &middot; Free shipping</p>
-      </div>
-      <!-- 3 BOTTLES -->
-      <div class="pricing-card">
-        <div class="pricing-bottles">
-          <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim bottle">
-          <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim bottle">
-          <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim bottle">
-        </div>
-        <div class="pricing-amount"><sup>$</sup>39<small style="font-size:24px;font-weight:700">.99</small></div>
-        <div class="pricing-per">per bottle</div>
-        <div class="pricing-savings">Save $60.00</div>
-        <a href="#" class="btn-primary" href="/checkout?qty=3">Get 3 Bottles</a>
-        <p class="pricing-note">90-day supply &middot; Free shipping</p>
-      </div>
-    </div>
-    <p class="pricing-bottom-note reveal"><strong>$2/day</strong> (or less) while your GLP-1 medication does the work.</p>
   </div>
 </section>
 
@@ -2135,6 +2545,108 @@ ul, ol {
   // For browsers that don't support @property, use JS animation
   if (!CSS.supports || !CSS.supports('background', 'conic-gradient(from 0deg, red, blue)')) {
     // Fallback: static gradient border (already handled in CSS)
+  }
+
+  // ===== BUNDLE SELECTOR INTERACTIVITY =====
+  var bundleOptions = document.querySelectorAll('.bundle-option');
+  var bundleOriginal = document.getElementById('bundle-original');
+  var bundlePrice = document.getElementById('bundle-price');
+  var bundleDiscount = document.getElementById('bundle-discount');
+  var bundleBuyBtn = document.getElementById('bundle-buy-btn');
+  var bundleImage = document.getElementById('bundle-product-image');
+  var bundleToggleBtns = document.querySelectorAll('.bundle-toggle-btn');
+  var subscriptionInfo = document.getElementById('subscription-info');
+
+  // Current purchase type
+  var currentPurchaseType = 'onetime'; // 'onetime' or 'subscribe'
+
+  // Price data - One Time
+  var bundleDataOnetime = {
+    1: { price: '59.99', original: '59.99', save: '0', percent: 0, freeShip: false },
+    2: { price: '99.98', original: '119.98', save: '20.00', percent: 17, freeShip: true },
+    3: { price: '119.97', original: '179.97', save: '60.00', percent: 33, freeShip: true }
+  };
+
+  // Price data - Subscription (extra 15% off)
+  var bundleDataSubscribe = {
+    1: { price: '50.99', original: '59.99', save: '9.00', percent: 15, freeShip: true },
+    2: { price: '84.98', original: '119.98', save: '35.00', percent: 29, freeShip: true },
+    3: { price: '101.97', original: '179.97', save: '78.00', percent: 43, freeShip: true }
+  };
+
+  function getBundleData() {
+    return currentPurchaseType === 'subscribe' ? bundleDataSubscribe : bundleDataOnetime;
+  }
+
+  function updateBundleUI(qty) {
+    var bundleData = getBundleData();
+    var data = bundleData[qty];
+
+    // Update prices
+    var priceParts = data.price.split('.');
+    bundlePrice.innerHTML = priceParts[0] + '</span><sup>.' + priceParts[1] + '</sup>';
+
+    if (data.percent > 0) {
+      bundleOriginal.textContent = '$' + data.original;
+      bundleOriginal.style.display = 'block';
+      var discountText = (data.freeShip ? 'FREE Delivery + ' : '') + 'Save ' + data.percent + '%';
+      bundleDiscount.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg><span>' + discountText + '</span>';
+      bundleDiscount.style.display = 'inline-flex';
+    } else {
+      bundleOriginal.style.display = 'none';
+      bundleDiscount.style.display = 'none';
+    }
+
+    // Update button
+    var btnText = currentPurchaseType === 'subscribe' ? 'SUBSCRIBE & SAVE ' + data.percent + '%' : 'BUY NOW';
+    if (data.percent > 0 && currentPurchaseType === 'onetime') {
+      btnText = 'BUY NOW & SAVE ' + data.percent + '%';
+    }
+    bundleBuyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ' + btnText;
+  }
+
+  // Toggle between one-time and subscribe
+  bundleToggleBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      bundleToggleBtns.forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      currentPurchaseType = this.getAttribute('data-type');
+
+      // Show/hide subscription info
+      if (currentPurchaseType === 'subscribe') {
+        subscriptionInfo.classList.add('visible');
+      } else {
+        subscriptionInfo.classList.remove('visible');
+      }
+
+      // Update pricing
+      var selectedOption = document.querySelector('.bundle-option.selected');
+      var qty = selectedOption ? parseInt(selectedOption.getAttribute('data-qty'), 10) : 2;
+      updateBundleUI(qty);
+    });
+  });
+
+  // Quantity selection
+  bundleOptions.forEach(function(option) {
+    option.addEventListener('click', function() {
+      bundleOptions.forEach(function(opt) { opt.classList.remove('selected'); });
+      this.classList.add('selected');
+      var qty = parseInt(this.getAttribute('data-qty'), 10);
+      updateBundleUI(qty);
+    });
+  });
+
+  // Buy button click
+  if (bundleBuyBtn) {
+    bundleBuyBtn.addEventListener('click', function() {
+      var selectedOption = document.querySelector('.bundle-option.selected');
+      var qty = selectedOption ? selectedOption.getAttribute('data-qty') : '2';
+      var url = 'checkout/index.html?qty=' + qty;
+      if (currentPurchaseType === 'subscribe') {
+        url += '&subscribe=true';
+      }
+      window.location.href = url;
+    });
   }
 
 })();
