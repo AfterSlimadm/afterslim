@@ -1488,8 +1488,12 @@ ul, ol {
 
 @media (max-width: 480px) {
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 16px;
+  }
+
+  .footer-grid > div:first-child {
+    grid-column: 1 / -1;
   }
 
   .social-proof-inner {
