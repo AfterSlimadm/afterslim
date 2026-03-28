@@ -1494,6 +1494,10 @@ ul, ol {
     display: block;
   }
 
+  .mobile-qty-option .qty-save-subscription {
+    display: none;
+  }
+
   .mobile-purchase-type {
     margin-bottom: 20px;
   }
@@ -2201,7 +2205,7 @@ ul, ol {
   <div class="mobile-quantity-options">
     <div class="mobile-qty-option" onclick="selectQuantity(1)">
       <span class="qty-label">1 Bottle</span>
-      <span class="qty-save">Save 26%</span>
+      <span class="qty-save qty-save-subscription" id="bottle1-save">Save 26%</span>
     </div>
     <div class="mobile-qty-option selected" onclick="selectQuantity(2)">
       <span class="qty-badge recommended">RECOMMENDED</span>
@@ -2780,6 +2784,13 @@ ul, ol {
   // ===== PAGE LOAD FADE IN =====
   window.addEventListener('load', function() {
     document.body.classList.add('loaded');
+
+    // Initialize bottle 1 save visibility based on default subscription selection
+    var bottle1Save = document.getElementById('bottle1-save');
+    var isSubscribeSelected = document.querySelectorAll('.mobile-purchase-option')[0].classList.contains('selected');
+    if (bottle1Save) {
+      bottle1Save.style.display = isSubscribeSelected ? 'block' : 'none';
+    }
   });
 
   // ===== STICKY NAV SCROLL EFFECT =====
@@ -3035,10 +3046,19 @@ function selectPurchaseType(type) {
   options.forEach(function(opt) {
     opt.classList.remove('selected');
   });
+
+  var bottle1Save = document.getElementById('bottle1-save');
+
   if (type === 'subscribe') {
     options[0].classList.add('selected');
+    if (bottle1Save) {
+      bottle1Save.style.display = 'block';
+    }
   } else {
     options[1].classList.add('selected');
+    if (bottle1Save) {
+      bottle1Save.style.display = 'none';
+    }
   }
   updateMobileButtonPrice();
 }
