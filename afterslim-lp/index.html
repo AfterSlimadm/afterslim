@@ -2210,7 +2210,7 @@ ul, ol {
     <div class="mobile-qty-option selected" onclick="selectQuantity(2)">
       <span class="qty-badge recommended">RECOMMENDED</span>
       <span class="qty-label">2 Bottles</span>
-      <span class="qty-save">Save 24%</span>
+      <span class="qty-save" id="bottle2-save">Save 24%</span>
     </div>
     <div class="mobile-qty-option" onclick="selectQuantity(3)">
       <span class="qty-badge best-value">BEST VALUE</span>
@@ -2225,7 +2225,7 @@ ul, ol {
       <div class="option-header">
         <div class="option-left">
           <span class="radio-circle"></span>
-          <span class="option-title">Subscribe & Save 26%</span>
+          <span class="option-title" id="subscribe-title">Subscribe & Save 26%</span>
         </div>
         <div class="option-price">
           <div class="price-original">$57.99</div>
@@ -2791,6 +2791,11 @@ ul, ol {
     if (bottle1Save) {
       bottle1Save.style.display = isSubscribeSelected ? 'block' : 'none';
     }
+
+    // Initialize subscription discounts
+    if (typeof updateSubscriptionDiscounts === 'function') {
+      updateSubscriptionDiscounts();
+    }
   });
 
   // ===== STICKY NAV SCROLL EFFECT =====
@@ -3030,6 +3035,26 @@ function changeMainImage(thumbnail) {
   thumbnail.classList.add('active');
 }
 
+function updateSubscriptionDiscounts() {
+  var selectedQty = document.querySelector('.mobile-qty-option.selected');
+  var qtyIndex = Array.from(document.querySelectorAll('.mobile-qty-option')).indexOf(selectedQty) + 1;
+  var isSubscribe = document.querySelectorAll('.mobile-purchase-option')[0].classList.contains('selected');
+
+  var bottle2Save = document.getElementById('bottle2-save');
+  var subscribeTitle = document.getElementById('subscribe-title');
+
+  // Update bundle 2 discount and subscription title based on selection
+  if (isSubscribe && qtyIndex === 2) {
+    // When bundle 2 is selected with subscription
+    if (bottle2Save) bottle2Save.textContent = 'Save 37%';
+    if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 37%';
+  } else {
+    // Reset to default values
+    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
+    if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
+  }
+}
+
 function selectQuantity(qty) {
   var options = document.querySelectorAll('.mobile-qty-option');
   options.forEach(function(opt, index) {
@@ -3039,6 +3064,7 @@ function selectQuantity(qty) {
     }
   });
   updateMobilePrice(qty);
+  updateSubscriptionDiscounts();
 }
 
 function selectPurchaseType(type) {
@@ -3061,6 +3087,7 @@ function selectPurchaseType(type) {
     }
   }
   updateMobileButtonPrice();
+  updateSubscriptionDiscounts();
 }
 
 function updateMobilePrice(qty) {
