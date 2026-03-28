@@ -2215,7 +2215,7 @@ ul, ol {
     <div class="mobile-qty-option" onclick="selectQuantity(3)">
       <span class="qty-badge best-value">BEST VALUE</span>
       <span class="qty-label">3 Bottles</span>
-      <span class="qty-save">Save 40%</span>
+      <span class="qty-save" id="bottle3-save">Save 40%</span>
     </div>
   </div>
 
@@ -3041,16 +3041,24 @@ function updateSubscriptionDiscounts() {
   var isSubscribe = document.querySelectorAll('.mobile-purchase-option')[0].classList.contains('selected');
 
   var bottle2Save = document.getElementById('bottle2-save');
+  var bottle3Save = document.getElementById('bottle3-save');
   var subscribeTitle = document.getElementById('subscribe-title');
 
-  // Update bundle 2 discount and subscription title based on selection
+  // Update bundle discounts and subscription title based on selection
   if (isSubscribe && qtyIndex === 2) {
     // When bundle 2 is selected with subscription
     if (bottle2Save) bottle2Save.textContent = 'Save 37%';
+    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 37%';
+  } else if (isSubscribe && qtyIndex === 3) {
+    // When bundle 3 is selected with subscription
+    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
+    if (bottle3Save) bottle3Save.textContent = 'Save 49%';
+    if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 49%';
   } else {
     // Reset to default values
     if (bottle2Save) bottle2Save.textContent = 'Save 24%';
+    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
 }
