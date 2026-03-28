@@ -3044,19 +3044,24 @@ function updateSubscriptionDiscounts() {
   var bottle3Save = document.getElementById('bottle3-save');
   var subscribeTitle = document.getElementById('subscribe-title');
 
-  // Update bundle discounts and subscription title based on selection
-  if (isSubscribe && qtyIndex === 2) {
-    // When bundle 2 is selected with subscription
+  // Update bundle discounts based on whether subscription is active
+  if (isSubscribe) {
+    // When subscription is active, all bundles show subscription discounts
     if (bottle2Save) bottle2Save.textContent = 'Save 37%';
-    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
-    if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 37%';
-  } else if (isSubscribe && qtyIndex === 3) {
-    // When bundle 3 is selected with subscription
-    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
     if (bottle3Save) bottle3Save.textContent = 'Save 49%';
-    if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 49%';
+
+    // Update subscription title based on selected quantity
+    if (subscribeTitle) {
+      if (qtyIndex === 1) {
+        subscribeTitle.textContent = 'Subscribe & Save 26%';
+      } else if (qtyIndex === 2) {
+        subscribeTitle.textContent = 'Subscribe & Save 37%';
+      } else if (qtyIndex === 3) {
+        subscribeTitle.textContent = 'Subscribe & Save 49%';
+      }
+    }
   } else {
-    // Reset to default values
+    // One-time purchase: show standard discounts
     if (bottle2Save) bottle2Save.textContent = 'Save 24%';
     if (bottle3Save) bottle3Save.textContent = 'Save 40%';
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
