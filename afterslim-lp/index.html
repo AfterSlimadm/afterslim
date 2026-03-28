@@ -2221,9 +2221,9 @@ ul, ol {
           <span class="option-title">Subscribe & Save 20%</span>
         </div>
         <div class="option-price">
-          <div class="price-original">$79.98</div>
-          <div class="price-current">$63.98</div>
-          <div class="price-per">$31.99/bottle</div>
+          <div class="price-original">$57.99</div>
+          <div class="price-current">$47.99</div>
+          <div class="price-per">$24.00/bottle</div>
         </div>
       </div>
       <div class="option-benefits">
@@ -2244,15 +2244,15 @@ ul, ol {
           <span class="option-title">One-time purchase</span>
         </div>
         <div class="option-price">
-          <div class="price-current">$79.98</div>
-          <div class="price-per">$39.99/bottle</div>
+          <div class="price-current">$57.99</div>
+          <div class="price-per">$29.00/bottle</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Add to Cart Button -->
-  <button class="mobile-add-to-cart" onclick="window.location.href='#pricing'">Add to Cart - $63.98</button>
+  <button class="mobile-add-to-cart" onclick="window.location.href='#pricing'">Add to Cart - $47.99</button>
 </section>
 
 <!-- ========== SOCIAL PROOF BAR ========== -->
@@ -3041,35 +3041,26 @@ function selectPurchaseType(type) {
 }
 
 function updateMobilePrice(qty) {
-  var basePrice = 39.99;
-  var subscribeDiscount = 0.20;
-  var qtyDiscounts = { 1: 0, 2: 0.10, 3: 0.15 };
+  // Pricing tables
+  var oneTimePrices = { 1: 37.99, 2: 57.99, 3: 67.99 };
+  var subscribePrices = { 1: 27.99, 2: 47.99, 3: 57.99 };
 
-  var qtyDiscount = qtyDiscounts[qty] || 0;
-  var isSubscribe = document.querySelector('.mobile-purchase-option.selected') === document.querySelectorAll('.mobile-purchase-option')[0];
-
-  var pricePerBottle = basePrice * (1 - qtyDiscount);
-  var total = pricePerBottle * qty;
-
-  if (isSubscribe) {
-    pricePerBottle = pricePerBottle * (1 - subscribeDiscount);
-    total = total * (1 - subscribeDiscount);
-  }
+  var oneTimePrice = oneTimePrices[qty];
+  var subscribePrice = subscribePrices[qty];
 
   // Update subscription option prices
   var subOption = document.querySelectorAll('.mobile-purchase-option')[0];
-  var subOriginal = (basePrice * qty).toFixed(2);
-  var subTotal = (basePrice * qty * (1 - qtyDiscount) * (1 - subscribeDiscount)).toFixed(2);
-  var subPerBottle = (basePrice * (1 - qtyDiscount) * (1 - subscribeDiscount)).toFixed(2);
+  var subTotal = subscribePrice.toFixed(2);
+  var subPerBottle = (subscribePrice / qty).toFixed(2);
 
-  subOption.querySelector('.price-original').textContent = '$' + subOriginal;
+  subOption.querySelector('.price-original').textContent = '$' + oneTimePrice.toFixed(2);
   subOption.querySelector('.price-current').textContent = '$' + subTotal;
   subOption.querySelector('.price-per').textContent = '$' + subPerBottle + '/bottle';
 
   // Update one-time option prices
   var oneOption = document.querySelectorAll('.mobile-purchase-option')[1];
-  var oneTotal = (basePrice * qty * (1 - qtyDiscount)).toFixed(2);
-  var onePerBottle = (basePrice * (1 - qtyDiscount)).toFixed(2);
+  var oneTotal = oneTimePrice.toFixed(2);
+  var onePerBottle = (oneTimePrice / qty).toFixed(2);
 
   oneOption.querySelector('.price-current').textContent = '$' + oneTotal;
   oneOption.querySelector('.price-per').textContent = '$' + onePerBottle + '/bottle';
@@ -3082,14 +3073,10 @@ function updateMobileButtonPrice() {
   var qtyIndex = Array.from(document.querySelectorAll('.mobile-qty-option')).indexOf(selectedQty) + 1;
   var isSubscribe = document.querySelector('.mobile-purchase-option.selected') === document.querySelectorAll('.mobile-purchase-option')[0];
 
-  var basePrice = 39.99;
-  var qtyDiscounts = { 1: 0, 2: 0.10, 3: 0.15 };
-  var qtyDiscount = qtyDiscounts[qtyIndex] || 0;
+  var oneTimePrices = { 1: 37.99, 2: 57.99, 3: 67.99 };
+  var subscribePrices = { 1: 27.99, 2: 47.99, 3: 57.99 };
 
-  var total = basePrice * qtyIndex * (1 - qtyDiscount);
-  if (isSubscribe) {
-    total = total * 0.80;
-  }
+  var total = isSubscribe ? subscribePrices[qtyIndex] : oneTimePrices[qtyIndex];
 
   var btn = document.querySelector('.mobile-add-to-cart');
   btn.textContent = 'Add to Cart - $' + total.toFixed(2);
