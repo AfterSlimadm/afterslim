@@ -2271,8 +2271,8 @@ ul, ol {
     </div>
   </div>
 
-  <!-- Add to Cart Button -->
-  <button class="mobile-add-to-cart" onclick="window.location.href='#pricing'">Add to Cart - $47.99</button>
+  <!-- Shop Now Button -->
+  <button class="mobile-add-to-cart" onclick="window.location.href='#pricing'">Shop Now - $47.99</button>
 </section>
 
 <!-- ========== SOCIAL PROOF BAR ========== -->
@@ -2656,7 +2656,7 @@ ul, ol {
       <div class="bundle-cta">
         <button class="btn-bundle" id="bundle-buy-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          BUY NOW & SAVE 24%
+          SHOP NOW & SAVE 24%
         </button>
       </div>
 
@@ -2984,9 +2984,9 @@ ul, ol {
     }
 
     // Update button
-    var btnText = currentPurchaseType === 'subscribe' ? 'SUBSCRIBE & SAVE ' + data.percent + '%' : 'BUY NOW';
+    var btnText = currentPurchaseType === 'subscribe' ? 'SUBSCRIBE & SAVE ' + data.percent + '%' : 'SHOP NOW';
     if (data.percent > 0 && currentPurchaseType === 'onetime') {
-      btnText = 'BUY NOW & SAVE ' + data.percent + '%';
+      btnText = 'SHOP NOW & SAVE ' + data.percent + '%';
     }
     bundleBuyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> ' + btnText;
   }
@@ -3155,7 +3155,7 @@ function updateMobileButtonPrice() {
   var total = isSubscribe ? subscribePrices[qtyIndex] : oneTimePrices[qtyIndex];
 
   var btn = document.querySelector('.mobile-add-to-cart');
-  btn.textContent = 'Add to Cart - $' + total.toFixed(2);
+  btn.textContent = 'Shop Now - $' + total.toFixed(2);
 }
 </script>
 <script src="checkout.js"></script>
