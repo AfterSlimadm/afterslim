@@ -1598,7 +1598,7 @@ ul, ol {
   .mobile-add-to-cart {
     width: 100%;
     padding: 18px;
-    background: var(--orange);
+    background: #16a34a;
     color: white;
     font-size: 16px;
     font-weight: 700;
@@ -1606,10 +1606,23 @@ ul, ol {
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.2s;
+    animation: pulse-button 2s ease-in-out infinite;
   }
 
   .mobile-add-to-cart:hover {
-    background: var(--orange-dark);
+    background: #15803d;
+    animation: none;
+  }
+
+  @keyframes pulse-button {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4);
+    }
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 8px rgba(22, 163, 74, 0);
+    }
   }
 
   .hero {
