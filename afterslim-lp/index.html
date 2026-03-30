@@ -2589,7 +2589,7 @@ ul, ol {
           <span class="toggle-label">One-Time Purchase</span>
         </button>
         <button class="bundle-toggle-btn" data-type="subscribe">
-          <span class="toggle-label">Subscribe<span class="subscribe-extra-badge">Extra 15% OFF</span></span>
+          <span class="toggle-label">Subscribe<span class="subscribe-extra-badge">Save More</span></span>
           <span class="toggle-sublabel">Cancel anytime</span>
         </button>
       </div>
@@ -2600,7 +2600,7 @@ ul, ol {
         <ul>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-            Extra 15% off every order
+            Save up to 49% off
           </li>
           <li>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
@@ -2624,17 +2624,17 @@ ul, ol {
 
       <!-- Quantity Options -->
       <div class="bundle-options">
-        <div class="bundle-option" data-qty="1" data-price="59.99" data-original="59.99" data-save="0" data-percent="0">
+        <div class="bundle-option" data-qty="1" data-price="37.99" data-original="37.99" data-save="0" data-percent="0">
           <div class="bundle-option-qty">1 Bottle</div>
           <div class="bundle-option-label">30-day supply</div>
         </div>
-        <div class="bundle-option selected" data-qty="2" data-price="99.98" data-original="119.98" data-save="20.00" data-percent="17">
+        <div class="bundle-option selected" data-qty="2" data-price="57.99" data-original="75.98" data-save="17.99" data-percent="24">
           <span class="bundle-option-badge popular">Most Popular</span>
           <div class="bundle-option-qty">2 Bottles</div>
           <div class="bundle-option-label">60-day supply</div>
           <div class="bundle-option-shipping">Free Shipping</div>
         </div>
-        <div class="bundle-option" data-qty="3" data-price="119.97" data-original="179.97" data-save="60.00" data-percent="33">
+        <div class="bundle-option" data-qty="3" data-price="67.99" data-original="113.97" data-save="45.98" data-percent="40">
           <span class="bundle-option-badge best">Best Deal</span>
           <div class="bundle-option-qty">3 Bottles</div>
           <div class="bundle-option-label">90-day supply</div>
@@ -2644,11 +2644,11 @@ ul, ol {
 
       <!-- Dynamic Pricing -->
       <div class="bundle-pricing">
-        <div class="bundle-price-original" id="bundle-original">$119.98</div>
-        <div class="bundle-price-current"><sup>$</sup><span id="bundle-price">99</span><sup>.98</sup></div>
+        <div class="bundle-price-original" id="bundle-original">$75.98</div>
+        <div class="bundle-price-current"><sup>$</sup><span id="bundle-price">57</span><sup>.99</sup></div>
         <div class="bundle-discount" id="bundle-discount">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
-          <span>FREE Shipping + Save 17%</span>
+          <span>FREE Shipping + Save 24%</span>
         </div>
       </div>
 
@@ -2656,7 +2656,7 @@ ul, ol {
       <div class="bundle-cta">
         <button class="btn-bundle" id="bundle-buy-btn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          BUY NOW & SAVE 17%
+          BUY NOW & SAVE 24%
         </button>
       </div>
 
@@ -2948,16 +2948,16 @@ ul, ol {
 
   // Price data - One Time
   var bundleDataOnetime = {
-    1: { price: '59.99', original: '59.99', save: '0', percent: 0, freeShip: false },
-    2: { price: '99.98', original: '119.98', save: '20.00', percent: 17, freeShip: true },
-    3: { price: '119.97', original: '179.97', save: '60.00', percent: 33, freeShip: true }
+    1: { price: '37.99', original: '37.99', save: '0', percent: 0, freeShip: false },
+    2: { price: '57.99', original: '75.98', save: '17.99', percent: 24, freeShip: true },
+    3: { price: '67.99', original: '113.97', save: '45.98', percent: 40, freeShip: true }
   };
 
-  // Price data - Subscription (extra 15% off)
+  // Price data - Subscription
   var bundleDataSubscribe = {
-    1: { price: '50.99', original: '59.99', save: '9.00', percent: 15, freeShip: true },
-    2: { price: '84.98', original: '119.98', save: '35.00', percent: 29, freeShip: true },
-    3: { price: '101.97', original: '179.97', save: '78.00', percent: 43, freeShip: true }
+    1: { price: '27.99', original: '37.99', save: '10.00', percent: 26, freeShip: true },
+    2: { price: '47.99', original: '75.98', save: '27.99', percent: 37, freeShip: true },
+    3: { price: '57.99', original: '113.97', save: '55.98', percent: 49, freeShip: true }
   };
 
   function getBundleData() {
