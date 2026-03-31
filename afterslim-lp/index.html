@@ -1603,6 +1603,12 @@ ul, ol {
   background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   padding: 24px 0;
   overflow: hidden;
+  position: relative;
+}
+
+.mobile-reviews-container {
+  position: relative;
+  padding: 0 40px;
 }
 
 .mobile-reviews-slider {
@@ -1611,60 +1617,112 @@ ul, ol {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding: 0 20px;
+  padding: 0 10px;
   scrollbar-width: none;
+  scroll-behavior: smooth;
 }
 
 .mobile-reviews-slider::-webkit-scrollbar {
   display: none;
 }
 
+.mobile-reviews-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  background: var(--orange);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.mobile-reviews-nav svg {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+}
+
+.mobile-reviews-nav.prev {
+  left: 5px;
+}
+
+.mobile-reviews-nav.next {
+  right: 5px;
+}
+
 .mobile-review-card {
-  flex: 0 0 280px;
+  flex: 0 0 calc(100% - 20px);
   background: #fff;
   border-radius: 12px;
   padding: 20px;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 }
 
 .mobile-review-card .review-stars {
-  color: #f59e0b;
-  font-size: 14px;
-  margin-bottom: 10px;
+  color: #000;
+  font-size: 18px;
+  margin-bottom: 12px;
   display: block;
 }
 
 .mobile-review-card .review-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
 .mobile-review-card .review-text {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 12px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-style: italic;
 }
 
 .mobile-review-card .review-footer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 13px;
+  gap: 4px;
+}
+
+.mobile-review-card .review-author {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .mobile-review-card .review-verified {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #16a34a;
+  color: var(--text-secondary);
 }
 
 .mobile-review-card .review-verified svg {
   width: 14px;
   height: 14px;
+  color: #16a34a;
+}
+
+.mobile-reviews-more {
+  display: block;
+  text-align: center;
+  padding: 16px 0 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .mobile-review-card .review-author {
@@ -3070,72 +3128,82 @@ ul, ol {
 
 <!-- ========== MOBILE REVIEWS BAR (hidden on desktop) ========== -->
 <section class="mobile-reviews-bar">
-  <div class="mobile-reviews-slider">
-    <div class="mobile-review-card">
-      <span class="review-stars">★★★★★</span>
-      <h4 class="review-title">Life changing supplement!</h4>
-      <p class="review-text">I've been on Ozempic for 3 months and the nausea was unbearable. Started AfterSlim 2 weeks ago and the difference is incredible!</p>
-      <div class="review-footer">
-        <span class="review-verified">
-          <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Verified
-        </span>
-        <span class="review-author">Sarah M.</span>
-      </div>
-    </div>
+  <div class="mobile-reviews-container">
+    <button class="mobile-reviews-nav prev" onclick="slideMobileReviews(-1)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button class="mobile-reviews-nav next" onclick="slideMobileReviews(1)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
 
-    <div class="mobile-review-card">
-      <span class="review-stars">★★★★★</span>
-      <h4 class="review-title">Finally found relief!</h4>
-      <p class="review-text">The constipation from Mounjaro was awful. Within a week of taking AfterSlim, everything was back to normal. Highly recommend!</p>
-      <div class="review-footer">
-        <span class="review-verified">
-          <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Verified
-        </span>
-        <span class="review-author">Jennifer K.</span>
+    <div class="mobile-reviews-slider" id="mobileReviewsSlider">
+      <div class="mobile-review-card">
+        <span class="review-stars">★★★★★</span>
+        <h4 class="review-title">Life changing supplement!</h4>
+        <p class="review-text">I've been on Ozempic for 3 months and the nausea was unbearable. Started AfterSlim 2 weeks ago and the difference is incredible! No more bloating or stomach issues.</p>
+        <div class="review-footer">
+          <span class="review-author">-Sarah M.</span>
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+        </div>
       </div>
-    </div>
 
-    <div class="mobile-review-card">
-      <span class="review-stars">★★★★★</span>
-      <h4 class="review-title">Best GLP-1 companion</h4>
-      <p class="review-text">I was skeptical at first but AfterSlim really works. My energy levels are up, no more gut issues, and I'm still losing weight!</p>
-      <div class="review-footer">
-        <span class="review-verified">
-          <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Verified
-        </span>
-        <span class="review-author">Michelle R.</span>
+      <div class="mobile-review-card">
+        <span class="review-stars">★★★★★</span>
+        <h4 class="review-title">Finally found relief!</h4>
+        <p class="review-text">The constipation from Mounjaro was awful. My doctor recommended a gut supplement and I found AfterSlim. Within a week, everything was back to normal!</p>
+        <div class="review-footer">
+          <span class="review-author">-Jennifer K.</span>
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+        </div>
       </div>
-    </div>
 
-    <div class="mobile-review-card">
-      <span class="review-stars">★★★★★</span>
-      <h4 class="review-title">No more nausea!</h4>
-      <p class="review-text">The nausea from my GLP-1 medication was making it hard to stick with the treatment. AfterSlim has been a game changer!</p>
-      <div class="review-footer">
-        <span class="review-verified">
-          <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Verified
-        </span>
-        <span class="review-author">Lisa T.</span>
+      <div class="mobile-review-card">
+        <span class="review-stars">★★★★★</span>
+        <h4 class="review-title">Best GLP-1 companion</h4>
+        <p class="review-text">I was skeptical at first but AfterSlim really works. My energy levels are up, no more gut issues, and I'm still losing weight on Wegovy. This is a must-have!</p>
+        <div class="review-footer">
+          <span class="review-author">-Michelle R.</span>
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+        </div>
       </div>
-    </div>
 
-    <div class="mobile-review-card">
-      <span class="review-stars">★★★★★</span>
-      <h4 class="review-title">Highly recommend!</h4>
-      <p class="review-text">My doctor told me to find a gut support supplement for my Ozempic journey. AfterSlim has exceeded my expectations!</p>
-      <div class="review-footer">
-        <span class="review-verified">
-          <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Verified
-        </span>
-        <span class="review-author">Amanda P.</span>
+      <div class="mobile-review-card">
+        <span class="review-stars">★★★★★</span>
+        <h4 class="review-title">No more nausea!</h4>
+        <p class="review-text">The nausea from my GLP-1 medication was making it hard to stick with the treatment. AfterSlim has been a game changer - I can finally eat without feeling sick!</p>
+        <div class="review-footer">
+          <span class="review-author">-Lisa T.</span>
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+        </div>
+      </div>
+
+      <div class="mobile-review-card">
+        <span class="review-stars">★★★★★</span>
+        <h4 class="review-title">Highly recommend!</h4>
+        <p class="review-text">My doctor told me to find a gut support supplement for my Ozempic journey. AfterSlim has exceeded my expectations. Better digestion and more energy!</p>
+        <div class="review-footer">
+          <span class="review-author">-Amanda P.</span>
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+        </div>
       </div>
     </div>
   </div>
+  <a href="#reviews" class="mobile-reviews-more">Read More Reviews</a>
 </section>
 
 <!-- ========== DESKTOP REVIEWS BAR (hidden on mobile) ========== -->
@@ -3353,7 +3421,6 @@ ul, ol {
   <!-- Product Info -->
   <div class="mobile-product-rating">
     <span class="stars">★★★★★</span>
-    <span class="reviews">4.8/5 (127 reviews)</span>
   </div>
   <p class="mobile-product-description">The GLP-1 Companion. Protects your gut microbiome while you lose weight.</p>
 
@@ -4430,6 +4497,26 @@ function slideReviews(direction) {
 
   slider.style.transform = 'translateX(-' + (currentReviewSlide * cardWidth) + 'px)';
   slider.style.transition = 'transform 0.3s ease';
+}
+
+// Mobile Reviews slider
+var currentMobileReviewSlide = 0;
+
+function slideMobileReviews(direction) {
+  var slider = document.getElementById('mobileReviewsSlider');
+  if (!slider) return;
+
+  var cards = slider.querySelectorAll('.mobile-review-card');
+  var cardWidth = cards[0].offsetWidth + 16; // card width + gap
+
+  currentMobileReviewSlide += direction;
+  if (currentMobileReviewSlide < 0) currentMobileReviewSlide = cards.length - 1;
+  if (currentMobileReviewSlide >= cards.length) currentMobileReviewSlide = 0;
+
+  slider.scrollTo({
+    left: currentMobileReviewSlide * cardWidth,
+    behavior: 'smooth'
+  });
 }
 
 // Desktop Product Section Functions
