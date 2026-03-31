@@ -3497,19 +3497,11 @@ ul, ol {
 <section class="mobile-product-section">
   <!-- Product Gallery -->
   <div class="mobile-product-gallery">
-    <div class="mobile-gallery-main">
-      <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Balance" id="mobile-main-image">
-    </div>
-    <div class="mobile-gallery-thumbs">
-      <div class="mobile-thumb active" onclick="changeMainImage('images/afterslim-bottle-nobg.png', this)">
-        <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Bottle">
-      </div>
-      <div class="mobile-thumb" onclick="changeMainImage('images/afterslim-facts.png', this)">
-        <img src="images/afterslim-facts.png" alt="Supplement Facts">
-      </div>
-      <div class="mobile-thumb" onclick="changeMainImage('images/afterslim-ingredients.png', this)">
-        <img src="images/afterslim-ingredients.png" alt="Ingredients">
-      </div>
+    <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Balance" class="mobile-product-main-image" id="mobileMainImage">
+    <div class="mobile-product-thumbnails">
+      <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim Bottle" class="active" onclick="changeMainImage(this)">
+      <img src="images/afterslim-facts.png" alt="Supplement Facts" onclick="changeMainImage(this)">
+      <img src="images/afterslim-ingredients.png" alt="Ingredients" onclick="changeMainImage(this)">
     </div>
   </div>
 
