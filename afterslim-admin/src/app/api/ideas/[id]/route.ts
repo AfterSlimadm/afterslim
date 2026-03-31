@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const { id } = await params;
   const body = await request.json();
   const supabase = createServerClient();
@@ -27,6 +33,11 @@ export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const { id } = await params;
   const supabase = createServerClient();
 

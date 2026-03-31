@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 import { z } from "zod";
 
 export async function GET(request: Request) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
   const category = searchParams.get("category");
@@ -51,6 +57,11 @@ const ideaSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const body = await request.json();
   const parsed = ideaSchema.safeParse(body);
 

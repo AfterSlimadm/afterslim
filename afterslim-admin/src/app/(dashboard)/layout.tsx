@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { createSupabaseServerWithCookies } from "@/lib/supabase/server";
+import { getAuthenticatedAdmin } from "@/lib/auth";
+import { AuthProvider } from "@/components/auth-provider";
 import { DashboardShell } from "./dashboard-shell";
 
 export default async function DashboardLayout({
@@ -7,12 +8,15 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createSupabaseServerWithCookies();
-  const { data: { user } } = await supabase.auth.getUser();
+  const admin = await getAuthenticatedAdmin();
 
-  if (!user) {
+  if (!admin) {
     redirect("/login");
   }
 
-  return <DashboardShell>{children}</DashboardShell>;
+  return (
+    <AuthProvider user={admin}>
+      <DashboardShell>{children}</DashboardShell>
+    </AuthProvider>
+  );
 }

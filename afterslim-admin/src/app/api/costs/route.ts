@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 import { z } from "zod";
 
 export async function GET() {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const supabase = getAdminClient();
 
   const { data, error } = await supabase
@@ -30,6 +36,11 @@ const costSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const body = await request.json();
   const parsed = costSchema.safeParse(body);
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = [
@@ -14,6 +15,11 @@ const ALLOWED_TYPES = [
 ];
 
 export async function POST(request: NextRequest) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;

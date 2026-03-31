@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth-provider";
 import { createClient } from "@/lib/supabase";
 import { useAdminStore } from "@/store/use-admin-store";
 import { NAV_ITEMS } from "@/lib/constants";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import {
   Menu,
   ChevronRight,
@@ -25,36 +26,25 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+const ROLE_LABELS: Record<string, string> = {
+  owner: "Owner",
+  admin: "Admin",
+  support: "Support",
+  viewer: "Viewer",
+};
+
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const setSidebarOpen = useAdminStore((s) => s.setSidebarOpen);
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userInitials, setUserInitials] = useState("AD");
+  const { display_name, email, role } = useAuth();
 
-  useEffect(() => {
-    async function loadUser() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      setUserEmail(user.email ?? "");
-      const { data: adminUser } = await supabase
-        .from("admin_users")
-        .select("display_name")
-        .eq("id", user.id)
-        .single();
-      const name = adminUser?.display_name ?? user.email?.split("@")[0] ?? "Admin";
-      setUserName(name);
-      const parts = name.split(" ");
-      setUserInitials(
-        parts.length >= 2
-          ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-          : name.substring(0, 2).toUpperCase()
-      );
-    }
-    loadUser();
-  }, []);
+  const userName = display_name || email?.split("@")[0] || "User";
+  const parts = userName.split(" ");
+  const userInitials =
+    parts.length >= 2
+      ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+      : userName.substring(0, 2).toUpperCase();
 
   const breadcrumbs = buildBreadcrumbs(pathname);
 
@@ -116,22 +106,31 @@ export function Header() {
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium">{userName || "Admin"}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium">{userName}</p>
+                <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                  {ROLE_LABELS[role] || role}
+                </Badge>
+              </div>
               <p className="text-xs text-muted-foreground">
-                {userEmail || "admin@afterslim.com"}
+                {email || ""}
               </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => router.push("/settings")}>
-            <Settings className="mr-2 h-4 w-4" />
-            Configurações
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/settings")}>
-            <User className="mr-2 h-4 w-4" />
-            Perfil
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
+          {role !== "support" && (
+            <>
+              <DropdownMenuItem onClick={() => router.push("/settings")}>
+                <Settings className="mr-2 h-4 w-4" />
+                Configuracoes
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/settings")}>
+                <User className="mr-2 h-4 w-4" />
+                Perfil
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
             <LogOut className="mr-2 h-4 w-4" />
             Sair
@@ -142,19 +141,17 @@ export function Header() {
   );
 }
 
-/* ── Build breadcrumbs from pathname + NAV_ITEMS ─────────────── */
+/* -- Build breadcrumbs from pathname + NAV_ITEMS -- */
 
 function buildBreadcrumbs(
   pathname: string
 ): { label: string; href: string }[] {
   const crumbs: { label: string; href: string }[] = [];
 
-  // Always start with the matched top-level nav item
   for (const item of NAV_ITEMS) {
     if (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))) {
       crumbs.push({ label: item.label, href: item.href });
 
-      // Check children for a more specific match
       if (item.children) {
         for (const child of item.children) {
           if (pathname === child.href) {
@@ -167,12 +164,10 @@ function buildBreadcrumbs(
     }
   }
 
-  // Fallback for root
   if (crumbs.length === 0 && pathname === "/") {
     crumbs.push({ label: "Dashboard", href: "/" });
   }
 
-  // Fallback for unmatched paths
   if (crumbs.length === 0) {
     const segments = pathname.split("/").filter(Boolean);
     const label = segments[segments.length - 1] ?? "Page";

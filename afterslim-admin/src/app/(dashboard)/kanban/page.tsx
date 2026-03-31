@@ -1,10 +1,12 @@
 export const dynamic = "force-dynamic";
 
+import { requireAuth } from "@/lib/auth";
 import { getKanbanColumns, getKanbanCards } from "@/lib/queries/kanban";
 import { KanbanBoard } from "@/components/kanban/kanban-board";
 import type { KanbanColumn, KanbanCard } from "@/lib/types";
 
 export default async function KanbanPage() {
+  await requireAuth("/kanban");
   let columns: KanbanColumn[] = [];
   let cards: KanbanCard[] = [];
 

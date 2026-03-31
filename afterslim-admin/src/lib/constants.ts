@@ -10,8 +10,11 @@ import {
   Package,
   FileText,
   Store,
+  Bell,
+  ClipboardCheck,
   type LucideIcon,
 } from "lucide-react";
+import type { AdminRole } from "./auth";
 import type {
   OrderStatus,
   PaymentStatus,
@@ -24,6 +27,7 @@ import type {
   TransactionCategory,
   DocumentCategory,
   CostCategory,
+  ReminderStatus,
 } from "./types";
 
 /* =============================================================
@@ -35,6 +39,7 @@ export interface NavItem {
   href: string;
   icon: LucideIcon;
   badge?: string;
+  roles?: AdminRole[];
   children?: Omit<NavItem, "icon" | "children">[];
 }
 
@@ -43,6 +48,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Painel",
     href: "/",
     icon: LayoutDashboard,
+    roles: ["owner", "admin"],
   },
   {
     label: "Pedidos",
@@ -53,12 +59,19 @@ export const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
+    label: "Tarefas de Suporte",
+    href: "/support-tasks",
+    icon: ClipboardCheck,
+    roles: ["owner", "admin", "support"],
+  },
+  {
     label: "Financeiro",
     href: "/finance",
     icon: DollarSign,
+    roles: ["owner", "admin"],
     children: [
-      { label: "Visão Geral", href: "/finance" },
-      { label: "Transações", href: "/finance/transactions" },
+      { label: "Visao Geral", href: "/finance" },
+      { label: "Transacoes", href: "/finance/transactions" },
       { label: "Custos", href: "/finance/costs" },
       { label: "Metas", href: "/finance/goals" },
     ],
@@ -67,31 +80,43 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Canais de Venda",
     href: "/sales-channels",
     icon: Store,
+    roles: ["owner", "admin"],
   },
   {
     label: "Estoque",
     href: "/inventory",
     icon: Package,
+    roles: ["owner", "admin"],
   },
   {
     label: "Documentos",
     href: "/documents",
     icon: FileText,
+    roles: ["owner", "admin"],
+  },
+  {
+    label: "Lembretes",
+    href: "/reminders",
+    icon: Bell,
+    roles: ["owner", "admin"],
   },
   {
     label: "Ideias",
     href: "/ideas",
     icon: Lightbulb,
+    roles: ["owner", "admin"],
   },
   {
     label: "Kanban",
     href: "/kanban",
     icon: KanbanSquare,
+    roles: ["owner", "admin"],
   },
   {
     label: "Criadores",
     href: "/creators",
     icon: Users,
+    roles: ["owner", "admin"],
     children: [
       { label: "Todos os Criadores", href: "/creators" },
     ],
@@ -100,17 +125,19 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Agentes",
     href: "/agents",
     icon: Bot,
+    roles: ["owner", "admin"],
     children: [
-      { label: "Visão Geral", href: "/agents" },
+      { label: "Visao Geral", href: "/agents" },
       { label: "Mensagens", href: "/agents/messages" },
       { label: "Tarefas", href: "/agents/tasks" },
-      { label: "Memória", href: "/agents/memory" },
+      { label: "Memoria", href: "/agents/memory" },
     ],
   },
   {
-    label: "Configurações",
+    label: "Configuracoes",
     href: "/settings",
     icon: Settings,
+    roles: ["owner", "admin"],
   },
 ];
 
@@ -341,6 +368,19 @@ export const IDEA_SOURCE_CONFIG: Record<
    Misc
    ============================================================= */
 
+/* =============================================================
+   Status de lembretes
+   ============================================================= */
+
+export const REMINDER_STATUS_CONFIG: Record<
+  ReminderStatus,
+  { label: string; color: string; icon: string }
+> = {
+  pending: { label: "Pendente", color: "badge-warning", icon: "Clock" },
+  done: { label: "Concluido", color: "badge-success", icon: "CheckCircle" },
+  dismissed: { label: "Descartado", color: "badge-neutral", icon: "XCircle" },
+};
+
 export const ITEMS_PER_PAGE_OPTIONS = [10, 25, 50, 100] as const;
 export const DEFAULT_PAGE_SIZE = 25;
 
@@ -381,4 +421,26 @@ export const DOCUMENT_CATEGORY_CONFIG: Record<
   receipt: { label: "Recibo", icon: "CreditCard", color: "badge-warning" },
   legal: { label: "Jurídico", icon: "Shield", color: "badge-purple" },
   other: { label: "Outros", icon: "MoreHorizontal", color: "badge-neutral" },
+};
+
+/* =============================================================
+   Support Task Types
+   ============================================================= */
+
+import type { SupportTaskType } from "./types";
+
+export const SUPPORT_TASK_TYPE_CONFIG: Record<
+  SupportTaskType,
+  { label: string; icon: string; color: string }
+> = {
+  called_customer:       { label: "Ligou para o cliente", icon: "Phone", color: "badge-info" },
+  sent_sms:              { label: "Enviou SMS de recuperacao", icon: "MessageSquare", color: "badge-info" },
+  sent_email:            { label: "Enviou e-mail", icon: "Mail", color: "badge-info" },
+  offered_partial_refund:{ label: "Ofereceu reembolso parcial", icon: "DollarSign", color: "badge-warning" },
+  customer_accepted:     { label: "Cliente aceitou", icon: "CheckCircle", color: "badge-success" },
+  customer_declined:     { label: "Cliente recusou", icon: "XCircle", color: "badge-error" },
+  processed_refund:      { label: "Processou reembolso", icon: "RotateCcw", color: "badge-purple" },
+  reship_requested:      { label: "Solicitou reenvio", icon: "Truck", color: "badge-purple" },
+  callback_scheduled:    { label: "Agendou callback", icon: "Clock", color: "badge-warning" },
+  other:                 { label: "Outro", icon: "MoreHorizontal", color: "badge-neutral" },
 };

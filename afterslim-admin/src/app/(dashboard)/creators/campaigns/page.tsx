@@ -1,6 +1,9 @@
 import { Megaphone } from "lucide-react";
+import { requireAuth } from "@/lib/auth";
 
-export default function CampaignsPage() {
+export default async function CampaignsPage() {
+  await requireAuth("/creators");
+
   return (
     <div className="page-container">
       <div className="mb-6">

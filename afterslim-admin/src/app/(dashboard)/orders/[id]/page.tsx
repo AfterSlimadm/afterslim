@@ -18,6 +18,8 @@ import {
 import { toast } from "sonner";
 import { formatCurrency, formatDate, formatDateTime, cn } from "@/lib/utils";
 import { ORDER_STATUS_CONFIG, PAYMENT_STATUS_CONFIG } from "@/lib/constants";
+import { useAuth } from "@/components/auth-provider";
+import { OrderSupportTasks } from "@/components/support/order-support-tasks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -107,6 +109,7 @@ export default function OrderDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const { role } = useAuth();
   const [order, setOrder] = useState<Order>(EMPTY_ORDER);
   const [loading, setLoading] = useState(true);
   const [noteOpen, setNoteOpen] = useState(false);
@@ -219,7 +222,7 @@ export default function OrderDetailPage({
 
           {/* Actions */}
           <div className="flex gap-2">
-            {nextStatuses.length > 0 && (
+            {role !== "support" && nextStatuses.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button className="gap-2">
@@ -586,6 +589,9 @@ export default function OrderDetailPage({
               </CardContent>
             </Card>
           )}
+
+          {/* Support Tasks */}
+          <OrderSupportTasks orderId={id} />
         </div>
       </div>
     </div>

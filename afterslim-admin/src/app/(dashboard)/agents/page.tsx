@@ -1,10 +1,12 @@
 export const dynamic = "force-dynamic";
 
+import { requireAuth } from "@/lib/auth";
 import { getAgentTasks, getAgentMemories, getAgentMessages } from "@/lib/queries/agents";
 import { AGENTS } from "@/lib/constants";
 import AgentsContent, { type AgentStatus } from "./agents-content";
 
 export default async function AgentsPage() {
+  await requireAuth("/agents");
   let agentStatuses: AgentStatus[] = [];
 
   try {

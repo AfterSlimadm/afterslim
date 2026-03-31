@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 
 export async function DELETE(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const { id } = await params;
   const supabase = getAdminClient();
 

@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { requireAuth } from "@/lib/auth";
 import { getDashboardStats } from "@/lib/queries/dashboard";
 import {
   getRevenueByDay,
@@ -9,6 +10,7 @@ import {
 import DashboardContent from "./dashboard-content";
 
 export default async function DashboardPage() {
+  await requireAuth("/dashboard");
   let stats = null;
   let revenueData: Awaited<ReturnType<typeof getRevenueByDay>> = [];
   let recentOrders: Awaited<ReturnType<typeof getRecentOrders>> = [];

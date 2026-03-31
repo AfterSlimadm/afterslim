@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
 import { logAudit } from "@/lib/audit";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 
 /**
  * GET /api/settings
  * Fetch all store_settings rows as a key-value object.
  */
 export async function GET() {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const supabase = createServerClient();
 
   const { data, error } = await supabase
@@ -31,6 +37,11 @@ export async function GET() {
  * Body: { key: string, value: unknown }
  */
 export async function POST(request: Request) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const body = await request.json();
   const { key, value } = body;
 

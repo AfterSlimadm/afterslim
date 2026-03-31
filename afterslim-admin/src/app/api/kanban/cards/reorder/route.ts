@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 import { z } from "zod";
 
 const schema = z.object({
@@ -9,6 +10,11 @@ const schema = z.object({
 });
 
 export async function PATCH(request: Request) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const body = await request.json();
   const parsed = schema.safeParse(body);
 

@@ -3,6 +3,7 @@ import { createServerClient } from "./supabase-server";
 interface AuditEntry {
   userId?: string;
   userName?: string;
+  userRole?: string;
   action: string;
   entityType?: string;
   entityId?: string;
@@ -27,7 +28,10 @@ export async function logAudit(entry: AuditEntry) {
       entity_id: entry.entityId,
       old_value: entry.oldValue,
       new_value: entry.newValue,
-      metadata: entry.metadata || {},
+      metadata: {
+        ...(entry.metadata || {}),
+        ...(entry.userRole ? { role: entry.userRole } : {}),
+      },
       ip_address: entry.ipAddress,
     });
   } catch (error) {

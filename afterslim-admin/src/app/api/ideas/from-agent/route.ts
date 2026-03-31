@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
 import { logAudit } from "@/lib/audit";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 
 /**
  * POST /api/ideas/from-agent
@@ -11,6 +12,11 @@ import { logAudit } from "@/lib/audit";
  * Auth: header x-api-key deve corresponder a API_SECRET.
  */
 export async function POST(request: Request) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   // --- Auth ---
   const apiKey = request.headers.get("x-api-key");
   if (!apiKey || apiKey !== process.env.API_SECRET) {

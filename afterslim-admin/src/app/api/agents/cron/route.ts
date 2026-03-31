@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase-server";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 
 // Vercel Hobby allows up to 60s for serverless functions
 export const maxDuration = 60;
@@ -263,6 +264,11 @@ Respond with JSON only: { "format": "reel|carousel|story|post", "pillar": "...",
 
 // ── Main handler ────────────────────────────────────────────────────────────
 export async function GET(req: NextRequest) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   // Verify cron secret
   const authHeader = req.headers.get("authorization");
   if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {

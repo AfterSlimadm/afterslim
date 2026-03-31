@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { requireAuth } from "@/lib/auth";
 import {
   getFinanceSummary,
   getCashFlowByWeek,
@@ -9,6 +10,7 @@ import {
 import FinanceContent from "./finance-content";
 
 export default async function FinancePage() {
+  await requireAuth("/finance");
   let summary = null;
   let cashFlow: Awaited<ReturnType<typeof getCashFlowByWeek>> = [];
   let revenueTrend: Awaited<ReturnType<typeof getRevenueTrend>> = [];

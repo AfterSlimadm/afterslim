@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, type NavItem } from "@/lib/constants";
 import { useAdminStore } from "@/store/use-admin-store";
+import { useAuth } from "@/components/auth-provider";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -26,6 +27,11 @@ export function Sidebar() {
   const pathname = usePathname();
   const collapsed = useAdminStore((s) => s.sidebarCollapsed);
   const toggleCollapsed = useAdminStore((s) => s.toggleSidebarCollapsed);
+  const { role } = useAuth();
+
+  const filteredNav = NAV_ITEMS.filter(
+    (item) => !item.roles || item.roles.includes(role)
+  );
 
   return (
     <aside
@@ -57,7 +63,7 @@ export function Sidebar() {
       {/* Navigation */}
       <ScrollArea className="flex-1 px-2 py-3">
         <nav className="space-y-1">
-          {NAV_ITEMS.map((item) => (
+          {filteredNav.map((item) => (
             <SidebarNavItem
               key={item.href}
               item={item}
@@ -202,6 +208,11 @@ function SidebarNavItem({
 export function MobileSidebarContent() {
   const pathname = usePathname();
   const setSidebarOpen = useAdminStore((s) => s.setSidebarOpen);
+  const { role } = useAuth();
+
+  const filteredNav = NAV_ITEMS.filter(
+    (item) => !item.roles || item.roles.includes(role)
+  );
 
   return (
     <div className="flex h-full flex-col">
@@ -225,7 +236,7 @@ export function MobileSidebarContent() {
       {/* Navigation */}
       <ScrollArea className="flex-1 px-2 py-3">
         <nav className="space-y-1">
-          {NAV_ITEMS.map((item) => {
+          {filteredNav.map((item) => {
             const Icon = item.icon;
             const isActive =
               pathname === item.href ||

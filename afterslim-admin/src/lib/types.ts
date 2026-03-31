@@ -402,6 +402,57 @@ export interface Document {
   created_at: string;
 }
 
+// ─── Reminders ───────────────────────────────────────────────
+
+export type ReminderStatus = "pending" | "done" | "dismissed";
+export type ReminderPriority = "low" | "medium" | "high" | "critical";
+export type ReminderSource = "manual" | "whatsapp" | "agent";
+
+export interface Reminder {
+  id: string;
+  title: string;
+  description: string | null;
+  due_date: string | null;
+  assigned_to: string | null;
+  priority: ReminderPriority;
+  status: ReminderStatus;
+  created_by: string | null;
+  source: ReminderSource;
+  created_at: string;
+  updated_at: string;
+}
+
+// ─── Support Tasks ──────────────────────────────────────────────
+
+export type SupportTaskType =
+  | "called_customer"
+  | "sent_sms"
+  | "sent_email"
+  | "offered_partial_refund"
+  | "customer_accepted"
+  | "customer_declined"
+  | "processed_refund"
+  | "reship_requested"
+  | "callback_scheduled"
+  | "other";
+
+export interface SupportTask {
+  id: string;
+  order_id: string | null;
+  customer_id: string | null;
+  admin_user_id: string;
+  task_type: SupportTaskType;
+  description: string | null;
+  is_completed: boolean;
+  completed_at: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+  /* Joined */
+  admin_user?: { display_name: string };
+  order?: { id: string; order_number: string; status: string } | null;
+}
+
 // ─── Misc ─────────────────────────────────────────────────────
 
 export interface DateRange {

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getApiUser, requireRole } from "@/lib/api-auth";
 import { z } from "zod";
 
 // Vercel Hobby allows up to 60s for serverless functions
@@ -19,6 +20,11 @@ const chatSchema = z.object({
  * No direct LLM fallback. OpenClaw handles model routing internally.
  */
 export async function POST(request: Request) {
+  const apiUser = await getApiUser();
+  if (!apiUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const forbidden = requireRole(apiUser.role, ["owner", "admin"]);
+  if (forbidden) return forbidden;
+
   const body = await request.json();
   const parsed = chatSchema.safeParse(body);
 

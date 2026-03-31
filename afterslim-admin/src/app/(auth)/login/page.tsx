@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,11 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const isSupportPortal = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return window.location.hostname.startsWith("tauk.");
+  }, []);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
@@ -50,17 +55,17 @@ function LoginForm() {
       });
 
       if (error) {
-        toast.error("Falha no login", {
+        toast.error(isSupportPortal ? "Login failed" : "Falha no login", {
           description: error.message,
         });
         return;
       }
 
-      toast.success("Bem-vindo de volta!");
+      toast.success(isSupportPortal ? "Welcome back!" : "Bem-vindo de volta!");
       router.push(redirectTo);
       router.refresh();
     } catch {
-      toast.error("Erro inesperado. Tente novamente.");
+      toast.error(isSupportPortal ? "Unexpected error. Try again." : "Erro inesperado. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -79,15 +84,21 @@ function LoginForm() {
             className="h-12 w-auto"
             priority
           />
-          <p className="text-sm text-muted-foreground">Painel Administrativo</p>
+          <p className="text-sm text-muted-foreground">
+            {isSupportPortal ? "Support Portal" : "Painel Administrativo"}
+          </p>
         </div>
 
         {/* Login card */}
         <Card>
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-xl">Entrar</CardTitle>
+            <CardTitle className="text-xl">
+              {isSupportPortal ? "Sign In" : "Entrar"}
+            </CardTitle>
             <CardDescription>
-              Insira suas credenciais para acessar o painel
+              {isSupportPortal
+                ? "Enter your credentials to access the support portal"
+                : "Insira suas credenciais para acessar o painel"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -97,7 +108,7 @@ function LoginForm() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@afterslim.com"
+                  placeholder={isSupportPortal ? "your@email.com" : "admin@afterslim.com"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -107,11 +118,13 @@ function LoginForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password">
+                  {isSupportPortal ? "Password" : "Senha"}
+                </Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Digite sua senha"
+                  placeholder={isSupportPortal ? "Enter your password" : "Digite sua senha"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -124,10 +137,10 @@ function LoginForm() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Entrando...
+                    {isSupportPortal ? "Signing in..." : "Entrando..."}
                   </>
                 ) : (
-                  "Entrar"
+                  isSupportPortal ? "Sign In" : "Entrar"
                 )}
               </Button>
             </form>
@@ -135,7 +148,9 @@ function LoginForm() {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground">
-          Uso interno. Acesso nao autorizado e proibido.
+          {isSupportPortal
+            ? "Authorized personnel only. All actions are logged."
+            : "Uso interno. Acesso nao autorizado e proibido."}
         </p>
       </div>
     </div>
