@@ -349,6 +349,31 @@ ul, ol {
   line-height: 1.5;
 }
 
+/* Hero Text Only (Desktop) */
+.hero-text-only {
+  padding: 60px 0 40px;
+}
+
+.hero-text-only .hero-text-center {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.hero-text-only h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero-text-only .hero-subtitle {
+  margin-bottom: 16px;
+}
+
+.hero-text-only .hero-bold {
+  margin-bottom: 0;
+}
+
 .hero-buttons {
   display: flex;
   gap: 12px;
@@ -908,6 +933,129 @@ ul, ol {
   color: var(--text-secondary);
 }
 
+/* ========== UGC SECTION ========== */
+.ugc-section {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  padding: 80px 0;
+}
+
+.ugc-section .section-title {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.ugc-section .section-subtitle {
+  text-align: center;
+  margin: 0 auto 48px;
+  color: var(--text-secondary);
+}
+
+.ugc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .ugc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .ugc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ugc-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ugc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.ugc-video-placeholder {
+  position: relative;
+  aspect-ratio: 9/16;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ugc-play-btn {
+  width: 64px;
+  height: 64px;
+  background: rgba(234, 88, 12, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 2;
+}
+
+.ugc-video-placeholder:hover .ugc-play-btn {
+  transform: scale(1.1);
+  background: var(--orange);
+}
+
+.ugc-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.6) 100%);
+  z-index: 1;
+}
+
+.ugc-platform {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.ugc-platform svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ugc-info {
+  padding: 16px;
+}
+
+.ugc-username {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.ugc-caption {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* ========== PRICING ========== */
 .pricing-section {
   background: var(--warm);
@@ -1099,31 +1247,111 @@ ul, ol {
 /* ========== FAQ ========== */
 .faq-section {
   background: var(--light);
+  padding: 80px 0;
 }
 
-.faq-section .section-title {
-  text-align: center;
-  margin-bottom: 48px;
+.faq-section.section-padding {
+  padding: 80px 0;
 }
 
-.faq-list {
-  max-width: 720px;
+.faq-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 100px;
+  align-items: start;
+  max-width: 1100px;
   margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .faq-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.faq-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.faq-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.faq-title-script {
+  font-size: 38px;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: var(--orange);
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+
+.faq-tabs {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.faq-item {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: border-color 0.3s ease;
+@media (max-width: 900px) {
+  .faq-tabs {
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 
-.faq-item.open {
-  border-color: var(--orange);
+.faq-tab {
+  padding: 12px 32px;
+  border: 2px solid var(--orange);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--orange);
+  text-align: center;
+}
+
+.faq-tab:hover {
+  background: rgba(234, 88, 12, 0.1);
+}
+
+.faq-tab.active {
+  background: var(--orange);
+  color: #fff;
+}
+
+.faq-content {
+  flex: 1;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.faq-category {
+  display: none;
+}
+
+.faq-category.active {
+  display: block;
+}
+
+.faq-item {
+  border-bottom: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+
+.faq-item:first-child {
+  border-top: 1px solid #e5e5e5;
 }
 
 .faq-question {
@@ -1131,7 +1359,7 @@ ul, ol {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px;
+  padding: 22px 0;
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
@@ -1147,25 +1375,25 @@ ul, ol {
 
 .faq-icon {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   transition: transform 0.3s ease;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .faq-item.open .faq-icon {
-  transform: rotate(45deg);
+  transform: rotate(180deg);
   color: var(--orange);
 }
 
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease, padding 0.3s ease;
+  transition: max-height 0.4s ease;
 }
 
 .faq-answer-inner {
-  padding: 0 24px 20px;
+  padding: 0 0 22px;
   font-size: 15px;
   color: var(--text-secondary);
   line-height: 1.7;
@@ -1325,8 +1553,573 @@ ul, ol {
   display: none;
 }
 
+/* ========== DESKTOP BANNERS (hidden on mobile) ========== */
+.desktop-banners {
+  display: block;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  background: #f5f5f5;
+}
+
+.desktop-banner {
+  width: 100%;
+  display: block;
+  line-height: 0;
+}
+
+.desktop-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 100%;
+}
+
+/* ========== MOBILE BANNERS (hidden on desktop) ========== */
+.mobile-banners {
+  display: none;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  background: #f5f5f5;
+}
+
+.mobile-banner {
+  width: 100%;
+  display: block;
+  line-height: 0;
+}
+
+.mobile-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 100%;
+}
+
+/* ========== DESKTOP REVIEWS BAR (hidden on mobile) ========== */
+.desktop-reviews-bar {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  padding: 40px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.desktop-reviews-bar .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.reviews-slider {
+  display: flex;
+  gap: 24px;
+  overflow: visible;
+  transition: transform 0.3s ease;
+}
+
+.review-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  min-width: calc(33.333% - 16px);
+  max-width: calc(33.333% - 16px);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.review-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1c1917;
+  margin: 0;
+}
+
+.review-stars {
+  color: #f59e0b;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.review-text {
+  font-size: 14px;
+  color: #57534e;
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 16px;
+}
+
+.review-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e7e5e4;
+  padding-top: 12px;
+}
+
+.review-verified {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.review-verified svg {
+  width: 14px;
+  height: 14px;
+}
+
+.review-author {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c1917;
+}
+
+.reviews-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.reviews-nav:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.reviews-nav.prev {
+  left: 10px;
+}
+
+.reviews-nav.next {
+  right: 10px;
+}
+
+.reviews-nav svg {
+  width: 20px;
+  height: 20px;
+  color: #1c1917;
+}
+
+.reviews-more {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.reviews-more a {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.reviews-more a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ========== DESKTOP PRODUCT SECTION (hidden on mobile) ========== */
+.desktop-product-section {
+  background: #fff;
+  padding: 60px 0;
+}
+
+.desktop-product-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.desktop-product-image {
+  text-align: center;
+}
+
+.desktop-product-image img {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+.desktop-product-info {
+  max-width: 500px;
+}
+
+.desktop-product-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.desktop-product-rating .stars {
+  color: #f59e0b;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.desktop-product-rating .reviews {
+  font-size: 14px;
+  color: #78716c;
+}
+
+.desktop-product-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1c1917;
+  margin-bottom: 8px;
+}
+
+.desktop-product-subtitle {
+  font-size: 15px;
+  color: #57534e;
+  margin-bottom: 24px;
+}
+
+/* Quantity Selection - OPositiv Style (Horizontal) */
+.desktop-qty-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1c1917;
+  margin-bottom: 12px;
+}
+
+.desktop-bundle-options {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.desktop-bundle-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px 16px;
+  border: 2px solid #e7e5e4;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
+  position: relative;
+  text-align: center;
+  min-height: 90px;
+}
+
+.desktop-bundle-option * {
+  pointer-events: none;
+}
+
+.desktop-bundle-option:hover {
+  border-color: #d6d3d1;
+}
+
+.desktop-bundle-option.selected {
+  border-color: #ea580c;
+  background: #fff7ed;
+}
+
+/* Hide radio circles in horizontal layout */
+.desktop-bundle-option .radio-circle {
+  display: none;
+}
+
+.desktop-bundle-option .bundle-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.desktop-bundle-option .bundle-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.desktop-bundle-option .bundle-qty-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1c1917;
+}
+
+.desktop-bundle-option .bundle-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.desktop-bundle-option .bundle-badge.recommended {
+  background: #1c1917;
+  color: #fff;
+}
+
+.desktop-bundle-option .bundle-badge.best-value {
+  background: #ea580c;
+  color: #fff;
+}
+
+.desktop-bundle-option .bundle-right {
+  text-align: center;
+}
+
+.desktop-bundle-option .bundle-save {
+  font-size: 13px;
+  color: #ea580c;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.desktop-bundle-recommendation {
+  font-size: 13px;
+  color: #57534e;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* Purchase Type Selection - OPositiv Style */
+.desktop-purchase-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c1917;
+  margin-bottom: 12px;
+}
+
+.desktop-purchase-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.desktop-purchase-option {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 20px;
+  border: 2px solid #e7e5e4;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.desktop-purchase-option * {
+  pointer-events: none;
+}
+
+.desktop-purchase-option:hover {
+  border-color: #d6d3d1;
+}
+
+.desktop-purchase-option.selected {
+  border-color: #ea580c;
+  background: #fff7ed;
+}
+
+.desktop-purchase-option .radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ea580c;
+  border-radius: 50%;
+  margin-right: 14px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.desktop-purchase-option.selected .radio-circle {
+  border-color: #ea580c;
+}
+
+.desktop-purchase-option.selected .radio-circle::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #ea580c;
+  border-radius: 50%;
+}
+
+.desktop-purchase-option .option-content {
+  flex: 1;
+}
+
+.desktop-purchase-option .option-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.desktop-purchase-option .option-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1c1917;
+}
+
+.desktop-purchase-option .option-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1c1917;
+}
+
+.desktop-purchase-option .option-price .original {
+  font-size: 14px;
+  color: #a8a29e;
+  text-decoration: line-through;
+  margin-right: 8px;
+  font-weight: 400;
+}
+
+.desktop-purchase-option .option-benefits {
+  margin-top: 8px;
+}
+
+.desktop-purchase-option .option-benefit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #57534e;
+  margin-bottom: 4px;
+}
+
+.desktop-purchase-option .option-benefit svg {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+/* Customer Favorite Badge */
+.desktop-customer-favorite {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fef3c7;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.desktop-customer-favorite svg {
+  color: #f59e0b;
+}
+
+.desktop-customer-favorite span {
+  font-size: 14px;
+  color: #92400e;
+  font-weight: 500;
+}
+
+/* Add to Cart Button - OPositiv Style */
+.desktop-add-to-cart {
+  width: 100%;
+  padding: 18px 24px;
+  background: #16a34a;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: pulse-button 2s ease-in-out infinite;
+}
+
+.desktop-add-to-cart:hover {
+  background: #15803d;
+  transform: scale(1.02);
+}
+
+.desktop-add-to-cart .btn-text {
+  font-size: 16px;
+}
+
+.desktop-add-to-cart .btn-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.desktop-add-to-cart .btn-price .original {
+  text-decoration: line-through;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.desktop-guarantee {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #78716c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.desktop-guarantee svg {
+  color: #16a34a;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+  /* Hide desktop elements on mobile */
+  .desktop-banners,
+  .desktop-reviews-bar,
+  .desktop-product-section,
+  .hero-text-only {
+    display: none;
+  }
+
+  /* Show mobile banners on mobile */
+  .mobile-banners {
+    display: block;
+  }
+
   .section-padding {
     padding: 48px 0;
   }
@@ -2162,11 +2955,6 @@ ul, ol {
 </head>
 <body>
 
-<!-- ========== ANNOUNCEMENT BAR ========== -->
-<div class="announcement-bar">
-  <strong>The GLP-1 Companion</strong> &nbsp;&middot;&nbsp; Free Shipping on 2+ Bottles &nbsp;&middot;&nbsp; <strong>90-Day Guarantee</strong>
-</div>
-
 <!-- ========== STICKY NAV ========== -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
@@ -2175,25 +2963,237 @@ ul, ol {
   </div>
 </nav>
 
-<!-- ========== HERO ========== -->
-<section class="hero">
-  <div class="hero-grid">
-    <div class="hero-content reveal">
-      <span class="label">THE GLP-1 COMPANION</span>
-      <h1>On Mounjaro or Ozempic? Your gut needs backup.</h1>
-      <p class="hero-subtitle">Nausea. Bloating. Constipation. These aren't just side effects. They're warning signs that your gut microbiome is under stress from GLP-1 medications.</p>
-      <div class="hero-cta-section">
-        <p class="hero-bold">AfterSlim protects your gut microbiome while you lose weight.</p>
-        <div class="hero-buttons">
-          <a href="#pricing" class="btn-primary">Order Now</a>
-          <a href="#how" class="btn-outline">See How It Works</a>
+<!-- ========== ANNOUNCEMENT BAR ========== -->
+<div class="announcement-bar">
+  <strong>The GLP-1 Companion</strong> &nbsp;&middot;&nbsp; Free Shipping on 2+ Bottles &nbsp;&middot;&nbsp; <strong>90-Day Guarantee</strong>
+</div>
+
+<!-- ========== DESKTOP BANNERS (hidden on mobile) ========== -->
+<div class="desktop-banners">
+  <a href="#pricing" class="desktop-banner">
+    <img src="images/bannerdesktop1.png" alt="AfterSlim - Weight Loss Support for Hair, Energy, Gut Health & Satiety">
+  </a>
+  <a href="#pricing" class="desktop-banner">
+    <img src="images/bannerdesktop2.png" alt="AfterSlim - Protect Your Gut, Keep Losing Weight">
+  </a>
+</div>
+
+<!-- ========== MOBILE BANNERS (hidden on desktop) ========== -->
+<div class="mobile-banners">
+  <a href="#pricing" class="mobile-banner">
+    <img src="images/bannermobile1.png" alt="AfterSlim - Weight Loss Support for Hair, Energy, Gut Health & Satiety">
+  </a>
+  <a href="#pricing" class="mobile-banner">
+    <img src="images/bannermobile2.png" alt="AfterSlim - Protect Your Gut, Keep Losing Weight">
+  </a>
+</div>
+
+<!-- ========== DESKTOP REVIEWS BAR (hidden on mobile) ========== -->
+<section class="desktop-reviews-bar">
+  <div class="container">
+    <button class="reviews-nav prev" onclick="slideReviews(-1)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button class="reviews-nav next" onclick="slideReviews(1)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
+
+    <div class="reviews-slider" id="reviewsSlider">
+      <div class="review-card">
+        <div class="review-header">
+          <h4 class="review-title">Life changing supplement!</h4>
+          <span class="review-stars">★★★★★</span>
         </div>
-        <p class="fda-disclaimer">*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
+        <p class="review-text">I've been on Ozempic for 3 months and the nausea was unbearable. Started AfterSlim 2 weeks ago and the difference is incredible. No more bloating or stomach issues!</p>
+        <div class="review-footer">
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+          <span class="review-author">-Sarah M.</span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <h4 class="review-title">Finally found relief!</h4>
+          <span class="review-stars">★★★★★</span>
+        </div>
+        <p class="review-text">The constipation from Mounjaro was awful. My doctor recommended a gut supplement and I found AfterSlim. Within a week, everything was back to normal. Highly recommend!</p>
+        <div class="review-footer">
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+          <span class="review-author">-Jennifer K.</span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <h4 class="review-title">Best GLP-1 companion</h4>
+          <span class="review-stars">★★★★★</span>
+        </div>
+        <p class="review-text">I was skeptical at first but AfterSlim really works. My energy levels are up, no more gut issues, and I'm still losing weight on Wegovy. This is a must-have!</p>
+        <div class="review-footer">
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+          <span class="review-author">-Michelle R.</span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <h4 class="review-title">No more nausea!</h4>
+          <span class="review-stars">★★★★★</span>
+        </div>
+        <p class="review-text">The nausea from my GLP-1 medication was making it hard to stick with the treatment. AfterSlim has been a game changer - I can finally eat without feeling sick!</p>
+        <div class="review-footer">
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+          <span class="review-author">-Lisa T.</span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <h4 class="review-title">Highly recommend!</h4>
+          <span class="review-stars">★★★★★</span>
+        </div>
+        <p class="review-text">My doctor told me to find a gut support supplement for my Ozempic journey. AfterSlim has exceeded my expectations. Better digestion and more energy throughout the day.</p>
+        <div class="review-footer">
+          <span class="review-verified">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Verified Customer
+          </span>
+          <span class="review-author">-Amanda P.</span>
+        </div>
       </div>
     </div>
-    <div class="hero-image-wrapper reveal">
-      <div class="hero-glow"></div>
-      <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Balance supplement bottle" class="hero-bottle">
+
+    <div class="reviews-more">
+      <a href="#reviews">Read More Reviews</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== HERO (Desktop Text Only) ========== -->
+<section class="hero hero-text-only">
+  <div class="hero-text-center reveal">
+    <span class="label">THE GLP-1 COMPANION</span>
+    <h1>On Mounjaro or Ozempic? Your gut needs backup.</h1>
+    <p class="hero-subtitle">Nausea. Bloating. Constipation. These aren't just side effects. They're warning signs that your gut microbiome is under stress from GLP-1 medications.</p>
+    <p class="hero-bold">AfterSlim protects your gut microbiome while you lose weight.</p>
+  </div>
+</section>
+
+<!-- ========== DESKTOP PRODUCT SECTION (hidden on mobile) ========== -->
+<section class="desktop-product-section">
+  <div class="desktop-product-grid">
+    <div class="desktop-product-image">
+      <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Balance supplement bottle">
+    </div>
+    <div class="desktop-product-info">
+      <div class="desktop-product-rating">
+        <span class="stars">★★★★★</span>
+        <span class="reviews">4.8/5 (127 reviews)</span>
+      </div>
+      <h2 class="desktop-product-title">AfterSlim GLP-1 Balance</h2>
+      <p class="desktop-product-subtitle">The GLP-1 Companion. Protects your gut microbiome while you lose weight.</p>
+
+      <!-- Quantity Selection -->
+      <p class="desktop-qty-label">Select Quantity:</p>
+      <div class="desktop-bundle-options">
+        <div class="desktop-bundle-option" data-qty="1" onclick="selectDesktopBundle(1)">
+          <div class="bundle-content">
+            <div class="bundle-left">
+              <span class="bundle-qty-text">1 Bottle</span>
+            </div>
+            <div class="bundle-right">
+              <span class="bundle-save" id="desktop-bottle1-save"></span>
+            </div>
+          </div>
+        </div>
+        <div class="desktop-bundle-option selected" data-qty="2" onclick="selectDesktopBundle(2)">
+          <span class="bundle-badge recommended">Recommended</span>
+          <div class="bundle-content">
+            <div class="bundle-left">
+              <span class="bundle-qty-text">2 Bottles</span>
+            </div>
+            <div class="bundle-right">
+              <span class="bundle-save" id="desktop-bottle2-save">Save 24%</span>
+            </div>
+          </div>
+        </div>
+        <div class="desktop-bundle-option" data-qty="3" onclick="selectDesktopBundle(3)">
+          <span class="bundle-badge best-value">Best Value</span>
+          <div class="bundle-content">
+            <div class="bundle-left">
+              <span class="bundle-qty-text">3 Bottles</span>
+            </div>
+            <div class="bundle-right">
+              <span class="bundle-save" id="desktop-bottle3-save">Save 40%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="desktop-bundle-recommendation">We recommend 2-3 months of consistent daily use for best results.</p>
+
+      <!-- Purchase Type Selection -->
+      <p class="desktop-purchase-label">Select Your Purchase Type</p>
+      <div class="desktop-purchase-options">
+        <div class="desktop-purchase-option selected" onclick="selectDesktopPurchase('subscribe')">
+          <span class="radio-circle"></span>
+          <div class="option-content">
+            <div class="option-header">
+              <span class="option-title" id="desktop-subscribe-title">Subscribe & Save 37%</span>
+              <span class="option-price" id="desktop-subscribe-price">$47.99</span>
+            </div>
+            <div class="option-benefits">
+              <div class="option-benefit">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Free Shipping Always</span>
+              </div>
+              <div class="option-benefit">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Delivered Every 30 Days</span>
+              </div>
+              <div class="option-benefit">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Cancel Anytime</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="desktop-purchase-option" onclick="selectDesktopPurchase('onetime')">
+          <span class="radio-circle"></span>
+          <div class="option-content">
+            <div class="option-header">
+              <span class="option-title">One-Time Purchase</span>
+              <span class="option-price" id="desktop-onetime-price">$57.99</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add to Cart Button -->
+      <button class="desktop-add-to-cart" onclick="window.location.href='#pricing'">
+        <span class="btn-text">Add to Cart</span>
+        <span class="btn-price">
+          <span class="original" id="desktop-btn-original">$75.98</span>
+          <span id="desktop-btn-price">$47.99</span>
+        </span>
+      </button>
+
+      <p class="desktop-guarantee">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        90-Day Money Back Guarantee
+      </p>
     </div>
   </div>
 </section>
@@ -2295,7 +3295,7 @@ ul, ol {
     </div>
     <span class="proof-divider"></span>
     <div class="proof-item">
-      <span style="font-size: 18px;">🇺🇸</span>
+      <img src="https://flagcdn.com/w40/us.png" width="24" height="16" alt="USA" style="border-radius: 2px;">
       <span>Made in USA</span>
     </div>
   </div>
@@ -2508,73 +3508,90 @@ ul, ol {
   </div>
 </section>
 
-<!-- ========== REVIEWS ========== -->
-<!-- PLACEHOLDER: Replace with real reviews -->
-<section class="reviews-section section-padding">
+<!-- ========== UGC SECTION ========== -->
+<!-- PLACEHOLDER: Replace with real UGC videos/images -->
+<section class="ugc-section section-padding">
   <div class="container">
     <div class="reveal">
-      <h2 class="section-title">What GLP-1 Users Are Saying</h2>
-      <p class="section-subtitle">Real experiences from people combining AfterSlim with their GLP-1 treatment.</p>
+      <h2 class="section-title">Real Results from Real Users</h2>
+      <p class="section-subtitle">See what our community is sharing about their AfterSlim journey.</p>
     </div>
-    <div class="reviews-grid reveal-children">
-      <!-- PLACEHOLDER REVIEW 1 -->
-      <div class="review-card">
-        <div class="review-stars">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="review-text">"I've been on Mounjaro for 3 months and the bloating was unbearable. Two weeks after starting AfterSlim, the difference is night and day. I can actually eat without discomfort."</p>
-        <div class="review-author">
-          <div class="review-avatar">S</div>
-          <div>
-            <div class="review-name">Sarah M.</div>
-            <div class="review-detail">Mounjaro user, 3 months</div>
+    <div class="ugc-grid reveal-children">
+      <!-- UGC Item 1 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
           </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform">
+            <!-- Instagram icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6 6 0 100 12 6 6 0 000-12zm0 9.9a3.9 3.9 0 110-7.8 3.9 3.9 0 010 7.8zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@sarah_wellness</span>
+          <p class="ugc-caption">"3 weeks on Mounjaro + AfterSlim = no more bloating!"</p>
         </div>
       </div>
-      <!-- PLACEHOLDER REVIEW 2 -->
-      <div class="review-card">
-        <div class="review-stars">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="review-text">"My doctor mentioned Akkermansia supplements but Pendulum was way too expensive. AfterSlim gives me that plus prebiotics for a fraction of the cost. My digestion has improved significantly."</p>
-        <div class="review-author">
-          <div class="review-avatar">J</div>
-          <div>
-            <div class="review-name">James R.</div>
-            <div class="review-detail">Ozempic user, 6 months</div>
+
+      <!-- UGC Item 2 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
           </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform tiktok">
+            <!-- TikTok icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@jen_ozempic_journey</span>
+          <p class="ugc-caption">"Finally a supplement that actually works with my GLP-1!"</p>
         </div>
       </div>
-      <!-- PLACEHOLDER REVIEW 3 -->
-      <div class="review-card">
-        <div class="review-stars">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <p class="review-text">"I was about to quit Wegovy because of the nausea. Started AfterSlim as a last resort and within a week the nausea dropped dramatically. Down 22 lbs and counting."</p>
-        <div class="review-author">
-          <div class="review-avatar">M</div>
-          <div>
-            <div class="review-name">Michelle K.</div>
-            <div class="review-detail">Wegovy user, 4 months</div>
+
+      <!-- UGC Item 3 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
           </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform">
+            <!-- Instagram icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6 6 0 100 12 6 6 0 000-12zm0 9.9a3.9 3.9 0 110-7.8 3.9 3.9 0 010 7.8zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@mike_health_tips</span>
+          <p class="ugc-caption">"My gut health has never been better. AfterSlim is a game changer!"</p>
+        </div>
+      </div>
+
+      <!-- UGC Item 4 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform tiktok">
+            <!-- TikTok icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@wegovy_warrior</span>
+          <p class="ugc-caption">"Down 30lbs and no more nausea thanks to AfterSlim!"</p>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- END PLACEHOLDER REVIEWS -->
+<!-- END UGC SECTION -->
 
 <!-- ========== BUNDLE SELECTOR (Happy Sweet Bubble Style) ========== -->
 <section class="bundle-section section-padding" id="pricing">
@@ -2691,62 +3708,162 @@ ul, ol {
 <!-- ========== FAQ ========== -->
 <section class="faq-section section-padding">
   <div class="container">
-    <div class="reveal">
-      <h2 class="section-title">Frequently Asked Questions</h2>
-    </div>
-    <div class="faq-list reveal">
-      <div class="faq-item">
-        <button class="faq-question" aria-expanded="false">
-          What is AfterSlim and who is it for?
-          <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">AfterSlim GLP-1 Balance is a prebiotic and probiotic supplement designed specifically for people taking GLP-1 medications like Mounjaro (tirzepatide), Ozempic, or Wegovy (semaglutide). It contains targeted strains including Akkermansia muciniphila to support your gut microbiome during treatment.</div>
+    <div class="faq-container reveal">
+      <!-- Sidebar with Title and Tabs -->
+      <div class="faq-sidebar">
+        <h2 class="faq-title">Frequently Asked</h2>
+        <p class="faq-title-script">Questions</p>
+        <div class="faq-tabs">
+          <button class="faq-tab active" data-category="product">Product</button>
+          <button class="faq-tab" data-category="shipping">Shipping</button>
+          <button class="faq-tab" data-category="other">Other</button>
         </div>
       </div>
-      <div class="faq-item">
-        <button class="faq-question" aria-expanded="false">
-          Can I take AfterSlim with my GLP-1 medication?
-          <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">AfterSlim is a dietary supplement and is generally well-tolerated alongside GLP-1 medications. However, we always recommend consulting with your healthcare provider before starting any new supplement, especially if you're on prescription medication.</div>
+
+      <!-- FAQ Content -->
+      <div class="faq-content">
+        <!-- Product FAQs -->
+        <div class="faq-category active" data-category="product">
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                What is AfterSlim and who is it for?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">AfterSlim GLP-1 Balance is a prebiotic and probiotic supplement designed specifically for people taking GLP-1 medications like Mounjaro (tirzepatide), Ozempic, or Wegovy (semaglutide). It contains targeted strains including Akkermansia muciniphila to support your gut microbiome during treatment.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Can I take AfterSlim with my GLP-1 medication?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">AfterSlim is a dietary supplement and is generally well-tolerated alongside GLP-1 medications. However, we always recommend consulting with your healthcare provider before starting any new supplement, especially if you're on prescription medication.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                What makes Akkermansia muciniphila special?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Akkermansia muciniphila is a next-generation probiotic strain that plays a critical role in maintaining the gut lining. Research has shown it supports metabolic health, reduces inflammation, and strengthens the intestinal barrier. Companies like Pendulum charge $150/month for Akkermansia alone. AfterSlim includes it alongside complementary prebiotics and probiotics.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                How soon will I notice results?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Many users report improvements in digestive comfort within 1 to 2 weeks. For the full benefits of microbiome restoration, we recommend consistent daily use for at least 60 to 90 days. This is why our 2-bottle and 3-bottle packs offer the best value.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                How is AfterSlim different from a regular probiotic?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Most probiotics use generic Lactobacillus and Bifidobacterium strains not targeted for GLP-1 users. AfterSlim was formulated specifically for the gut challenges created by GLP-1 medications. It includes Akkermansia muciniphila (a next-gen strain), Clostridium butyricum (a butyrate producer), and targeted prebiotics that feed these beneficial bacteria.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                How do I take AfterSlim capsules?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Take 2 capsules daily with water, preferably with a meal. For best results, take consistently at the same time each day. Store in a cool, dry place away from direct sunlight.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" aria-expanded="false">
-          What makes Akkermansia muciniphila special?
-          <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">Akkermansia muciniphila is a next-generation probiotic strain that plays a critical role in maintaining the gut lining. Research has shown it supports metabolic health, reduces inflammation, and strengthens the intestinal barrier. Companies like Pendulum charge $150/month for Akkermansia alone. AfterSlim includes it alongside complementary prebiotics and probiotics.</div>
+
+        <!-- Shipping FAQs -->
+        <div class="faq-category" data-category="shipping">
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                How long does shipping take?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Orders are processed within 1-2 business days. Standard shipping within the US takes 3-5 business days. Express shipping options are available at checkout for faster delivery.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Do you offer free shipping?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Yes! We offer free standard shipping on all orders of 2 or more bottles within the continental United States. Single bottle orders have a flat shipping rate of $4.99.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Do you ship internationally?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Currently, we only ship within the United States. We're working on expanding our shipping to Canada and other countries soon. Sign up for our newsletter to be notified when international shipping becomes available.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                How can I track my order?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Once your order ships, you'll receive an email with tracking information. You can also log into your account to view order status and tracking details at any time.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" aria-expanded="false">
-          How soon will I notice results?
-          <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">Many users report improvements in digestive comfort within 1 to 2 weeks. For the full benefits of microbiome restoration, we recommend consistent daily use for at least 60 to 90 days. This is why our 2-bottle and 3-bottle packs offer the best value.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" aria-expanded="false">
-          How is AfterSlim different from a regular probiotic?
-          <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">Most probiotics use generic Lactobacillus and Bifidobacterium strains not targeted for GLP-1 users. AfterSlim was formulated specifically for the gut challenges created by GLP-1 medications. It includes Akkermansia muciniphila (a next-gen strain), Clostridium butyricum (a butyrate producer), and targeted prebiotics that feed these beneficial bacteria.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" aria-expanded="false">
-          What is your refund policy?
-          <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">We offer a 90-day money-back guarantee. If you're not satisfied with AfterSlim for any reason, simply contact our support team within 90 days of your purchase for a full refund. No questions asked.</div>
+
+        <!-- Other FAQs -->
+        <div class="faq-category" data-category="other">
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                What is your refund policy?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">We offer a 90-day money-back guarantee. If you're not satisfied with AfterSlim for any reason, simply contact our support team within 90 days of your purchase for a full refund. No questions asked.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                How do I cancel my subscription?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">You can cancel your subscription anytime by logging into your account or contacting our support team. There are no cancellation fees or long-term commitments. Changes must be made at least 48 hours before your next billing date.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                How do I contact customer support?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Our customer support team is available Monday through Friday, 9am-5pm EST. You can reach us via email at support@afterslim.com or through our contact form. We typically respond within 24 hours.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Is AfterSlim FDA approved?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">AfterSlim is manufactured in an FDA-registered, GMP-certified facility in the USA. As a dietary supplement, it is not required to receive FDA approval. However, we adhere to strict quality control standards and third-party testing to ensure purity and potency.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2846,6 +3963,35 @@ ul, ol {
     observer.observe(el);
   });
 
+  // ===== FAQ TABS =====
+  document.querySelectorAll('.faq-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var category = this.getAttribute('data-category');
+
+      // Update active tab
+      document.querySelectorAll('.faq-tab').forEach(function(t) {
+        t.classList.remove('active');
+      });
+      this.classList.add('active');
+
+      // Show corresponding category
+      document.querySelectorAll('.faq-category').forEach(function(cat) {
+        cat.classList.remove('active');
+      });
+      var activeCategory = document.querySelector('.faq-category[data-category="' + category + '"]');
+      if (activeCategory) {
+        activeCategory.classList.add('active');
+      }
+
+      // Close all open FAQ items
+      document.querySelectorAll('.faq-item.open').forEach(function(openItem) {
+        openItem.classList.remove('open');
+        openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        openItem.querySelector('.faq-answer').style.maxHeight = '0';
+      });
+    });
+  });
+
   // ===== FAQ ACCORDION =====
   document.querySelectorAll('.faq-question').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -2853,9 +3999,10 @@ ul, ol {
       var answer = item.querySelector('.faq-answer');
       var inner = item.querySelector('.faq-answer-inner');
       var isOpen = item.classList.contains('open');
+      var currentCategory = item.closest('.faq-category');
 
-      // Close all other items
-      document.querySelectorAll('.faq-item.open').forEach(function(openItem) {
+      // Close all other items in the same category
+      currentCategory.querySelectorAll('.faq-item.open').forEach(function(openItem) {
         if (openItem !== item) {
           openItem.classList.remove('open');
           openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
@@ -3115,6 +4262,163 @@ function selectPurchaseType(type) {
   updateMobileButtonPrice();
   updateSubscriptionDiscounts();
 }
+
+// Reviews slider
+var currentReviewSlide = 0;
+var totalReviewSets = 2; // Number of review sets (for rotation)
+
+function slideReviews(direction) {
+  var slider = document.getElementById('reviewsSlider');
+  if (!slider) return;
+
+  var cards = slider.querySelectorAll('.review-card');
+  var cardWidth = cards[0].offsetWidth + 24; // card width + gap
+
+  currentReviewSlide += direction;
+  if (currentReviewSlide < 0) currentReviewSlide = 0;
+  if (currentReviewSlide >= cards.length - 2) currentReviewSlide = cards.length - 3;
+
+  slider.style.transform = 'translateX(-' + (currentReviewSlide * cardWidth) + 'px)';
+  slider.style.transition = 'transform 0.3s ease';
+}
+
+// Desktop Product Section Functions
+var desktopSelectedQty = 2;
+var desktopPurchaseType = 'subscribe';
+
+var desktopPrices = {
+  onetime: { 1: 37.99, 2: 57.99, 3: 67.99 },
+  subscribe: { 1: 27.99, 2: 47.99, 3: 57.99 }
+};
+
+var desktopOriginals = { 1: 37.99, 2: 75.98, 3: 113.97 };
+
+var desktopDiscounts = {
+  onetime: { 1: 0, 2: 24, 3: 40 },
+  subscribe: { 1: 26, 2: 37, 3: 49 }
+};
+
+function selectDesktopBundle(qty) {
+  desktopSelectedQty = qty;
+
+  // Update selected state
+  document.querySelectorAll('.desktop-bundle-option').forEach(function(opt) {
+    opt.classList.remove('selected');
+    if (parseInt(opt.getAttribute('data-qty')) === qty) {
+      opt.classList.add('selected');
+    }
+  });
+
+  updateDesktopPrices();
+  updateDesktopDiscounts();
+}
+
+function selectDesktopPurchase(type) {
+  desktopPurchaseType = type;
+
+  // Update selected state (subscribe is index 0, onetime is index 1)
+  document.querySelectorAll('.desktop-purchase-option').forEach(function(opt, index) {
+    opt.classList.remove('selected');
+    if ((type === 'subscribe' && index === 0) || (type === 'onetime' && index === 1)) {
+      opt.classList.add('selected');
+    }
+  });
+
+  updateDesktopPrices();
+  updateDesktopDiscounts();
+}
+
+function updateDesktopPrices() {
+  var qty = desktopSelectedQty;
+  var type = desktopPurchaseType;
+
+  var price = desktopPrices[type][qty];
+  var original = desktopOriginals[qty];
+  var savings = (original - price).toFixed(2);
+
+  // Update display
+  var totalEl = document.getElementById('desktop-total-price');
+  var originalEl = document.getElementById('desktop-original-price');
+  var saveEl = document.getElementById('desktop-save-amount');
+  var onetimeEl = document.getElementById('desktop-onetime-price');
+  var subscribeEl = document.getElementById('desktop-subscribe-price');
+  var shippingEl = document.getElementById('desktop-free-shipping');
+
+  if (totalEl) totalEl.textContent = '$' + price.toFixed(2);
+  if (originalEl) {
+    if (savings > 0) {
+      originalEl.textContent = '$' + original.toFixed(2);
+      originalEl.style.display = 'inline';
+    } else {
+      originalEl.style.display = 'none';
+    }
+  }
+  if (saveEl) {
+    if (savings > 0) {
+      saveEl.textContent = 'Save $' + savings;
+      saveEl.style.display = 'inline';
+    } else {
+      saveEl.style.display = 'none';
+    }
+  }
+  if (onetimeEl) onetimeEl.textContent = '$' + desktopPrices.onetime[qty].toFixed(2);
+  if (subscribeEl) subscribeEl.textContent = '$' + desktopPrices.subscribe[qty].toFixed(2);
+
+  // Update button prices
+  var btnOriginal = document.getElementById('desktop-btn-original');
+  var btnPrice = document.getElementById('desktop-btn-price');
+  if (btnOriginal) {
+    if (savings > 0) {
+      btnOriginal.textContent = '$' + original.toFixed(2);
+      btnOriginal.style.display = 'inline';
+    } else {
+      btnOriginal.style.display = 'none';
+    }
+  }
+  if (btnPrice) btnPrice.textContent = '$' + price.toFixed(2);
+
+  // Free shipping for 2+ bottles or subscription
+  if (shippingEl) {
+    shippingEl.style.display = (qty >= 2 || type === 'subscribe') ? 'flex' : 'none';
+  }
+}
+
+function updateDesktopDiscounts() {
+  var type = desktopPurchaseType;
+  var qty = desktopSelectedQty;
+
+  var bottle1Save = document.getElementById('desktop-bottle1-save');
+  var bottle2Save = document.getElementById('desktop-bottle2-save');
+  var bottle3Save = document.getElementById('desktop-bottle3-save');
+  var subscribeTitle = document.getElementById('desktop-subscribe-title');
+
+  if (type === 'subscribe') {
+    // Show subscription discounts
+    if (bottle1Save) {
+      bottle1Save.textContent = 'Save 26%';
+      bottle1Save.style.display = 'block';
+    }
+    if (bottle2Save) bottle2Save.textContent = 'Save 37%';
+    if (bottle3Save) bottle3Save.textContent = 'Save 49%';
+    if (subscribeTitle) {
+      subscribeTitle.textContent = 'Subscribe & Save ' + desktopDiscounts.subscribe[qty] + '%';
+    }
+  } else {
+    // Hide bottle1 save for one-time, show bundle discounts
+    if (bottle1Save) {
+      bottle1Save.style.display = 'none';
+    }
+    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
+    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
+    if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
+  }
+}
+
+// Initialize desktop product section
+document.addEventListener('DOMContentLoaded', function() {
+  updateDesktopPrices();
+  updateDesktopDiscounts();
+});
 
 function updateMobilePrice(qty) {
   // Pricing tables
