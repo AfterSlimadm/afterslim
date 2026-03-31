@@ -1725,9 +1725,43 @@ ul, ol {
   text-underline-offset: 3px;
 }
 
-.mobile-review-card .review-author {
+/* ========== MOBILE HERO TEXT (hidden on desktop) ========== */
+.mobile-hero-text {
+  display: none;
+  background: var(--light);
+  padding: 48px 20px;
+  text-align: center;
+}
+
+.mobile-hero-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.mobile-hero-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.mobile-hero-subtitle {
+  font-size: 15px;
   color: var(--text-secondary);
-  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.mobile-hero-cta {
+  font-size: 15px;
+  color: var(--orange);
+  margin: 0;
 }
 
 /* ========== DESKTOP REVIEWS BAR (hidden on mobile) ========== */
@@ -2248,13 +2282,10 @@ ul, ol {
     display: none;
   }
 
-  /* Show mobile banners and reviews on mobile */
+  /* Show mobile banners, reviews, and hero text on mobile */
   .mobile-banners,
-  .mobile-reviews-bar {
-    display: block;
-  }
-
-  .mobile-banners {
+  .mobile-reviews-bar,
+  .mobile-hero-text {
     display: block;
   }
 
@@ -3416,14 +3447,18 @@ ul, ol {
   </div>
 </section>
 
+<!-- ========== MOBILE HERO TEXT (between reviews and bundles) ========== -->
+<section class="mobile-hero-text">
+  <div class="container">
+    <span class="mobile-hero-label">THE GLP-1 COMPANION</span>
+    <h2 class="mobile-hero-title">On Mounjaro or Ozempic? Your gut needs backup.</h2>
+    <p class="mobile-hero-subtitle">Nausea. Bloating. Constipation. These aren't just side effects. They're warning signs that your gut microbiome is under stress from GLP-1 medications.</p>
+    <p class="mobile-hero-cta"><strong>AfterSlim protects your gut microbiome while you lose weight.</strong></p>
+  </div>
+</section>
+
 <!-- ========== MOBILE PRODUCT SECTION ========== -->
 <section class="mobile-product-section">
-  <!-- Product Info -->
-  <div class="mobile-product-rating">
-    <span class="stars">★★★★★</span>
-  </div>
-  <p class="mobile-product-description">The GLP-1 Companion. Protects your gut microbiome while you lose weight.</p>
-
   <!-- Social Proof -->
   <div class="mobile-social-proof">
     <span class="fire">🔥</span>
