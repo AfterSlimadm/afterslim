@@ -62,7 +62,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Tarefas de Suporte",
     href: "/support-tasks",
     icon: ClipboardCheck,
-    roles: ["owner", "admin", "support"],
+    roles: ["owner", "admin"],
   },
   {
     label: "Financeiro",

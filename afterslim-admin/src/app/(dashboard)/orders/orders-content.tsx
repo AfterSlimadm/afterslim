@@ -25,6 +25,7 @@ import {
   type OrderFilters,
 } from "@/components/orders/order-filters";
 import type { Order } from "@/lib/types";
+import { useAuth } from "@/components/auth-provider";
 
 /* ── Stats ────────────────────────────────────────────────── */
 
@@ -62,6 +63,8 @@ interface OrdersContentProps {
 const PAGE_SIZE = 10;
 
 export default function OrdersContent({ orders }: OrdersContentProps) {
+  const { role } = useAuth();
+  const isSupport = role === "support";
   const [filters, setFilters] = useState<OrderFilters>({
     search: "",
     statuses: [],
@@ -145,19 +148,23 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="page-header">
-          <h1 className="page-title">Pedidos</h1>
+          <h1 className="page-title">{isSupport ? "Orders" : "Pedidos"}</h1>
           <p className="page-description">
-            Gerencie pedidos, acompanhe envios e processe devoluções.
+            {isSupport
+              ? "View orders, customer details, and track your support actions."
+              : "Gerencie pedidos, acompanhe envios e processe devolucoes."}
           </p>
         </div>
-        <Button
-          variant="outline"
-          className="gap-2"
-          onClick={() => toast.info("Funcao de exportacao em breve")}
-        >
-          <Download className="h-4 w-4" />
-          Exportar
-        </Button>
+        {!isSupport && (
+          <Button
+            variant="outline"
+            className="gap-2"
+            onClick={() => toast.info("Funcao de exportacao em breve")}
+          >
+            <Download className="h-4 w-4" />
+            Exportar
+          </Button>
+        )}
       </div>
 
       {/* Stats row */}
