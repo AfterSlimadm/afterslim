@@ -956,6 +956,10 @@ ul, ol {
   gap: 24px;
 }
 
+.ugc-nav {
+  display: none;
+}
+
 @media (max-width: 1024px) {
   .ugc-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -975,13 +979,54 @@ ul, ol {
     padding: 0 20px;
   }
 
+  .ugc-grid-wrapper {
+    position: relative;
+  }
+
+  .ugc-nav {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: var(--orange);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: opacity 0.3s ease, background 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .ugc-nav svg {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+  }
+
+  .ugc-nav.prev {
+    left: 10px;
+  }
+
+  .ugc-nav.next {
+    right: 10px;
+  }
+
+  .ugc-nav.disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
   .ugc-grid {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
-    padding: 0 20px 20px calc(50% - 130px);
+    padding: 0 50px 20px;
     scrollbar-width: none;
   }
 
@@ -3841,8 +3886,15 @@ ul, ol {
       <h2 class="section-title">Real Results from Real Users</h2>
       <p class="section-subtitle">See what our community is sharing about their AfterSlim journey.</p>
     </div>
-    <div class="ugc-grid reveal-children">
-      <!-- UGC Item 1 -->
+    <div class="ugc-grid-wrapper">
+      <button class="ugc-nav prev disabled" onclick="slideUgc(-1)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="ugc-nav next" onclick="slideUgc(1)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="ugc-grid reveal-children">
+        <!-- UGC Item 1 -->
       <div class="ugc-card">
         <div class="ugc-video-placeholder">
           <div class="ugc-play-btn">
@@ -3912,6 +3964,7 @@ ul, ol {
           <span class="ugc-username">@wegovy_warrior</span>
           <p class="ugc-caption">"Down 30lbs and no more nausea thanks to AfterSlim!"</p>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -4626,6 +4679,56 @@ function slideMobileReviews(direction) {
     behavior: 'smooth'
   });
 }
+
+// UGC slider for mobile
+function slideUgc(direction) {
+  var grid = document.querySelector('.ugc-grid');
+  if (!grid) return;
+
+  var cards = grid.querySelectorAll('.ugc-card');
+  if (cards.length === 0) return;
+
+  var cardWidth = cards[0].offsetWidth + 16; // card width + gap
+  var newScrollLeft = grid.scrollLeft + (direction * cardWidth);
+
+  grid.scrollTo({
+    left: newScrollLeft,
+    behavior: 'smooth'
+  });
+}
+
+// Update UGC nav arrows state based on scroll position
+function updateUgcNavState() {
+  var grid = document.querySelector('.ugc-grid');
+  var prevBtn = document.querySelector('.ugc-nav.prev');
+  var nextBtn = document.querySelector('.ugc-nav.next');
+
+  if (!grid || !prevBtn || !nextBtn) return;
+
+  // Check if at the beginning
+  if (grid.scrollLeft <= 10) {
+    prevBtn.classList.add('disabled');
+  } else {
+    prevBtn.classList.remove('disabled');
+  }
+
+  // Check if at the end
+  if (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 10) {
+    nextBtn.classList.add('disabled');
+  } else {
+    nextBtn.classList.remove('disabled');
+  }
+}
+
+// Add scroll listener for UGC grid
+document.addEventListener('DOMContentLoaded', function() {
+  var grid = document.querySelector('.ugc-grid');
+  if (grid) {
+    grid.addEventListener('scroll', updateUgcNavState);
+    // Initial state check
+    setTimeout(updateUgcNavState, 100);
+  }
+});
 
 // Desktop Product Section Functions
 var desktopSelectedQty = 2;
