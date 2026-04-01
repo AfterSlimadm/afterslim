@@ -1371,9 +1371,32 @@ ul, ol {
 }
 
 @media (max-width: 900px) {
+  .faq-sidebar {
+    text-align: center;
+  }
+
+  .faq-title,
+  .faq-title-script {
+    text-align: center;
+  }
+
   .faq-tabs {
-    flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .faq-tabs .faq-tab:nth-child(1),
+  .faq-tabs .faq-tab:nth-child(2) {
+    flex: 0 0 calc(50% - 6px);
+  }
+
+  .faq-tabs .faq-tab:nth-child(3) {
+    flex: 0 0 auto;
+    min-width: 120px;
   }
 }
 
