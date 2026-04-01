@@ -3570,7 +3570,7 @@ ul, ol {
   </div>
 
   <!-- Shop Now Button -->
-  <button class="mobile-add-to-cart" onclick="window.location.href='#pricing'">Shop Now - $47.99</button>
+  <button class="mobile-add-to-cart" onclick="window.location.href='#pricing'">Shop Now</button>
 </section>
 
 <!-- ========== SOCIAL PROOF BAR ========== -->
@@ -4777,7 +4777,7 @@ function updateMobileButtonPrice() {
   var total = isSubscribe ? subscribePrices[qtyIndex] : oneTimePrices[qtyIndex];
 
   var btn = document.querySelector('.mobile-add-to-cart');
-  btn.textContent = 'Shop Now - $' + total.toFixed(2);
+  btn.textContent = 'Shop Now';
 }
 </script>
 <script src="checkout.js"></script>
