@@ -962,9 +962,36 @@ ul, ol {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .ugc-section {
+    padding: 48px 0;
+  }
+
+  .ugc-section .container {
+    padding: 0;
+  }
+
+  .ugc-section .reveal {
+    padding: 0 20px;
+  }
+
   .ugc-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    padding: 0 20px 20px;
+    scrollbar-width: none;
+  }
+
+  .ugc-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ugc-grid .ugc-card {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
   }
 }
 
