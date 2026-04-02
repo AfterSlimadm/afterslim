@@ -534,14 +534,8 @@ ul, ol {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 0;
-}
-
-.connector-line {
-  width: 2px;
-  height: 20px;
-  background: var(--orange);
-  border-style: dashed;
+  padding: 16px 0;
+  gap: 0;
 }
 
 .connector-dot {
@@ -549,6 +543,12 @@ ul, ol {
   height: 10px;
   background: var(--orange);
   border-radius: 50%;
+}
+
+.connector-line {
+  width: 0;
+  height: 40px;
+  border-left: 2px dashed var(--orange);
 }
 
 @media (max-width: 768px) {
@@ -4459,6 +4459,7 @@ ul, ol {
           <p>GLP-1 medications like Ozempic and Mounjaro work by slowing gastric emptying and reducing appetite. While effective for weight loss, this dramatically alters your gut environment. Slower digestion means food sits longer, changing pH levels and bacterial populations. Studies show GLP-1 users experience significant shifts in their microbiome composition, often leading to the uncomfortable side effects that make treatment difficult to maintain.</p>
         </div>
         <div class="science-connector">
+          <span class="connector-dot"></span>
           <span class="connector-line"></span>
           <span class="connector-dot"></span>
         </div>
