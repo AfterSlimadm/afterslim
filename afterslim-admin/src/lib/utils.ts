@@ -28,17 +28,17 @@ export function formatNumber(value: number): string {
 }
 
 /**
- * Format a number as BRL currency.
+ * Format a number as USD currency.
  * Accepts reais (e.g. 49.99) or optionally cents with fromCents flag.
  * Guards against NaN/Infinity by falling back to 0.
  */
 export function formatCurrency(value: number, fromCents = false): string {
   const safeValue = Number.isFinite(value) ? value : 0;
-  const reais = fromCents ? safeValue / 100 : safeValue;
-  return new Intl.NumberFormat("pt-BR", {
+  const dollars = fromCents ? safeValue / 100 : safeValue;
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "BRL",
-  }).format(reais);
+    currency: "USD",
+  }).format(dollars);
 }
 
 /**

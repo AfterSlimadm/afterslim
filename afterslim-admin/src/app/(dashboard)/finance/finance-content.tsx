@@ -48,7 +48,7 @@ import type {
 
 /* ── USD currency formatter ────────────────────────────────── */
 
-function formatBRL(value: number): string {
+function formatUSD(value: number): string {
   return value.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
@@ -226,7 +226,7 @@ export default function FinanceContent({
               </div>
               <CountUp
                 value={totalRevenue}
-                format={(n) => formatBRL(n)}
+                format={(n) => formatUSD(n)}
                 className="text-[2.25rem] font-bold tracking-tight leading-none text-foreground"
                 delay={0.3}
               />
@@ -254,7 +254,7 @@ export default function FinanceContent({
               </div>
               <CountUp
                 value={netRevenue}
-                format={(n) => formatBRL(n)}
+                format={(n) => formatUSD(n)}
                 className="text-[2.25rem] font-bold tracking-tight leading-none text-foreground"
                 delay={0.4}
               />
@@ -282,7 +282,7 @@ export default function FinanceContent({
               </div>
               <CountUp
                 value={totalExpenses}
-                format={(n) => formatBRL(n)}
+                format={(n) => formatUSD(n)}
                 className="text-[2.25rem] font-bold tracking-tight leading-none text-foreground"
                 delay={0.5}
               />
@@ -390,7 +390,7 @@ export default function FinanceContent({
                         fontSize: 13,
                       }}
                       formatter={(value: number) => [
-                        formatBRL(value),
+                        formatUSD(value),
                         "Receita",
                       ]}
                     />
@@ -515,7 +515,7 @@ export default function FinanceContent({
                         tx.valor >= 0 ? "text-foreground" : "text-red-600"
                       )}
                     >
-                      {formatBRL(Math.abs(tx.valor))}
+                      {formatUSD(Math.abs(tx.valor))}
                       {tx.valor < 0 && (
                         <span className="text-red-400 ml-0.5">-</span>
                       )}
