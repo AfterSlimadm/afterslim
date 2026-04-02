@@ -442,11 +442,47 @@ ul, ol {
 .science-image {
   flex: 1;
   max-width: 450px;
+  position: relative;
 }
 
-.science-image img {
+.science-image > img {
   width: 100%;
   height: auto;
+}
+
+.science-gif-circle {
+  position: absolute;
+  bottom: 15%;
+  right: -10%;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #fdf8f6;
+  border: 3px solid #f5e6e0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.science-gif-circle .gif-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.science-gif-label {
+  position: absolute;
+  bottom: 5%;
+  right: -15%;
+  background: #fde8e0;
+  color: #c44b2b;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
 }
 
 .science-content {
@@ -524,6 +560,20 @@ ul, ol {
   .science-image {
     max-width: 280px;
     margin: 0 auto;
+  }
+
+  .science-gif-circle {
+    width: 100px;
+    height: 100px;
+    bottom: 10%;
+    right: -5%;
+  }
+
+  .science-gif-label {
+    font-size: 11px;
+    padding: 6px 12px;
+    bottom: 0%;
+    right: -10%;
   }
 
   .science-box {
@@ -3886,6 +3936,10 @@ ul, ol {
     <div class="science-layout">
       <div class="science-image">
         <img src="images/intestino.png" alt="Large Intestine - Gut Microbiome">
+        <div class="science-gif-circle">
+          <img src="images/microbiome-gif.gif" alt="Gut Microbiome Animation" class="gif-placeholder">
+        </div>
+        <div class="science-gif-label">Akkermansia & Probiotics</div>
       </div>
       <div class="science-content">
         <div class="science-box">
