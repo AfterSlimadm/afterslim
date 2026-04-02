@@ -410,6 +410,98 @@ ul, ol {
   50% { transform: translateY(-12px); }
 }
 
+/* ========== THE SCIENCE BEHIND ========== */
+.science-section {
+  background: var(--light);
+  padding: 60px 20px;
+}
+
+.science-section .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.science-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 40px;
+}
+
+.science-title span {
+  color: var(--orange);
+}
+
+.science-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  position: relative;
+}
+
+.science-grid::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--orange);
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.science-column h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.science-column p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.science-column p strong {
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .science-section {
+    padding: 48px 20px;
+  }
+
+  .science-title {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+
+  .science-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .science-grid::before {
+    display: none;
+  }
+
+  .science-column {
+    text-align: center;
+    padding-bottom: 32px;
+    border-bottom: 3px solid var(--orange);
+  }
+
+  .science-column:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
 /* ========== SOCIAL PROOF BAR ========== */
 .social-proof {
   background: #fff;
@@ -3748,6 +3840,23 @@ ul, ol {
   <a href="#" class="btn-amazon" target="_blank">
     Buy on <img src="images/amazon-logo.png" alt="Amazon" class="amazon-logo-img">
   </a>
+</section>
+
+<!-- ========== THE SCIENCE BEHIND ========== -->
+<section class="science-section">
+  <div class="container">
+    <h2 class="science-title">The Science Behind <span>AfterSlim</span></h2>
+    <div class="science-grid">
+      <div class="science-column">
+        <h3>The Biology</h3>
+        <p>GLP-1 medications like Ozempic and Mounjaro work by slowing gastric emptying and reducing appetite. While effective for weight loss, this dramatically alters your gut environment. Slower digestion means food sits longer, changing pH levels and bacterial populations. Studies show GLP-1 users experience significant shifts in their microbiome composition, often leading to the uncomfortable side effects that make treatment difficult to maintain.</p>
+      </div>
+      <div class="science-column">
+        <h3>How This Helps</h3>
+        <p>AfterSlim delivers a precision-targeted blend of prebiotics and clinically studied probiotic strains including Akkermansia muciniphila, specifically chosen for GLP-1 users. These beneficial bacteria help restore gut lining integrity, support healthy digestion, and maintain the microbial balance your body needs. By protecting your microbiome during treatment, AfterSlim helps you get the weight loss results you want while minimizing the side effects that can derail your progress.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ========== SOCIAL PROOF BAR ========== -->
