@@ -39,6 +39,7 @@ interface SupportDashboardContentProps {
     task_type: string;
     description: string | null;
     order_id: string | null;
+    order_number: string | null;
     created_at: string;
     is_completed: boolean;
   }[];
@@ -283,7 +284,7 @@ export default function SupportDashboardContent({
                               href={`/orders/${task.order_id}`}
                               className="text-primary hover:underline"
                             >
-                              Order #{task.order_id}
+                              Order #{task.order_number ?? task.order_id?.slice(-4) ?? ""}
                             </Link>
                           </span>
                         )}

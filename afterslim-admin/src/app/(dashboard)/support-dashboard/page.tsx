@@ -13,7 +13,7 @@ async function getSupportDashboardData(userId: string) {
     // Pending support tasks (filtered by current user)
     supabase
       .from("support_tasks")
-      .select("*, admin_user:admin_users!admin_user_id(display_name)")
+      .select("*, admin_user:admin_users!admin_user_id(display_name), order:orders!order_id(order_number)")
       .eq("is_completed", false)
       .eq("admin_user_id", userId)
       .order("created_at", { ascending: false })
@@ -21,7 +21,7 @@ async function getSupportDashboardData(userId: string) {
     // Recent orders for the table
     supabase
       .from("orders")
-      .select("id, order_number, status, total_cents, created_at, profile:profiles(full_name)")
+      .select("id, order_number, status, total_cents, created_at, email, shipping_address, profile:profiles(full_name)")
       .order("created_at", { ascending: false })
       .limit(10),
   ]);
@@ -40,11 +40,16 @@ async function getSupportDashboardData(userId: string) {
     },
     recentOrders: (recentOrdersRes.data ?? []).map((o) => {
       const raw = o.profile as unknown;
+      const addr = o.shipping_address as Record<string, string> | null;
       let customerName = "Unknown";
       if (Array.isArray(raw) && raw.length > 0 && (raw[0] as Record<string,string>)?.full_name) {
         customerName = (raw[0] as Record<string,string>).full_name;
       } else if (raw && typeof raw === "object" && !Array.isArray(raw) && (raw as Record<string, string>).full_name) {
         customerName = (raw as Record<string, string>).full_name;
+      } else if (addr?.name) {
+        customerName = addr.name;
+      } else if (o.email) {
+        customerName = o.email as string;
       }
       return {
         id: o.id,
@@ -55,14 +60,19 @@ async function getSupportDashboardData(userId: string) {
         customer_name: customerName,
       };
     }),
-    pendingTasks: (pendingTasksRes.data ?? []).map((t) => ({
-      id: t.id,
-      task_type: t.task_type,
-      description: t.description,
-      order_id: t.order_id,
-      created_at: t.created_at,
-      is_completed: t.is_completed,
-    })),
+    pendingTasks: (pendingTasksRes.data ?? []).map((t) => {
+      const orderRaw = t.order as Record<string, string> | null;
+      const orderNumber = orderRaw?.order_number ?? null;
+      return {
+        id: t.id,
+        task_type: t.task_type,
+        description: t.description,
+        order_id: t.order_id,
+        order_number: orderNumber,
+        created_at: t.created_at,
+        is_completed: t.is_completed,
+      };
+    }),
   };
 }
 

@@ -90,7 +90,7 @@ export async function getRecentOrders(
 
   const { data, error } = await supabase
     .from("orders")
-    .select("id, order_number, status, total_cents, created_at, profile:profiles(full_name)")
+    .select("id, order_number, status, total_cents, created_at, email, shipping_address, profile:profiles(full_name)")
     .order("created_at", { ascending: false })
     .limit(limit);
 
@@ -101,11 +101,16 @@ export async function getRecentOrders(
 
   return (data ?? []).map((order) => {
     const raw = order.profile as unknown;
+    const addr = order.shipping_address as Record<string, string> | null;
     let customerName = "Unknown";
     if (Array.isArray(raw) && raw.length > 0 && raw[0]?.full_name) {
       customerName = raw[0].full_name;
     } else if (raw && typeof raw === "object" && !Array.isArray(raw) && (raw as Record<string, unknown>).full_name) {
       customerName = (raw as Record<string, string>).full_name;
+    } else if (addr?.name) {
+      customerName = addr.name;
+    } else if (order.email) {
+      customerName = order.email as string;
     }
 
     return {
