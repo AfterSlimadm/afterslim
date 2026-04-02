@@ -43,114 +43,159 @@ export interface NavItem {
   children?: Omit<NavItem, "icon" | "children">[];
 }
 
-export const NAV_ITEMS: NavItem[] = [
+export interface NavGroup {
+  label: string;
+  items: NavItem[];
+}
+
+export const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Painel",
-    href: "/",
-    icon: LayoutDashboard,
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Pedidos",
-    href: "/orders",
-    icon: ShoppingCart,
-    children: [
-      { label: "Todos os Pedidos", href: "/orders" },
+    label: "Principal",
+    items: [
+      {
+        label: "Painel",
+        href: "/",
+        icon: LayoutDashboard,
+        roles: ["owner", "admin"],
+      },
+      {
+        label: "Dashboard",
+        href: "/support-dashboard",
+        icon: LayoutDashboard,
+        roles: ["support"],
+      },
     ],
   },
   {
-    label: "Tarefas de Suporte",
-    href: "/support-tasks",
-    icon: ClipboardCheck,
-    roles: ["owner", "admin"],
+    label: "Operacoes",
+    items: [
+      {
+        label: "Pedidos",
+        href: "/orders",
+        icon: ShoppingCart,
+        children: [
+          { label: "Todos os Pedidos", href: "/orders" },
+        ],
+      },
+      {
+        label: "Tarefas de Suporte",
+        href: "/support-tasks",
+        icon: ClipboardCheck,
+        roles: ["owner", "admin", "support"],
+      },
+      {
+        label: "Estoque",
+        href: "/inventory",
+        icon: Package,
+        roles: ["owner", "admin"],
+      },
+      {
+        label: "Canais de Venda",
+        href: "/sales-channels",
+        icon: Store,
+        roles: ["owner", "admin"],
+      },
+    ],
   },
   {
     label: "Financeiro",
-    href: "/finance",
-    icon: DollarSign,
-    roles: ["owner", "admin"],
-    children: [
-      { label: "Visao Geral", href: "/finance" },
-      { label: "Transacoes", href: "/finance/transactions" },
-      { label: "Custos", href: "/finance/costs" },
-      { label: "Metas", href: "/finance/goals" },
+    items: [
+      {
+        label: "Financeiro",
+        href: "/finance",
+        icon: DollarSign,
+        roles: ["owner", "admin"],
+        children: [
+          { label: "Visao Geral", href: "/finance" },
+          { label: "Transacoes", href: "/finance/transactions" },
+          { label: "Custos", href: "/finance/costs" },
+          { label: "Metas", href: "/finance/goals" },
+        ],
+      },
+      {
+        label: "Documentos",
+        href: "/documents",
+        icon: FileText,
+        roles: ["owner", "admin"],
+      },
     ],
   },
   {
-    label: "Canais de Venda",
-    href: "/sales-channels",
-    icon: Store,
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Estoque",
-    href: "/inventory",
-    icon: Package,
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Documentos",
-    href: "/documents",
-    icon: FileText,
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Lembretes",
-    href: "/reminders",
-    icon: Bell,
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Ideias",
-    href: "/ideas",
-    icon: Lightbulb,
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Kanban",
-    href: "/kanban",
-    icon: KanbanSquare,
-    roles: ["owner", "admin"],
-  },
-  {
-    label: "Criadores",
-    href: "/creators",
-    icon: Users,
-    roles: ["owner", "admin"],
-    children: [
-      { label: "Todos os Criadores", href: "/creators" },
+    label: "Planejamento",
+    items: [
+      {
+        label: "Ideias",
+        href: "/ideas",
+        icon: Lightbulb,
+        roles: ["owner", "admin"],
+      },
+      {
+        label: "Kanban",
+        href: "/kanban",
+        icon: KanbanSquare,
+        roles: ["owner", "admin"],
+      },
+      {
+        label: "Lembretes",
+        href: "/reminders",
+        icon: Bell,
+        roles: ["owner", "admin"],
+      },
     ],
   },
   {
-    label: "Agentes",
-    href: "/agents",
-    icon: Bot,
-    roles: ["owner", "admin"],
-    children: [
-      { label: "Visao Geral", href: "/agents" },
-      { label: "Mensagens", href: "/agents/messages" },
-      { label: "Tarefas", href: "/agents/tasks" },
-      { label: "Memoria", href: "/agents/memory" },
+    label: "Equipe",
+    items: [
+      {
+        label: "Criadores",
+        href: "/creators",
+        icon: Users,
+        roles: ["owner", "admin"],
+        children: [
+          { label: "Todos os Criadores", href: "/creators" },
+        ],
+      },
+      {
+        label: "Agentes",
+        href: "/agents",
+        icon: Bot,
+        roles: ["owner", "admin"],
+        children: [
+          { label: "Visao Geral", href: "/agents" },
+          { label: "Mensagens", href: "/agents/messages" },
+          { label: "Tarefas", href: "/agents/tasks" },
+          { label: "Memoria", href: "/agents/memory" },
+        ],
+      },
     ],
   },
   {
-    label: "Configuracoes",
-    href: "/settings",
-    icon: Settings,
-    roles: ["owner", "admin"],
+    label: "Sistema",
+    items: [
+      {
+        label: "Configuracoes",
+        href: "/settings",
+        icon: Settings,
+        roles: ["owner", "admin"],
+      },
+    ],
   },
 ];
+
+// Flat list for backwards compatibility (header mobile menu etc)
+export const NAV_ITEMS: NavItem[] = NAV_GROUPS.flatMap((g) => g.items);
 
 /* =============================================================
    Status de pedidos
    ============================================================= */
 
 export const ORDER_STATUS_CONFIG: Record<
-  OrderStatus,
+  string,
   { label: string; color: string; icon: string }
 > = {
   pending: { label: "Pendente", color: "badge-warning", icon: "Clock" },
   confirmed: { label: "Confirmado", color: "badge-info", icon: "CheckCircle" },
+  paid: { label: "Pago", color: "badge-success", icon: "CheckCircle" },
   processing: { label: "Processando", color: "badge-info", icon: "Loader" },
   shipped: { label: "Enviado", color: "badge-purple", icon: "Truck" },
   delivered: { label: "Entregue", color: "badge-success", icon: "PackageCheck" },

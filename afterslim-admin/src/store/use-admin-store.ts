@@ -59,7 +59,7 @@ export const useAdminStore = create<AdminStore>()(
         compactMode: false,
         showIds: false,
         defaultPageSize: 25,
-        currency: "BRL",
+        currency: "USD",
       },
       setPreference: (key, value) =>
         set((s) => ({

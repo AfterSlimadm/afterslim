@@ -131,7 +131,7 @@ export function IdeaFilters({
           <div className="flex items-center rounded-md border">
             <Button
               variant={viewMode === "grid" ? "secondary" : "ghost"}
-              size="icon-sm"
+              size="icon"
               onClick={() => onViewModeChange("grid")}
               className="rounded-r-none"
             >
@@ -139,7 +139,7 @@ export function IdeaFilters({
             </Button>
             <Button
               variant={viewMode === "list" ? "secondary" : "ghost"}
-              size="icon-sm"
+              size="icon"
               onClick={() => onViewModeChange("list")}
               className="rounded-l-none"
             >

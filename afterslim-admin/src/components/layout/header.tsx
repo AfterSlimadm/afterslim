@@ -60,7 +60,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 border-b bg-background px-5 lg:px-8">
+    <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border/40 glass-strong px-5 lg:px-8 sticky top-0 z-30">
       {/* Mobile menu toggle */}
       <Button
         variant="ghost"

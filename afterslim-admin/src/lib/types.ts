@@ -7,6 +7,7 @@
 export type OrderStatus =
   | "pending"
   | "confirmed"
+  | "paid"
   | "processing"
   | "shipped"
   | "delivered"
@@ -19,6 +20,7 @@ export type PaymentMethod = "stripe" | "paypal" | "other";
 
 export interface Order {
   id: string;
+  order_number?: string;
   customer_id: string;
   status: OrderStatus;
   payment_status: PaymentStatus;

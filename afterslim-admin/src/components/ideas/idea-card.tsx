@@ -146,7 +146,7 @@ export function IdeaCard({ idea, onClick }: IdeaCardProps) {
         {/* Create Task action */}
         <Button
           variant="outline"
-          size="xs"
+          size="sm"
           className="w-full opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={(e) => {
             e.stopPropagation();

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { NAV_ITEMS, type NavItem } from "@/lib/constants";
+import { NAV_GROUPS, type NavItem } from "@/lib/constants";
 import { useAdminStore } from "@/store/use-admin-store";
 import { useAuth } from "@/components/auth-provider";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -29,24 +28,31 @@ export function Sidebar() {
   const toggleCollapsed = useAdminStore((s) => s.toggleSidebarCollapsed);
   const { role } = useAuth();
 
-  const filteredNav = NAV_ITEMS.filter(
-    (item) => !item.roles || item.roles.includes(role)
-  );
+  const filteredGroups = NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter(
+      (item) => !item.roles || item.roles.includes(role)
+    ),
+  })).filter((group) => group.items.length > 0);
 
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300",
+        "hidden lg:flex flex-col border-r border-[#c0c7cf26] bg-[#ecf5ff] transition-all duration-300",
         collapsed ? "w-16" : "w-64"
       )}
     >
       {/* Logo */}
-      <div className="flex h-14 items-center border-b border-sidebar-border px-4">
+      <div className="flex h-14 items-center border-b border-[#c0c7cf26] px-4">
         <Link href="/" className="flex items-center gap-2 overflow-hidden">
           {collapsed ? (
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">A</span>
-            </div>
+            <Image
+              src="/logo-afterslim.svg"
+              alt="AfterSlim"
+              width={32}
+              height={32}
+              className="h-8 w-8 shrink-0 object-contain"
+            />
           ) : (
             <Image
               src="/logo-afterslim.svg"
@@ -61,26 +67,46 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <ScrollArea className="flex-1 px-2 py-3">
+      <ScrollArea className="flex-1 py-3">
         <nav className="space-y-1">
-          {filteredNav.map((item) => (
-            <SidebarNavItem
-              key={item.href}
-              item={item}
-              pathname={pathname}
-              collapsed={collapsed}
-            />
+          {filteredGroups.map((group, groupIdx) => (
+            <div key={group.label}>
+              {/* Group separator (not on first group) */}
+              {groupIdx > 0 && (
+                <div className="mx-3 my-2 h-px bg-[#c0c7cf20]" />
+              )}
+
+              {/* Group label */}
+              {!collapsed && (
+                <div className="px-4 pb-1 pt-2">
+                  <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[#70787f]">
+                    {group.label}
+                  </span>
+                </div>
+              )}
+
+              {/* Group items */}
+              <div className="space-y-0.5 px-2">
+                {group.items.map((item) => (
+                  <SidebarNavItem
+                    key={item.href}
+                    item={item}
+                    pathname={pathname}
+                    collapsed={collapsed}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
       </ScrollArea>
 
       {/* Collapse toggle */}
-      <Separator />
-      <div className="p-2">
+      <div className="border-t border-[#c0c7cf26] p-2">
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-center"
+          className="w-full justify-center text-[#40484e] hover:bg-[#dae3ee]"
           onClick={toggleCollapsed}
         >
           {collapsed ? (
@@ -124,10 +150,10 @@ function SidebarNavItem({
           <Link
             href={item.href}
             className={cn(
-              "flex h-9 w-full items-center justify-center rounded-md text-sidebar-foreground transition-colors",
+              "flex h-9 w-full items-center justify-center rounded-lg text-[#141d24] transition-colors",
               isActive
-                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                : "hover:bg-sidebar-accent/50"
+                ? "bg-[#dae3ee] font-medium"
+                : "hover:bg-[#dae3ee]/50"
             )}
           >
             <Icon className="h-4 w-4" />
@@ -146,10 +172,10 @@ function SidebarNavItem({
       <Link
         href={item.href}
         className={cn(
-          "flex h-9 items-center gap-3 rounded-md px-3 text-sm text-sidebar-foreground transition-colors",
+          "flex h-9 items-center gap-3 rounded-lg px-3 text-sm transition-colors",
           isActive
-            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-            : "hover:bg-sidebar-accent/50"
+            ? "bg-[#dae3ee] text-[#141d24] font-medium"
+            : "text-[#40484e] hover:bg-[#dae3ee]/50 hover:text-[#141d24]"
         )}
       >
         <Icon className="h-4 w-4 shrink-0" />
@@ -164,10 +190,10 @@ function SidebarNavItem({
       <CollapsibleTrigger asChild>
         <button
           className={cn(
-            "flex h-9 w-full items-center gap-3 rounded-md px-3 text-sm text-sidebar-foreground transition-colors",
+            "flex h-9 w-full items-center gap-3 rounded-lg px-3 text-sm transition-colors",
             isActive
-              ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-              : "hover:bg-sidebar-accent/50"
+              ? "bg-[#dae3ee] text-[#141d24] font-medium"
+              : "text-[#40484e] hover:bg-[#dae3ee]/50 hover:text-[#141d24]"
           )}
         >
           <Icon className="h-4 w-4 shrink-0" />
@@ -188,10 +214,10 @@ function SidebarNavItem({
               key={child.href}
               href={child.href}
               className={cn(
-                "flex h-8 items-center rounded-md px-3 text-sm transition-colors",
+                "flex h-8 items-center rounded-lg px-3 text-sm transition-colors",
                 childActive
-                  ? "text-sidebar-primary font-medium"
-                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+                  ? "text-[#00628c] font-medium"
+                  : "text-[#70787f] hover:text-[#141d24] hover:bg-[#dae3ee]/50"
               )}
             >
               {child.label}
@@ -210,14 +236,17 @@ export function MobileSidebarContent() {
   const setSidebarOpen = useAdminStore((s) => s.setSidebarOpen);
   const { role } = useAuth();
 
-  const filteredNav = NAV_ITEMS.filter(
-    (item) => !item.roles || item.roles.includes(role)
-  );
+  const filteredGroups = NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter(
+      (item) => !item.roles || item.roles.includes(role)
+    ),
+  })).filter((group) => group.items.length > 0);
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-[#ecf5ff]">
       {/* Logo */}
-      <div className="flex h-14 items-center border-b px-4">
+      <div className="flex h-14 items-center border-b border-[#c0c7cf26] px-4">
         <Link
           href="/"
           className="flex items-center gap-2"
@@ -234,51 +263,65 @@ export function MobileSidebarContent() {
       </div>
 
       {/* Navigation */}
-      <ScrollArea className="flex-1 px-2 py-3">
+      <ScrollArea className="flex-1 py-3">
         <nav className="space-y-1">
-          {filteredNav.map((item) => {
-            const Icon = item.icon;
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
+          {filteredGroups.map((group, groupIdx) => (
+            <div key={group.label}>
+              {groupIdx > 0 && (
+                <div className="mx-3 my-2 h-px bg-[#c0c7cf20]" />
+              )}
+              <div className="px-4 pb-1 pt-2">
+                <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[#70787f]">
+                  {group.label}
+                </span>
+              </div>
+              <div className="space-y-0.5 px-2">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive =
+                    pathname === item.href ||
+                    (item.href !== "/" && pathname.startsWith(item.href));
 
-            return (
-              <div key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className={cn(
-                    "flex h-10 items-center gap-3 rounded-md px-3 text-sm transition-colors",
-                    isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent/50"
-                  )}
-                >
-                  <Icon className="h-4 w-4 shrink-0" />
-                  <span>{item.label}</span>
-                </Link>
-                {item.children && isActive && (
-                  <div className="space-y-0.5 pl-7 pt-0.5">
-                    {item.children.map((child) => (
+                  return (
+                    <div key={item.href}>
                       <Link
-                        key={child.href}
-                        href={child.href}
+                        href={item.href}
                         onClick={() => setSidebarOpen(false)}
                         className={cn(
-                          "flex h-8 items-center rounded-md px-3 text-sm transition-colors",
-                          pathname === child.href
-                            ? "text-sidebar-primary font-medium"
-                            : "text-sidebar-foreground/70 hover:text-sidebar-foreground"
+                          "flex h-10 items-center gap-3 rounded-lg px-3 text-sm transition-colors",
+                          isActive
+                            ? "bg-[#dae3ee] text-[#141d24] font-medium"
+                            : "text-[#40484e] hover:bg-[#dae3ee]/50"
                         )}
                       >
-                        {child.label}
+                        <Icon className="h-4 w-4 shrink-0" />
+                        <span>{item.label}</span>
                       </Link>
-                    ))}
-                  </div>
-                )}
+                      {item.children && isActive && (
+                        <div className="space-y-0.5 pl-7 pt-0.5">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              onClick={() => setSidebarOpen(false)}
+                              className={cn(
+                                "flex h-8 items-center rounded-lg px-3 text-sm transition-colors",
+                                pathname === child.href
+                                  ? "text-[#00628c] font-medium"
+                                  : "text-[#70787f] hover:text-[#141d24]"
+                              )}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </nav>
       </ScrollArea>
     </div>

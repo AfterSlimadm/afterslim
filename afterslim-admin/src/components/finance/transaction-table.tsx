@@ -143,7 +143,7 @@ export function TransactionTable({
       </TableHeader>
       <TableBody>
         {sorted.map((tx, index) => {
-          const catConfig = TRANSACTION_CATEGORY_CONFIG[tx.category];
+          const catConfig = TRANSACTION_CATEGORY_CONFIG[tx.category] ?? { label: tx.category, icon: "MoreHorizontal" };
           const IconComponent = ICON_MAP[catConfig.icon] ?? MoreHorizontal;
           const isIncome = tx.type === "income";
 

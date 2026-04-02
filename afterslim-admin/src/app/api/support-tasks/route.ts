@@ -52,9 +52,6 @@ export async function POST(request: Request) {
   if (!task_type) {
     return NextResponse.json({ error: "task_type is required" }, { status: 400 });
   }
-  if (!order_id && !customer_id) {
-    return NextResponse.json({ error: "order_id or customer_id is required" }, { status: 400 });
-  }
 
   const supabase = createServerClient();
 

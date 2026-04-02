@@ -20,13 +20,15 @@ export interface AdminUser {
  * If a route is not listed, only owner/admin can access it.
  */
 const ROUTE_PERMISSIONS: Record<string, AdminRole[]> = {
-  "/orders":         ["owner", "admin", "support"],
-  "/support-tasks":  ["owner", "admin", "support"],
+  "/orders":             ["owner", "admin", "support"],
+  "/support-tasks":      ["owner", "admin", "support"],
+  "/support-dashboard":  ["owner", "admin", "support"],
 };
 
 const ADMIN_ONLY_ROUTES = [
   "/dashboard",
   "/finance",
+  "/transactions",
   "/sales-channels",
   "/inventory",
   "/documents",
@@ -85,7 +87,7 @@ export function canAccessRoute(role: AdminRole, pathname: string): boolean {
  * Landing page per role.
  */
 export function getDefaultRoute(role: AdminRole): string {
-  return role === "support" ? "/orders" : "/dashboard";
+  return role === "support" ? "/support-dashboard" : "/dashboard";
 }
 
 /**

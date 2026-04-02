@@ -8,7 +8,7 @@ export async function getOrders() {
 
   const { data, error } = await supabase
     .from("orders")
-    .select("*, order_items(count)")
+    .select("*, order_items(count), profile:profiles(full_name)")
     .order("created_at", { ascending: false });
 
   if (error) {

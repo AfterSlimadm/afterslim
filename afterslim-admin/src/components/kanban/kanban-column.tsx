@@ -63,7 +63,7 @@ export function KanbanColumn({ column, cards, onAddCard }: KanbanColumnProps) {
         </div>
         <Button
           variant="ghost"
-          size="icon-xs"
+          size="icon"
           onClick={() => onAddCard?.(column.id)}
         >
           <Plus className="h-3.5 w-3.5" />

@@ -32,10 +32,13 @@ const CHANNEL_CONFIG: Record<
   { label: string; icon: React.ElementType; color: string }
 > = {
   website: { label: "Website", icon: Globe, color: "badge-success" },
+  shopify: { label: "Shopify", icon: ShoppingBag, color: "badge-success" },
+  hotmart: { label: "Hotmart", icon: ShoppingBag, color: "badge-warning" },
   tiktok_shop: { label: "TikTok Shop", icon: ShoppingBag, color: "badge-info" },
   instagram: { label: "Instagram", icon: ShoppingBag, color: "badge-purple" },
   affiliate: { label: "Afiliado", icon: Users, color: "badge-warning" },
   creator: { label: "Criador", icon: Users, color: "badge-neutral" },
+  direct: { label: "Venda Direta", icon: Globe, color: "badge-info" },
   other: { label: "Outro", icon: Globe, color: "badge-neutral" },
 };
 

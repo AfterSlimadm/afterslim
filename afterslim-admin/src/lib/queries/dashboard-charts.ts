@@ -90,7 +90,7 @@ export async function getRecentOrders(
 
   const { data, error } = await supabase
     .from("orders")
-    .select("id, status, total, created_at, customer:customers(name)")
+    .select("id, order_number, status, total_cents, created_at, profile:profiles(full_name)")
     .order("created_at", { ascending: false })
     .limit(limit);
 
@@ -99,21 +99,20 @@ export async function getRecentOrders(
     return [];
   }
 
-  return (data ?? []).map((order, index) => {
-    // Generate order number from row position (descending)
-    const raw = order.customer as unknown;
+  return (data ?? []).map((order) => {
+    const raw = order.profile as unknown;
     let customerName = "Unknown";
-    if (Array.isArray(raw) && raw.length > 0 && raw[0]?.name) {
-      customerName = raw[0].name;
-    } else if (raw && typeof raw === "object" && !Array.isArray(raw) && (raw as Record<string, unknown>).name) {
-      customerName = (raw as Record<string, string>).name;
+    if (Array.isArray(raw) && raw.length > 0 && raw[0]?.full_name) {
+      customerName = raw[0].full_name;
+    } else if (raw && typeof raw === "object" && !Array.isArray(raw) && (raw as Record<string, unknown>).full_name) {
+      customerName = (raw as Record<string, string>).full_name;
     }
 
     return {
       id: order.id,
-      orderNumber: `AS-${String(100000 + index).slice(-6)}`,
+      orderNumber: order.order_number ?? `AS-${order.id.slice(-4)}`,
       customer: customerName,
-      total: Number(order.total),
+      total: Number(order.total_cents ?? 0) / 100,
       status: order.status as OrderStatus,
       date: order.created_at,
     };

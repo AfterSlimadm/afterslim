@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getAdminClient } from "@/lib/supabase/admin";
+import { postBuyerLead, postAbandonLead } from "@/lib/listflex";
 import type Stripe from "stripe";
 
 /**
  * POST /api/checkout/webhook
- * Stripe webhook handler. Creates order in Supabase when payment succeeds.
+ * Stripe webhook handler.
+ * - checkout.session.completed  -> create order + income transaction + Listflex buyer
+ * - checkout.session.expired    -> Listflex abandon lead
  */
 export async function POST(request: Request) {
   const body = await request.text();
@@ -34,6 +37,11 @@ export async function POST(request: Request) {
     await handleCheckoutCompleted(session);
   }
 
+  if (event.type === "checkout.session.expired") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    await handleCheckoutExpired(session);
+  }
+
   return NextResponse.json({ received: true });
 }
 
@@ -52,10 +60,19 @@ function extractShippingAddress(session: any) {
   };
 }
 
+function splitName(fullName?: string | null): { fname: string; lname: string } {
+  if (!fullName) return { fname: "", lname: "" };
+  const parts = fullName.trim().split(/\s+/);
+  return {
+    fname: parts[0] ?? "",
+    lname: parts.slice(1).join(" ") || "",
+  };
+}
+
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const supabase = getAdminClient();
 
-  // Check if order already exists (idempotency)
+  // Idempotency: check if order already exists
   const { data: existing } = await supabase
     .from("orders")
     .select("id")
@@ -69,39 +86,45 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const metadata = session.metadata ?? {};
   const totalCents = session.amount_total ?? 0;
+  const qty = Number(metadata.quantity) || 1;
+  const email = session.customer_details?.email ?? session.customer_email;
 
   // Generate order number
   const orderNumber = `AS-${Date.now().toString().slice(-6)}`;
 
-  // Create order
-  const { error: orderError } = await supabase.from("orders").insert({
-    order_number: orderNumber,
-    email: session.customer_details?.email ?? session.customer_email,
-    status: "paid",
-    subtotal_cents: totalCents,
-    total_cents: totalCents,
-    shipping_cents: 0,
-    discount_cents: 0,
-    tax_cents: 0,
-    shipping_address: extractShippingAddress(session),
-    stripe_checkout_session_id: session.id,
-    stripe_payment_intent_id:
-      typeof session.payment_intent === "string"
-        ? session.payment_intent
-        : null,
-    sales_channel: "website",
-    metadata: {
-      product_id: metadata.product_id,
-      quantity: Number(metadata.quantity) || 1,
-    },
-  });
+  // Create order and get the UUID back
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .insert({
+      order_number: orderNumber,
+      email,
+      status: "paid",
+      subtotal_cents: totalCents,
+      total_cents: totalCents,
+      shipping_cents: 0,
+      discount_cents: 0,
+      tax_cents: 0,
+      shipping_address: extractShippingAddress(session),
+      stripe_checkout_session_id: session.id,
+      stripe_payment_intent_id:
+        typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : null,
+      sales_channel: "website",
+      metadata: {
+        product_id: metadata.product_id,
+        quantity: qty,
+      },
+    })
+    .select("id")
+    .single();
 
-  if (orderError) {
-    console.error("[webhook] failed to create order:", orderError.message);
+  if (orderError || !order) {
+    console.error("[webhook] failed to create order:", orderError?.message);
     return;
   }
 
-  // Create order item
+  // Create order item using order UUID (not order_number)
   if (metadata.product_id) {
     const { data: product } = await supabase
       .from("products")
@@ -110,26 +133,86 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       .single();
 
     if (product) {
-      const qty = Number(metadata.quantity) || 1;
       await supabase.from("order_items").insert({
-        order_id: orderNumber,
+        order_id: order.id,
         product_id: metadata.product_id,
         product_name: product.name,
         quantity: qty,
         unit_price_cents: product.price_cents,
-        total_price_cents: product.price_cents * qty,
       });
     }
   }
 
   // Update inventory
   if (metadata.product_id) {
-    const qty = Number(metadata.quantity) || 1;
     await supabase.rpc("decrement_stock", {
       p_product_id: metadata.product_id,
       p_quantity: qty,
     });
   }
 
-  console.log("[webhook] order created:", orderNumber);
+  // Create income transaction so finance dashboard works
+  const totalDollars = totalCents / 100;
+  await supabase.from("transactions").insert({
+    type: "income",
+    category: "sale",
+    description: `Pedido ${orderNumber}`,
+    amount: totalDollars,
+    currency: "USD",
+    date: new Date().toISOString().split("T")[0],
+    reference_id: order.id,
+    reference_type: "order",
+    created_by: "webhook",
+  });
+
+  // Forward buyer lead to Listflex
+  const customerName = session.customer_details?.name;
+  const { fname, lname } = splitName(customerName);
+  postBuyerLead({
+    email: email ?? undefined,
+    fname,
+    lname,
+    phone: session.customer_details?.phone ?? undefined,
+    offer: "https://afterslim.com",
+    comments: `Order ${orderNumber} - $${totalDollars}`,
+  }).catch((err) => console.error("[listflex] buyer post failed:", err));
+
+  console.log("[webhook] order created:", orderNumber, "id:", order.id);
+}
+
+async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
+  const email = session.customer_details?.email ?? session.customer_email;
+
+  if (!email) {
+    console.log("[webhook] expired session without email, skipping abandon");
+    return;
+  }
+
+  // Save abandon lead to DB
+  const supabase = getAdminClient();
+  await supabase.from("leads").insert({
+    email,
+    source: "checkout_abandon",
+    utm_source: session.metadata?.utm_source ?? null,
+    utm_medium: session.metadata?.utm_medium ?? null,
+    utm_campaign: session.metadata?.utm_campaign ?? null,
+    consent_marketing: false,
+    metadata: {
+      stripe_session_id: session.id,
+      amount_total: session.amount_total,
+    },
+  });
+
+  // Forward abandon lead to Listflex
+  const customerName = session.customer_details?.name;
+  const { fname, lname } = splitName(customerName);
+  postAbandonLead({
+    email,
+    fname,
+    lname,
+    offer: "https://afterslim.com",
+    comments: "Checkout abandoned",
+  }).catch((err) => console.error("[listflex] abandon post failed:", err));
+
+  console.log("[webhook] abandon lead saved:", email);
 }

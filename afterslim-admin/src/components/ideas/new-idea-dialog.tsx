@@ -194,7 +194,7 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
           {/* Estimated Cost & Revenue */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="idea-cost">Custo Estimado (R$)</Label>
+              <Label htmlFor="idea-cost">Custo Estimado (USD)</Label>
               <Input
                 id="idea-cost"
                 type="number"
@@ -204,7 +204,7 @@ export function NewIdeaDialog({ children }: NewIdeaDialogProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="idea-revenue">Receita Estimada (R$)</Label>
+              <Label htmlFor="idea-revenue">Receita Estimada (USD)</Label>
               <Input
                 id="idea-revenue"
                 type="number"

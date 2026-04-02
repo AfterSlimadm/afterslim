@@ -62,9 +62,9 @@ import type { Order, OrderStatus, OrderEvent } from "@/lib/types";
 
 /* ── Status transition options ────────────────────────────── */
 
-const STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
-  pending: ["confirmed", "cancelled"],
-  confirmed: ["processing", "cancelled"],
+const STATUS_TRANSITIONS: Record<string, string[]> = {
+  pending: ["paid", "cancelled"],
+  paid: ["processing", "cancelled"],
   processing: ["shipped", "cancelled"],
   shipped: ["delivered"],
   delivered: ["refunded"],
@@ -120,25 +120,45 @@ export default function OrderDetailPage({
       try {
         const res = await fetch(`/api/orders/${id}`);
         if (!res.ok) throw new Error("Erro ao buscar pedido");
-        const data = await res.json();
+        const json = await res.json();
+        // API returns { order, items, events } — unwrap
+        const data = json.order ?? json;
+        const rawItems = (json.items ?? data.order_items ?? []).map((item: Record<string, unknown>) => ({
+          id: item.id as string,
+          order_id: item.order_id as string,
+          product_id: item.product_id as string,
+          product_name: (item.product_name as string) ?? "Produto",
+          variant: (item.variant as string) ?? null,
+          quantity: Number(item.quantity ?? 1),
+          unit_price: Number(item.unit_price_cents ?? item.unit_price ?? 0) / (item.unit_price_cents ? 100 : 1),
+          total_price: Number(item.total_price_cents ?? item.total_price ?? 0) / (item.total_price_cents ? 100 : 1),
+          created_at: (item.created_at as string) ?? "",
+        }));
+        // If item total_price is 0 but we have unit_price and quantity, calculate it
+        for (const item of rawItems) {
+          if (item.total_price === 0 && item.unit_price > 0) {
+            item.total_price = item.unit_price * item.quantity;
+          }
+        }
         setOrder({
           id: data.id ?? id,
+          order_number: data.order_number ?? undefined,
           customer_id: data.customer_id ?? "",
           status: data.status ?? "pending",
           payment_status: data.payment_status ?? "pending",
           payment_method: data.payment_method ?? "other",
-          subtotal: Number(data.subtotal ?? 0),
-          discount: Number(data.discount ?? 0),
-          shipping_cost: Number(data.shipping_cost ?? 0),
-          total: Number(data.total ?? 0),
-          tracking_code: data.tracking_code ?? null,
+          subtotal: Number(data.subtotal_cents ?? data.subtotal ?? 0) / (data.subtotal_cents != null ? 100 : 1),
+          discount: Number(data.discount_cents ?? data.discount ?? 0) / (data.discount_cents != null ? 100 : 1),
+          shipping_cost: Number(data.shipping_cents ?? data.shipping_cost ?? 0) / (data.shipping_cents != null ? 100 : 1),
+          total: Number(data.total_cents ?? data.total ?? 0) / (data.total_cents != null ? 100 : 1),
+          tracking_code: data.tracking_code ?? data.tracking_number ?? null,
           notes: data.notes ?? null,
           created_at: data.created_at ?? new Date().toISOString(),
           updated_at: data.updated_at ?? new Date().toISOString(),
           shipping_address: data.shipping_address ?? EMPTY_ORDER.shipping_address,
           customer: data.customer ?? undefined,
-          items: data.order_items ?? data.items ?? [],
-          events: data.order_events ?? data.events ?? [],
+          items: rawItems,
+          events: json.events ?? data.order_events ?? [],
         });
       } catch (err) {
         console.error("[OrderDetail] fetch failed:", err);
@@ -177,23 +197,47 @@ export default function OrderDetailPage({
     );
   }
 
-  const orderNumber = `AS-${id.padStart(6, "0")}`;
+  const orderNumber = order.order_number ?? `AS-${id.slice(-8).toUpperCase()}`;
   const statusConfig = ORDER_STATUS_CONFIG[order.status];
   const paymentConfig = PAYMENT_STATUS_CONFIG[order.payment_status];
   const nextStatuses = STATUS_TRANSITIONS[order.status];
 
-  function handleStatusChange(newStatus: OrderStatus) {
-    setOrder((prev) => ({ ...prev, status: newStatus }));
-    toast.success(
-      `Status do pedido atualizado para ${ORDER_STATUS_CONFIG[newStatus].label}`
-    );
+  async function handleStatusChange(newStatus: OrderStatus) {
+    try {
+      const res = await fetch(`/api/orders/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) throw new Error("Erro ao atualizar status");
+      setOrder((prev) => ({ ...prev, status: newStatus }));
+      toast.success(
+        `Status do pedido atualizado para ${ORDER_STATUS_CONFIG[newStatus].label}`
+      );
+    } catch {
+      toast.error("Erro ao atualizar status. Tente novamente.");
+    }
   }
 
-  function handleAddNote() {
+  async function handleAddNote() {
     if (!noteText.trim()) return;
-    toast.success("Nota adicionada com sucesso");
-    setNoteText("");
-    setNoteOpen(false);
+    try {
+      const existingNotes = order.notes ? order.notes + "\n\n" : "";
+      const timestamp = new Date().toLocaleString("pt-BR");
+      const updatedNotes = `${existingNotes}[${timestamp}] ${noteText.trim()}`;
+      const res = await fetch(`/api/orders/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notes: updatedNotes }),
+      });
+      if (!res.ok) throw new Error("Erro ao salvar nota");
+      setOrder((prev) => ({ ...prev, notes: updatedNotes }));
+      toast.success("Nota adicionada com sucesso");
+      setNoteText("");
+      setNoteOpen(false);
+    } catch {
+      toast.error("Erro ao salvar nota. Tente novamente.");
+    }
   }
 
   return (
