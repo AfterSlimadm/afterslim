@@ -140,13 +140,21 @@ export default function OrderDetailPage({
             item.total_price = item.unit_price * item.quantity;
           }
         }
+        // Build customer from order-level fields (email, shipping_address.name)
+        const addr = data.shipping_address as Record<string, string> | null;
+        const customerName = addr?.name ?? data.customer?.name ?? undefined;
+        const customerEmail = data.email ?? data.customer?.email ?? undefined;
+        const customer = (customerName || customerEmail)
+          ? { name: customerName ?? "Unknown", email: customerEmail, phone: data.customer?.phone }
+          : data.customer ?? undefined;
+
         setOrder({
           id: data.id ?? id,
           order_number: data.order_number ?? undefined,
-          customer_id: data.customer_id ?? "",
+          customer_id: data.profile_id ?? data.customer_id ?? "",
           status: data.status ?? "pending",
           payment_status: data.payment_status ?? "pending",
-          payment_method: data.payment_method ?? "other",
+          payment_method: data.payment_method ?? data.stripe_payment_intent_id ? "stripe" : "other",
           subtotal: Number(data.subtotal_cents ?? data.subtotal ?? 0) / (data.subtotal_cents != null ? 100 : 1),
           discount: Number(data.discount_cents ?? data.discount ?? 0) / (data.discount_cents != null ? 100 : 1),
           shipping_cost: Number(data.shipping_cents ?? data.shipping_cost ?? 0) / (data.shipping_cents != null ? 100 : 1),
@@ -155,8 +163,15 @@ export default function OrderDetailPage({
           notes: data.notes ?? null,
           created_at: data.created_at ?? new Date().toISOString(),
           updated_at: data.updated_at ?? new Date().toISOString(),
-          shipping_address: data.shipping_address ?? EMPTY_ORDER.shipping_address,
-          customer: data.customer ?? undefined,
+          shipping_address: {
+            street: addr?.street ?? addr?.line1 ?? "",
+            number: addr?.number ?? "",
+            neighborhood: addr?.neighborhood ?? "",
+            city: addr?.city ?? "",
+            state: addr?.state ?? "",
+            zip_code: addr?.zip_code ?? addr?.postal_code ?? "",
+          },
+          customer: customer as Order["customer"],
           items: rawItems,
           events: json.events ?? data.order_events ?? [],
         });
@@ -357,9 +372,9 @@ export default function OrderDetailPage({
                 Itens do Pedido
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="p-0 overflow-x-auto">
               {order.items && order.items.length > 0 ? (
-                <Table>
+                <Table className="min-w-[400px]">
                   <TableHeader>
                     <TableRow>
                       <TableHead className="pl-6">Produto</TableHead>
@@ -515,19 +530,23 @@ export default function OrderDetailPage({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {order.shipping_address?.street ? (
+              {order.shipping_address?.city || order.shipping_address?.street ? (
                 <div className="text-sm leading-relaxed">
-                  <p>
-                    {order.shipping_address.street}
-                    {order.shipping_address.number &&
-                      `, ${order.shipping_address.number}`}
-                  </p>
-                  <p>{order.shipping_address.neighborhood}</p>
-                  <p>
-                    {order.shipping_address.city},{" "}
-                    {order.shipping_address.state}{" "}
-                    {order.shipping_address.zip_code}
-                  </p>
+                  {order.shipping_address.street && (
+                    <p>
+                      {order.shipping_address.street}
+                      {order.shipping_address.number &&
+                        `, ${order.shipping_address.number}`}
+                    </p>
+                  )}
+                  {order.shipping_address.neighborhood && (
+                    <p>{order.shipping_address.neighborhood}</p>
+                  )}
+                  {(order.shipping_address.city || order.shipping_address.state) && (
+                    <p>
+                      {[order.shipping_address.city, order.shipping_address.state, order.shipping_address.zip_code].filter(Boolean).join(", ")}
+                    </p>
+                  )}
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">
