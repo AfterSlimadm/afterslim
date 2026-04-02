@@ -417,7 +417,7 @@ ul, ol {
 }
 
 .science-section .container {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -433,42 +433,77 @@ ul, ol {
   color: var(--orange);
 }
 
-.science-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  position: relative;
+.science-layout {
+  display: flex;
+  align-items: center;
+  gap: 50px;
 }
 
-.science-grid::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--orange);
-  transform: translateX(-50%);
-  border-radius: 2px;
+.science-image {
+  flex: 1;
+  max-width: 450px;
 }
 
-.science-column h3 {
-  font-size: 18px;
+.science-image img {
+  width: 100%;
+  height: auto;
+}
+
+.science-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.science-box {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+
+.science-box h3 {
+  display: inline-block;
+  font-size: 16px;
   font-weight: 700;
   color: var(--orange);
-  margin-bottom: 16px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  margin-bottom: 12px;
+  padding: 6px 16px;
+  border: 2px solid var(--orange);
+  border-radius: 6px;
 }
 
-.science-column p {
+.science-box p {
   font-size: 15px;
   line-height: 1.7;
   color: var(--text-secondary);
+  text-align: center;
 }
 
-.science-column p strong {
+.science-box p strong {
   color: var(--text-primary);
+}
+
+.science-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.connector-line {
+  width: 2px;
+  height: 20px;
+  background: var(--orange);
+  border-style: dashed;
+}
+
+.connector-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--orange);
+  border-radius: 50%;
 }
 
 @media (max-width: 768px) {
@@ -481,24 +516,26 @@ ul, ol {
     margin-bottom: 32px;
   }
 
-  .science-grid {
-    grid-template-columns: 1fr;
+  .science-layout {
+    flex-direction: column;
     gap: 32px;
   }
 
-  .science-grid::before {
-    display: none;
+  .science-image {
+    max-width: 280px;
+    margin: 0 auto;
   }
 
-  .science-column {
-    text-align: center;
-    padding-bottom: 32px;
-    border-bottom: 3px solid var(--orange);
+  .science-box {
+    padding: 20px;
   }
 
-  .science-column:last-child {
-    padding-bottom: 0;
-    border-bottom: none;
+  .science-box h3 {
+    font-size: 14px;
+  }
+
+  .science-box p {
+    font-size: 14px;
   }
 }
 
@@ -3846,14 +3883,23 @@ ul, ol {
 <section class="science-section">
   <div class="container">
     <h2 class="science-title">The Science Behind <span>AfterSlim</span></h2>
-    <div class="science-grid">
-      <div class="science-column">
-        <h3>The Biology</h3>
-        <p>GLP-1 medications like Ozempic and Mounjaro work by slowing gastric emptying and reducing appetite. While effective for weight loss, this dramatically alters your gut environment. Slower digestion means food sits longer, changing pH levels and bacterial populations. Studies show GLP-1 users experience significant shifts in their microbiome composition, often leading to the uncomfortable side effects that make treatment difficult to maintain.</p>
+    <div class="science-layout">
+      <div class="science-image">
+        <img src="images/intestino.png" alt="Large Intestine - Gut Microbiome">
       </div>
-      <div class="science-column">
-        <h3>How This Helps</h3>
-        <p>AfterSlim delivers a precision-targeted blend of prebiotics and clinically studied probiotic strains including Akkermansia muciniphila, specifically chosen for GLP-1 users. These beneficial bacteria help restore gut lining integrity, support healthy digestion, and maintain the microbial balance your body needs. By protecting your microbiome during treatment, AfterSlim helps you get the weight loss results you want while minimizing the side effects that can derail your progress.</p>
+      <div class="science-content">
+        <div class="science-box">
+          <h3>The Biology</h3>
+          <p>GLP-1 medications like Ozempic and Mounjaro work by slowing gastric emptying and reducing appetite. While effective for weight loss, this dramatically alters your gut environment. Slower digestion means food sits longer, changing pH levels and bacterial populations. Studies show GLP-1 users experience significant shifts in their microbiome composition, often leading to the uncomfortable side effects that make treatment difficult to maintain.</p>
+        </div>
+        <div class="science-connector">
+          <span class="connector-line"></span>
+          <span class="connector-dot"></span>
+        </div>
+        <div class="science-box">
+          <h3>How This Helps</h3>
+          <p>AfterSlim delivers a precision-targeted blend of prebiotics and clinically studied probiotic strains including Akkermansia muciniphila, specifically chosen for GLP-1 users. These beneficial bacteria help restore gut lining integrity, support healthy digestion, and maintain the microbial balance your body needs. By protecting your microbiome during treatment, AfterSlim helps you get the weight loss results you want while minimizing the side effects that can derail your progress.</p>
+        </div>
       </div>
     </div>
   </div>
