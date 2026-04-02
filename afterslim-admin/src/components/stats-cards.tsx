@@ -12,7 +12,7 @@ export const Component = () => {
           <CreditCard className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">$45,231.89</div>
+          <div className="text-2xl font-bold">R$45.231,89</div>
           <div className="flex items-center pt-1 text-xs text-green-600">
             <ArrowUpRight className="mr-1 h-3 w-3" />
             <span>+20.1% from last month</span>

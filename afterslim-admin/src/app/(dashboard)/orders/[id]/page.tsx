@@ -169,7 +169,7 @@ export default function OrderDetailPage({
             neighborhood: addr?.neighborhood ?? "",
             city: addr?.city ?? "",
             state: addr?.state ?? "",
-            zip_code: addr?.zip_code ?? addr?.postal_code ?? "",
+            zip_code: addr?.zip_code ?? addr?.zip ?? addr?.postal_code ?? "",
           },
           customer: customer as Order["customer"],
           items: rawItems,

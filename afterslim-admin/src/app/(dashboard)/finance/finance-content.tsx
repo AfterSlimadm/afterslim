@@ -379,7 +379,7 @@ export default function FinanceContent({
                       tickLine={false}
                       tick={{ fontSize: 11, fill: "#94a3b8" }}
                       tickFormatter={(v) =>
-                        `$${(v / 1000).toFixed(0)}k`
+                        `R$${(v / 1000).toFixed(0)}k`
                       }
                     />
                     <Tooltip

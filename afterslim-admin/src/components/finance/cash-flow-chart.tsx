@@ -91,7 +91,7 @@ export function CashFlowChart({ data }: CashFlowChartProps) {
               axisLine={false}
               tickMargin={8}
               tick={{ fontSize: 12 }}
-              tickFormatter={(value) => `$${(value / 1000).toFixed(1)}k`}
+              tickFormatter={(value) => `R$${(value / 1000).toFixed(1)}k`}
               width={48}
             />
             <ChartTooltip

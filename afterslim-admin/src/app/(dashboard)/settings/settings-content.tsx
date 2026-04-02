@@ -95,7 +95,7 @@ export default function SettingsContent({
     (initialSettings.default_carrier as string) || "correios"
   );
   const [freeShippingMin, setFreeShippingMin] = useState(
-    (initialSettings.free_shipping_min as string) || "$199.00"
+    (initialSettings.free_shipping_min as string) || "R$199,00"
   );
   const [processingTime, setProcessingTime] = useState(
     (initialSettings.processing_time as string) || "2 dias uteis"
@@ -160,7 +160,7 @@ export default function SettingsContent({
     setLanguage((initialSettings.language as string) || "pt-BR");
     setCarrier((initialSettings.default_carrier as string) || "correios");
     setFreeShippingMin(
-      (initialSettings.free_shipping_min as string) || "$199.00"
+      (initialSettings.free_shipping_min as string) || "R$199,00"
     );
     setProcessingTime(
       (initialSettings.processing_time as string) || "2 dias uteis"

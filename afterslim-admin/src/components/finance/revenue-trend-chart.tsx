@@ -100,7 +100,7 @@ export function RevenueTrendChart({ data }: RevenueTrendChartProps) {
               tickMargin={8}
               tick={{ fontSize: 12 }}
               tickFormatter={(value) =>
-                `$${(value / 1000).toFixed(1)}k`
+                `R$${(value / 1000).toFixed(1)}k`
               }
               width={48}
             />

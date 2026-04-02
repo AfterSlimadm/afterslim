@@ -2,6 +2,7 @@
 
 import { Sidebar, MobileSidebarContent } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
+import { NavigationProgress } from "@/components/navigation-progress";
 import { useAdminStore } from "@/store/use-admin-store";
 import {
   Sheet,
@@ -15,6 +16,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
+      <NavigationProgress />
       <Sidebar />
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="left" className="w-[85vw] max-w-xs p-0" showCloseButton={false}>
@@ -24,7 +26,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       </Sheet>
       <div className="flex flex-1 flex-col overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-y-auto p-5 lg:p-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-5 lg:p-8">
           {children}
         </main>
       </div>
