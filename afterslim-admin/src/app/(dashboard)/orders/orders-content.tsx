@@ -44,8 +44,9 @@ import {
 import type { Order } from "@/lib/types";
 import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
+import { getLocaleFromRole, getStatusPillLabel, t } from "@/lib/i18n";
 
-/* ── Stat Card ─────────────────────────────────────────────── */
+/* -- Stat Card ------------------------------------------------- */
 
 interface StatCardProps {
   label: string;
@@ -104,57 +105,24 @@ function StatCard({
   );
 }
 
-/* ── Status Badge (inline, pill-shaped, 12% opacity bg) ────── */
+/* -- Status Badge (inline, pill-shaped, 12% opacity bg) -------- */
 
 const STATUS_PILL_MAP: Record<
   string,
-  { label: string; bg: string; text: string }
+  { bg: string; text: string }
 > = {
-  pending: {
-    label: "Novo",
-    bg: "bg-blue-500/12",
-    text: "text-blue-700",
-  },
-  confirmed: {
-    label: "Confirmado",
-    bg: "bg-sky-500/12",
-    text: "text-sky-700",
-  },
-  paid: {
-    label: "Pago",
-    bg: "bg-green-500/12",
-    text: "text-green-700",
-  },
-  processing: {
-    label: "Processando",
-    bg: "bg-amber-500/12",
-    text: "text-amber-700",
-  },
-  shipped: {
-    label: "Enviado",
-    bg: "bg-emerald-500/12",
-    text: "text-emerald-700",
-  },
-  delivered: {
-    label: "Entregue",
-    bg: "bg-green-500/12",
-    text: "text-green-700",
-  },
-  cancelled: {
-    label: "Cancelado",
-    bg: "bg-neutral-500/12",
-    text: "text-neutral-600",
-  },
-  refunded: {
-    label: "Reembolsado",
-    bg: "bg-neutral-500/12",
-    text: "text-neutral-600",
-  },
+  pending: { bg: "bg-blue-500/12", text: "text-blue-700" },
+  confirmed: { bg: "bg-sky-500/12", text: "text-sky-700" },
+  paid: { bg: "bg-green-500/12", text: "text-green-700" },
+  processing: { bg: "bg-amber-500/12", text: "text-amber-700" },
+  shipped: { bg: "bg-emerald-500/12", text: "text-emerald-700" },
+  delivered: { bg: "bg-green-500/12", text: "text-green-700" },
+  cancelled: { bg: "bg-neutral-500/12", text: "text-neutral-600" },
+  refunded: { bg: "bg-neutral-500/12", text: "text-neutral-600" },
 };
 
-function StatusPill({ status }: { status: string }) {
+function StatusPill({ status, locale }: { status: string; locale: "pt" | "en" }) {
   const config = STATUS_PILL_MAP[status] ?? {
-    label: status,
     bg: "bg-neutral-500/12",
     text: "text-neutral-600",
   };
@@ -166,12 +134,12 @@ function StatusPill({ status }: { status: string }) {
         config.text
       )}
     >
-      {config.label}
+      {getStatusPillLabel(status, locale)}
     </span>
   );
 }
 
-/* ── Avatar circle (initials) ──────────────────────────────── */
+/* -- Avatar circle (initials) ---------------------------------- */
 
 const AVATAR_COLORS = [
   "bg-blue-100 text-blue-700",
@@ -200,18 +168,19 @@ function AvatarCircle({ name }: { name: string }) {
   );
 }
 
-/* ── Props ────────────────────────────────────────────────── */
+/* -- Props ---------------------------------------------------- */
 
 interface OrdersContentProps {
   orders: Order[];
 }
 
-/* ── Page component ───────────────────────────────────────── */
+/* -- Page component ------------------------------------------- */
 
 const PAGE_SIZE = 5;
 
 export default function OrdersContent({ orders }: OrdersContentProps) {
   const { role } = useAuth();
+  const locale = getLocaleFromRole(role);
   const router = useRouter();
   const isSupport = role === "support";
   const [search, setSearch] = useState("");
@@ -302,21 +271,19 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
 
   return (
     <div className="page-container">
-      {/* ── Header ──────────────────────────────────────────── */}
+      {/* -- Header ------------------------------------------------ */}
       <BlurFade delay={0}>
         <div className="page-header">
           <h1 className="page-title">
-            {isSupport ? "Orders" : "Pedidos"}
+            {t("orders.title", locale)}
           </h1>
           <p className="page-description">
-            {isSupport
-              ? "View orders, customer details, and track your support actions."
-              : "Gerencie e acompanhe as transacoes da AfterSlim em tempo real."}
+            {t("orders.description", locale)}
           </p>
         </div>
       </BlurFade>
 
-      {/* ── Filter row ──────────────────────────────────────── */}
+      {/* -- Filter row -------------------------------------------- */}
       <BlurFade delay={0.05}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-1 items-center gap-3">
@@ -324,7 +291,7 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
             <div className="relative max-w-sm flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Pesquisar pedidos..."
+                placeholder={t("orders.search", locale)}
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 className="pl-9 border-border/15 bg-white shadow-none"
@@ -335,20 +302,20 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
             <Button
               variant="outline"
               className="gap-2 border-border/15 bg-white shadow-none text-muted-foreground"
-              onClick={() => toast.info("Filtro de data em breve")}
+              onClick={() => toast.info(t("orders.dateFilterSoon", locale))}
             >
               <Calendar className="h-4 w-4" />
-              <span className="hidden sm:inline">Selecionar data</span>
+              <span className="hidden sm:inline">{t("orders.selectDate", locale)}</span>
             </Button>
 
             {/* Filters */}
             <Button
               variant="outline"
               className="gap-2 border-border/15 bg-white shadow-none text-muted-foreground"
-              onClick={() => toast.info("Filtros avancados em breve")}
+              onClick={() => toast.info(t("orders.advancedFiltersSoon", locale))}
             >
               <SlidersHorizontal className="h-4 w-4" />
-              <span className="hidden sm:inline">Filtros</span>
+              <span className="hidden sm:inline">{t("orders.filters", locale)}</span>
             </Button>
           </div>
 
@@ -356,42 +323,42 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
           {!isSupport && (
             <Button
               className="gap-2 bg-[#00628c] hover:bg-[#00496a] text-white shadow-none"
-              onClick={() => toast.info("Funcao de exportacao em breve")}
+              onClick={() => toast.info(t("orders.exportSoon", locale))}
             >
               <Download className="h-4 w-4" />
-              Exportar CSV
+              {t("orders.exportCsv", locale)}
             </Button>
           )}
         </div>
       </BlurFade>
 
-      {/* ── Stats row ───────────────────────────────────────── */}
+      {/* -- Stats row --------------------------------------------- */}
       <div className="kpi-grid">
         <StatCard
-          label="Novos hoje"
+          label={t("orders.newToday", locale)}
           value={stats.newToday}
           icon={<ShoppingCart className="h-5 w-5 text-[#00628c]" />}
           iconBg="bg-[#c8e6ff]/30"
-          badge="Hoje"
+          badge={t("orders.today", locale)}
           badgeColor="bg-[#00628c]/10 text-[#00628c]"
           delay={0.1}
         />
         <StatCard
-          label="Processando"
+          label={t("orders.processing", locale)}
           value={stats.processing}
           icon={<Loader className="h-5 w-5 text-amber-600" />}
           iconBg="bg-amber-100"
           delay={0.15}
         />
         <StatCard
-          label="Enviados"
+          label={t("orders.shipped", locale)}
           value={stats.shipped}
           icon={<Truck className="h-5 w-5 text-emerald-600" />}
           iconBg="bg-emerald-100"
           delay={0.2}
         />
         <StatCard
-          label="Problemas"
+          label={t("orders.problems", locale)}
           value={stats.problems}
           icon={<AlertTriangle className="h-5 w-5 text-red-600" />}
           iconBg="bg-red-100"
@@ -399,7 +366,7 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
         />
       </div>
 
-      {/* ── Data Table ──────────────────────────────────────── */}
+      {/* -- Data Table -------------------------------------------- */}
       <BlurFade delay={0.3}>
         <Card className="border-border/15 overflow-hidden shadow-none">
           <CardContent className="p-0">
@@ -407,25 +374,25 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
               <TableHeader>
                 <TableRow className="border-border/15 hover:bg-transparent">
                   <TableHead className="pl-5 text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
-                    Pedido #
+                    {t("table.orderNumber", locale)}
                   </TableHead>
                   <TableHead className="text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
-                    Cliente
+                    {t("table.customer", locale)}
                   </TableHead>
                   <TableHead className="hidden md:table-cell text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
-                    Produtos
+                    {t("table.products", locale)}
                   </TableHead>
                   <TableHead className="text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
-                    Status
+                    {t("table.status", locale)}
                   </TableHead>
                   <TableHead className="hidden lg:table-cell text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
-                    Data
+                    {t("table.date", locale)}
                   </TableHead>
                   <TableHead className="text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
-                    Valor
+                    {t("table.value", locale)}
                   </TableHead>
                   <TableHead className="w-[60px] pr-5 text-right text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
-                    Acoes
+                    {t("table.actions", locale)}
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -436,14 +403,14 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
                       colSpan={7}
                       className="h-32 text-center text-muted-foreground"
                     >
-                      Nenhum pedido encontrado.
+                      {t("orders.noOrders", locale)}
                     </TableCell>
                   </TableRow>
                 ) : (
                   paginatedOrders.map((order) => {
                     const itemCount = order.items?.length ?? 0;
                     const customerName =
-                      order.customer?.name ?? "Desconhecido";
+                      order.customer?.name ?? t("order.unknown", locale);
 
                     return (
                       <TableRow
@@ -475,12 +442,12 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
 
                         {/* Products */}
                         <TableCell className="hidden md:table-cell text-muted-foreground">
-                          {itemCount} {itemCount === 1 ? "produto" : "produtos"}
+                          {itemCount} {itemCount === 1 ? t("orders.product", locale) : t("orders.products", locale)}
                         </TableCell>
 
                         {/* Status pill */}
                         <TableCell>
-                          <StatusPill status={order.status} />
+                          <StatusPill status={order.status} locale={locale} />
                         </TableCell>
 
                         {/* Date */}
@@ -504,7 +471,7 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Acoes</span>
+                                <span className="sr-only">{t("table.actions", locale)}</span>
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
@@ -515,26 +482,26 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
                                 }}
                               >
                                 <Eye className="h-4 w-4" />
-                                Ver detalhes
+                                {t("orders.viewDetails", locale)}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  toast.info("Atualizar status em breve");
+                                  toast.info(t("orders.statusUpdateSoon", locale));
                                 }}
                               >
                                 <Truck className="h-4 w-4" />
-                                Atualizar status
+                                {t("orders.updateStatus", locale)}
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  toast.info("Imprimir fatura em breve");
+                                  toast.info(t("orders.printSoon", locale));
                                 }}
                               >
                                 <Printer className="h-4 w-4" />
-                                Imprimir fatura
+                                {t("orders.printInvoice", locale)}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -549,14 +516,14 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
         </Card>
       </BlurFade>
 
-      {/* ── Pagination ──────────────────────────────────────── */}
+      {/* -- Pagination -------------------------------------------- */}
       <BlurFade delay={0.35}>
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Mostrando{" "}
+            {t("orders.showing", locale)}{" "}
             {filteredOrders.length > 0 ? (page - 1) * PAGE_SIZE + 1 : 0} -{" "}
-            {Math.min(page * PAGE_SIZE, filteredOrders.length)} de{" "}
-            {filteredOrders.length} pedidos
+            {Math.min(page * PAGE_SIZE, filteredOrders.length)} {t("orders.of", locale)}{" "}
+            {filteredOrders.length} {t("orders.ordersLabel", locale)}
           </p>
           <div className="flex items-center gap-1">
             <Button

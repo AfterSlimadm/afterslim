@@ -21,12 +21,14 @@ import { Input } from "@/components/ui/input";
 import { SUPPORT_TASK_TYPE_CONFIG } from "@/lib/constants";
 import { SupportTaskItem } from "./support-task-item";
 import type { SupportTask, SupportTaskType } from "@/lib/types";
+import { type Locale, getSupportTaskTypeLabel, t } from "@/lib/i18n";
 
 interface OrderSupportTasksProps {
   orderId: string;
+  locale?: Locale;
 }
 
-export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
+export function OrderSupportTasks({ orderId, locale = "pt" }: OrderSupportTasksProps) {
   const [tasks, setTasks] = useState<SupportTask[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
@@ -52,7 +54,7 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
 
   async function handleAdd() {
     if (!newTaskType) {
-      toast.error("Selecione o tipo da tarefa");
+      toast.error(t("orderSupport.selectType", locale));
       return;
     }
 
@@ -73,9 +75,9 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
       setNewTaskType("");
       setNewDescription("");
       setShowForm(false);
-      toast.success("Tarefa adicionada");
+      toast.success(t("orderSupport.taskAdded", locale));
     } catch {
-      toast.error("Erro ao criar tarefa");
+      toast.error(t("orderSupport.createError", locale));
     } finally {
       setAdding(false);
     }
@@ -90,7 +92,7 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
           <ClipboardCheck className="h-4 w-4 text-muted-foreground" />
-          Suporte
+          {t("orderSupport.title", locale)}
         </CardTitle>
         <Button
           variant="ghost"
@@ -99,7 +101,7 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
           onClick={() => setShowForm(!showForm)}
         >
           <Plus className="h-3.5 w-3.5" />
-          Adicionar
+          {t("orderSupport.add", locale)}
         </Button>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -108,18 +110,18 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
           <div className="space-y-2 rounded-lg border p-3">
             <Select value={newTaskType} onValueChange={setNewTaskType}>
               <SelectTrigger className="h-8 text-xs">
-                <SelectValue placeholder="Tipo da tarefa" />
+                <SelectValue placeholder={t("orderSupport.taskTypePlaceholder", locale)} />
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(SUPPORT_TASK_TYPE_CONFIG).map(([key, config]) => (
                   <SelectItem key={key} value={key}>
-                    {config.label}
+                    {getSupportTaskTypeLabel(key, locale)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Input
-              placeholder="Nota (opcional)"
+              placeholder={t("orderSupport.notePlaceholder", locale)}
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
               className="h-8 text-xs"
@@ -134,7 +136,7 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
                 {adding ? (
                   <Loader2 className="h-3 w-3 animate-spin" />
                 ) : (
-                  "Salvar"
+                  t("orderSupport.save", locale)
                 )}
               </Button>
               <Button
@@ -143,7 +145,7 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
                 className="h-7 text-xs"
                 onClick={() => setShowForm(false)}
               >
-                Cancelar
+                {t("orderSupport.cancel", locale)}
               </Button>
             </div>
           </div>
@@ -156,7 +158,7 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
           </div>
         ) : tasks.length === 0 ? (
           <p className="text-xs text-muted-foreground text-center py-3">
-            Nenhuma tarefa de suporte registrada.
+            {t("orderSupport.noTasks", locale)}
           </p>
         ) : (
           <div className="-mx-4 divide-y">
@@ -166,6 +168,7 @@ export function OrderSupportTasks({ orderId }: OrderSupportTasksProps) {
                 task={task}
                 onUpdate={handleTaskUpdate}
                 compact
+                locale={locale}
               />
             ))}
           </div>

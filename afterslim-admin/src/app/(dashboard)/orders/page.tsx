@@ -18,7 +18,7 @@ export default async function OrdersPage() {
       // Extract customer name: try profile join first, then shipping_address.name, then email
       const rawProfile = row.profile as unknown;
       const shippingAddr = row.shipping_address as Record<string, string> | null;
-      let customerName = "Desconhecido";
+      let customerName = "Unknown";
       if (Array.isArray(rawProfile) && rawProfile.length > 0 && (rawProfile[0] as Record<string,string>)?.full_name) {
         customerName = (rawProfile[0] as Record<string,string>).full_name;
       } else if (rawProfile && typeof rawProfile === "object" && !Array.isArray(rawProfile) && (rawProfile as Record<string, string>).full_name) {

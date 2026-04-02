@@ -19,21 +19,67 @@ import {
 } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
+import { getLocaleFromRole, t, type Locale } from "@/lib/i18n";
+
+/* -- Nav label translation map --------------------------------- */
+
+const NAV_LABEL_MAP: Record<string, { pt: string; en: string }> = {
+  // Group labels
+  "Principal": { pt: "Principal", en: "Main" },
+  "Operacoes": { pt: "Operacoes", en: "Operations" },
+  "Financeiro": { pt: "Financeiro", en: "Finance" },
+  "Planejamento": { pt: "Planejamento", en: "Planning" },
+  "Equipe": { pt: "Equipe", en: "Team" },
+  "Sistema": { pt: "Sistema", en: "System" },
+  // Item labels
+  "Painel": { pt: "Painel", en: "Dashboard" },
+  "Dashboard": { pt: "Dashboard", en: "Dashboard" },
+  "Pedidos": { pt: "Pedidos", en: "Orders" },
+  "Todos os Pedidos": { pt: "Todos os Pedidos", en: "All Orders" },
+  "Tarefas de Suporte": { pt: "Tarefas de Suporte", en: "Support Tasks" },
+  "Estoque": { pt: "Estoque", en: "Inventory" },
+  "Canais de Venda": { pt: "Canais de Venda", en: "Sales Channels" },
+  "Visao Geral": { pt: "Visao Geral", en: "Overview" },
+  "Transacoes": { pt: "Transacoes", en: "Transactions" },
+  "Custos": { pt: "Custos", en: "Costs" },
+  "Metas": { pt: "Metas", en: "Goals" },
+  "Documentos": { pt: "Documentos", en: "Documents" },
+  "Ideias": { pt: "Ideias", en: "Ideas" },
+  "Kanban": { pt: "Kanban", en: "Kanban" },
+  "Lembretes": { pt: "Lembretes", en: "Reminders" },
+  "Criadores": { pt: "Criadores", en: "Creators" },
+  "Todos os Criadores": { pt: "Todos os Criadores", en: "All Creators" },
+  "Agentes": { pt: "Agentes", en: "Agents" },
+  "Mensagens": { pt: "Mensagens", en: "Messages" },
+  "Tarefas": { pt: "Tarefas", en: "Tasks" },
+  "Memoria": { pt: "Memoria", en: "Memory" },
+  "Configuracoes": { pt: "Configuracoes", en: "Settings" },
+};
+
+function translateLabel(label: string, locale: Locale): string {
+  const entry = NAV_LABEL_MAP[label];
+  if (!entry) return label;
+  return entry[locale];
+}
 
 export function Sidebar() {
   const pathname = usePathname();
   const collapsed = useAdminStore((s) => s.sidebarCollapsed);
   const toggleCollapsed = useAdminStore((s) => s.toggleSidebarCollapsed);
   const { role } = useAuth();
+  const locale = getLocaleFromRole(role);
 
-  const filteredGroups = NAV_GROUPS.map((group) => ({
-    ...group,
-    items: group.items.filter(
-      (item) => !item.roles || item.roles.includes(role)
-    ),
-  })).filter((group) => group.items.length > 0);
+  const filteredGroups = useMemo(() =>
+    NAV_GROUPS.map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) => !item.roles || item.roles.includes(role)
+      ),
+    })).filter((group) => group.items.length > 0),
+    [role]
+  );
 
   return (
     <aside
@@ -80,7 +126,7 @@ export function Sidebar() {
               {!collapsed && (
                 <div className="px-4 pb-1 pt-2">
                   <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[#70787f]">
-                    {group.label}
+                    {translateLabel(group.label, locale)}
                   </span>
                 </div>
               )}
@@ -93,6 +139,7 @@ export function Sidebar() {
                     item={item}
                     pathname={pathname}
                     collapsed={collapsed}
+                    locale={locale}
                   />
                 ))}
               </div>
@@ -114,7 +161,7 @@ export function Sidebar() {
           ) : (
             <>
               <ChevronLeft className="mr-2 h-4 w-4" />
-              <span className="text-xs">Recolher</span>
+              <span className="text-xs">{t("nav.collapse", locale)}</span>
             </>
           )}
         </Button>
@@ -123,16 +170,18 @@ export function Sidebar() {
   );
 }
 
-/* ── Individual nav item (handles children / collapsible) ────── */
+/* -- Individual nav item (handles children / collapsible) ------- */
 
 function SidebarNavItem({
   item,
   pathname,
   collapsed,
+  locale,
 }: {
   item: NavItem;
   pathname: string;
   collapsed: boolean;
+  locale: Locale;
 }) {
   const isActive =
     pathname === item.href ||
@@ -141,6 +190,7 @@ function SidebarNavItem({
   const [open, setOpen] = useState(isActive);
 
   const Icon = item.icon;
+  const translatedLabel = translateLabel(item.label, locale);
 
   // Collapsed mode: show just the icon with a tooltip
   if (collapsed) {
@@ -160,7 +210,7 @@ function SidebarNavItem({
           </Link>
         </TooltipTrigger>
         <TooltipContent side="right">
-          <p>{item.label}</p>
+          <p>{translatedLabel}</p>
         </TooltipContent>
       </Tooltip>
     );
@@ -179,7 +229,7 @@ function SidebarNavItem({
         )}
       >
         <Icon className="h-4 w-4 shrink-0" />
-        <span className="truncate">{item.label}</span>
+        <span className="truncate">{translatedLabel}</span>
       </Link>
     );
   }
@@ -197,7 +247,7 @@ function SidebarNavItem({
           )}
         >
           <Icon className="h-4 w-4 shrink-0" />
-          <span className="flex-1 truncate text-left">{item.label}</span>
+          <span className="flex-1 truncate text-left">{translatedLabel}</span>
           <ChevronDown
             className={cn(
               "h-3.5 w-3.5 shrink-0 transition-transform",
@@ -220,7 +270,7 @@ function SidebarNavItem({
                   : "text-[#70787f] hover:text-[#141d24] hover:bg-[#dae3ee]/50"
               )}
             >
-              {child.label}
+              {translateLabel(child.label, locale)}
             </Link>
           );
         })}
@@ -229,19 +279,23 @@ function SidebarNavItem({
   );
 }
 
-/* ── Mobile sidebar content (used inside Sheet) ─────────────── */
+/* -- Mobile sidebar content (used inside Sheet) ----------------- */
 
 export function MobileSidebarContent() {
   const pathname = usePathname();
   const setSidebarOpen = useAdminStore((s) => s.setSidebarOpen);
   const { role } = useAuth();
+  const locale = getLocaleFromRole(role);
 
-  const filteredGroups = NAV_GROUPS.map((group) => ({
-    ...group,
-    items: group.items.filter(
-      (item) => !item.roles || item.roles.includes(role)
-    ),
-  })).filter((group) => group.items.length > 0);
+  const filteredGroups = useMemo(() =>
+    NAV_GROUPS.map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) => !item.roles || item.roles.includes(role)
+      ),
+    })).filter((group) => group.items.length > 0),
+    [role]
+  );
 
   return (
     <div className="flex h-full flex-col bg-[#ecf5ff]">
@@ -272,7 +326,7 @@ export function MobileSidebarContent() {
               )}
               <div className="px-4 pb-1 pt-2">
                 <span className="text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-[#70787f]">
-                  {group.label}
+                  {translateLabel(group.label, locale)}
                 </span>
               </div>
               <div className="space-y-0.5 px-2">
@@ -295,7 +349,7 @@ export function MobileSidebarContent() {
                         )}
                       >
                         <Icon className="h-4 w-4 shrink-0" />
-                        <span>{item.label}</span>
+                        <span>{translateLabel(item.label, locale)}</span>
                       </Link>
                       {item.children && isActive && (
                         <div className="space-y-0.5 pl-7 pt-0.5">
@@ -311,7 +365,7 @@ export function MobileSidebarContent() {
                                   : "text-[#70787f] hover:text-[#141d24]"
                               )}
                             >
-                              {child.label}
+                              {translateLabel(child.label, locale)}
                             </Link>
                           ))}
                         </div>

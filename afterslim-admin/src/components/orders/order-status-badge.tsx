@@ -1,18 +1,20 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ORDER_STATUS_CONFIG } from "@/lib/constants";
+import { type Locale, getOrderStatusLabel } from "@/lib/i18n";
 import type { OrderStatus } from "@/lib/types";
 
-/* ── Props ────────────────────────────────────────────────── */
+/* -- Props ---------------------------------------------------- */
 
 interface OrderStatusBadgeProps {
   status: OrderStatus;
   className?: string;
+  locale?: Locale;
 }
 
-/* ── Component ────────────────────────────────────────────── */
+/* -- Component ------------------------------------------------- */
 
-export function OrderStatusBadge({ status, className }: OrderStatusBadgeProps) {
+export function OrderStatusBadge({ status, className, locale = "pt" }: OrderStatusBadgeProps) {
   const config = ORDER_STATUS_CONFIG[status];
 
   return (
@@ -20,7 +22,7 @@ export function OrderStatusBadge({ status, className }: OrderStatusBadgeProps) {
       variant="secondary"
       className={cn("border-none text-xs font-medium", config.color, className)}
     >
-      {config.label}
+      {getOrderStatusLabel(status, locale)}
     </Badge>
   );
 }

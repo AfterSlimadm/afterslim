@@ -23,17 +23,21 @@ import {
 } from "@/components/ui/table";
 import { OrderStatusBadge } from "@/components/orders/order-status-badge";
 import type { Order } from "@/lib/types";
+import { useAuth } from "@/components/auth-provider";
+import { getLocaleFromRole, getPaymentStatusLabel, t } from "@/lib/i18n";
 
-/* ── Props ────────────────────────────────────────────────── */
+/* -- Props ---------------------------------------------------- */
 
 interface OrderTableProps {
   orders: Order[];
 }
 
-/* ── Component ────────────────────────────────────────────── */
+/* -- Component ------------------------------------------------- */
 
 export function OrderTable({ orders }: OrderTableProps) {
   const router = useRouter();
+  const { role } = useAuth();
+  const locale = getLocaleFromRole(role);
 
   function handleRowClick(orderId: string) {
     router.push(`/orders/${orderId}`);
@@ -43,21 +47,21 @@ export function OrderTable({ orders }: OrderTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="pl-4">Pedido #</TableHead>
-          <TableHead>Cliente</TableHead>
-          <TableHead className="hidden md:table-cell">Itens</TableHead>
-          <TableHead>Total</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="hidden sm:table-cell">Pagamento</TableHead>
-          <TableHead className="hidden lg:table-cell">Data</TableHead>
-          <TableHead className="w-[50px] pr-4 text-right">Acoes</TableHead>
+          <TableHead className="pl-4">{t("orderTable.orderNumber", locale)}</TableHead>
+          <TableHead>{t("orderTable.customer", locale)}</TableHead>
+          <TableHead className="hidden md:table-cell">{t("orderTable.items", locale)}</TableHead>
+          <TableHead>{t("orderTable.total", locale)}</TableHead>
+          <TableHead>{t("orderTable.status", locale)}</TableHead>
+          <TableHead className="hidden sm:table-cell">{t("orderTable.payment", locale)}</TableHead>
+          <TableHead className="hidden lg:table-cell">{t("orderTable.date", locale)}</TableHead>
+          <TableHead className="w-[50px] pr-4 text-right">{t("orderTable.actions", locale)}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {orders.length === 0 ? (
           <TableRow>
             <TableCell colSpan={8} className="h-32 text-center">
-              <p className="text-muted-foreground">Nenhum pedido encontrado.</p>
+              <p className="text-muted-foreground">{t("orderTable.noOrders", locale)}</p>
             </TableCell>
           </TableRow>
         ) : (
@@ -77,7 +81,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                 <TableCell>
                   <div>
                     <p className="font-medium">
-                      {order.customer?.name ?? "Desconhecido"}
+                      {order.customer?.name ?? t("orderTable.unknown", locale)}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {order.customer?.email ?? ""}
@@ -85,13 +89,13 @@ export function OrderTable({ orders }: OrderTableProps) {
                   </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  {itemCount} {itemCount === 1 ? "item" : "itens"}
+                  {itemCount} {itemCount === 1 ? t("orderTable.item", locale) : t("orderTable.itemsPlural", locale)}
                 </TableCell>
                 <TableCell className="font-mono">
                   {formatCurrency(order.total)}
                 </TableCell>
                 <TableCell>
-                  <OrderStatusBadge status={order.status} />
+                  <OrderStatusBadge status={order.status} locale={locale} />
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   <Badge
@@ -101,7 +105,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                       paymentConfig.color
                     )}
                   >
-                    {paymentConfig.label}
+                    {getPaymentStatusLabel(order.payment_status, locale)}
                   </Badge>
                 </TableCell>
                 <TableCell className="hidden lg:table-cell text-muted-foreground">
@@ -117,7 +121,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         onClick={(e) => e.stopPropagation()}
                       >
                         <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Acoes</span>
+                        <span className="sr-only">{t("orderTable.actions", locale)}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -128,7 +132,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         }}
                       >
                         <Eye className="h-4 w-4" />
-                        Ver detalhes
+                        {t("orderTable.viewDetails", locale)}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={(e) => {
@@ -136,7 +140,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         }}
                       >
                         <Truck className="h-4 w-4" />
-                        Atualizar status
+                        {t("orderTable.updateStatus", locale)}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -145,7 +149,7 @@ export function OrderTable({ orders }: OrderTableProps) {
                         }}
                       >
                         <Printer className="h-4 w-4" />
-                        Imprimir fatura
+                        {t("orderTable.printInvoice", locale)}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

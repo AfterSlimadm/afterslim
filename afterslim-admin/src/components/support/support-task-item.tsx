@@ -8,14 +8,16 @@ import { cn, formatDateTime } from "@/lib/utils";
 import { SUPPORT_TASK_TYPE_CONFIG } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import type { SupportTask } from "@/lib/types";
+import { type Locale, getSupportTaskTypeLabel, t } from "@/lib/i18n";
 
 interface SupportTaskItemProps {
   task: SupportTask;
   onUpdate: (task: SupportTask) => void;
   compact?: boolean;
+  locale?: Locale;
 }
 
-export function SupportTaskItem({ task, onUpdate, compact }: SupportTaskItemProps) {
+export function SupportTaskItem({ task, onUpdate, compact, locale = "pt" }: SupportTaskItemProps) {
   const [loading, setLoading] = useState(false);
   const typeConfig = SUPPORT_TASK_TYPE_CONFIG[task.task_type] ?? {
     label: task.task_type,
@@ -34,10 +36,10 @@ export function SupportTaskItem({ task, onUpdate, compact }: SupportTaskItemProp
       const updated = await res.json();
       onUpdate(updated);
       toast.success(
-        updated.is_completed ? "Tarefa concluida" : "Tarefa reaberta"
+        updated.is_completed ? t("taskItem.completed", locale) : t("taskItem.reopened", locale)
       );
     } catch {
-      toast.error("Erro ao atualizar tarefa");
+      toast.error(t("taskItem.updateError", locale));
     } finally {
       setLoading(false);
     }
@@ -70,7 +72,7 @@ export function SupportTaskItem({ task, onUpdate, compact }: SupportTaskItemProp
             variant="secondary"
             className={cn("text-xs border-none", typeConfig.color)}
           >
-            {typeConfig.label}
+            {getSupportTaskTypeLabel(task.task_type, locale)}
           </Badge>
           {task.order_id && !compact && (
             <Link
@@ -78,7 +80,7 @@ export function SupportTaskItem({ task, onUpdate, compact }: SupportTaskItemProp
               className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
             >
               <ExternalLink className="h-3 w-3" />
-              Pedido
+              {t("taskItem.order", locale)}
             </Link>
           )}
         </div>
@@ -104,7 +106,7 @@ export function SupportTaskItem({ task, onUpdate, compact }: SupportTaskItemProp
             </span>
             {task.completed_at && (
               <span className="text-green-600">
-                Concluida em {formatDateTime(task.completed_at)}
+                {t("taskItem.completedAt", locale)} {formatDateTime(task.completed_at)}
               </span>
             )}
           </div>

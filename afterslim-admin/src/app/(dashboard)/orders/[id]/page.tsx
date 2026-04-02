@@ -59,8 +59,9 @@ import {
 import { OrderStatusBadge } from "@/components/orders/order-status-badge";
 import { OrderTimeline } from "@/components/orders/order-timeline";
 import type { Order, OrderStatus, OrderEvent } from "@/lib/types";
+import { getLocaleFromRole, getOrderStatusLabel, getPaymentStatusLabel, t } from "@/lib/i18n";
 
-/* ── Status transition options ────────────────────────────── */
+/* -- Status transition options --------------------------------- */
 
 const STATUS_TRANSITIONS: Record<string, string[]> = {
   pending: ["paid", "cancelled"],
@@ -72,7 +73,7 @@ const STATUS_TRANSITIONS: Record<string, string[]> = {
   refunded: [],
 };
 
-/* ── Empty order default ──────────────────────────────────── */
+/* -- Empty order default --------------------------------------- */
 
 const EMPTY_ORDER: Order = {
   id: "",
@@ -101,7 +102,7 @@ const EMPTY_ORDER: Order = {
   events: [],
 };
 
-/* ── Page component ───────────────────────────────────────── */
+/* -- Page component ------------------------------------------- */
 
 export default function OrderDetailPage({
   params,
@@ -110,6 +111,7 @@ export default function OrderDetailPage({
 }) {
   const { id } = use(params);
   const { role } = useAuth();
+  const locale = getLocaleFromRole(role);
   const [order, setOrder] = useState<Order>(EMPTY_ORDER);
   const [loading, setLoading] = useState(true);
   const [noteOpen, setNoteOpen] = useState(false);
@@ -119,15 +121,15 @@ export default function OrderDetailPage({
     async function fetchOrder() {
       try {
         const res = await fetch(`/api/orders/${id}`);
-        if (!res.ok) throw new Error("Erro ao buscar pedido");
+        if (!res.ok) throw new Error("Error fetching order");
         const json = await res.json();
-        // API returns { order, items, events } — unwrap
+        // API returns { order, items, events } - unwrap
         const data = json.order ?? json;
         const rawItems = (json.items ?? data.order_items ?? []).map((item: Record<string, unknown>) => ({
           id: item.id as string,
           order_id: item.order_id as string,
           product_id: item.product_id as string,
-          product_name: (item.product_name as string) ?? "Produto",
+          product_name: (item.product_name as string) ?? "Product",
           variant: (item.variant as string) ?? null,
           quantity: Number(item.quantity ?? 1),
           unit_price: Number(item.unit_price_cents ?? item.unit_price ?? 0) / (item.unit_price_cents ? 100 : 1),
@@ -177,19 +179,19 @@ export default function OrderDetailPage({
         });
       } catch (err) {
         console.error("[OrderDetail] fetch failed:", err);
-        toast.error("Erro ao carregar pedido");
+        toast.error(t("toast.fetchError", locale));
       } finally {
         setLoading(false);
       }
     }
     fetchOrder();
-  }, [id]);
+  }, [id, locale]);
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
         <Loader2 className="h-8 w-8 animate-spin mb-3" />
-        <p className="text-sm">Carregando pedido...</p>
+        <p className="text-sm">{t("order.loading", locale)}</p>
       </div>
     );
   }
@@ -200,13 +202,17 @@ export default function OrderDetailPage({
         <Button variant="ghost" size="sm" asChild className="gap-1.5">
           <Link href="/orders">
             <ArrowLeft className="h-4 w-4" />
-            Voltar para Pedidos
+            {t("order.backToOrders", locale)}
           </Link>
         </Button>
         <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
           <Package className="h-10 w-10 mb-3" />
-          <p className="font-medium">Pedido nao encontrado</p>
-          <p className="text-sm">O pedido #{id} nao existe ou foi removido.</p>
+          <p className="font-medium">{t("order.notFound", locale)}</p>
+          <p className="text-sm">
+            {locale === "en"
+              ? `Order #${id} does not exist or was removed.`
+              : `O pedido #${id} nao existe ou foi removido.`}
+          </p>
         </div>
       </div>
     );
@@ -224,13 +230,13 @@ export default function OrderDetailPage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      if (!res.ok) throw new Error("Erro ao atualizar status");
+      if (!res.ok) throw new Error("Error updating status");
       setOrder((prev) => ({ ...prev, status: newStatus as OrderStatus }));
       toast.success(
-        `Status do pedido atualizado para ${ORDER_STATUS_CONFIG[newStatus].label}`
+        `${t("toast.statusUpdated", locale)} ${getOrderStatusLabel(newStatus, locale)}`
       );
     } catch {
-      toast.error("Erro ao atualizar status. Tente novamente.");
+      toast.error(t("toast.statusError", locale));
     }
   }
 
@@ -238,20 +244,20 @@ export default function OrderDetailPage({
     if (!noteText.trim()) return;
     try {
       const existingNotes = order.notes ? order.notes + "\n\n" : "";
-      const timestamp = new Date().toLocaleString("pt-BR");
+      const timestamp = new Date().toLocaleString(locale === "en" ? "en-US" : "pt-BR");
       const updatedNotes = `${existingNotes}[${timestamp}] ${noteText.trim()}`;
       const res = await fetch(`/api/orders/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ notes: updatedNotes }),
       });
-      if (!res.ok) throw new Error("Erro ao salvar nota");
+      if (!res.ok) throw new Error("Error saving note");
       setOrder((prev) => ({ ...prev, notes: updatedNotes }));
-      toast.success("Nota adicionada com sucesso");
+      toast.success(t("toast.noteAdded", locale));
       setNoteText("");
       setNoteOpen(false);
     } catch {
-      toast.error("Erro ao salvar nota. Tente novamente.");
+      toast.error(t("toast.noteError", locale));
     }
   }
 
@@ -262,7 +268,7 @@ export default function OrderDetailPage({
         <Button variant="ghost" size="sm" asChild className="gap-1.5">
           <Link href="/orders">
             <ArrowLeft className="h-4 w-4" />
-            Voltar para Pedidos
+            {t("order.backToOrders", locale)}
           </Link>
         </Button>
 
@@ -272,10 +278,10 @@ export default function OrderDetailPage({
               <h1 className="text-2xl font-bold tracking-tight">
                 {orderNumber}
               </h1>
-              <OrderStatusBadge status={order.status} />
+              <OrderStatusBadge status={order.status} locale={locale} />
             </div>
             <p className="text-sm text-muted-foreground">
-              Realizado em {formatDateTime(order.created_at)}
+              {t("order.placedOn", locale)} {formatDateTime(order.created_at)}
             </p>
           </div>
 
@@ -285,7 +291,7 @@ export default function OrderDetailPage({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button className="gap-2">
-                    Atualizar Status
+                    {t("order.updateStatus", locale)}
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -302,9 +308,9 @@ export default function OrderDetailPage({
                           ORDER_STATUS_CONFIG[status].color
                         )}
                       >
-                        {ORDER_STATUS_CONFIG[status].label}
+                        {getOrderStatusLabel(status, locale)}
                       </Badge>
-                      Marcar como {ORDER_STATUS_CONFIG[status].label}
+                      {t("order.markAs", locale)} {getOrderStatusLabel(status, locale)}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -315,22 +321,21 @@ export default function OrderDetailPage({
               <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <MessageSquarePlus className="h-4 w-4" />
-                  Adicionar Nota
+                  {t("order.addNote", locale)}
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Adicionar Nota</DialogTitle>
+                  <DialogTitle>{t("order.addNote", locale)}</DialogTitle>
                   <DialogDescription>
-                    Adicione uma nota interna a este pedido. Notas sao visiveis
-                    apenas para a equipe admin.
+                    {t("order.addNoteDesc", locale)}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-2">
-                  <Label htmlFor="note">Nota</Label>
+                  <Label htmlFor="note">{t("order.note", locale)}</Label>
                   <Textarea
                     id="note"
-                    placeholder="Digite sua nota..."
+                    placeholder={t("order.notePlaceholder", locale)}
                     value={noteText}
                     onChange={(e) => setNoteText(e.target.value)}
                     rows={4}
@@ -341,9 +346,9 @@ export default function OrderDetailPage({
                     variant="outline"
                     onClick={() => setNoteOpen(false)}
                   >
-                    Cancelar
+                    {t("order.cancel", locale)}
                   </Button>
-                  <Button onClick={handleAddNote}>Salvar Nota</Button>
+                  <Button onClick={handleAddNote}>{t("order.saveNote", locale)}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -351,10 +356,10 @@ export default function OrderDetailPage({
             <Button
               variant="outline"
               className="gap-2"
-              onClick={() => toast.info("Impressao de fatura em breve")}
+              onClick={() => toast.info(t("toast.printSoon", locale))}
             >
               <Printer className="h-4 w-4" />
-              Imprimir Fatura
+              {t("order.printInvoice", locale)}
             </Button>
           </div>
         </div>
@@ -369,7 +374,7 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Package className="h-5 w-5 text-muted-foreground" />
-                Itens do Pedido
+                {t("order.orderItems", locale)}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 overflow-x-auto">
@@ -377,10 +382,10 @@ export default function OrderDetailPage({
                 <Table className="min-w-[400px]">
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="pl-6">Produto</TableHead>
-                      <TableHead className="text-center">Qtd</TableHead>
-                      <TableHead className="text-right">Preço Unit.</TableHead>
-                      <TableHead className="pr-6 text-right">Total</TableHead>
+                      <TableHead className="pl-6">{t("order.product", locale)}</TableHead>
+                      <TableHead className="text-center">{t("order.qty", locale)}</TableHead>
+                      <TableHead className="text-right">{t("order.unitPrice", locale)}</TableHead>
+                      <TableHead className="pr-6 text-right">{t("order.total", locale)}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -411,7 +416,7 @@ export default function OrderDetailPage({
                   <TableFooter>
                     <TableRow>
                       <TableCell colSpan={3} className="pl-6 text-right">
-                        Subtotal
+                        {t("order.subtotal", locale)}
                       </TableCell>
                       <TableCell className="pr-6 text-right font-mono">
                         {formatCurrency(order.subtotal)}
@@ -420,7 +425,7 @@ export default function OrderDetailPage({
                     {order.discount > 0 && (
                       <TableRow>
                         <TableCell colSpan={3} className="pl-6 text-right">
-                          Desconto
+                          {t("order.discount", locale)}
                         </TableCell>
                         <TableCell className="pr-6 text-right font-mono text-red-600">
                           -{formatCurrency(order.discount)}
@@ -429,11 +434,11 @@ export default function OrderDetailPage({
                     )}
                     <TableRow>
                       <TableCell colSpan={3} className="pl-6 text-right">
-                        Frete
+                        {t("order.shipping", locale)}
                       </TableCell>
                       <TableCell className="pr-6 text-right font-mono">
                         {order.shipping_cost === 0
-                          ? "Gratis"
+                          ? t("order.free", locale)
                           : formatCurrency(order.shipping_cost)}
                       </TableCell>
                     </TableRow>
@@ -442,7 +447,7 @@ export default function OrderDetailPage({
                         colSpan={3}
                         className="pl-6 text-right font-bold"
                       >
-                        Total
+                        {t("order.total", locale)}
                       </TableCell>
                       <TableCell className="pr-6 text-right font-mono font-bold">
                         {formatCurrency(order.total)}
@@ -453,7 +458,7 @@ export default function OrderDetailPage({
               ) : (
                 <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
                   <Package className="h-8 w-8 mb-2" />
-                  <p className="text-sm">Nenhum item neste pedido.</p>
+                  <p className="text-sm">{t("order.noItems", locale)}</p>
                 </div>
               )}
             </CardContent>
@@ -462,9 +467,9 @@ export default function OrderDetailPage({
           {/* Timeline */}
           <Card>
             <CardHeader>
-              <CardTitle>Histórico do Pedido</CardTitle>
+              <CardTitle>{t("order.history", locale)}</CardTitle>
               <CardDescription>
-                Histórico de atividades deste pedido
+                {t("order.historyDesc", locale)}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -472,7 +477,7 @@ export default function OrderDetailPage({
                 <OrderTimeline events={order.events} />
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  Nenhum evento registrado.
+                  {t("order.noEvents", locale)}
                 </p>
               )}
             </CardContent>
@@ -486,7 +491,7 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <User className="h-4 w-4 text-muted-foreground" />
-                Cliente
+                {t("order.customer", locale)}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -495,8 +500,8 @@ export default function OrderDetailPage({
                   <div>
                     <p className="font-medium">{order.customer.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      {order.customer.total_orders ?? 0} pedidos &middot;{" "}
-                      {formatCurrency(order.customer.total_spent ?? 0)} gasto
+                      {order.customer.total_orders ?? 0} {t("order.ordersCount", locale)} &middot;{" "}
+                      {formatCurrency(order.customer.total_spent ?? 0)} {t("order.spent", locale)}
                     </p>
                   </div>
                   <Separator />
@@ -515,7 +520,7 @@ export default function OrderDetailPage({
                 </>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  Dados do cliente nao disponiveis.
+                  {t("order.customerNoData", locale)}
                 </p>
               )}
             </CardContent>
@@ -526,7 +531,7 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
-                Endereco de Entrega
+                {t("order.shippingAddress", locale)}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -550,14 +555,14 @@ export default function OrderDetailPage({
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  Endereco nao informado.
+                  {t("order.addressNotProvided", locale)}
                 </p>
               )}
               {order.tracking_code && (
                 <>
                   <Separator className="my-3" />
                   <div className="text-sm">
-                    <p className="text-muted-foreground">Codigo de Rastreio</p>
+                    <p className="text-muted-foreground">{t("order.trackingCode", locale)}</p>
                     <p className="font-mono font-medium">
                       {order.tracking_code}
                     </p>
@@ -572,18 +577,18 @@ export default function OrderDetailPage({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
-                Pagamento
+                {t("order.payment", locale)}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Metodo</span>
+                <span className="text-sm text-muted-foreground">{t("order.method", locale)}</span>
                 <span className="text-sm font-medium capitalize">
                   {order.payment_method}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Status</span>
+                <span className="text-sm text-muted-foreground">{t("table.status", locale)}</span>
                 <Badge
                   variant="secondary"
                   className={cn(
@@ -591,11 +596,11 @@ export default function OrderDetailPage({
                     paymentConfig.color
                   )}
                 >
-                  {paymentConfig.label}
+                  {getPaymentStatusLabel(order.payment_status, locale)}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Valor</span>
+                <span className="text-sm text-muted-foreground">{t("table.value", locale)}</span>
                 <span className="font-mono font-medium">
                   {formatCurrency(order.total)}
                 </span>
@@ -606,34 +611,34 @@ export default function OrderDetailPage({
           {/* Order summary */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Resumo do Pedido</CardTitle>
+              <CardTitle className="text-base">{t("order.orderSummary", locale)}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Subtotal</span>
+                <span className="text-muted-foreground">{t("order.subtotal", locale)}</span>
                 <span className="font-mono">
                   {formatCurrency(order.subtotal)}
                 </span>
               </div>
               {order.discount > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Desconto</span>
+                  <span className="text-muted-foreground">{t("order.discount", locale)}</span>
                   <span className="font-mono text-red-600">
                     -{formatCurrency(order.discount)}
                   </span>
                 </div>
               )}
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Frete</span>
+                <span className="text-muted-foreground">{t("order.shipping", locale)}</span>
                 <span className="font-mono">
                   {order.shipping_cost === 0
-                    ? "Gratis"
+                    ? t("order.free", locale)
                     : formatCurrency(order.shipping_cost)}
                 </span>
               </div>
               <Separator />
               <div className="flex items-center justify-between font-medium">
-                <span>Total</span>
+                <span>{t("order.total", locale)}</span>
                 <span className="font-mono">
                   {formatCurrency(order.total)}
                 </span>
@@ -645,7 +650,7 @@ export default function OrderDetailPage({
           {order.notes && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Notas</CardTitle>
+                <CardTitle className="text-base">{t("order.notes", locale)}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">{order.notes}</p>
@@ -654,7 +659,7 @@ export default function OrderDetailPage({
           )}
 
           {/* Support Tasks */}
-          <OrderSupportTasks orderId={id} />
+          <OrderSupportTasks orderId={id} locale={locale} />
         </div>
       </div>
     </div>
