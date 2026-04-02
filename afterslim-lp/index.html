@@ -589,6 +589,39 @@ ul, ol {
   }
 }
 
+/* ========== CAPSULE SHOWCASE ========== */
+.capsule-section {
+  background: linear-gradient(180deg, #fff5f0 0%, #ffe8dc 100%);
+  padding: 0;
+}
+
+.capsule-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.capsule-image {
+  max-height: 280px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .capsule-container {
+    min-height: 280px;
+    padding: 30px 20px;
+  }
+
+  .capsule-image {
+    max-height: 200px;
+  }
+}
+
 /* ========== KEY INGREDIENTS ========== */
 .ingredients-section {
   background: #fff;
@@ -4098,6 +4131,13 @@ ul, ol {
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ========== CAPSULE SHOWCASE ========== -->
+<section class="capsule-section">
+  <div class="capsule-container">
+    <img src="images/afterslim-capsule.png" alt="AfterSlim Capsule with Probiotics" class="capsule-image">
   </div>
 </section>
 
