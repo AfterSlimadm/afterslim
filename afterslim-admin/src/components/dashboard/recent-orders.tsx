@@ -32,6 +32,7 @@ const STATUS_STYLES: Record<
 > = {
   pending: { label: "Pendente", className: "badge-warning" },
   confirmed: { label: "Confirmado", className: "badge-info" },
+  paid: { label: "Pago", className: "badge-success" },
   processing: { label: "Processando", className: "badge-info" },
   shipped: { label: "Enviado", className: "badge-purple" },
   delivered: { label: "Entregue", className: "badge-success" },

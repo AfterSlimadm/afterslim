@@ -202,7 +202,7 @@ export default function OrderDetailPage({
   const paymentConfig = PAYMENT_STATUS_CONFIG[order.payment_status];
   const nextStatuses = STATUS_TRANSITIONS[order.status];
 
-  async function handleStatusChange(newStatus: OrderStatus) {
+  async function handleStatusChange(newStatus: string) {
     try {
       const res = await fetch(`/api/orders/${id}`, {
         method: "PATCH",
@@ -210,7 +210,7 @@ export default function OrderDetailPage({
         body: JSON.stringify({ status: newStatus }),
       });
       if (!res.ok) throw new Error("Erro ao atualizar status");
-      setOrder((prev) => ({ ...prev, status: newStatus }));
+      setOrder((prev) => ({ ...prev, status: newStatus as OrderStatus }));
       toast.success(
         `Status do pedido atualizado para ${ORDER_STATUS_CONFIG[newStatus].label}`
       );

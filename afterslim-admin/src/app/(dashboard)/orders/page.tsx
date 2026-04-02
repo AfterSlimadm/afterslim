@@ -57,7 +57,7 @@ export default async function OrdersPage() {
         customer: { name: customerName } as Record<string, unknown>,
         items: itemCount > 0 ? Array(itemCount).fill({ id: "placeholder" }) : undefined,
       };
-    }) as Order[];
+    }) as unknown as Order[];
   } catch (error) {
     console.error("[OrdersPage] Failed to fetch orders:", error);
   }
