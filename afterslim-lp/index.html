@@ -589,6 +589,141 @@ ul, ol {
   }
 }
 
+/* ========== KEY INGREDIENTS ========== */
+.ingredients-section {
+  background: #fff;
+  padding: 70px 20px;
+}
+
+.ingredients-section .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.ingredients-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.ingredients-title span {
+  color: var(--orange);
+}
+
+.ingredients-subtitle {
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 50px;
+}
+
+.ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.ingredient-card {
+  background: var(--light);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.ingredient-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.ingredient-card.featured {
+  background: linear-gradient(135deg, #fff5f0 0%, #ffe8dc 100%);
+  border: 2px solid var(--orange);
+}
+
+.ingredient-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.ingredient-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.ingredient-dose {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange);
+  background: rgba(255, 107, 53, 0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.ingredient-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.ingredient-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  background: var(--orange);
+  padding: 5px 14px;
+  border-radius: 20px;
+}
+
+@media (max-width: 900px) {
+  .ingredients-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .ingredients-section {
+    padding: 50px 20px;
+  }
+
+  .ingredients-title {
+    font-size: 26px;
+  }
+
+  .ingredients-subtitle {
+    font-size: 14px;
+    margin-bottom: 36px;
+  }
+
+  .ingredients-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .ingredient-card {
+    padding: 24px 20px;
+  }
+
+  .ingredient-icon {
+    font-size: 32px;
+  }
+
+  .ingredient-card h3 {
+    font-size: 16px;
+  }
+}
+
 /* ========== SOCIAL PROOF BAR ========== */
 .social-proof {
   background: #fff;
@@ -3954,6 +4089,58 @@ ul, ol {
           <h3>How This Helps</h3>
           <p>AfterSlim delivers a precision-targeted blend of prebiotics and clinically studied probiotic strains including Akkermansia muciniphila, specifically chosen for GLP-1 users. These beneficial bacteria help restore gut lining integrity, support healthy digestion, and maintain the microbial balance your body needs. By protecting your microbiome during treatment, AfterSlim helps you get the weight loss results you want while minimizing the side effects that can derail your progress.</p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== KEY INGREDIENTS ========== -->
+<section class="ingredients-section">
+  <div class="container">
+    <h2 class="ingredients-title">Key <span>Ingredients</span></h2>
+    <p class="ingredients-subtitle">Clinically studied compounds specifically selected for GLP-1 users</p>
+
+    <div class="ingredients-grid">
+      <!-- Prebiotics -->
+      <div class="ingredient-card">
+        <div class="ingredient-icon">🌿</div>
+        <h3>Chicory Root Inulin</h3>
+        <span class="ingredient-dose">211mg</span>
+        <p>A powerful prebiotic fiber that feeds beneficial gut bacteria, helping restore the microbiome balance disrupted by GLP-1 medications.</p>
+        <span class="ingredient-tag">Prebiotic</span>
+      </div>
+
+      <div class="ingredient-card">
+        <div class="ingredient-icon">🥔</div>
+        <h3>Resistant Starch</h3>
+        <span class="ingredient-dose">100mg</span>
+        <p>Derived from potato, this prebiotic passes through the digestive system intact, providing fuel for probiotics in the colon.</p>
+        <span class="ingredient-tag">Prebiotic</span>
+      </div>
+
+      <!-- Probiotics -->
+      <div class="ingredient-card featured">
+        <div class="ingredient-icon">⭐</div>
+        <h3>Akkermansia muciniphila</h3>
+        <span class="ingredient-dose">Part of 36mg Blend</span>
+        <p>The star probiotic that strengthens the gut mucus layer, protecting intestinal lining integrity during GLP-1 treatment.</p>
+        <span class="ingredient-tag">Probiotic</span>
+      </div>
+
+      <div class="ingredient-card">
+        <div class="ingredient-icon">🦠</div>
+        <h3>Bifidobacterium infantis</h3>
+        <span class="ingredient-dose">Part of 36mg Blend</span>
+        <p>A well-researched probiotic strain that supports healthy digestion and helps reduce bloating and discomfort.</p>
+        <span class="ingredient-tag">Probiotic</span>
+      </div>
+
+      <div class="ingredient-card">
+        <div class="ingredient-icon">🔬</div>
+        <h3>Clostridium butyricum</h3>
+        <span class="ingredient-dose">Part of 36mg Blend</span>
+        <p>Produces butyrate, a short-chain fatty acid essential for gut lining health and reducing inflammation.</p>
+        <span class="ingredient-tag">Probiotic</span>
       </div>
     </div>
   </div>
