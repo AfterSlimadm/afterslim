@@ -620,9 +620,15 @@ ul, ol {
 }
 
 .ingredients-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
+}
+
+.ingredients-grid .ingredient-card {
+  flex: 0 1 calc(33.333% - 16px);
+  max-width: 340px;
 }
 
 .ingredient-card {
@@ -687,8 +693,8 @@ ul, ol {
 }
 
 @media (max-width: 900px) {
-  .ingredients-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .ingredients-grid .ingredient-card {
+    flex: 0 1 calc(50% - 12px);
   }
 }
 
@@ -707,11 +713,12 @@ ul, ol {
   }
 
   .ingredients-grid {
-    grid-template-columns: 1fr;
     gap: 16px;
   }
 
-  .ingredient-card {
+  .ingredients-grid .ingredient-card {
+    flex: 0 1 100%;
+    max-width: 100%;
     padding: 24px 20px;
   }
 
