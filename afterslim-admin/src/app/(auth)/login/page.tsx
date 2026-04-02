@@ -93,8 +93,8 @@ function LoginForm() {
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      {/* ── Left: Brand Canvas ─────────── */}
-      <section className="relative flex w-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#e6f6fc] via-[#f0f9ff] to-[#f8f9fa] md:w-3/5 md:min-h-screen">
+      {/* ── Left: Brand Canvas (desktop only) ─────────── */}
+      <section className="relative hidden w-3/5 min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#e6f6fc] via-[#f0f9ff] to-[#f8f9fa] md:flex">
         {/* Soft aurora blobs */}
         <div
           className="absolute -left-[20%] top-[10%] h-[500px] w-[600px] rounded-full opacity-[0.30] blur-[120px]"
@@ -123,7 +123,7 @@ function LoginForm() {
 
         {/* Content */}
         <motion.div
-          className="relative z-10 flex flex-col px-8 py-16 md:px-20 md:py-0"
+          className="relative z-10 flex flex-col px-20"
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -133,11 +133,11 @@ function LoginForm() {
             alt="AfterSlim"
             width={240}
             height={60}
-            className="h-14 w-auto md:h-16"
+            className="h-16 w-auto"
             priority
           />
           <motion.p
-            className="mt-4 text-lg font-medium tracking-tight text-[#00628c]/70 md:text-xl"
+            className="mt-4 text-xl font-medium tracking-tight text-[#00628c]/70"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
@@ -148,9 +148,9 @@ function LoginForm() {
           </motion.p>
         </motion.div>
 
-        {/* Secure badge (desktop only) - glass */}
+        {/* Secure badge - glass */}
         <motion.div
-          className="absolute bottom-12 left-20 hidden items-center gap-3 rounded-xl glass-subtle px-5 py-3 md:flex"
+          className="absolute bottom-12 left-20 flex items-center gap-3 rounded-xl glass-subtle px-5 py-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
@@ -170,6 +170,28 @@ function LoginForm() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.7, ease: "easeOut" }}
         >
+          {/* Mobile logo + subtitle */}
+          <motion.div
+            className="mb-10 flex flex-col items-center md:hidden"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Image
+              src="/logo-afterslim.svg"
+              alt="AfterSlim"
+              width={200}
+              height={50}
+              className="h-12 w-auto"
+              priority
+            />
+            <p className="mt-3 text-sm font-medium tracking-tight text-[#00628c]/60">
+              {isSupportPortal
+                ? "Support Portal"
+                : "Supplement Management Platform"}
+            </p>
+          </motion.div>
+
           {/* Header */}
           <header className="mb-10">
             <h2 className="text-headline text-[#09141e]">
