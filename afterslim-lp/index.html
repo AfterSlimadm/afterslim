@@ -1139,6 +1139,55 @@ ul, ol {
   font-style: italic;
 }
 
+.reviews-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.page-number {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.page-number:hover {
+  background: #f3f4f6;
+}
+
+.page-number.active {
+  background: var(--orange);
+  color: white;
+}
+
+.write-review {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.write-review-link {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--orange);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.write-review-link:hover {
+  color: #c2410c;
+}
+
 @media (max-width: 768px) {
   .customer-reviews-section {
     padding: 48px 20px;
@@ -5183,6 +5232,43 @@ ul, ol {
         <h4 class="review-title">My doctor even noticed the difference</h4>
         <p class="review-text">Started taking AfterSlim alongside my Ozempic treatment. Not only do I feel better, but my doctor said my gut health markers have improved significantly. Highly recommend!</p>
       </div>
+
+      <!-- Review 5 -->
+      <div class="review-item">
+        <div class="reviewer-name">Amanda P.</div>
+        <div class="verified-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+          Verified Customer
+        </div>
+        <div class="review-meta">
+          <div class="review-stars">
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <span class="review-date">March 15, 2026</span>
+        </div>
+        <h4 class="review-title">No more stomach issues!</h4>
+        <p class="review-text">I was having terrible side effects on Wegovy - nausea, bloating, you name it. A friend recommended AfterSlim and within a week I noticed a huge improvement. Now I can focus on my weight loss journey without the gut discomfort.</p>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="reviews-pagination">
+      <span class="page-number active">1</span>
+      <span class="page-number">2</span>
+      <span class="page-number">3</span>
+      <span class="page-number">4</span>
+      <span class="page-number">5</span>
+      <span class="page-number">6</span>
+      <span class="page-number">7</span>
+    </div>
+
+    <!-- Write a Review -->
+    <div class="write-review">
+      <a href="#" class="write-review-link">Write a Review</a>
     </div>
   </div>
 </section>
