@@ -1073,7 +1073,7 @@ ul, ol {
 }
 
 .review-item {
-  padding: 24px 0;
+  padding: 28px 0;
   border-bottom: 1px solid #e5e5e5;
 }
 
@@ -1082,18 +1082,19 @@ ul, ol {
 }
 
 .review-header {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .reviewer-info {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 12px;
 }
 
 .reviewer-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -1101,9 +1102,13 @@ ul, ol {
 .verified-badge {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: #6B7280;
+  gap: 6px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.verified-badge svg {
+  opacity: 0.6;
 }
 
 .review-meta {
@@ -1118,26 +1123,27 @@ ul, ol {
 }
 
 .review-stars svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
 .review-date {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
 .review-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .review-text {
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--text-secondary);
+  font-style: italic;
 }
 
 @media (max-width: 768px) {
