@@ -4976,7 +4976,7 @@ ul, ol {
 
       <!-- Purchase Type Selection -->
       <div class="bundle-purchase-options">
-        <div class="bundle-purchase-option selected" data-type="subscribe">
+        <div class="bundle-purchase-option selected" data-type="subscribe" onclick="selectBundlePurchaseType('subscribe')">
           <div class="purchase-option-header">
             <div class="purchase-option-left">
               <span class="purchase-radio-circle"></span>
@@ -4999,7 +4999,7 @@ ul, ol {
             </div>
           </div>
         </div>
-        <div class="bundle-purchase-option" data-type="onetime">
+        <div class="bundle-purchase-option" data-type="onetime" onclick="selectBundlePurchaseType('onetime')">
           <div class="purchase-option-header">
             <div class="purchase-option-left">
               <span class="purchase-radio-circle"></span>
@@ -5859,6 +5859,20 @@ function selectPurchaseType(type) {
   }
   updateMobileButtonPrice();
   updateSubscriptionDiscounts();
+}
+
+// Bundle section purchase type selection
+function selectBundlePurchaseType(type) {
+  var options = document.querySelectorAll('.bundle-purchase-option');
+  options.forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+
+  if (type === 'subscribe') {
+    options[0].classList.add('selected');
+  } else {
+    options[1].classList.add('selected');
+  }
 }
 
 // Reviews slider
