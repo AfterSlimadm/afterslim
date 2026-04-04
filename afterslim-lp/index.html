@@ -1081,22 +1081,11 @@ ul, ol {
   border-bottom: none;
 }
 
-.review-header {
-  display: block;
-  margin-bottom: 16px;
-}
-
-.reviewer-info {
-  display: block;
-  margin-bottom: 8px;
-}
-
 .reviewer-name {
-  display: block;
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .verified-badge {
@@ -1105,7 +1094,7 @@ ul, ol {
   gap: 6px;
   font-size: 14px;
   color: #9ca3af;
-  white-space: nowrap;
+  margin-bottom: 12px;
 }
 
 .verified-badge svg {
@@ -1116,7 +1105,7 @@ ul, ol {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 8px;
+  margin-bottom: 16px;
 }
 
 .review-stars {
@@ -5113,24 +5102,20 @@ ul, ol {
     <div class="reviews-list">
       <!-- Review 1 -->
       <div class="review-item">
-        <div class="review-header">
-          <div class="reviewer-info">
-            <span class="reviewer-name">Sarah M.</span>
-            <span class="verified-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#6B7280"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Verified Customer
-            </span>
+        <div class="reviewer-name">Sarah M.</div>
+        <div class="verified-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+          Verified Customer
+        </div>
+        <div class="review-meta">
+          <div class="review-stars">
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
-          <div class="review-meta">
-            <div class="review-stars">
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
-            <span class="review-date">March 28, 2026</span>
-          </div>
+          <span class="review-date">March 28, 2026</span>
         </div>
         <h4 class="review-title">Life changing supplement!</h4>
         <p class="review-text">I've been on Ozempic for 3 months and the nausea was unbearable. Started AfterSlim 2 weeks ago and the difference is incredible. No more bloating or stomach issues!</p>
@@ -5138,24 +5123,20 @@ ul, ol {
 
       <!-- Review 2 -->
       <div class="review-item">
-        <div class="review-header">
-          <div class="reviewer-info">
-            <span class="reviewer-name">Jennifer K.</span>
-            <span class="verified-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#6B7280"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Verified Customer
-            </span>
+        <div class="reviewer-name">Jennifer K.</div>
+        <div class="verified-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+          Verified Customer
+        </div>
+        <div class="review-meta">
+          <div class="review-stars">
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
-          <div class="review-meta">
-            <div class="review-stars">
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
-            <span class="review-date">March 25, 2026</span>
-          </div>
+          <span class="review-date">March 25, 2026</span>
         </div>
         <h4 class="review-title">Finally found relief!</h4>
         <p class="review-text">Mounjaro was working great for weight loss but my gut was a mess. AfterSlim has been a game changer. I feel so much better and can actually enjoy meals again without fear.</p>
@@ -5163,24 +5144,20 @@ ul, ol {
 
       <!-- Review 3 -->
       <div class="review-item">
-        <div class="review-header">
-          <div class="reviewer-info">
-            <span class="reviewer-name">Michael R.</span>
-            <span class="verified-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#6B7280"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Verified Customer
-            </span>
+        <div class="reviewer-name">Michael R.</div>
+        <div class="verified-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+          Verified Customer
+        </div>
+        <div class="review-meta">
+          <div class="review-stars">
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
-          <div class="review-meta">
-            <div class="review-stars">
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
-            <span class="review-date">March 22, 2026</span>
-          </div>
+          <span class="review-date">March 22, 2026</span>
         </div>
         <h4 class="review-title">Worth every penny</h4>
         <p class="review-text">I was skeptical at first but decided to try it. After 3 weeks, my digestion has improved dramatically. The constipation I was experiencing on Wegovy is completely gone.</p>
@@ -5188,24 +5165,20 @@ ul, ol {
 
       <!-- Review 4 -->
       <div class="review-item">
-        <div class="review-header">
-          <div class="reviewer-info">
-            <span class="reviewer-name">Lisa T.</span>
-            <span class="verified-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#6B7280"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Verified Customer
-            </span>
+        <div class="reviewer-name">Lisa T.</div>
+        <div class="verified-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+          Verified Customer
+        </div>
+        <div class="review-meta">
+          <div class="review-stars">
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
-          <div class="review-meta">
-            <div class="review-stars">
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
-            <span class="review-date">March 18, 2026</span>
-          </div>
+          <span class="review-date">March 18, 2026</span>
         </div>
         <h4 class="review-title">My doctor even noticed the difference</h4>
         <p class="review-text">Started taking AfterSlim alongside my Ozempic treatment. Not only do I feel better, but my doctor said my gut health markers have improved significantly. Highly recommend!</p>
