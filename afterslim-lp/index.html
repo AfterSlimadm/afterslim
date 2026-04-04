@@ -3738,27 +3738,21 @@ ul, ol {
 }
 
 .bundle-options {
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .bundle-option {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   position: relative;
   background: #fff;
-  border: 2px solid #e7e5e4;
-  border-radius: 8px;
-  padding: 20px 12px 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 16px 8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
-  min-height: 90px;
 }
 
 .bundle-option * {
@@ -3770,7 +3764,7 @@ ul, ol {
 }
 
 .bundle-option.selected {
-  border-color: #ea580c;
+  border-color: var(--orange);
   background: #fff7ed;
 }
 
@@ -3779,7 +3773,7 @@ ul, ol {
   top: -10px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 4px 10px;
+  padding: 3px 8px;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -3794,29 +3788,30 @@ ul, ol {
 }
 
 .bundle-option-badge.best {
-  background: #ea580c;
+  background: var(--orange);
   color: #fff;
 }
 
 .bundle-option-qty {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   color: #1c1917;
-  margin-bottom: 4px;
+  display: block;
 }
 
 .bundle-option-save {
-  font-size: 13px;
-  color: #ea580c;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--orange);
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
 }
 
 .bundle-qty-label {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #1c1917;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .bundle-purchase-options {
@@ -3824,10 +3819,10 @@ ul, ol {
 }
 
 .bundle-purchase-option {
-  border: 2px solid #e5e5e5;
+  border: 2px solid var(--orange);
   border-radius: 12px;
   padding: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   cursor: pointer;
   transition: all 0.2s;
   background: #fff;
@@ -3845,21 +3840,23 @@ ul, ol {
 .purchase-option-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .purchase-option-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .purchase-radio-circle {
   width: 20px;
   height: 20px;
-  border: 2px solid #d1d5db;
+  border: 2px solid #d4d4d4;
   border-radius: 50%;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
@@ -3869,10 +3866,6 @@ ul, ol {
 
 .bundle-purchase-option.selected .purchase-radio-circle::after {
   content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 10px;
   height: 10px;
   background: var(--orange);
@@ -3880,7 +3873,7 @@ ul, ol {
 }
 
 .purchase-option-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #1c1917;
 }
@@ -3890,34 +3883,34 @@ ul, ol {
 }
 
 .purchase-price-original {
-  font-size: 14px;
-  color: #9ca3af;
+  font-size: 13px;
+  color: #a8a29e;
   text-decoration: line-through;
 }
 
 .purchase-price-current {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: #1c1917;
 }
 
 .purchase-price-per {
-  font-size: 13px;
-  color: #6b7280;
+  font-size: 12px;
+  color: #78716c;
 }
 
 .purchase-option-benefits {
-  margin-top: 12px;
-  padding-left: 32px;
+  margin-top: 10px;
+  padding-left: 30px;
 }
 
 .purchase-benefit {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 6px;
+  font-size: 13px;
   color: #16a34a;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .purchase-benefit svg {
@@ -3928,7 +3921,7 @@ ul, ol {
 .btn-bundle-shop {
   width: 100%;
   padding: 16px 24px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: white;
   background: #16a34a;
@@ -4209,12 +4202,16 @@ ul, ol {
 /* Bundle Responsive */
 @media (max-width: 768px) {
   .bundle-container {
-    padding: 32px 20px;
+    padding: 28px 20px;
     margin: 0 16px;
   }
 
   .bundle-title {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .bundle-subtitle {
+    font-size: 14px;
   }
 
   .bundle-options {
@@ -4222,25 +4219,41 @@ ul, ol {
   }
 
   .bundle-option {
-    padding: 16px 8px 12px;
-    min-height: 80px;
+    padding: 14px 6px;
   }
 
   .bundle-option-qty {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .bundle-option-save {
     font-size: 11px;
   }
 
-  .bundle-price-current {
-    font-size: 40px;
+  .bundle-option-badge {
+    font-size: 8px;
+    padding: 2px 6px;
   }
 
-  .btn-bundle {
+  .purchase-option-title {
+    font-size: 14px;
+  }
+
+  .purchase-price-current {
     font-size: 16px;
-    padding: 16px 24px;
+  }
+
+  .purchase-price-per {
+    font-size: 11px;
+  }
+
+  .purchase-benefit {
+    font-size: 12px;
+  }
+
+  .btn-bundle-shop {
+    font-size: 15px;
+    padding: 14px 20px;
   }
 }
 </style>
