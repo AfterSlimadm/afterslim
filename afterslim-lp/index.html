@@ -1086,40 +1086,42 @@ ul, ol {
 }
 
 .reviewer-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
   margin-bottom: 12px;
 }
 
 .reviewer-name {
+  display: block;
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
+  margin-bottom: 4px;
 }
 
 .verified-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 14px;
   color: #9ca3af;
+  white-space: nowrap;
 }
 
 .verified-badge svg {
-  opacity: 0.6;
+  flex-shrink: 0;
 }
 
 .review-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
 }
 
 .review-stars {
   display: flex;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .review-stars svg {
@@ -1130,6 +1132,7 @@ ul, ol {
 .review-date {
   font-size: 14px;
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .review-title {
