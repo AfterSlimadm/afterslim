@@ -3812,6 +3812,136 @@ ul, ol {
   text-transform: uppercase;
 }
 
+.bundle-qty-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1c1917;
+  margin-bottom: 12px;
+}
+
+.bundle-purchase-options {
+  margin-bottom: 20px;
+}
+
+.bundle-purchase-option {
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
+}
+
+.bundle-purchase-option:last-child {
+  margin-bottom: 0;
+}
+
+.bundle-purchase-option.selected {
+  border-color: var(--orange);
+  background: #fff7ed;
+}
+
+.purchase-option-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.purchase-option-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.purchase-radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.bundle-purchase-option.selected .purchase-radio-circle {
+  border-color: var(--orange);
+}
+
+.bundle-purchase-option.selected .purchase-radio-circle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: var(--orange);
+  border-radius: 50%;
+}
+
+.purchase-option-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1c1917;
+}
+
+.purchase-option-price {
+  text-align: right;
+}
+
+.purchase-price-original {
+  font-size: 14px;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.purchase-price-current {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1c1917;
+}
+
+.purchase-price-per {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.purchase-option-benefits {
+  margin-top: 12px;
+  padding-left: 32px;
+}
+
+.purchase-benefit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #16a34a;
+  margin-bottom: 4px;
+}
+
+.purchase-benefit svg {
+  stroke: #16a34a;
+  flex-shrink: 0;
+}
+
+.btn-bundle-shop {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  background: #16a34a;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-bundle-shop:hover {
+  background: #15803d;
+}
+
 .bundle-pricing {
   text-align: center;
   margin-bottom: 20px;
@@ -4820,79 +4950,72 @@ ul, ol {
       <h2 class="bundle-title">Choose Your Bundle</h2>
       <p class="bundle-subtitle">Select quantity to see savings!</p>
 
-      <!-- Purchase Type Toggle -->
-      <div class="bundle-purchase-toggle">
-        <button class="bundle-toggle-btn active" data-type="onetime">
-          <span class="toggle-label">One-Time Purchase</span>
-        </button>
-        <button class="bundle-toggle-btn" data-type="subscribe">
-          <span class="toggle-label">Subscribe<span class="subscribe-extra-badge">Save More</span></span>
-          <span class="toggle-sublabel">Cancel anytime</span>
-        </button>
-      </div>
-
-      <!-- Subscription Info (hidden by default) -->
-      <div class="bundle-subscription-info" id="subscription-info">
-        <strong>Subscription Benefits:</strong>
-        <ul>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-            Save up to 49% off
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-            Free shipping always
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-            Cancel or pause anytime
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-            Delivered every 30/60/90 days
-          </li>
-        </ul>
-      </div>
-
       <!-- Product Image -->
       <div class="bundle-image">
         <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Balance" id="bundle-product-image">
       </div>
 
       <!-- Quantity Options -->
+      <p class="bundle-qty-label">Select Quantity:</p>
       <div class="bundle-options">
         <div class="bundle-option" data-qty="1" data-price="37.99" data-original="37.99" data-save="0" data-percent="0">
           <div class="bundle-option-qty">1 Bottle</div>
-          <div class="bundle-option-save" id="bundle-bottle1-save"></div>
+          <div class="bundle-option-save" id="bundle-bottle1-save">Save 26%</div>
         </div>
         <div class="bundle-option selected" data-qty="2" data-price="57.99" data-original="75.98" data-save="17.99" data-percent="24">
-          <span class="bundle-option-badge popular">Recommended</span>
+          <span class="bundle-option-badge popular">RECOMMENDED</span>
           <div class="bundle-option-qty">2 Bottles</div>
-          <div class="bundle-option-save" id="bundle-bottle2-save">Save 24%</div>
+          <div class="bundle-option-save" id="bundle-bottle2-save">Save 37%</div>
         </div>
         <div class="bundle-option" data-qty="3" data-price="67.99" data-original="113.97" data-save="45.98" data-percent="40">
-          <span class="bundle-option-badge best">Best Value</span>
+          <span class="bundle-option-badge best">BEST VALUE</span>
           <div class="bundle-option-qty">3 Bottles</div>
-          <div class="bundle-option-save" id="bundle-bottle3-save">Save 40%</div>
+          <div class="bundle-option-save" id="bundle-bottle3-save">Save 49%</div>
         </div>
       </div>
 
-      <!-- Dynamic Pricing -->
-      <div class="bundle-pricing">
-        <div class="bundle-price-original" id="bundle-original">$75.98</div>
-        <div class="bundle-price-current"><sup>$</sup><span id="bundle-price">57</span><sup>.99</sup></div>
-        <div class="bundle-discount" id="bundle-discount">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
-          <span>FREE Shipping + Save 24%</span>
+      <!-- Purchase Type Selection -->
+      <div class="bundle-purchase-options">
+        <div class="bundle-purchase-option selected" data-type="subscribe">
+          <div class="purchase-option-header">
+            <div class="purchase-option-left">
+              <span class="purchase-radio-circle"></span>
+              <span class="purchase-option-title">Subscribe & Save 37%</span>
+            </div>
+            <div class="purchase-option-price">
+              <div class="purchase-price-original">$57.99</div>
+              <div class="purchase-price-current">$47.99</div>
+              <div class="purchase-price-per">$24.00/bottle</div>
+            </div>
+          </div>
+          <div class="purchase-option-benefits">
+            <div class="purchase-benefit">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>Free shipping every month</span>
+            </div>
+            <div class="purchase-benefit">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+              <span>Cancel anytime</span>
+            </div>
+          </div>
+        </div>
+        <div class="bundle-purchase-option" data-type="onetime">
+          <div class="purchase-option-header">
+            <div class="purchase-option-left">
+              <span class="purchase-radio-circle"></span>
+              <span class="purchase-option-title">One-time purchase</span>
+            </div>
+            <div class="purchase-option-price">
+              <div class="purchase-price-current">$57.99</div>
+              <div class="purchase-price-per">$29.00/bottle</div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- CTA Button -->
       <div class="bundle-cta">
-        <button class="btn-bundle" id="bundle-buy-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          SHOP NOW & SAVE 24%
-        </button>
+        <button class="btn-bundle-shop">Shop Now</button>
         <div class="amazon-divider">or</div>
         <a href="#" class="btn-amazon" target="_blank">
           Buy on <img src="images/amazon-logo.png" alt="Amazon" class="amazon-logo-img">
