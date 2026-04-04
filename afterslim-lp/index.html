@@ -3738,30 +3738,40 @@ ul, ol {
 }
 
 .bundle-options {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-direction: row;
   gap: 12px;
   margin-bottom: 28px;
 }
 
 .bundle-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   position: relative;
   background: #fff;
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 12px;
+  border: 2px solid #e7e5e4;
+  border-radius: 8px;
+  padding: 20px 12px 16px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s;
+  min-height: 90px;
+}
+
+.bundle-option * {
+  pointer-events: none;
 }
 
 .bundle-option:hover {
-  border-color: var(--orange);
+  border-color: #d6d3d1;
 }
 
 .bundle-option.selected {
-  border-color: var(--orange);
-  background: rgba(234,88,12,0.04);
+  border-color: #ea580c;
+  background: #fff7ed;
 }
 
 .bundle-option-badge {
@@ -3769,42 +3779,37 @@ ul, ol {
   top: -10px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 3px 10px;
+  padding: 4px 10px;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  border-radius: 50px;
+  border-radius: 4px;
   white-space: nowrap;
 }
 
 .bundle-option-badge.popular {
-  background: var(--orange);
+  background: #1c1917;
   color: #fff;
 }
 
 .bundle-option-badge.best {
-  background: var(--success);
+  background: #ea580c;
   color: #fff;
 }
 
 .bundle-option-qty {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 2px;
+  color: #1c1917;
+  margin-bottom: 4px;
 }
 
-.bundle-option-label {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.bundle-option-shipping {
-  font-size: 11px;
-  color: var(--success);
-  font-weight: 500;
-  margin-top: 4px;
+.bundle-option-save {
+  font-size: 13px;
+  color: #ea580c;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .bundle-pricing {
@@ -4087,11 +4092,16 @@ ul, ol {
   }
 
   .bundle-option {
-    padding: 14px 8px;
+    padding: 16px 8px 12px;
+    min-height: 80px;
   }
 
   .bundle-option-qty {
-    font-size: 18px;
+    font-size: 14px;
+  }
+
+  .bundle-option-save {
+    font-size: 11px;
   }
 
   .bundle-price-current {
@@ -4853,19 +4863,17 @@ ul, ol {
       <div class="bundle-options">
         <div class="bundle-option" data-qty="1" data-price="37.99" data-original="37.99" data-save="0" data-percent="0">
           <div class="bundle-option-qty">1 Bottle</div>
-          <div class="bundle-option-label">30-day supply</div>
+          <div class="bundle-option-save" id="bundle-bottle1-save"></div>
         </div>
         <div class="bundle-option selected" data-qty="2" data-price="57.99" data-original="75.98" data-save="17.99" data-percent="24">
-          <span class="bundle-option-badge popular">Most Popular</span>
+          <span class="bundle-option-badge popular">Recommended</span>
           <div class="bundle-option-qty">2 Bottles</div>
-          <div class="bundle-option-label">60-day supply</div>
-          <div class="bundle-option-shipping">Free Shipping</div>
+          <div class="bundle-option-save" id="bundle-bottle2-save">Save 24%</div>
         </div>
         <div class="bundle-option" data-qty="3" data-price="67.99" data-original="113.97" data-save="45.98" data-percent="40">
-          <span class="bundle-option-badge best">Best Deal</span>
+          <span class="bundle-option-badge best">Best Value</span>
           <div class="bundle-option-qty">3 Bottles</div>
-          <div class="bundle-option-label">90-day supply</div>
-          <div class="bundle-option-shipping">Free Shipping</div>
+          <div class="bundle-option-save" id="bundle-bottle3-save">Save 40%</div>
         </div>
       </div>
 
