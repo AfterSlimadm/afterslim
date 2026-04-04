@@ -4972,16 +4972,16 @@ ul, ol {
       <!-- Quantity Options -->
       <p class="bundle-qty-label">Select Quantity:</p>
       <div class="bundle-options">
-        <div class="bundle-option" data-qty="1" data-price="37.99" data-original="37.99" data-save="0" data-percent="0">
+        <div class="bundle-option" data-qty="1" onclick="selectBundleQuantity(1)">
           <div class="bundle-option-qty">1 Bottle</div>
           <div class="bundle-option-save" id="bundle-bottle1-save">Save 26%</div>
         </div>
-        <div class="bundle-option selected" data-qty="2" data-price="57.99" data-original="75.98" data-save="17.99" data-percent="24">
+        <div class="bundle-option selected" data-qty="2" onclick="selectBundleQuantity(2)">
           <span class="bundle-option-badge popular">RECOMMENDED</span>
           <div class="bundle-option-qty">2 Bottles</div>
           <div class="bundle-option-save" id="bundle-bottle2-save">Save 37%</div>
         </div>
-        <div class="bundle-option" data-qty="3" data-price="67.99" data-original="113.97" data-save="45.98" data-percent="40">
+        <div class="bundle-option" data-qty="3" onclick="selectBundleQuantity(3)">
           <span class="bundle-option-badge best">BEST VALUE</span>
           <div class="bundle-option-qty">3 Bottles</div>
           <div class="bundle-option-save" id="bundle-bottle3-save">Save 49%</div>
@@ -4994,7 +4994,7 @@ ul, ol {
           <div class="purchase-option-header">
             <div class="purchase-option-left">
               <span class="purchase-radio-circle"></span>
-              <span class="purchase-option-title">Subscribe & Save 37%</span>
+              <span class="purchase-option-title" id="bundle-subscribe-title">Subscribe & Save 37%</span>
             </div>
             <div class="purchase-option-price">
               <div class="purchase-price-original">$57.99</div>
@@ -5875,8 +5875,14 @@ function selectPurchaseType(type) {
   updateSubscriptionDiscounts();
 }
 
+// Bundle section state
+var bundlePurchaseType = 'subscribe';
+var bundleSelectedQty = 2;
+
 // Bundle section purchase type selection
 function selectBundlePurchaseType(type) {
+  bundlePurchaseType = type;
+
   var options = document.querySelectorAll('.bundle-purchase-option');
   options.forEach(function(opt) {
     opt.classList.remove('selected');
@@ -5886,6 +5892,56 @@ function selectBundlePurchaseType(type) {
     options[0].classList.add('selected');
   } else {
     options[1].classList.add('selected');
+  }
+
+  updateBundleDiscounts();
+}
+
+// Bundle section quantity selection
+function selectBundleQuantity(qty) {
+  bundleSelectedQty = qty;
+
+  var options = document.querySelectorAll('.bundle-option');
+  options.forEach(function(opt) {
+    opt.classList.remove('selected');
+  });
+
+  options[qty - 1].classList.add('selected');
+  updateBundleDiscounts();
+}
+
+// Update bundle discounts based on purchase type and quantity
+function updateBundleDiscounts() {
+  var bottle1Save = document.getElementById('bundle-bottle1-save');
+  var bottle2Save = document.getElementById('bundle-bottle2-save');
+  var bottle3Save = document.getElementById('bundle-bottle3-save');
+  var subscribeTitle = document.getElementById('bundle-subscribe-title');
+
+  if (bundlePurchaseType === 'subscribe') {
+    // Subscribe mode: show subscription discounts
+    if (bottle1Save) {
+      bottle1Save.textContent = 'Save 26%';
+      bottle1Save.style.display = 'block';
+    }
+    if (bottle2Save) bottle2Save.textContent = 'Save 37%';
+    if (bottle3Save) bottle3Save.textContent = 'Save 49%';
+
+    // Update subscribe title based on selected quantity
+    if (subscribeTitle) {
+      if (bundleSelectedQty === 1) {
+        subscribeTitle.textContent = 'Subscribe & Save 26%';
+      } else if (bundleSelectedQty === 2) {
+        subscribeTitle.textContent = 'Subscribe & Save 37%';
+      } else {
+        subscribeTitle.textContent = 'Subscribe & Save 49%';
+      }
+    }
+  } else {
+    // One-time mode: show one-time discounts
+    if (bottle1Save) bottle1Save.style.display = 'none';
+    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
+    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
+    if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
 }
 
