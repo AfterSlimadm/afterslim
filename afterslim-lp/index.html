@@ -115,7 +115,7 @@ ul, ol {
   text-decoration: none;
   transition: background 0.2s;
   text-align: center;
-  animation: pulse 2s ease-in-out infinite;
+  animation: pulse 3.5s ease-in-out infinite;
 }
 
 .btn-shop-now:hover {
@@ -126,11 +126,11 @@ ul, ol {
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
+    box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.5);
   }
   50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(234, 88, 12, 0);
+    transform: scale(1.03);
+    box-shadow: 0 0 0 8px rgba(234, 88, 12, 0);
   }
 }
 
@@ -3328,12 +3328,13 @@ ul, ol {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  animation: pulse-button 2s ease-in-out infinite;
+  animation: pulse-button 3.5s ease-in-out infinite;
 }
 
 .desktop-add-to-cart:hover {
   background: #15803d;
   transform: scale(1.02);
+  animation: none;
 }
 
 .desktop-add-to-cart .btn-text {
@@ -3741,7 +3742,7 @@ ul, ol {
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.2s;
-    animation: pulse-button 2s ease-in-out infinite;
+    animation: pulse-button 3.5s ease-in-out infinite;
   }
 
   .mobile-add-to-cart:hover {
@@ -3761,11 +3762,11 @@ ul, ol {
   @keyframes pulse-button {
     0%, 100% {
       transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4);
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.3);
     }
     50% {
       transform: scale(1.02);
-      box-shadow: 0 0 0 8px rgba(22, 163, 74, 0);
+      box-shadow: 0 0 0 6px rgba(22, 163, 74, 0);
     }
   }
 
@@ -4197,10 +4198,23 @@ ul, ol {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s;
+  animation: pulse-green 3.5s ease-in-out infinite;
 }
 
 .btn-bundle-shop:hover {
   background: #15803d;
+  animation: none;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.5);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 8px rgba(22, 163, 74, 0);
+  }
 }
 
 .bundle-pricing {
