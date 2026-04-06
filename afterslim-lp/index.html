@@ -2919,10 +2919,37 @@ ul, ol {
   text-align: center;
 }
 
-.desktop-product-image img {
+.desktop-product-image .main-image {
   max-width: 400px;
   width: 100%;
   height: auto;
+  margin-bottom: 16px;
+}
+
+.desktop-product-thumbnails {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.desktop-product-thumbnails img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid #e5e5e5;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.desktop-product-thumbnails img:hover {
+  border-color: var(--orange);
+  transform: scale(1.05);
+}
+
+.desktop-product-thumbnails img.active {
+  border-color: var(--orange);
 }
 
 .desktop-product-info {
@@ -4595,7 +4622,11 @@ ul, ol {
 <section class="desktop-product-section" id="desktop-bundle">
   <div class="desktop-product-grid">
     <div class="desktop-product-image">
-      <img src="images/bundle-bottle-1.png" alt="AfterSlim GLP-1 Balance supplement bottle">
+      <img src="images/bundle-bottle-1.png" alt="AfterSlim GLP-1 Balance supplement bottle" class="main-image" id="desktopMainImage">
+      <div class="desktop-product-thumbnails">
+        <img src="images/bundle-bottle-1.png" alt="Product view 1" class="active" onclick="changeDesktopImage('images/bundle-bottle-1.png', this)">
+        <img src="images/bundle-benefits.png" alt="Product benefits" onclick="changeDesktopImage('images/bundle-benefits.png', this)">
+      </div>
     </div>
     <div class="desktop-product-info">
       <div class="desktop-product-rating">
@@ -6190,6 +6221,14 @@ function selectDesktopPurchase(type) {
 
   updateDesktopPrices();
   updateDesktopDiscounts();
+}
+
+function changeDesktopImage(imageSrc, thumbnail) {
+  document.getElementById('desktopMainImage').src = imageSrc;
+  document.querySelectorAll('.desktop-product-thumbnails img').forEach(function(img) {
+    img.classList.remove('active');
+  });
+  thumbnail.classList.add('active');
 }
 
 function updateDesktopPrices() {
