@@ -512,9 +512,18 @@ ul, ol {
 }
 
 .science-gif-circle .gif-placeholder {
-  width: 80%;
-  height: 80%;
+  position: absolute;
+  width: 70%;
+  height: 70%;
   object-fit: contain;
+}
+
+.science-gif-circle .gif-left {
+  left: -5%;
+}
+
+.science-gif-circle .gif-right {
+  right: -5%;
 }
 
 .science-gif-label {
@@ -4881,7 +4890,8 @@ ul, ol {
       <div class="science-image">
         <img src="images/intestino.png" alt="Large Intestine - Gut Microbiome">
         <div class="science-gif-circle">
-          <img src="images/bacteriagif.gif" alt="Gut Microbiome Animation" class="gif-placeholder">
+          <img src="images/bacteriagif.gif" alt="Gut Microbiome Animation" class="gif-placeholder gif-left">
+          <img src="images/bacteriagif.gif" alt="Gut Microbiome Animation" class="gif-placeholder gif-right">
         </div>
         <div class="science-gif-label">Akkermansia</div>
       </div>
