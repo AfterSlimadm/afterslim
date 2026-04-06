@@ -3342,6 +3342,58 @@ ul, ol {
     display: block;
   }
 
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.9);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+
+  .gallery-nav.prev {
+    left: 10px;
+  }
+
+  .gallery-nav.next {
+    right: 10px;
+  }
+
+  .gallery-nav svg {
+    width: 20px;
+    height: 20px;
+    color: var(--dark);
+  }
+
+  .gallery-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+
+  .gallery-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    cursor: pointer;
+  }
+
+  .gallery-dot.active {
+    background: var(--orange);
+  }
+
   .mobile-product-thumbnails {
     display: flex !important;
     gap: 8px;
@@ -4747,7 +4799,14 @@ ul, ol {
 <section class="mobile-product-section" id="mobile-bundle">
   <!-- Product Image Container (white background) -->
   <div class="mobile-product-gallery">
+    <button class="gallery-nav prev" onclick="navigateMobileImage(-1)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
     <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Balance" class="mobile-product-main-image" id="mobileMainImage">
+    <button class="gallery-nav next" onclick="navigateMobileImage(1)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="gallery-dots" id="galleryDots"></div>
   </div>
 
   <!-- Thumbnails (outside the white container) -->
@@ -5938,7 +5997,87 @@ function changeMainImage(thumbnail) {
     img.classList.remove('active');
   });
   thumbnail.classList.add('active');
+  updateGalleryDots();
 }
+
+var mobileImages = [
+  'images/afterslim-bottle-nobg.png',
+  'images/bundle-bottle-1.png',
+  'images/bundle-benefits.png',
+  'images/afterslim-facts.png',
+  'images/afterslim-ingredients.png'
+];
+var currentMobileImageIndex = 0;
+
+function initGalleryDots() {
+  var dotsContainer = document.getElementById('galleryDots');
+  if (!dotsContainer) return;
+  dotsContainer.innerHTML = '';
+  mobileImages.forEach(function(img, index) {
+    var dot = document.createElement('div');
+    dot.className = 'gallery-dot' + (index === 0 ? ' active' : '');
+    dot.onclick = function() { goToMobileImage(index); };
+    dotsContainer.appendChild(dot);
+  });
+}
+
+function updateGalleryDots() {
+  var mainImage = document.getElementById('mobileMainImage');
+  var currentSrc = mainImage.src.split('/').pop();
+  currentMobileImageIndex = mobileImages.findIndex(function(img) {
+    return img.split('/').pop() === currentSrc;
+  });
+  if (currentMobileImageIndex === -1) currentMobileImageIndex = 0;
+
+  document.querySelectorAll('.gallery-dot').forEach(function(dot, index) {
+    dot.classList.toggle('active', index === currentMobileImageIndex);
+  });
+}
+
+function navigateMobileImage(direction) {
+  currentMobileImageIndex += direction;
+  if (currentMobileImageIndex < 0) currentMobileImageIndex = mobileImages.length - 1;
+  if (currentMobileImageIndex >= mobileImages.length) currentMobileImageIndex = 0;
+  goToMobileImage(currentMobileImageIndex);
+}
+
+function goToMobileImage(index) {
+  currentMobileImageIndex = index;
+  var mainImage = document.getElementById('mobileMainImage');
+  mainImage.src = mobileImages[index];
+
+  var thumbnails = document.querySelectorAll('.mobile-product-thumbnails img');
+  thumbnails.forEach(function(thumb, i) {
+    thumb.classList.toggle('active', i === index);
+  });
+
+  updateGalleryDots();
+}
+
+// Swipe support
+var touchStartX = 0;
+var touchEndX = 0;
+
+function handleGallerySwipe() {
+  if (touchEndX < touchStartX - 50) navigateMobileImage(1);
+  if (touchEndX > touchStartX + 50) navigateMobileImage(-1);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initGalleryDots();
+
+  var gallery = document.querySelector('.mobile-product-gallery');
+  if (gallery) {
+    gallery.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    gallery.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleGallerySwipe();
+    });
+  }
+});
 
 function updateSubscriptionDiscounts() {
   var selectedQty = document.querySelector('.mobile-qty-option.selected');
