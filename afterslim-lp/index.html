@@ -5021,7 +5021,7 @@ ul, ol {
         <div class="science-gif-circle">
           <img src="images/bacteriagif.gif" alt="Gut Microbiome Animation" class="gif-placeholder">
         </div>
-        <div class="science-gif-label">Akkermansia</div>
+        <div class="science-gif-label" id="bacteriaLabel">Harmful Bacteria</div>
       </div>
       <div class="science-content">
         <div class="science-box">
@@ -6097,6 +6097,21 @@ document.addEventListener('DOMContentLoaded', function() {
       touchEndX = e.changedTouches[0].screenX;
       handleGallerySwipe();
     });
+  }
+
+  // Bacteria label alternation
+  var bacteriaLabel = document.getElementById('bacteriaLabel');
+  if (bacteriaLabel) {
+    setTimeout(function() {
+      bacteriaLabel.textContent = 'Akkermansia';
+    }, 3000);
+
+    setInterval(function() {
+      bacteriaLabel.textContent = 'Harmful Bacteria';
+      setTimeout(function() {
+        bacteriaLabel.textContent = 'Akkermansia';
+      }, 3000);
+    }, 6000);
   }
 });
 
