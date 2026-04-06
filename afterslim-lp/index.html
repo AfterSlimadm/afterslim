@@ -944,6 +944,42 @@ ul, ol {
   border: 1px solid #e5e5e5;
 }
 
+.testimonial-card-image {
+  background-size: cover;
+  background-position: center;
+  padding: 0;
+  position: relative;
+  min-height: 450px;
+  overflow: hidden;
+}
+
+.testimonial-content-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 70%, transparent 100%);
+  color: white;
+}
+
+.testimonial-card-image .testimonial-stars {
+  color: #fbbf24;
+}
+
+.testimonial-card-image .testimonial-text {
+  color: white;
+  font-weight: 500;
+}
+
+.testimonial-card-image .testimonial-name {
+  color: white;
+}
+
+.testimonial-card-image .testimonial-verified {
+  color: #86efac;
+}
+
 .testimonial-image {
   width: 100%;
   height: 200px;
@@ -1049,6 +1085,10 @@ ul, ol {
 
   .testimonial-card {
     flex: 0 0 280px;
+  }
+
+  .testimonial-card-image {
+    min-height: 400px;
   }
 
   .testimonials-nav {
@@ -5125,16 +5165,17 @@ ul, ol {
 
       <div class="testimonials-carousel" id="testimonialsCarousel">
         <!-- Testimonial 1 -->
-        <div class="testimonial-card">
-          <img src="images/djtow1.png" alt="Sarah M." class="testimonial-image">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"I've been on Ozempic for 3 months and the bloating was unbearable. AfterSlim changed everything - I feel like myself again!"</p>
-          <div class="testimonial-author">
-            <span class="testimonial-name">Sarah M.</span>
-            <span class="testimonial-verified">
-              <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-              Verified Purchase
-            </span>
+        <div class="testimonial-card testimonial-card-image" style="background-image: url('images/djtow1.png');">
+          <div class="testimonial-content-overlay">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"I've been on Ozempic for 3 months and the bloating was unbearable. AfterSlim changed everything - I feel like myself again!"</p>
+            <div class="testimonial-author">
+              <span class="testimonial-name">Sarah M.</span>
+              <span class="testimonial-verified">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Verified Purchase
+              </span>
+            </div>
           </div>
         </div>
 
