@@ -561,6 +561,8 @@ ul, ol {
   white-space: nowrap;
   z-index: 3;
   box-shadow: 0 3px 10px rgba(196, 75, 43, 0.2);
+  min-width: 165px;
+  text-align: center;
 }
 
 .science-content {
@@ -666,6 +668,7 @@ ul, ol {
     padding: 7px 16px;
     bottom: 8%;
     right: 11%;
+    min-width: 140px;
   }
 
   .science-box {
@@ -6099,18 +6102,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Bacteria label alternation
+  // Bacteria label alternation - synced with GIF
   var bacteriaLabel = document.getElementById('bacteriaLabel');
   if (bacteriaLabel) {
-    setTimeout(function() {
-      bacteriaLabel.textContent = 'Akkermansia';
-    }, 3000);
+    var isHarmful = true;
 
+    function toggleLabel() {
+      if (isHarmful) {
+        bacteriaLabel.textContent = 'Harmful Bacteria';
+        setTimeout(function() {
+          isHarmful = false;
+          bacteriaLabel.textContent = 'Akkermansia';
+        }, 3000);
+      }
+    }
+
+    // Start immediately
+    toggleLabel();
+
+    // Repeat every 6 seconds (3s Harmful + 3s Akkermansia)
     setInterval(function() {
-      bacteriaLabel.textContent = 'Harmful Bacteria';
-      setTimeout(function() {
-        bacteriaLabel.textContent = 'Akkermansia';
-      }, 3000);
+      isHarmful = true;
+      toggleLabel();
     }, 6000);
   }
 });
