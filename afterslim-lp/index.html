@@ -2069,6 +2069,95 @@ ul, ol {
   margin: 0;
 }
 
+/* ========== 90-DAY GUARANTEE ========== */
+.guarantee-section {
+  background: linear-gradient(135deg, #fef3e9 0%, #fff8f5 100%);
+  text-align: center;
+}
+
+.guarantee-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.guarantee-badge {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.guarantee-badge svg {
+  width: 100px;
+  height: 100px;
+}
+
+.guarantee-days {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--orange);
+  margin-top: 5px;
+}
+
+.guarantee-section .section-title {
+  margin-bottom: 16px;
+}
+
+.guarantee-section .section-title span {
+  color: var(--orange);
+}
+
+.guarantee-text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.guarantee-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+.guarantee-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.guarantee-feature svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .guarantee-badge svg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .guarantee-days {
+    font-size: 22px;
+  }
+
+  .guarantee-text {
+    font-size: 15px;
+  }
+
+  .guarantee-features {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
 /* ========== PRICING ========== */
 .pricing-section {
   background: var(--warm);
@@ -4573,175 +4662,89 @@ ul, ol {
   </a>
 </div>
 
-<!-- ========== MOBILE REVIEWS BAR (hidden on desktop) ========== -->
-<section class="mobile-reviews-bar">
-  <div class="mobile-reviews-container">
-    <button class="mobile-reviews-nav prev" onclick="slideMobileReviews(-1)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-    </button>
-    <button class="mobile-reviews-nav next" onclick="slideMobileReviews(1)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-    </button>
-
-    <div class="mobile-reviews-slider" id="mobileReviewsSlider">
-      <div class="mobile-review-card">
-        <span class="review-stars">★★★★★</span>
-        <h4 class="review-title">Life changing supplement!</h4>
-        <p class="review-text">I've been on Ozempic for 3 months and the nausea was unbearable. Started AfterSlim 2 weeks ago and the difference is incredible! No more bloating or stomach issues.</p>
-        <div class="review-footer">
-          <span class="review-author">-Sarah M.</span>
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-        </div>
-      </div>
-
-      <div class="mobile-review-card">
-        <span class="review-stars">★★★★★</span>
-        <h4 class="review-title">Finally found relief!</h4>
-        <p class="review-text">The constipation from Mounjaro was awful. My doctor recommended a gut supplement and I found AfterSlim. Within a week, everything was back to normal!</p>
-        <div class="review-footer">
-          <span class="review-author">-Jennifer K.</span>
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-        </div>
-      </div>
-
-      <div class="mobile-review-card">
-        <span class="review-stars">★★★★★</span>
-        <h4 class="review-title">Best GLP-1 companion</h4>
-        <p class="review-text">I was skeptical at first but AfterSlim really works. My energy levels are up, no more gut issues, and I'm still losing weight on Wegovy. This is a must-have!</p>
-        <div class="review-footer">
-          <span class="review-author">-Michelle R.</span>
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-        </div>
-      </div>
-
-      <div class="mobile-review-card">
-        <span class="review-stars">★★★★★</span>
-        <h4 class="review-title">No more nausea!</h4>
-        <p class="review-text">The nausea from my GLP-1 medication was making it hard to stick with the treatment. AfterSlim has been a game changer - I can finally eat without feeling sick!</p>
-        <div class="review-footer">
-          <span class="review-author">-Lisa T.</span>
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-        </div>
-      </div>
-
-      <div class="mobile-review-card">
-        <span class="review-stars">★★★★★</span>
-        <h4 class="review-title">Highly recommend!</h4>
-        <p class="review-text">My doctor told me to find a gut support supplement for my Ozempic journey. AfterSlim has exceeded my expectations. Better digestion and more energy!</p>
-        <div class="review-footer">
-          <span class="review-author">-Amanda P.</span>
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <a href="#reviews" class="mobile-reviews-more">Read More Reviews</a>
-</section>
-
-<!-- ========== DESKTOP REVIEWS BAR (hidden on mobile) ========== -->
-<section class="desktop-reviews-bar">
+<!-- ========== UGC SECTION (moved from below) ========== -->
+<section class="ugc-section section-padding">
   <div class="container">
-    <button class="reviews-nav prev" onclick="slideReviews(-1)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-    </button>
-    <button class="reviews-nav next" onclick="slideReviews(1)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-    </button>
-
-    <div class="reviews-slider" id="reviewsSlider">
-      <div class="review-card">
-        <div class="review-header">
-          <h4 class="review-title">Life changing supplement!</h4>
-          <span class="review-stars">★★★★★</span>
-        </div>
-        <p class="review-text">I've been on Ozempic for 3 months and the nausea was unbearable. Started AfterSlim 2 weeks ago and the difference is incredible. No more bloating or stomach issues!</p>
-        <div class="review-footer">
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-          <span class="review-author">-Sarah M.</span>
-        </div>
-      </div>
-
-      <div class="review-card">
-        <div class="review-header">
-          <h4 class="review-title">Finally found relief!</h4>
-          <span class="review-stars">★★★★★</span>
-        </div>
-        <p class="review-text">The constipation from Mounjaro was awful. My doctor recommended a gut supplement and I found AfterSlim. Within a week, everything was back to normal. Highly recommend!</p>
-        <div class="review-footer">
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-          <span class="review-author">-Jennifer K.</span>
-        </div>
-      </div>
-
-      <div class="review-card">
-        <div class="review-header">
-          <h4 class="review-title">Best GLP-1 companion</h4>
-          <span class="review-stars">★★★★★</span>
-        </div>
-        <p class="review-text">I was skeptical at first but AfterSlim really works. My energy levels are up, no more gut issues, and I'm still losing weight on Wegovy. This is a must-have!</p>
-        <div class="review-footer">
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-          <span class="review-author">-Michelle R.</span>
-        </div>
-      </div>
-
-      <div class="review-card">
-        <div class="review-header">
-          <h4 class="review-title">No more nausea!</h4>
-          <span class="review-stars">★★★★★</span>
-        </div>
-        <p class="review-text">The nausea from my GLP-1 medication was making it hard to stick with the treatment. AfterSlim has been a game changer - I can finally eat without feeling sick!</p>
-        <div class="review-footer">
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-          <span class="review-author">-Lisa T.</span>
-        </div>
-      </div>
-
-      <div class="review-card">
-        <div class="review-header">
-          <h4 class="review-title">Highly recommend!</h4>
-          <span class="review-stars">★★★★★</span>
-        </div>
-        <p class="review-text">My doctor told me to find a gut support supplement for my Ozempic journey. AfterSlim has exceeded my expectations. Better digestion and more energy throughout the day.</p>
-        <div class="review-footer">
-          <span class="review-verified">
-            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Verified Customer
-          </span>
-          <span class="review-author">-Amanda P.</span>
-        </div>
-      </div>
+    <div class="reveal">
+      <h2 class="section-title">Real Results from Real Users</h2>
+      <p class="section-subtitle">See what our community is sharing about their AfterSlim journey.</p>
     </div>
+    <div class="ugc-grid-wrapper">
+      <button class="ugc-nav prev disabled" onclick="slideUgc(-1)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="ugc-nav next" onclick="slideUgc(1)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="ugc-grid reveal-children">
+        <!-- UGC Item 1 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6 6 0 100 12 6 6 0 000-12zm0 9.9a3.9 3.9 0 110-7.8 3.9 3.9 0 010 7.8zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@sarah_wellness</span>
+          <p class="ugc-caption">"3 weeks on Mounjaro + AfterSlim = no more bloating!"</p>
+        </div>
+      </div>
 
-    <div class="reviews-more">
-      <a href="#reviews">Read More Reviews</a>
+      <!-- UGC Item 2 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform tiktok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@jen_ozempic_journey</span>
+          <p class="ugc-caption">"Finally a supplement that actually works with my GLP-1!"</p>
+        </div>
+      </div>
+
+      <!-- UGC Item 3 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6 6 0 100 12 6 6 0 000-12zm0 9.9a3.9 3.9 0 110-7.8 3.9 3.9 0 010 7.8zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@mike_health_tips</span>
+          <p class="ugc-caption">"My gut health has never been better. AfterSlim is a game changer!"</p>
+        </div>
+      </div>
+
+      <!-- UGC Item 4 -->
+      <div class="ugc-card">
+        <div class="ugc-video-placeholder">
+          <div class="ugc-play-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="ugc-overlay"></div>
+          <span class="ugc-platform tiktok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+          </span>
+        </div>
+        <div class="ugc-info">
+          <span class="ugc-username">@wegovy_warrior</span>
+          <p class="ugc-caption">"Down 30lbs and no more nausea thanks to AfterSlim!"</p>
+        </div>
+      </div>
+      </div>
     </div>
   </div>
 </section>
@@ -4982,98 +4985,37 @@ ul, ol {
   </a>
 </section>
 
-<!-- ========== UGC SECTION ========== -->
-<!-- PLACEHOLDER: Replace with real UGC videos/images -->
-<section class="ugc-section section-padding">
+<!-- ========== 90-DAY GUARANTEE SECTION ========== -->
+<section class="guarantee-section section-padding">
   <div class="container">
-    <div class="reveal">
-      <h2 class="section-title">Real Results from Real Users</h2>
-      <p class="section-subtitle">See what our community is sharing about their AfterSlim journey.</p>
-    </div>
-    <div class="ugc-grid-wrapper">
-      <button class="ugc-nav prev disabled" onclick="slideUgc(-1)">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <button class="ugc-nav next" onclick="slideUgc(1)">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </button>
-      <div class="ugc-grid reveal-children">
-        <!-- UGC Item 1 -->
-      <div class="ugc-card">
-        <div class="ugc-video-placeholder">
-          <div class="ugc-play-btn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="ugc-overlay"></div>
-          <span class="ugc-platform">
-            <!-- Instagram icon -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6 6 0 100 12 6 6 0 000-12zm0 9.9a3.9 3.9 0 110-7.8 3.9 3.9 0 010 7.8zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
-          </span>
-        </div>
-        <div class="ugc-info">
-          <span class="ugc-username">@sarah_wellness</span>
-          <p class="ugc-caption">"3 weeks on Mounjaro + AfterSlim = no more bloating!"</p>
-        </div>
+    <div class="guarantee-content reveal">
+      <div class="guarantee-badge">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="guarantee-days">90</span>
       </div>
-
-      <!-- UGC Item 2 -->
-      <div class="ugc-card">
-        <div class="ugc-video-placeholder">
-          <div class="ugc-play-btn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="ugc-overlay"></div>
-          <span class="ugc-platform tiktok">
-            <!-- TikTok icon -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
-          </span>
+      <h2 class="section-title">90-Day <span>Money-Back Guarantee</span></h2>
+      <p class="guarantee-text">We're so confident in AfterSlim that we offer a full 90-day money-back guarantee. If you're not completely satisfied with your results, simply contact us for a full refund - no questions asked.</p>
+      <div class="guarantee-features">
+        <div class="guarantee-feature">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Full refund within 90 days</span>
         </div>
-        <div class="ugc-info">
-          <span class="ugc-username">@jen_ozempic_journey</span>
-          <p class="ugc-caption">"Finally a supplement that actually works with my GLP-1!"</p>
+        <div class="guarantee-feature">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>No questions asked</span>
         </div>
-      </div>
-
-      <!-- UGC Item 3 -->
-      <div class="ugc-card">
-        <div class="ugc-video-placeholder">
-          <div class="ugc-play-btn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="ugc-overlay"></div>
-          <span class="ugc-platform">
-            <!-- Instagram icon -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6 6 0 100 12 6 6 0 000-12zm0 9.9a3.9 3.9 0 110-7.8 3.9 3.9 0 010 7.8zm6.406-10.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
-          </span>
+        <div class="guarantee-feature">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Try risk-free</span>
         </div>
-        <div class="ugc-info">
-          <span class="ugc-username">@mike_health_tips</span>
-          <p class="ugc-caption">"My gut health has never been better. AfterSlim is a game changer!"</p>
-        </div>
-      </div>
-
-      <!-- UGC Item 4 -->
-      <div class="ugc-card">
-        <div class="ugc-video-placeholder">
-          <div class="ugc-play-btn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="ugc-overlay"></div>
-          <span class="ugc-platform tiktok">
-            <!-- TikTok icon -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
-          </span>
-        </div>
-        <div class="ugc-info">
-          <span class="ugc-username">@wegovy_warrior</span>
-          <p class="ugc-caption">"Down 30lbs and no more nausea thanks to AfterSlim!"</p>
-        </div>
-      </div>
       </div>
     </div>
   </div>
 </section>
-<!-- END UGC SECTION -->
+<!-- END 90-DAY GUARANTEE SECTION -->
 
 <!-- ========== THE SCIENCE BEHIND ========== -->
 <section class="science-section">
