@@ -1213,11 +1213,37 @@ ul, ol {
   border-bottom: none;
 }
 
+.reviewer-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.reviewer-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.reviewer-info {
+  display: flex;
+  flex-direction: column;
+}
+
 .reviewer-name {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .verified-badge {
@@ -1876,8 +1902,10 @@ ul, ol {
 
 /* ========== UGC SECTION ========== */
 .ugc-section {
-  background: linear-gradient(180deg, #f5c4a1 0%, #fde8d8 100%);
-  padding: 30px 0 20px;
+  background: linear-gradient(180deg, #e56b1a 0%, #f5a55a 20%, #f8d4bc 50%, #f8f5f2 100%);
+  padding: 0 0 20px;
+  padding-top: 30px;
+  margin-top: -1px;
 }
 
 .ugc-section .section-title {
@@ -2679,7 +2707,7 @@ ul, ol {
   width: 100%;
   position: relative;
   z-index: 1;
-  background: #f5f5f5;
+  background: #e56b1a;
 }
 
 .desktop-banner {
@@ -2701,7 +2729,7 @@ ul, ol {
   width: 100%;
   position: relative;
   z-index: 1;
-  background: #f5f5f5;
+  background: #e56b1a;
 }
 
 .mobile-banner {
@@ -5106,6 +5134,53 @@ ul, ol {
   </div>
 </section>
 
+<!-- ========== SUPPLEMENT FACTS ========== -->
+<section class="facts-section section-padding">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Supplement Facts</h2>
+      <p class="section-subtitle">Transparent ingredients. Clinically studied strains. Nothing hidden.</p>
+    </div>
+    <div class="facts-table-wrapper reveal">
+      <div class="facts-header">
+        <h3>AfterSlim GLP-1 Balance</h3>
+        <p>Serving Size: 1 Capsule &middot; Servings Per Container: 30</p>
+      </div>
+      <table class="facts-table">
+        <tbody>
+          <tr>
+            <th>Chicory Root Inulin (Prebiotic)</th>
+            <td>211 mg</td>
+          </tr>
+          <tr>
+            <th>Resistant Starch (Prebiotic)</th>
+            <td>100 mg</td>
+          </tr>
+          <tr>
+            <th>Probiotic Blend</th>
+            <td>36 mg</td>
+          </tr>
+          <tr class="sub-row">
+            <th>Akkermansia muciniphila</th>
+            <td>**</td>
+          </tr>
+          <tr class="sub-row">
+            <th>Bifidobacterium Infantis</th>
+            <td>**</td>
+          </tr>
+          <tr class="sub-row">
+            <th>Clostridium butyricum</th>
+            <td>**</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding: 12px 20px; font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border);">
+        ** Daily Value not established. Other Ingredients: Vegetarian Capsule (HPMC).
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ========== TESTIMONIALS CAROUSEL ========== -->
 <section class="testimonials-section">
   <div class="container">
@@ -5334,10 +5409,15 @@ ul, ol {
     <div class="reviews-list">
       <!-- Review 1 -->
       <div class="review-item">
-        <div class="reviewer-name">Sarah M.</div>
-        <div class="verified-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
-          Verified Customer
+        <div class="reviewer-header">
+          <div class="reviewer-avatar">S</div>
+          <div class="reviewer-info">
+            <div class="reviewer-name">Sarah M.</div>
+            <div class="verified-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+              Verified Customer
+            </div>
+          </div>
         </div>
         <div class="review-meta">
           <div class="review-stars">
@@ -5355,10 +5435,15 @@ ul, ol {
 
       <!-- Review 2 -->
       <div class="review-item">
-        <div class="reviewer-name">Jennifer K.</div>
-        <div class="verified-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
-          Verified Customer
+        <div class="reviewer-header">
+          <div class="reviewer-avatar">J</div>
+          <div class="reviewer-info">
+            <div class="reviewer-name">Jennifer K.</div>
+            <div class="verified-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+              Verified Customer
+            </div>
+          </div>
         </div>
         <div class="review-meta">
           <div class="review-stars">
@@ -5376,10 +5461,15 @@ ul, ol {
 
       <!-- Review 3 -->
       <div class="review-item">
-        <div class="reviewer-name">Michael R.</div>
-        <div class="verified-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
-          Verified Customer
+        <div class="reviewer-header">
+          <div class="reviewer-avatar">M</div>
+          <div class="reviewer-info">
+            <div class="reviewer-name">Michael R.</div>
+            <div class="verified-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+              Verified Customer
+            </div>
+          </div>
         </div>
         <div class="review-meta">
           <div class="review-stars">
@@ -5397,10 +5487,15 @@ ul, ol {
 
       <!-- Review 4 -->
       <div class="review-item">
-        <div class="reviewer-name">Lisa T.</div>
-        <div class="verified-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
-          Verified Customer
+        <div class="reviewer-header">
+          <div class="reviewer-avatar">L</div>
+          <div class="reviewer-info">
+            <div class="reviewer-name">Lisa T.</div>
+            <div class="verified-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+              Verified Customer
+            </div>
+          </div>
         </div>
         <div class="review-meta">
           <div class="review-stars">
@@ -5418,10 +5513,15 @@ ul, ol {
 
       <!-- Review 5 -->
       <div class="review-item">
-        <div class="reviewer-name">Amanda P.</div>
-        <div class="verified-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
-          Verified Customer
+        <div class="reviewer-header">
+          <div class="reviewer-avatar">A</div>
+          <div class="reviewer-info">
+            <div class="reviewer-name">Amanda P.</div>
+            <div class="verified-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none"/></svg>
+              Verified Customer
+            </div>
+          </div>
         </div>
         <div class="review-meta">
           <div class="review-stars">
@@ -5456,65 +5556,6 @@ ul, ol {
   </div>
 </section>
 
-<!-- ========== SUPPLEMENT FACTS ========== -->
-<section class="facts-section section-padding">
-  <div class="container">
-    <div class="reveal">
-      <h2 class="section-title">Supplement Facts</h2>
-      <p class="section-subtitle">Transparent ingredients. Clinically studied strains. Nothing hidden.</p>
-    </div>
-    <div class="facts-table-wrapper reveal">
-      <div class="facts-header">
-        <h3>AfterSlim GLP-1 Balance</h3>
-        <p>Serving Size: 1 Capsule &middot; Servings Per Container: 30</p>
-      </div>
-      <table class="facts-table">
-        <tbody>
-          <tr>
-            <th>Chicory Root Inulin (Prebiotic)</th>
-            <td>211 mg</td>
-          </tr>
-          <tr>
-            <th>Resistant Starch (Prebiotic)</th>
-            <td>100 mg</td>
-          </tr>
-          <tr>
-            <th>Probiotic Blend</th>
-            <td>36 mg</td>
-          </tr>
-          <tr class="sub-row">
-            <th>Akkermansia muciniphila</th>
-            <td>**</td>
-          </tr>
-          <tr class="sub-row">
-            <th>Bifidobacterium Infantis</th>
-            <td>**</td>
-          </tr>
-          <tr class="sub-row">
-            <th>Clostridium butyricum</th>
-            <td>**</td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="padding: 12px 20px; font-size: 11px; color: var(--text-secondary); border-top: 1px solid var(--border);">
-        ** Daily Value not established. Other Ingredients: Vegetarian Capsule (HPMC).
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== GUARANTEE ========== -->
-<section class="guarantee-section section-padding">
-  <div class="container">
-    <div class="guarantee-card reveal">
-      <div class="guarantee-icon">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      </div>
-      <h2>90-Day Money-Back Guarantee</h2>
-      <p>Try AfterSlim risk-free. If you're not satisfied with the results within 90 days, contact us for a full refund. No questions asked, no hassle.</p>
-    </div>
-  </div>
-</section>
 
 <!-- ========== FAQ ========== -->
 <section class="faq-section section-padding">
