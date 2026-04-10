@@ -4191,6 +4191,18 @@ ul, ol {
   font-weight: 600;
   margin-top: 4px;
   display: block;
+  transition: transform 0.3s ease;
+}
+
+.bundle-option-save.discount-flash {
+  animation: discountFlash 0.6s ease;
+}
+
+@keyframes discountFlash {
+  0% { transform: scale(1); color: var(--orange); }
+  30% { transform: scale(1.25); color: #16a34a; }
+  60% { transform: scale(1.1); color: #16a34a; }
+  100% { transform: scale(1); color: var(--orange); }
 }
 
 .bundle-qty-label {
@@ -6164,8 +6176,8 @@ function updateSubscriptionDiscounts() {
   // Update bundle discounts based on whether subscription is active
   if (isSubscribe) {
     // When subscription is active, all bundles show subscription discounts
-    if (bottle2Save) bottle2Save.textContent = 'Save 37%';
-    if (bottle3Save) bottle3Save.textContent = 'Save 49%';
+    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; flashDiscount(bottle3Save); }
 
     // Update subscription title based on selected quantity
     if (subscribeTitle) {
@@ -6176,11 +6188,12 @@ function updateSubscriptionDiscounts() {
       } else if (qtyIndex === 3) {
         subscribeTitle.textContent = 'Subscribe & Save 49%';
       }
+      flashDiscount(subscribeTitle);
     }
   } else {
     // One-time purchase: show standard discounts
-    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
-    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
+    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; flashDiscount(bottle3Save); }
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
 }
@@ -6255,6 +6268,14 @@ function selectBundleQuantity(qty) {
   updateBundleDiscounts();
 }
 
+// Flash animation helper for discount badges
+function flashDiscount(el) {
+  if (!el) return;
+  el.classList.remove('discount-flash');
+  void el.offsetWidth; // force reflow to restart animation
+  el.classList.add('discount-flash');
+}
+
 // Update bundle discounts based on purchase type and quantity
 function updateBundleDiscounts() {
   var bottle1Save = document.getElementById('bundle-bottle1-save');
@@ -6267,9 +6288,10 @@ function updateBundleDiscounts() {
     if (bottle1Save) {
       bottle1Save.textContent = 'Save 26%';
       bottle1Save.style.display = 'block';
+      flashDiscount(bottle1Save);
     }
-    if (bottle2Save) bottle2Save.textContent = 'Save 37%';
-    if (bottle3Save) bottle3Save.textContent = 'Save 49%';
+    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; flashDiscount(bottle3Save); }
 
     // Update subscribe title based on selected quantity
     if (subscribeTitle) {
@@ -6280,12 +6302,13 @@ function updateBundleDiscounts() {
       } else {
         subscribeTitle.textContent = 'Subscribe & Save 49%';
       }
+      flashDiscount(subscribeTitle);
     }
   } else {
     // One-time mode: show one-time discounts
     if (bottle1Save) bottle1Save.style.display = 'none';
-    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
-    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
+    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; flashDiscount(bottle3Save); }
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
 }
@@ -6518,19 +6541,21 @@ function updateDesktopDiscounts() {
     if (bottle1Save) {
       bottle1Save.textContent = 'Save 26%';
       bottle1Save.style.display = 'block';
+      flashDiscount(bottle1Save);
     }
-    if (bottle2Save) bottle2Save.textContent = 'Save 37%';
-    if (bottle3Save) bottle3Save.textContent = 'Save 49%';
+    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; flashDiscount(bottle3Save); }
     if (subscribeTitle) {
       subscribeTitle.textContent = 'Subscribe & Save ' + desktopDiscounts.subscribe[qty] + '%';
+      flashDiscount(subscribeTitle);
     }
   } else {
     // Hide bottle1 save for one-time, show bundle discounts
     if (bottle1Save) {
       bottle1Save.style.display = 'none';
     }
-    if (bottle2Save) bottle2Save.textContent = 'Save 24%';
-    if (bottle3Save) bottle3Save.textContent = 'Save 40%';
+    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; flashDiscount(bottle3Save); }
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
 }
