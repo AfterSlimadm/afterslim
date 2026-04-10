@@ -6242,7 +6242,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-function updateSubscriptionDiscounts() {
+function updateSubscriptionDiscounts(animate) {
   var selectedQty = document.querySelector('.mobile-qty-option.selected');
   var qtyIndex = Array.from(document.querySelectorAll('.mobile-qty-option')).indexOf(selectedQty) + 1;
   var isSubscribe = document.querySelectorAll('.mobile-purchase-option')[0].classList.contains('selected');
@@ -6252,14 +6252,11 @@ function updateSubscriptionDiscounts() {
   var bottle3Save = document.getElementById('bottle3-save');
   var subscribeTitle = document.getElementById('subscribe-title');
 
-  // Update bundle discounts based on whether subscription is active
   if (isSubscribe) {
-    // When subscription is active, all bundles show subscription discounts
-    if (bottle1Save) { bottle1Save.textContent = 'Save 26%'; bottle1Save.style.display = 'inline-block'; flashDiscount(bottle1Save); }
-    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; flashDiscount(bottle2Save); }
-    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; flashDiscount(bottle3Save); }
+    if (bottle1Save) { bottle1Save.textContent = 'Save 26%'; bottle1Save.style.display = 'inline-block'; if (animate) flashDiscount(bottle1Save); }
+    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; if (animate) flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; if (animate) flashDiscount(bottle3Save); }
 
-    // Update subscription title based on selected quantity
     if (subscribeTitle) {
       if (qtyIndex === 1) {
         subscribeTitle.textContent = 'Subscribe & Save 26%';
@@ -6268,15 +6265,29 @@ function updateSubscriptionDiscounts() {
       } else if (qtyIndex === 3) {
         subscribeTitle.textContent = 'Subscribe & Save 49%';
       }
-      flashDiscount(subscribeTitle);
+      if (animate) flashDiscount(subscribeTitle);
     }
   } else {
-    // One-time purchase: show standard discounts
     if (bottle1Save) bottle1Save.style.display = 'none';
-    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; flashDiscount(bottle2Save); }
-    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; flashDiscount(bottle3Save); }
+    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; if (animate) flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; if (animate) flashDiscount(bottle3Save); }
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
+}
+
+// Update mobile purchase option borders based on selected quantity
+function updateMobilePurchaseBorders() {
+  var selectedQty = document.querySelector('.mobile-qty-option.selected');
+  var qtyIndex = Array.from(document.querySelectorAll('.mobile-qty-option')).indexOf(selectedQty) + 1;
+  var colors = { 1: '#1c1917', 2: '#ea580c', 3: '#b91c1c' };
+  var bgs = { 1: '#fff', 2: '#fff7ed', 3: '#fef2f2' };
+  var color = colors[qtyIndex];
+  var bg = bgs[qtyIndex];
+
+  document.querySelectorAll('.mobile-purchase-option').forEach(function(opt) {
+    opt.style.borderColor = opt.classList.contains('selected') ? color : (color + '66');
+    opt.style.background = opt.classList.contains('selected') ? bg : '#fff';
+  });
 }
 
 function selectQuantity(qty) {
@@ -6288,7 +6299,8 @@ function selectQuantity(qty) {
     }
   });
   updateMobilePrice(qty);
-  updateSubscriptionDiscounts();
+  updateSubscriptionDiscounts(false);
+  updateMobilePurchaseBorders();
 }
 
 function selectPurchaseType(type) {
@@ -6311,7 +6323,8 @@ function selectPurchaseType(type) {
     }
   }
   updateMobileButtonPrice();
-  updateSubscriptionDiscounts();
+  updateSubscriptionDiscounts(true);
+  updateMobilePurchaseBorders();
 }
 
 // Bundle section state
@@ -6333,7 +6346,8 @@ function selectBundlePurchaseType(type) {
     options[1].classList.add('selected');
   }
 
-  updateBundleDiscounts();
+  updateBundleDiscounts(true);
+  updateBundlePurchaseBorders();
 }
 
 // Bundle section quantity selection
@@ -6346,7 +6360,8 @@ function selectBundleQuantity(qty) {
   });
 
   options[qty - 1].classList.add('selected');
-  updateBundleDiscounts();
+  updateBundleDiscounts(false);
+  updateBundlePurchaseBorders();
 }
 
 // Flash animation helper for discount badges
@@ -6358,23 +6373,21 @@ function flashDiscount(el) {
 }
 
 // Update bundle discounts based on purchase type and quantity
-function updateBundleDiscounts() {
+function updateBundleDiscounts(animate) {
   var bottle1Save = document.getElementById('bundle-bottle1-save');
   var bottle2Save = document.getElementById('bundle-bottle2-save');
   var bottle3Save = document.getElementById('bundle-bottle3-save');
   var subscribeTitle = document.getElementById('bundle-subscribe-title');
 
   if (bundlePurchaseType === 'subscribe') {
-    // Subscribe mode: show subscription discounts
     if (bottle1Save) {
       bottle1Save.textContent = 'Save 26%';
       bottle1Save.style.display = 'block';
-      flashDiscount(bottle1Save);
+      if (animate) flashDiscount(bottle1Save);
     }
-    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; flashDiscount(bottle2Save); }
-    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; flashDiscount(bottle3Save); }
+    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; if (animate) flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; if (animate) flashDiscount(bottle3Save); }
 
-    // Update subscribe title based on selected quantity
     if (subscribeTitle) {
       if (bundleSelectedQty === 1) {
         subscribeTitle.textContent = 'Subscribe & Save 26%';
@@ -6383,15 +6396,37 @@ function updateBundleDiscounts() {
       } else {
         subscribeTitle.textContent = 'Subscribe & Save 49%';
       }
-      flashDiscount(subscribeTitle);
+      if (animate) flashDiscount(subscribeTitle);
     }
   } else {
-    // One-time mode: show one-time discounts
     if (bottle1Save) bottle1Save.style.display = 'none';
-    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; flashDiscount(bottle2Save); }
-    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; flashDiscount(bottle3Save); }
+    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; if (animate) flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; if (animate) flashDiscount(bottle3Save); }
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
+}
+
+// Update bundle purchase option borders based on selected quantity
+function updateBundlePurchaseBorders() {
+  var colors = { 1: '#1c1917', 2: '#ea580c', 3: '#b91c1c' };
+  var bgs = { 1: '#fff', 2: '#fff7ed', 3: '#fef2f2' };
+  var color = colors[bundleSelectedQty];
+  var bg = bgs[bundleSelectedQty];
+
+  document.querySelectorAll('.bundle-purchase-option').forEach(function(opt) {
+    opt.style.borderColor = opt.classList.contains('selected') ? color : (color + '66');
+    if (opt.classList.contains('selected')) {
+      opt.style.background = bg;
+    } else {
+      opt.style.background = '#fff';
+    }
+  });
+
+  // Update radio circle colors
+  document.querySelectorAll('.bundle-purchase-option.selected .purchase-radio-circle').forEach(function(circle) {
+    circle.style.borderColor = color;
+    var dot = circle.querySelector('::after');
+  });
 }
 
 // Reviews slider
@@ -6527,7 +6562,8 @@ function selectDesktopBundle(qty) {
   });
 
   updateDesktopPrices();
-  updateDesktopDiscounts();
+  updateDesktopDiscounts(false);
+  updateDesktopPurchaseBorders();
 }
 
 function selectDesktopPurchase(type) {
@@ -6542,7 +6578,8 @@ function selectDesktopPurchase(type) {
   });
 
   updateDesktopPrices();
-  updateDesktopDiscounts();
+  updateDesktopDiscounts(true);
+  updateDesktopPurchaseBorders();
 }
 
 function changeDesktopImage(imageSrc, thumbnail) {
@@ -6608,7 +6645,7 @@ function updateDesktopPrices() {
   }
 }
 
-function updateDesktopDiscounts() {
+function updateDesktopDiscounts(animate) {
   var type = desktopPurchaseType;
   var qty = desktopSelectedQty;
 
@@ -6618,33 +6655,43 @@ function updateDesktopDiscounts() {
   var subscribeTitle = document.getElementById('desktop-subscribe-title');
 
   if (type === 'subscribe') {
-    // Show subscription discounts
     if (bottle1Save) {
       bottle1Save.textContent = 'Save 26%';
       bottle1Save.style.display = 'block';
-      flashDiscount(bottle1Save);
+      if (animate) flashDiscount(bottle1Save);
     }
-    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; flashDiscount(bottle2Save); }
-    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; flashDiscount(bottle3Save); }
+    if (bottle2Save) { bottle2Save.textContent = 'Save 37%'; if (animate) flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 49%'; if (animate) flashDiscount(bottle3Save); }
     if (subscribeTitle) {
       subscribeTitle.textContent = 'Subscribe & Save ' + desktopDiscounts.subscribe[qty] + '%';
-      flashDiscount(subscribeTitle);
+      if (animate) flashDiscount(subscribeTitle);
     }
   } else {
-    // Hide bottle1 save for one-time, show bundle discounts
-    if (bottle1Save) {
-      bottle1Save.style.display = 'none';
-    }
-    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; flashDiscount(bottle2Save); }
-    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; flashDiscount(bottle3Save); }
+    if (bottle1Save) bottle1Save.style.display = 'none';
+    if (bottle2Save) { bottle2Save.textContent = 'Save 24%'; if (animate) flashDiscount(bottle2Save); }
+    if (bottle3Save) { bottle3Save.textContent = 'Save 40%'; if (animate) flashDiscount(bottle3Save); }
     if (subscribeTitle) subscribeTitle.textContent = 'Subscribe & Save 26%';
   }
+}
+
+// Update desktop purchase option borders based on selected quantity
+function updateDesktopPurchaseBorders() {
+  var colors = { 1: '#1c1917', 2: '#ea580c', 3: '#b91c1c' };
+  var bgs = { 1: '#fff', 2: '#fff7ed', 3: '#fef2f2' };
+  var color = colors[desktopSelectedQty];
+  var bg = bgs[desktopSelectedQty];
+
+  document.querySelectorAll('.desktop-purchase-option').forEach(function(opt) {
+    opt.style.borderColor = opt.classList.contains('selected') ? color : (color + '66');
+    opt.style.background = opt.classList.contains('selected') ? bg : '#fff';
+  });
 }
 
 // Initialize desktop product section
 document.addEventListener('DOMContentLoaded', function() {
   updateDesktopPrices();
-  updateDesktopDiscounts();
+  updateDesktopDiscounts(false);
+  updateDesktopPurchaseBorders();
 });
 
 function updateMobilePrice(qty) {
