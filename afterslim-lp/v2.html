@@ -5030,9 +5030,39 @@ ul, ol {
 
 /* ========== HERO V2 ========== */
 .hero-v2 {
-  background: linear-gradient(180deg, #fafaf9 0%, #fff7ed 40%, #f8f5f2 100%);
-  padding: 60px 0 40px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #1a1a2e 100%);
+  padding: 80px 0 60px;
   overflow: hidden;
+  position: relative;
+}
+
+.hero-v2::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(234,88,12,0.15) 0%, transparent 60%);
+  pointer-events: none;
+  animation: heroGlow 6s ease-in-out infinite alternate;
+}
+
+.hero-v2::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 60%);
+  pointer-events: none;
+  animation: heroGlow 8s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes heroGlow {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.2) translate(20px, -20px); }
 }
 
 .hero-v2-inner {
@@ -5042,6 +5072,8 @@ ul, ol {
   display: flex;
   align-items: center;
   gap: 60px;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-v2-text {
@@ -5054,31 +5086,35 @@ ul, ol {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 2.5px;
-  color: var(--orange);
+  color: #f97316;
   text-transform: uppercase;
   margin-bottom: 16px;
-  background: rgba(234,88,12,0.08);
+  background: rgba(249,115,22,0.15);
   padding: 6px 14px;
   border-radius: 20px;
+  border: 1px solid rgba(249,115,22,0.3);
 }
 
 .hero-v2-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 46px;
+  font-size: 48px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #fff;
   line-height: 1.15;
   margin-bottom: 20px;
 }
 
 .hero-v2-title span {
-  color: var(--orange);
+  background: linear-gradient(135deg, #f97316, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-v2-subtitle {
   font-size: 17px;
   line-height: 1.7;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.7);
   margin-bottom: 24px;
 }
 
@@ -5095,7 +5131,7 @@ ul, ol {
   gap: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: rgba(255,255,255,0.85);
 }
 
 .hero-v2-cta-row {
@@ -5106,23 +5142,28 @@ ul, ol {
 
 .hero-v2-cta {
   display: inline-block;
-  padding: 16px 40px;
-  background: var(--orange);
+  padding: 18px 48px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
   color: #fff;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   border-radius: 50px;
   text-decoration: none;
   letter-spacing: 0.5px;
-  transition: all 0.2s;
-  box-shadow: 0 4px 16px rgba(234,88,12,0.3);
-  animation: pulse 3.5s ease-in-out infinite;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(249,115,22,0.4), 0 0 60px rgba(249,115,22,0.15);
+  animation: ctaGlow 3s ease-in-out infinite;
+}
+
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(249,115,22,0.4), 0 0 40px rgba(249,115,22,0.1); }
+  50% { box-shadow: 0 4px 30px rgba(249,115,22,0.6), 0 0 80px rgba(249,115,22,0.2); transform: scale(1.02); }
 }
 
 .hero-v2-cta:hover {
-  background: var(--orange-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(234,88,12,0.4);
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(249,115,22,0.5);
   animation: none;
 }
 
@@ -5132,7 +5173,7 @@ ul, ol {
   align-items: center;
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.6);
 }
 
 .hero-v2-stars {
@@ -5146,16 +5187,49 @@ ul, ol {
   position: relative;
 }
 
+.hero-v2-image::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(249,115,22,0.2) 0%, transparent 60%);
+  border-radius: 50%;
+  animation: bottleGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes bottleGlow {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+}
+
 .hero-v2-image img {
-  width: 320px;
+  width: 340px;
   height: auto;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 20px 50px rgba(249,115,22,0.3));
+  position: relative;
+  z-index: 2;
+  animation: bottleFloat 5s ease-in-out infinite;
+}
+
+@keyframes bottleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 /* Mobile Hero V2 */
 @media (max-width: 768px) {
   .hero-v2 {
-    padding: 36px 0 24px;
+    padding: 40px 0 32px;
+  }
+
+  .hero-v2::before {
+    width: 400px;
+    height: 400px;
+    right: -30%;
+    top: -20%;
   }
 
   .hero-v2-inner {
@@ -5175,11 +5249,11 @@ ul, ol {
 
   .hero-v2-trust-row {
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
   }
 
   .hero-v2-trust {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .hero-v2-cta-row {
@@ -5189,14 +5263,19 @@ ul, ol {
   }
 
   .hero-v2-cta {
-    padding: 14px 36px;
-    font-size: 15px;
+    padding: 16px 36px;
+    font-size: 16px;
     width: 100%;
     text-align: center;
   }
 
   .hero-v2-image img {
-    width: 220px;
+    width: 200px;
+  }
+
+  .hero-v2-image::before {
+    width: 200px;
+    height: 200px;
   }
 }
 
@@ -5263,11 +5342,27 @@ ul, ol {
   }
 }
 
+/* ========== HERO WAVE DIVIDER ========== */
+.hero-wave {
+  background: linear-gradient(180deg, #1a1a2e, #f8f5f2);
+  height: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-wave svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+}
+
 /* ========== SOCIAL PROOF BAR ========== */
 .social-proof-bar {
   background: #fff;
-  padding: 20px 0;
+  padding: 24px 0;
   border-bottom: 1px solid #f0eeec;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
 
 .social-proof-bar-inner {
@@ -5297,22 +5392,122 @@ ul, ol {
 }
 
 .social-proof-item .sp-number {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--orange);
 }
 
 @media (max-width: 768px) {
   .social-proof-bar-inner {
-    gap: 16px;
+    gap: 12px;
+    justify-content: space-around;
   }
 
   .social-proof-item {
-    font-size: 12px;
+    font-size: 11px;
+    flex-direction: column;
+    text-align: center;
+    gap: 4px;
+  }
+
+  .social-proof-item svg {
+    width: 24px;
+    height: 24px;
   }
 
   .social-proof-item .sp-number {
-    font-size: 15px;
+    font-size: 16px;
+  }
+}
+
+/* ========== ANIMATED SECTION ENTRANCES ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== ENHANCED SECTION STYLES ========== */
+.science-section,
+.ingredients-section {
+  position: relative;
+}
+
+.science-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), #f59e0b, var(--orange));
+}
+
+/* Ingredient cards hover effect */
+.ingredient-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.ingredient-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
+}
+
+/* Enhanced testimonial cards */
+.testimonial-card-image {
+  transition: transform 0.3s ease !important;
+}
+
+.testimonial-card-image:hover {
+  transform: scale(1.02) !important;
+}
+
+/* Review items hover */
+.review-item {
+  transition: background 0.3s ease;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 12px;
+}
+
+.review-item:hover {
+  background: rgba(249,115,22,0.03);
+}
+
+/* Enhanced guarantee card */
+.guarantee-content {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.guarantee-content:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1) !important;
+}
+
+/* FAQ items enhanced */
+.faq-question {
+  transition: color 0.2s ease !important;
+}
+
+.faq-question:hover {
+  color: var(--orange) !important;
+}
+
+/* Announcement bar enhanced */
+.announcement-bar {
+  background: linear-gradient(90deg, #1a1a2e, #0f3460, #1a1a2e) !important;
+}
+
+/* Mobile sticky CTA enhanced */
+@media (max-width: 768px) {
+  .mobile-sticky-cta .sticky-btn {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    box-shadow: 0 4px 16px rgba(249,115,22,0.3);
   }
 }
 </style>
@@ -5370,6 +5565,13 @@ ul, ol {
     </div>
   </div>
 </section>
+
+<!-- ========== HERO WAVE DIVIDER ========== -->
+<div class="hero-wave">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path fill="#f8f5f2" d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z"/>
+  </svg>
+</div>
 
 <!-- ========== SOCIAL PROOF BAR ========== -->
 <div class="social-proof-bar">
