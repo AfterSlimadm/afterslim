@@ -3577,12 +3577,15 @@ ul, ol {
 
 .desktop-bundle-option .bundle-save {
   font-size: 13px;
-  color: #ea580c;
   font-weight: 700;
   text-transform: uppercase;
   display: inline-block;
   transition: transform 0.3s ease;
 }
+
+.desktop-bundle-option:nth-child(1) .bundle-save { color: #1c1917; }
+.desktop-bundle-option:nth-child(2) .bundle-save { color: #ea580c; }
+.desktop-bundle-option:nth-child(3) .bundle-save { color: #b91c1c; }
 
 .desktop-bundle-recommendation {
   font-size: 13px;
@@ -4063,12 +4066,15 @@ ul, ol {
 
   .mobile-qty-option .qty-save {
     font-size: 12px;
-    color: var(--orange);
     font-weight: 600;
     margin-top: 4px;
     display: inline-block;
     transition: transform 0.3s ease;
   }
+
+  .mobile-qty-option:nth-child(1) .qty-save { color: #1c1917; }
+  .mobile-qty-option:nth-child(2) .qty-save { color: #ea580c; }
+  .mobile-qty-option:nth-child(3) .qty-save { color: #b91c1c; }
 
   .mobile-qty-option .qty-save-subscription {
     display: none;
@@ -4536,12 +4542,15 @@ ul, ol {
 
 .bundle-option-save {
   font-size: 12px;
-  color: var(--orange);
   font-weight: 600;
   margin-top: 4px;
   display: block;
   transition: transform 0.3s ease;
 }
+
+.bundle-option:nth-child(1) .bundle-option-save { color: #1c1917; }
+.bundle-option:nth-child(2) .bundle-option-save { color: #ea580c; }
+.bundle-option:nth-child(3) .bundle-option-save { color: #b91c1c; }
 
 .discount-flash {
   animation: discountFlash 0.5s ease !important;
