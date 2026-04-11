@@ -6285,9 +6285,21 @@ ul, ol {
     return currentPurchaseType === 'subscribe' ? bundleDataSubscribe : bundleDataOnetime;
   }
 
+  // Bundle bottle images by quantity
+  var bundleBottleImages = {
+    1: 'images/bottlereal.png',
+    2: 'images/bottlereal2.png',
+    3: 'images/bottlereal.png'
+  };
+
   function updateBundleUI(qty) {
     var bundleData = getBundleData();
     var data = bundleData[qty];
+
+    // Update bottle image
+    if (bundleImage && bundleBottleImages[qty]) {
+      bundleImage.src = bundleBottleImages[qty];
+    }
 
     // Update prices
     var priceParts = data.price.split('.');
