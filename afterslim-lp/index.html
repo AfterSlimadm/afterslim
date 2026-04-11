@@ -743,13 +743,46 @@ ul, ol {
 
 /* ========== KEY INGREDIENTS ========== */
 .ingredients-section {
-  background: #f8f5f2;
-  padding: 20px 20px 20px;
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 30%, #ea580c 60%, #b45309 100%);
+  padding: 60px 20px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ingredients-section::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,220,100,0.15) 0%, transparent 60%);
+  pointer-events: none;
+  animation: ingredGlow 6s ease-in-out infinite alternate;
+}
+
+.ingredients-section::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  animation: ingredGlow 8s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes ingredGlow {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.2); }
 }
 
 .ingredients-section .container {
   max-width: 1100px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .ingredients-title {
@@ -757,18 +790,18 @@ ul, ol {
   text-align: center;
   font-size: 36px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
   margin-bottom: 12px;
 }
 
 .ingredients-title span {
-  color: var(--orange);
+  color: #fde68a;
 }
 
 .ingredients-subtitle {
   text-align: center;
   font-size: 16px;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.8);
   margin-bottom: 50px;
 }
 
@@ -785,17 +818,19 @@ ul, ol {
 }
 
 .ingredient-card {
-  background: var(--light);
+  background: rgba(255,255,255,0.95);
   border-radius: 16px;
   padding: 28px 24px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.3);
 }
 
 .ingredient-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2);
 }
 
 .ingredient-icon {
@@ -857,7 +892,7 @@ ul, ol {
 
 @media (max-width: 600px) {
   .ingredients-section {
-    padding: 16px 20px 16px;
+    padding: 40px 16px 24px;
   }
 
   .ingredients-title {
@@ -5461,8 +5496,8 @@ ul, ol {
 
     <!-- Supplement Facts (inside Key Ingredients section) -->
     <div class="reveal" style="margin-top: 40px;">
-      <h2 class="section-title" style="text-align: center;">Supplement Facts</h2>
-      <p class="section-subtitle" style="text-align: center; margin: 0 auto 20px; color: var(--text-secondary);">Transparent ingredients. Clinically studied strains. Nothing hidden.</p>
+      <h2 class="section-title" style="text-align: center; color: #fff;">Supplement Facts</h2>
+      <p class="section-subtitle" style="text-align: center; margin: 0 auto 20px; color: rgba(255,255,255,0.8);">Transparent ingredients. Clinically studied strains. Nothing hidden.</p>
     </div>
     <div class="facts-table-wrapper reveal">
       <div class="facts-header">
@@ -5503,7 +5538,7 @@ ul, ol {
     </div>
 
     <div class="section-cta">
-      <a href="#pricing" class="btn-shop-now">TRY AFTERSLIM</a>
+      <a href="#pricing" class="btn-shop-now" style="background: #fff; color: var(--orange);">TRY AFTERSLIM</a>
     </div>
   </div>
 </section>
