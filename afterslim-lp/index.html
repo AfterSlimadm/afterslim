@@ -7099,18 +7099,29 @@ function updateMobileButtonPrice() {
     }
 
     // Add resize handles
-    var corners = ['nw','ne','sw','se'];
-    corners.forEach(function(pos) {
-      var handle = document.createElement('div');
-      handle.className = 'edit-handle';
-      handle.dataset.corner = pos;
-      handle.style.cssText = 'position:absolute;width:12px;height:12px;background:#ea580c;border:2px solid #fff;border-radius:50%;z-index:99998;cursor:' + pos + '-resize;';
-      if (pos.includes('n')) handle.style.top = '-6px';
-      if (pos.includes('s')) handle.style.bottom = '-6px';
-      if (pos.includes('w')) handle.style.left = '-6px';
-      if (pos.includes('e')) handle.style.right = '-6px';
-      handle.addEventListener('mousedown', startResize);
-      selectedEl.appendChild(handle);
+    var handles = [
+      { pos: 'nw', cursor: 'nw-resize', top: '-5px', left: '-5px', w: 10, h: 10, round: true },
+      { pos: 'ne', cursor: 'ne-resize', top: '-5px', right: '-5px', w: 10, h: 10, round: true },
+      { pos: 'sw', cursor: 'sw-resize', bottom: '-5px', left: '-5px', w: 10, h: 10, round: true },
+      { pos: 'se', cursor: 'se-resize', bottom: '-5px', right: '-5px', w: 10, h: 10, round: true },
+      { pos: 'n', cursor: 'n-resize', top: '-4px', left: '50%', ml: '-20px', w: 40, h: 8, round: false },
+      { pos: 's', cursor: 's-resize', bottom: '-4px', left: '50%', ml: '-20px', w: 40, h: 8, round: false },
+      { pos: 'w', cursor: 'w-resize', top: '50%', left: '-4px', mt: '-20px', w: 8, h: 40, round: false },
+      { pos: 'e', cursor: 'e-resize', top: '50%', right: '-4px', mt: '-20px', w: 8, h: 40, round: false }
+    ];
+    handles.forEach(function(h) {
+      var el = document.createElement('div');
+      el.className = 'edit-handle';
+      el.dataset.corner = h.pos;
+      el.style.cssText = 'position:absolute;background:#ea580c;border:2px solid #fff;z-index:99998;cursor:' + h.cursor + ';width:' + h.w + 'px;height:' + h.h + 'px;border-radius:' + (h.round ? '50%' : '4px') + ';';
+      if (h.top) el.style.top = h.top;
+      if (h.bottom) el.style.bottom = h.bottom;
+      if (h.left) el.style.left = h.left;
+      if (h.right) el.style.right = h.right;
+      if (h.ml) el.style.marginLeft = h.ml;
+      if (h.mt) el.style.marginTop = h.mt;
+      el.addEventListener('mousedown', startResize);
+      selectedEl.appendChild(el);
     });
 
     // Drag on element
