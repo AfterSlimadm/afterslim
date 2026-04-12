@@ -505,7 +505,7 @@ ul, ol {
 
 .science-layout {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   gap: 0;
   max-width: 900px;
   margin: 0 auto;
@@ -515,10 +515,11 @@ ul, ol {
 }
 
 .science-image {
-  flex: 0 0 45%;
+  flex: 0 0 380px;
   position: relative;
   background: #fff;
   padding: 24px;
+  align-self: center;
 }
 
 .science-image > img {
@@ -591,29 +592,25 @@ ul, ol {
   background: #f0eeeb;
   border: none;
   border-radius: 0;
-  padding: 28px 28px;
+  padding: 20px 24px;
   text-align: center;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .science-box h3 {
   display: inline-block;
   font-family: 'Montserrat', 'Proxima Nova', sans-serif;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--orange);
-  margin-bottom: 20px;
-  padding: 12px 28px;
+  margin-bottom: 14px;
+  padding: 8px 22px;
   border: 2px solid var(--orange);
   border-radius: 8px;
 }
 
 .science-box p {
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 13px;
+  line-height: 1.6;
   color: var(--text-secondary);
   text-align: center;
 }
@@ -626,21 +623,21 @@ ul, ol {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 0;
+  padding: 4px 0;
   gap: 0;
   background: #f0eeeb;
 }
 
 .connector-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background: var(--orange);
   border-radius: 50%;
 }
 
 .connector-line {
   width: 0;
-  height: 30px;
+  height: 20px;
   border-left: 2px dashed var(--orange);
 }
 
