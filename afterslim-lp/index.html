@@ -7031,7 +7031,8 @@ function updateMobileButtonPrice() {
     toolbar.innerHTML = '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">' +
       '<span style="font-weight:800;color:#ea580c;">EDIT MODE</span>' +
       '<span style="font-size:12px;color:#666;">Click any element to select | Drag to move | Corners to resize | ESC to deselect</span>' +
-      '<button id="edit-copy-btn" style="margin-left:auto;padding:6px 14px;background:#ea580c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;">COPY CSS</button>' +
+      '<label style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#333;">BG: <input type="color" id="edit-bg-picker" value="#ffffff" style="width:32px;height:28px;border:1px solid #ccc;border-radius:4px;cursor:pointer;padding:0;"></label>' +
+      '<button id="edit-copy-btn" style="padding:6px 14px;background:#ea580c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;">COPY CSS</button>' +
       '<button id="edit-exit-btn" style="padding:6px 14px;background:#333;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;">EXIT</button>' +
       '</div>';
     toolbar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#fff;padding:10px 20px;box-shadow:0 2px 20px rgba(0,0,0,0.15);border-bottom:3px solid #ea580c;font-family:Inter,sans-serif;font-size:14px;';
@@ -7045,6 +7046,12 @@ function updateMobileButtonPrice() {
 
     document.getElementById('edit-exit-btn').onclick = function() { toggleEditMode(); };
     document.getElementById('edit-copy-btn').onclick = copyCSS;
+    document.getElementById('edit-bg-picker').addEventListener('input', function(e) {
+      if (selectedEl) {
+        selectedEl.style.background = e.target.value;
+        updateInfo();
+      }
+    });
 
     // Add click listeners
     document.body.style.cursor = 'crosshair';
@@ -7092,8 +7099,21 @@ function updateMobileButtonPrice() {
     selectedEl.style.outline = '3px solid #ea580c';
     selectedEl.style.outlineOffset = '2px';
 
-    // Make draggable
+    // Update color picker to current bg
     var comp = window.getComputedStyle(selectedEl);
+    var picker = document.getElementById('edit-bg-picker');
+    if (picker) {
+      var bg = comp.backgroundColor;
+      if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+        var rgb = bg.match(/\d+/g);
+        if (rgb) {
+          var hex = '#' + rgb.slice(0,3).map(function(x) { return parseInt(x).toString(16).padStart(2,'0'); }).join('');
+          picker.value = hex;
+        }
+      }
+    }
+
+    // Make draggable
     if (comp.position === 'static') {
       selectedEl.style.position = 'relative';
     }
@@ -7211,7 +7231,8 @@ function updateMobileButtonPrice() {
       'padding: ' + comp.padding + '<br>' +
       'margin: ' + comp.margin + '<br>' +
       'top: ' + (selectedEl.style.top || '0') + '<br>' +
-      'left: ' + (selectedEl.style.left || '0');
+      'left: ' + (selectedEl.style.left || '0') + '<br>' +
+      'background: ' + comp.backgroundColor;
   }
 
   function copyCSS() {
