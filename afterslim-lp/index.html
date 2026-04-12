@@ -515,10 +515,10 @@ ul, ol {
 }
 
 .science-image {
-  flex: 0 0 380px;
+  flex: 0 0 420px;
   position: relative;
   background: #fff;
-  padding: 24px;
+  padding: 12px;
   align-self: center;
 }
 
@@ -626,6 +626,17 @@ ul, ol {
   padding: 4px 0;
   gap: 0;
   background: #f0eeeb;
+  position: relative;
+}
+
+.science-connector::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: #d6d3d1;
 }
 
 .connector-dot {
