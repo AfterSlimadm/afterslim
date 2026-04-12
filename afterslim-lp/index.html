@@ -589,16 +589,22 @@ ul, ol {
   flex-direction: column;
   justify-content: center;
   gap: 0;
-  background: #f0eeeb;
-  padding: 8px 12px;
 }
 
 .science-box {
-  background: #fff;
+  background: #eeece9;
   border: none;
-  border-radius: 12px;
-  padding: 16px 20px;
+  border-radius: 0;
+  padding: 16px 24px;
   text-align: center;
+}
+
+.science-box:first-child {
+  border-radius: 0 16px 0 0;
+}
+
+.science-box:last-child {
+  border-radius: 0 0 16px 0;
 }
 
 .science-box h3 {
@@ -630,7 +636,7 @@ ul, ol {
   align-items: center;
   padding: 6px 0;
   gap: 0;
-  background: transparent;
+  background: #eeece9;
 }
 
 .connector-dot {
