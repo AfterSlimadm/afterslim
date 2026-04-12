@@ -6985,5 +6985,244 @@ function updateMobileButtonPrice() {
 }
 </script>
 <script src="checkout.js"></script>
+
+<!-- ========== EDIT MODE (triple space to activate) ========== -->
+<script>
+(function() {
+  var spaceCount = 0;
+  var spaceTimer = null;
+  var editMode = false;
+  var selectedEl = null;
+  var isDragging = false;
+  var isResizing = false;
+  var startX, startY, startLeft, startTop, startW, startH;
+  var overlay, toolbar, info;
+
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      spaceCount++;
+      clearTimeout(spaceTimer);
+      spaceTimer = setTimeout(function() { spaceCount = 0; }, 600);
+      if (spaceCount >= 3) {
+        spaceCount = 0;
+        toggleEditMode();
+      }
+    }
+    if (editMode && e.code === 'Escape') {
+      deselectEl();
+    }
+  });
+
+  function toggleEditMode() {
+    editMode = !editMode;
+    if (editMode) {
+      activateEditMode();
+    } else {
+      deactivateEditMode();
+    }
+  }
+
+  function activateEditMode() {
+    // Create toolbar
+    toolbar = document.createElement('div');
+    toolbar.id = 'edit-toolbar';
+    toolbar.innerHTML = '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">' +
+      '<span style="font-weight:800;color:#ea580c;">EDIT MODE</span>' +
+      '<span style="font-size:12px;color:#666;">Click any element to select | Drag to move | Corners to resize | ESC to deselect</span>' +
+      '<button id="edit-copy-btn" style="margin-left:auto;padding:6px 14px;background:#ea580c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;">COPY CSS</button>' +
+      '<button id="edit-exit-btn" style="padding:6px 14px;background:#333;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;">EXIT</button>' +
+      '</div>';
+    toolbar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#fff;padding:10px 20px;box-shadow:0 2px 20px rgba(0,0,0,0.15);border-bottom:3px solid #ea580c;font-family:Inter,sans-serif;font-size:14px;';
+    document.body.appendChild(toolbar);
+
+    // Info panel
+    info = document.createElement('div');
+    info.id = 'edit-info';
+    info.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:99999;background:#1c1917;color:#fff;padding:12px 16px;border-radius:10px;font-family:monospace;font-size:12px;line-height:1.6;min-width:220px;display:none;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+    document.body.appendChild(info);
+
+    document.getElementById('edit-exit-btn').onclick = function() { toggleEditMode(); };
+    document.getElementById('edit-copy-btn').onclick = copyCSS;
+
+    // Add click listeners
+    document.body.style.cursor = 'crosshair';
+    document.addEventListener('click', onEditClick, true);
+
+    // Highlight on hover
+    document.addEventListener('mouseover', onEditHover, true);
+    document.addEventListener('mouseout', onEditHoverOut, true);
+  }
+
+  function deactivateEditMode() {
+    deselectEl();
+    if (toolbar) toolbar.remove();
+    if (info) info.remove();
+    document.body.style.cursor = '';
+    document.removeEventListener('click', onEditClick, true);
+    document.removeEventListener('mouseover', onEditHover, true);
+    document.removeEventListener('mouseout', onEditHoverOut, true);
+  }
+
+  function onEditHover(e) {
+    if (isDragging || isResizing) return;
+    var el = e.target;
+    if (el.id === 'edit-toolbar' || el.closest('#edit-toolbar') || el.id === 'edit-info' || el.closest('#edit-info') || el.classList.contains('edit-handle')) return;
+    el.style.outline = '2px dashed #ea580c';
+  }
+
+  function onEditHoverOut(e) {
+    var el = e.target;
+    if (el === selectedEl) return;
+    el.style.outline = '';
+  }
+
+  function onEditClick(e) {
+    var el = e.target;
+    if (el.id === 'edit-toolbar' || el.closest('#edit-toolbar') || el.id === 'edit-info' || el.closest('#edit-info') || el.classList.contains('edit-handle')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    selectEl(el);
+  }
+
+  function selectEl(el) {
+    deselectEl();
+    selectedEl = el;
+    selectedEl.style.outline = '3px solid #ea580c';
+    selectedEl.style.outlineOffset = '2px';
+
+    // Make draggable
+    var comp = window.getComputedStyle(selectedEl);
+    if (comp.position === 'static') {
+      selectedEl.style.position = 'relative';
+    }
+
+    // Add resize handles
+    var corners = ['nw','ne','sw','se'];
+    corners.forEach(function(pos) {
+      var handle = document.createElement('div');
+      handle.className = 'edit-handle';
+      handle.dataset.corner = pos;
+      handle.style.cssText = 'position:absolute;width:12px;height:12px;background:#ea580c;border:2px solid #fff;border-radius:50%;z-index:99998;cursor:' + pos + '-resize;';
+      if (pos.includes('n')) handle.style.top = '-6px';
+      if (pos.includes('s')) handle.style.bottom = '-6px';
+      if (pos.includes('w')) handle.style.left = '-6px';
+      if (pos.includes('e')) handle.style.right = '-6px';
+      handle.addEventListener('mousedown', startResize);
+      selectedEl.appendChild(handle);
+    });
+
+    // Drag on element
+    selectedEl.addEventListener('mousedown', startDrag);
+    updateInfo();
+  }
+
+  function deselectEl() {
+    if (!selectedEl) return;
+    selectedEl.style.outline = '';
+    selectedEl.style.outlineOffset = '';
+    selectedEl.removeEventListener('mousedown', startDrag);
+    selectedEl.querySelectorAll('.edit-handle').forEach(function(h) { h.remove(); });
+    selectedEl = null;
+    if (info) info.style.display = 'none';
+  }
+
+  function startDrag(e) {
+    if (e.target.classList.contains('edit-handle')) return;
+    e.preventDefault();
+    isDragging = true;
+    var rect = selectedEl.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = parseInt(selectedEl.style.left) || 0;
+    startTop = parseInt(selectedEl.style.top) || 0;
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('mouseup', stopDrag);
+  }
+
+  function onDrag(e) {
+    if (!isDragging) return;
+    var dx = e.clientX - startX;
+    var dy = e.clientY - startY;
+    selectedEl.style.left = (startLeft + dx) + 'px';
+    selectedEl.style.top = (startTop + dy) + 'px';
+    updateInfo();
+  }
+
+  function stopDrag() {
+    isDragging = false;
+    document.removeEventListener('mousemove', onDrag);
+    document.removeEventListener('mouseup', stopDrag);
+  }
+
+  function startResize(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    isResizing = true;
+    var corner = e.target.dataset.corner;
+    startX = e.clientX;
+    startY = e.clientY;
+    startW = selectedEl.offsetWidth;
+    startH = selectedEl.offsetHeight;
+    startLeft = parseInt(selectedEl.style.left) || 0;
+    startTop = parseInt(selectedEl.style.top) || 0;
+
+    function onResize(ev) {
+      var dx = ev.clientX - startX;
+      var dy = ev.clientY - startY;
+      if (corner.includes('e')) selectedEl.style.width = (startW + dx) + 'px';
+      if (corner.includes('w')) { selectedEl.style.width = (startW - dx) + 'px'; selectedEl.style.left = (startLeft + dx) + 'px'; }
+      if (corner.includes('s')) selectedEl.style.height = (startH + dy) + 'px';
+      if (corner.includes('n')) { selectedEl.style.height = (startH - dy) + 'px'; selectedEl.style.top = (startTop + dy) + 'px'; }
+      updateInfo();
+    }
+
+    function stopResize() {
+      isResizing = false;
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
+
+    document.addEventListener('mousemove', onResize);
+    document.addEventListener('mouseup', stopResize);
+  }
+
+  function updateInfo() {
+    if (!selectedEl || !info) return;
+    var comp = window.getComputedStyle(selectedEl);
+    var tag = selectedEl.tagName.toLowerCase();
+    var cls = selectedEl.className ? '.' + selectedEl.className.split(' ')[0] : '';
+    info.style.display = 'block';
+    info.innerHTML = '<div style="color:#ea580c;font-weight:700;margin-bottom:6px;">' + tag + cls + '</div>' +
+      'width: ' + Math.round(selectedEl.offsetWidth) + 'px<br>' +
+      'height: ' + Math.round(selectedEl.offsetHeight) + 'px<br>' +
+      'padding: ' + comp.padding + '<br>' +
+      'margin: ' + comp.margin + '<br>' +
+      'top: ' + (selectedEl.style.top || '0') + '<br>' +
+      'left: ' + (selectedEl.style.left || '0');
+  }
+
+  function copyCSS() {
+    if (!selectedEl) return;
+    var comp = window.getComputedStyle(selectedEl);
+    var cls = selectedEl.className ? '.' + selectedEl.className.split(' ')[0] : selectedEl.tagName;
+    var css = cls + ' {\n' +
+      '  width: ' + Math.round(selectedEl.offsetWidth) + 'px;\n' +
+      '  height: ' + Math.round(selectedEl.offsetHeight) + 'px;\n' +
+      '  padding: ' + comp.padding + ';\n' +
+      '  margin: ' + comp.margin + ';\n' +
+      '  position: ' + comp.position + ';\n' +
+      '  top: ' + (selectedEl.style.top || 'auto') + ';\n' +
+      '  left: ' + (selectedEl.style.left || 'auto') + ';\n' +
+      '}';
+    navigator.clipboard.writeText(css).then(function() {
+      var btn = document.getElementById('edit-copy-btn');
+      btn.textContent = 'COPIED!';
+      setTimeout(function() { btn.textContent = 'COPY CSS'; }, 2000);
+    });
+  }
+})();
+</script>
 </body>
 </html>
