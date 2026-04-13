@@ -6460,26 +6460,18 @@ document.addEventListener('DOMContentLoaded', function() {
   // Bacteria label alternation - synced with GIF
   var bacteriaLabel = document.getElementById('bacteriaLabel');
   if (bacteriaLabel) {
-    var isHarmful = true;
-
-    function toggleLabel() {
-      if (isHarmful) {
-        bacteriaLabel.textContent = 'Harmful Bacteria';
+    function cycleLabel() {
+      bacteriaLabel.textContent = 'Harmful Bacteria';
+      setTimeout(function() {
+        bacteriaLabel.textContent = 'Akkermansia';
         setTimeout(function() {
-          isHarmful = false;
-          bacteriaLabel.textContent = 'Akkermansia';
+          cycleLabel();
         }, 3000);
-      }
+      }, 5000);
     }
 
     // Start immediately
-    toggleLabel();
-
-    // Repeat every 7.5 seconds (3s Harmful + 4.5s Akkermansia)
-    setInterval(function() {
-      isHarmful = true;
-      toggleLabel();
-    }, 7500);
+    cycleLabel();
   }
 });
 
