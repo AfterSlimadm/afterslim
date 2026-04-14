@@ -12,6 +12,8 @@ const ALLOWED_TYPES = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "application/vnd.ms-excel",
+  "text/plain",
+  "text/csv",
 ];
 
 export async function POST(request: NextRequest) {
@@ -42,7 +44,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Tipo de arquivo nao permitido. Aceitos: PDF, PNG, JPG, WEBP, DOC, DOCX, XLS, XLSX.",
+            "Tipo de arquivo não permitido. Aceitos: PDF, PNG, JPG, WEBP, DOC, DOCX, XLS, XLSX, TXT, CSV.",
         },
         { status: 400 }
       );
