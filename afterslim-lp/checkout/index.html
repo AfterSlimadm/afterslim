@@ -244,13 +244,14 @@
   <script src="https://js.stripe.com/v3/"></script>
   <script>
     const STRIPE_PK = 'pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
-    const API_URL = 'https://admin.afterslim.com/api/checkout';
+    const API_URL = '/api/checkout';
 
-    const PRICES = { 1: 59.99, 2: 99.98, 3: 119.97 };
+    // Prices for display only — real price is calculated by backend/Stripe
+    const DISPLAY_PRICES = { 1: 59.99, 2: 99.98, 3: 119.97 };
     const UNIT_PRICES = { 1: '$59.99', 2: '$49.99/ea', 3: '$39.99/ea' };
 
     function updateSummary(qty) {
-      const total = PRICES[qty] || qty * 59.99;
+      const total = DISPLAY_PRICES[qty] || qty * 59.99;
       document.getElementById('unit-price').textContent = UNIT_PRICES[qty] || '$59.99';
       document.getElementById('subtotal').textContent = '$' + total.toFixed(2);
       document.getElementById('total').textContent = '$' + total.toFixed(2);
@@ -266,7 +267,8 @@
 
       try {
         const params = new URLSearchParams(window.location.search);
-        const quantity = parseInt(params.get('qty')) || 1;
+        const raw = parseInt(params.get('qty')) || 1;
+        const quantity = [1, 2, 3].includes(raw) ? raw : 1;
 
         updateSummary(quantity);
 
@@ -289,7 +291,11 @@
         loadingEl.remove();
         checkout.mount('#checkout-mount');
       } catch (err) {
-        mountEl.innerHTML = '<div class="error-msg">' + (err.message || 'Something went wrong. Please try again.') + '</div>';
+        var errorDiv = document.createElement('div');
+        errorDiv.className = 'error-msg';
+        errorDiv.textContent = err.message || 'Something went wrong. Please try again.';
+        mountEl.innerHTML = '';
+        mountEl.appendChild(errorDiv);
       }
     }
 

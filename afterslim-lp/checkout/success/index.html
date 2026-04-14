@@ -82,10 +82,11 @@
     <div class="order-id" id="order-id"></div>
   </div>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('session_id');
+    var params = new URLSearchParams(window.location.search);
+    var sessionId = params.get('session_id');
+    window.history.replaceState({}, '', '/checkout/success');
     if (sessionId) {
-      document.getElementById('order-id').textContent = 'Session: ' + sessionId.slice(0, 20) + '...';
+      document.getElementById('order-id').textContent = 'Your order has been confirmed.';
     }
   </script>
 </body>
