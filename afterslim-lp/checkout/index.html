@@ -269,13 +269,14 @@
         const params = new URLSearchParams(window.location.search);
         const raw = parseInt(params.get('qty')) || 1;
         const quantity = [1, 2, 3].includes(raw) ? raw : 1;
+        const subscribe = params.get('subscribe') === 'true';
 
         updateSummary(quantity);
 
         const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ quantity }),
+          body: JSON.stringify({ quantity, subscribe }),
         });
 
         if (!res.ok) {

@@ -5429,7 +5429,7 @@ ul, ol {
   </div>
 
   <!-- Shop Now Button -->
-  <button class="mobile-add-to-cart" onclick="window.location.href='#pricing'">Shop Now</button>
+  <button class="mobile-add-to-cart">Shop Now</button>
 
   <div class="amazon-divider">or</div>
   <a href="#" class="btn-amazon" target="_blank">
@@ -6522,7 +6522,7 @@ function toggleSideMenu() {
     bundleBuyBtn.addEventListener('click', function() {
       var selectedOption = document.querySelector('.bundle-option.selected');
       var qty = selectedOption ? selectedOption.getAttribute('data-qty') : '2';
-      var url = 'checkout/index.html?qty=' + qty;
+      var url = '/checkout?qty=' + qty;
       if (currentPurchaseType === 'subscribe') {
         url += '&subscribe=true';
       }
