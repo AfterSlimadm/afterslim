@@ -63,13 +63,13 @@ export default function SettingsContent({
 }: SettingsContentProps) {
   // Store info
   const [storeName, setStoreName] = useState(
-    (initialSettings.store_name as string) || "AfterSlim Brasil"
+    (initialSettings.store_name as string) || "AfterSlim"
   );
-  const [cnpj, setCnpj] = useState(
-    (initialSettings.cnpj as string) || "00.000.000/0000-00"
+  const [ein, setCnpj] = useState(
+    (initialSettings.ein as string) || "00-0000000"
   );
   const [contactEmail, setContactEmail] = useState(
-    (initialSettings.support_email as string) || "contato@afterslim.com.br"
+    (initialSettings.support_email as string) || "support@afterslim.com"
   );
   const [phone, setPhone] = useState(
     (initialSettings.phone as string) || "+55 (11) 99999-9999"
@@ -84,7 +84,7 @@ export default function SettingsContent({
     (initialSettings.currency as string) || "USD"
   );
   const [timezone, setTimezone] = useState(
-    (initialSettings.timezone as string) || "America/Sao_Paulo"
+    (initialSettings.timezone as string) || "America/New_York"
   );
   const [language, setLanguage] = useState(
     (initialSettings.language as string) || "pt-BR"
@@ -92,13 +92,13 @@ export default function SettingsContent({
 
   // Shipping
   const [carrier, setCarrier] = useState(
-    (initialSettings.default_carrier as string) || "correios"
+    (initialSettings.default_carrier as string) || "fullstack"
   );
   const [freeShippingMin, setFreeShippingMin] = useState(
-    (initialSettings.free_shipping_min as string) || "R$199,00"
+    (initialSettings.free_shipping_min as string) || "$49.99"
   );
   const [processingTime, setProcessingTime] = useState(
-    (initialSettings.processing_time as string) || "2 dias uteis"
+    (initialSettings.processing_time as string) || "2 business days"
   );
 
   // Notification channels
@@ -120,7 +120,7 @@ export default function SettingsContent({
     try {
       await saveMultipleSettings({
         store_name: storeName,
-        cnpj,
+        ein,
         support_email: contactEmail,
         phone,
         address,
@@ -145,10 +145,10 @@ export default function SettingsContent({
   }
 
   function handleDiscard() {
-    setStoreName((initialSettings.store_name as string) || "AfterSlim Brasil");
-    setCnpj((initialSettings.cnpj as string) || "00.000.000/0000-00");
+    setStoreName((initialSettings.store_name as string) || "AfterSlim");
+    setCnpj((initialSettings.ein as string) || "00-0000000");
     setContactEmail(
-      (initialSettings.support_email as string) || "contato@afterslim.com.br"
+      (initialSettings.support_email as string) || "support@afterslim.com"
     );
     setPhone((initialSettings.phone as string) || "+55 (11) 99999-9999");
     setAddress(
@@ -156,14 +156,14 @@ export default function SettingsContent({
         "Av. Paulista, 1000 - Bela Vista, Sao Paulo - SP"
     );
     setCurrency((initialSettings.currency as string) || "USD");
-    setTimezone((initialSettings.timezone as string) || "America/Sao_Paulo");
+    setTimezone((initialSettings.timezone as string) || "America/New_York");
     setLanguage((initialSettings.language as string) || "pt-BR");
-    setCarrier((initialSettings.default_carrier as string) || "correios");
+    setCarrier((initialSettings.default_carrier as string) || "fullstack");
     setFreeShippingMin(
-      (initialSettings.free_shipping_min as string) || "R$199,00"
+      (initialSettings.free_shipping_min as string) || "$49.99"
     );
     setProcessingTime(
-      (initialSettings.processing_time as string) || "2 dias uteis"
+      (initialSettings.processing_time as string) || "2 business days"
     );
     setEmailNotif(initialSettings.channel_email !== false);
     setSmsNotif(initialSettings.channel_sms === true);
@@ -238,9 +238,9 @@ export default function SettingsContent({
                       />
                     </div>
                     <div className="space-y-2">
-                      <FieldLabel>CNPJ</FieldLabel>
+                      <FieldLabel>EIN</FieldLabel>
                       <Input
-                        value={cnpj}
+                        value={ein}
                         onChange={(e) => setCnpj(e.target.value)}
                         className="border-0 bg-[#dae3ee]/60 shadow-none focus-visible:ring-1 focus-visible:ring-[#00628c]/30"
                       />
@@ -303,17 +303,17 @@ export default function SettingsContent({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="America/Sao_Paulo">
-                            America/Sao_Paulo (GMT-3)
+                          <SelectItem value="America/New_York">
+                            America/New_York (EST)
                           </SelectItem>
                           <SelectItem value="America/Manaus">
                             America/Manaus (GMT-4)
                           </SelectItem>
                           <SelectItem value="America/Belem">
-                            America/Belem (GMT-3)
+                            America/Belem (EST)
                           </SelectItem>
                           <SelectItem value="America/Recife">
-                            America/Recife (GMT-3)
+                            America/Recife (EST)
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -345,27 +345,25 @@ export default function SettingsContent({
                 <div className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                   <h2 className="mb-6 flex items-center gap-2 text-base font-semibold text-foreground">
                     <Truck className="size-4 text-muted-foreground" />
-                    Logistica e Envio
+                    Logística e Envio
                   </h2>
                   <div className="space-y-5">
                     <div className="space-y-2">
-                      <FieldLabel>Transportadora padrao</FieldLabel>
+                      <FieldLabel>Transportadora padrão</FieldLabel>
                       <Select value={carrier} onValueChange={setCarrier}>
                         <SelectTrigger className="border-0 bg-[#dae3ee]/60 shadow-none focus:ring-1 focus:ring-[#00628c]/30">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="correios">Correios</SelectItem>
-                          <SelectItem value="jadlog">Jadlog</SelectItem>
-                          <SelectItem value="totalexpress">
-                            Total Express
-                          </SelectItem>
-                          <SelectItem value="loggi">Loggi</SelectItem>
+                          <SelectItem value="usps">USPS</SelectItem>
+                          <SelectItem value="ups">UPS</SelectItem>
+                          <SelectItem value="fedex">FedEx</SelectItem>
+                          <SelectItem value="fullstack">FullStack Fulfillment</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <FieldLabel>Frete gratis (minimo)</FieldLabel>
+                      <FieldLabel>Frete grátis (mínimo)</FieldLabel>
                       <Input
                         value={freeShippingMin}
                         onChange={(e) => setFreeShippingMin(e.target.value)}
