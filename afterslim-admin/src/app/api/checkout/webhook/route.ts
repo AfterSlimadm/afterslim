@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { postBuyerLead, postAbandonLead } from "@/lib/listflex";
+import { submitOrder } from "@/lib/cartrover";
 import type Stripe from "stripe";
 
 /**
@@ -176,6 +177,70 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     offer: "https://afterslim.com",
     comments: `Order ${orderNumber} - $${totalDollars}`,
   }).catch((err) => console.error("[listflex] buyer post failed:", err));
+
+  // Forward order to CartRover (FullStack Fulfillment)
+  const shipping = extractShippingAddress(session);
+  if (shipping && email) {
+    try {
+      const unitPrice = totalDollars / qty;
+      const crResponse = await submitOrder({
+        cart_order_id: orderNumber,
+        cust_ref: order.id,
+        cust_email: email,
+        cust_first_name: fname,
+        cust_last_name: lname,
+        ship_first_name: fname,
+        ship_last_name: lname,
+        ship_address_1: shipping.line1 || "",
+        ship_address_2: shipping.line2 || undefined,
+        ship_city: shipping.city || "",
+        ship_state: shipping.state || "",
+        ship_zip: shipping.postal_code || "",
+        ship_country: shipping.country || "US",
+        sub_total: totalDollars,
+        grand_total: totalDollars,
+        shipping_handling: 0,
+        sales_tax: 0,
+        order_discount: 0,
+        items: [
+          {
+            item: "GP0363", // GLP-1 Support - confirmed with FullStack
+            sku: "GP0363",
+            quantity: qty,
+            price: unitPrice,
+            extended_amount: unitPrice * qty,
+            description: "GLP-1 Support - 30 Capsules",
+          },
+        ],
+      });
+
+      // Save CartRover ref and update status
+      await supabase
+        .from("orders")
+        .update({
+          status: "processing",
+          metadata: {
+            product_id: metadata.product_id,
+            quantity: qty,
+            cartrover_ref: crResponse.order_number,
+          },
+        })
+        .eq("id", order.id);
+
+      await supabase.from("order_events").insert({
+        order_id: order.id,
+        event_type: "status_changed",
+        old_value: "paid",
+        new_value: "processing",
+        actor: "cartrover",
+      });
+
+      console.log("[webhook] order sent to CartRover:", orderNumber);
+    } catch (err) {
+      // Don't block the webhook if CartRover fails - order is saved, can retry later
+      console.error("[webhook] CartRover submission failed (non-blocking):", err);
+    }
+  }
 
   console.log("[webhook] order created:", orderNumber, "id:", order.id);
 }

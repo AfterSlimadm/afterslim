@@ -1,0 +1,60 @@
+{
+  "categories": {
+    "glp1-side-effects": {
+      "description": "Managing common GLP-1 medication side effects",
+      "topics": [
+        "Why GLP-1 medications cause nausea and how to manage it",
+        "Bloating and gas on GLP-1 — what's happening in your gut",
+        "Constipation on GLP-1 medications — causes and natural solutions",
+        "How GLP-1 affects your appetite and digestion speed",
+        "The connection between GLP-1 medications and acid reflux",
+        "Why your taste buds change on GLP-1 therapy",
+        "Hair thinning on GLP-1 — is it the medication or nutrition?"
+      ]
+    },
+    "gut-health-basics": {
+      "description": "Foundational gut health education",
+      "topics": [
+        "What is the gut microbiome and why does it matter",
+        "How prebiotics feed your good bacteria",
+        "Probiotics 101 — what they actually do in your body",
+        "The gut-brain connection and how it affects your mood",
+        "Why fiber is the most underrated nutrient for gut health",
+        "Signs your gut health needs attention",
+        "How stress destroys your gut bacteria"
+      ]
+    },
+    "resistant-starch": {
+      "description": "Resistant starch education and benefits",
+      "topics": [
+        "What is resistant starch and why your gut loves it",
+        "Foods high in resistant starch you should be eating",
+        "How resistant starch feeds beneficial gut bacteria",
+        "The difference between regular starch and resistant starch",
+        "Why cooling your rice and potatoes creates resistant starch"
+      ]
+    },
+    "nutrition-on-glp1": {
+      "description": "Eating well while on GLP-1 medications",
+      "topics": [
+        "What to eat when you have almost no appetite on GLP-1",
+        "Protein priorities when your appetite is suppressed",
+        "Hydration tips for people on GLP-1 medications",
+        "Small meals that pack maximum nutrition on GLP-1",
+        "Why nutrient absorption matters more when eating less",
+        "The best foods to reduce GLP-1 digestive discomfort"
+      ]
+    },
+    "myths-and-facts": {
+      "description": "Common misconceptions about GLP-1 and supplements",
+      "topics": [
+        "Myth: GLP-1 medications destroy your gut bacteria",
+        "Myth: You don't need supplements if you eat healthy",
+        "Myth: All probiotics are the same",
+        "Myth: GLP-1 side effects mean the medication isn't working",
+        "Myth: You'll gain all the weight back after stopping GLP-1",
+        "Myth: Prebiotics and probiotics are the same thing"
+      ]
+    }
+  }
+}

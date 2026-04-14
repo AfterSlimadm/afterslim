@@ -54,7 +54,7 @@ export default function DashboardContent({
               Dashboard
             </h1>
             <p className="text-sm text-[#40484e]">
-              Visao geral do seu negocio AfterSlim
+              Visão geral do seu negócio AfterSlim
             </p>
           </div>
           <div className="flex items-center gap-2 rounded-lg bg-[#ecf5ff] px-3 py-1.5 text-sm text-[#40484e]">
@@ -91,7 +91,7 @@ export default function DashboardContent({
         <BlurFade delay={0.2}>
           <KpiCard
             variant="avgOrder"
-            title="Ticket Medio"
+            title="Ticket Médio"
             value={formatCurrency(avgOrder)}
             numericValue={avgOrder}
             trend={0}
@@ -145,7 +145,7 @@ export default function DashboardContent({
           <Button variant="ghost" size="sm" className="gap-2 text-[#40484e]" asChild>
             <Link href="/finance">
               <BarChart3 className="h-4 w-4" />
-              Relatorio Financeiro
+              Relatório Financeiro
             </Link>
           </Button>
         </div>

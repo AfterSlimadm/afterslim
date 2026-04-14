@@ -204,11 +204,11 @@ export default function SettingsContent({
             <TabsTrigger value="geral" className="text-sm">
               Geral
             </TabsTrigger>
-            <TabsTrigger value="notificacoes" className="text-sm">
-              Notificacoes
+            <TabsTrigger value="notificações" className="text-sm">
+              Notificações
             </TabsTrigger>
-            <TabsTrigger value="integracao" className="text-sm">
-              Integracao
+            <TabsTrigger value="integração" className="text-sm">
+              Integração
             </TabsTrigger>
             <TabsTrigger value="equipe" className="text-sm">
               Equipe
@@ -226,7 +226,7 @@ export default function SettingsContent({
                 {/* Store Info Card */}
                 <div className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                   <h2 className="mb-6 text-base font-semibold text-foreground">
-                    Informacoes da Loja
+                    Informações da Loja
                   </h2>
                   <div className="space-y-5">
                     <div className="space-y-2">
@@ -400,7 +400,7 @@ export default function SettingsContent({
                             E-mail
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            Notificacoes por e-mail
+                            Notificações por e-mail
                           </p>
                         </div>
                       </div>
@@ -483,23 +483,23 @@ export default function SettingsContent({
             </BlurFade>
           </TabsContent>
 
-          {/* ── Notificacoes Tab (placeholder) ──────────────── */}
-          <TabsContent value="notificacoes">
+          {/* ── Notificações Tab (placeholder) ──────────────── */}
+          <TabsContent value="notificações">
             <BlurFade delay={0.1}>
               <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <p className="text-sm text-muted-foreground">
-                  Configuracoes de notificacoes em breve.
+                  Configuracoes de notificações em breve.
                 </p>
               </div>
             </BlurFade>
           </TabsContent>
 
-          {/* ── Integracao Tab (placeholder) ────────────────── */}
-          <TabsContent value="integracao">
+          {/* ── Integração Tab (placeholder) ────────────────── */}
+          <TabsContent value="integração">
             <BlurFade delay={0.1}>
               <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <p className="text-sm text-muted-foreground">
-                  Configuracoes de integracao em breve.
+                  Configuracoes de integração em breve.
                 </p>
               </div>
             </BlurFade>

@@ -196,7 +196,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
 
   async function handleSave() {
     if (!formDesc.trim()) {
-      toast.error("Insira uma descricao");
+      toast.error("Insira uma descrição");
       return;
     }
     const amount = parseFloat(formAmount);
@@ -297,7 +297,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="cost-desc">Descricao</Label>
+                <Label htmlFor="cost-desc">Descrição</Label>
                 <Input
                   id="cost-desc"
                   placeholder="Ex: Estoque 500un AfterSlim"

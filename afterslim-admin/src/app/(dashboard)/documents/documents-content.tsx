@@ -306,7 +306,7 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="doc-description">Descricao (opcional)</Label>
+                <Label htmlFor="doc-description">Descrição (opcional)</Label>
                 <Textarea
                   id="doc-description"
                   placeholder="Detalhes sobre o documento..."

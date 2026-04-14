@@ -129,7 +129,7 @@ export default function FinanceContent({
               Financeiro
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Relatorio detalhado de performance e saude financeira.
+              Relatório detalhado de performance e saude financeira.
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -152,7 +152,7 @@ export default function FinanceContent({
             </div>
             <Button variant="outline" size="sm" className="gap-2">
               <Download className="h-4 w-4" />
-              Exportar Relatorio
+              Exportar Relatório
             </Button>
             <Button
               size="sm"
@@ -198,7 +198,7 @@ export default function FinanceContent({
                   <TrendingUp className="h-4 w-4 text-sky-600" />
                 </div>
                 <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-                  Receita Liquida
+                  Receita Líquida
                 </span>
               </div>
               <CountUp
@@ -389,7 +389,7 @@ export default function FinanceContent({
         <Card className="border-0 shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-base font-semibold">
-              Ultimas Transacoes
+              Últimas Transações
             </CardTitle>
             <Button
               variant="link"
@@ -408,7 +408,7 @@ export default function FinanceContent({
                     Data
                   </TableHead>
                   <TableHead className="text-[0.6875rem] uppercase tracking-wider font-semibold text-muted-foreground">
-                    Descricao
+                    Descrição
                   </TableHead>
                   <TableHead className="text-[0.6875rem] uppercase tracking-wider font-semibold text-muted-foreground">
                     Tipo

@@ -705,11 +705,11 @@ function IdeaDetailSheet({
             </span>
           </div>
 
-          {/* Responsavel */}
+          {/* Responsável */}
           {idea.assignee && (
             <div className="flex items-center gap-2">
               <User className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Responsavel:</span>
+              <span className="text-sm text-muted-foreground">Responsável:</span>
               <span className="text-sm font-medium">{idea.assignee}</span>
             </div>
           )}

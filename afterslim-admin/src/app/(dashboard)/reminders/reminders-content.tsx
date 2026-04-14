@@ -252,7 +252,7 @@ export default function RemindersContent({ reminders: initial }: RemindersConten
                 <TableHead>Titulo</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Prioridade</TableHead>
-                <TableHead>Responsavel</TableHead>
+                <TableHead>Responsável</TableHead>
                 <TableHead>Vencimento</TableHead>
                 <TableHead>Criado em</TableHead>
                 <TableHead className="w-[100px]">Acoes</TableHead>
@@ -432,7 +432,7 @@ function NewReminderDialog({ onCreated }: { onCreated: () => void }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Descricao</Label>
+            <Label htmlFor="description">Descrição</Label>
             <Textarea
               id="description"
               placeholder="Detalhes do lembrete..."
@@ -466,7 +466,7 @@ function NewReminderDialog({ onCreated }: { onCreated: () => void }) {
             </div>
           </div>
           <div className="space-y-2">
-            <Label>Responsavel</Label>
+            <Label>Responsável</Label>
             <Select value={assignedTo} onValueChange={setAssignedTo}>
               <SelectTrigger>
                 <SelectValue placeholder="Selecionar..." />

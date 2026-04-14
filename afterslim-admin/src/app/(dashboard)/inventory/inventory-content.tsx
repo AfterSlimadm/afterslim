@@ -155,7 +155,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
   const handleRestock = async () => {
     const qty = parseInt(restockQty);
     if (!qty || qty <= 0) {
-      toast.error("Insira uma quantidade valida");
+      toast.error("Insira uma quantidade válida");
       return;
     }
     try {
@@ -270,18 +270,18 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-base font-semibold mb-1">
-                      Relatorio Inteligente de Demanda
+                      Relatório Inteligente de Demanda
                     </h3>
                     <p className="text-sm text-white/75 leading-relaxed mb-4">
                       Analise automatica de demanda com base nas vendas recentes.
-                      Configure alertas para receber notificacoes de reposicao.
+                      Configure alertas para receber notificações de reposição.
                     </p>
                     <Button
                       variant="outline"
                       className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white rounded-full text-sm px-4"
                     >
                       <TrendingUp className="size-4 mr-1.5" />
-                      Configurar Automacao
+                      Configurar Automação
                     </Button>
                   </div>
                 </div>
@@ -295,10 +295,10 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base font-semibold">
-                    Movimentacao de Estoque
+                    Movimentação de Estoque
                   </CardTitle>
                   <button className="text-sm font-medium text-[#00628c] hover:text-[#00496a] transition-colors">
-                    Ver Relatorio Completo
+                    Ver Relatório Completo
                   </button>
                 </div>
               </CardHeader>
@@ -319,14 +319,14 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                         Quantidade
                       </TableHead>
                       <TableHead className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold pr-6">
-                        Responsavel
+                        Responsável
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
-                        Nenhuma movimentacao registrada
+                        Nenhuma movimentação registrada
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -392,17 +392,17 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                             if (!res.ok) throw new Error("Erro");
                             toast.success(
                               alert.status === "CRITICO"
-                                ? "Reposicao solicitada com urgencia"
-                                : "Cotacao de reposicao criada"
+                                ? "Reposição solicitada com urgência"
+                                : "Cotação de reposição criada"
                             );
                           } catch {
-                            toast.error("Erro ao criar solicitacao. Tente novamente.");
+                            toast.error("Erro ao criar solicitação. Tente novamente.");
                           }
                         }}
                       >
                         {alert.status === "CRITICO"
-                          ? "Pedir Reposicao"
-                          : "Gerar Cotacao"}
+                          ? "Pedir Reposição"
+                          : "Gerar Cotação"}
                         {" ->"}
                       </button>
                     </div>

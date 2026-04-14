@@ -118,7 +118,7 @@ export default function SalesChannelsContent({
         <Card className="gap-0 py-0">
           <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Ticket Medio
+              Ticket Médio
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>

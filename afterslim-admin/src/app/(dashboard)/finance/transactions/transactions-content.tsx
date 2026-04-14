@@ -176,7 +176,7 @@ export default function TransactionsContent({
       return;
     }
     if (!formDescription || formDescription.length < 3) {
-      toast.error("Insira uma descricao (minimo 3 caracteres)");
+      toast.error("Insira uma descrição (minimo 3 caracteres)");
       return;
     }
     if (!formDate) {
