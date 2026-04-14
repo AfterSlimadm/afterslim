@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   Plus,
   ArrowUpRight,
+  ArrowDownRight,
   TrendingUp,
   Brain,
   Pill,
