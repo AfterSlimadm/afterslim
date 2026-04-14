@@ -65,58 +65,13 @@ const PERIODS = [
   { key: "90d", label: "90d" },
 ] as const;
 
-/* ── Mock transaction data (until real endpoint) ────────────── */
+/* ── Transactions (empty until real endpoint) ────────────────── */
 
-const MOCK_TRANSACTIONS = [
-  {
-    id: "1",
-    date: "01/04/2026",
-    description: "Venda Shopify #4521",
-    type: "VENDA" as const,
-    valor: 297.0,
-    status: "APROVADO" as const,
-  },
-  {
-    id: "2",
-    date: "01/04/2026",
-    description: "Taxa Gateway - Stripe",
-    type: "TAXA" as const,
-    valor: -8.91,
-    status: "PROCESSANDO" as const,
-  },
-  {
-    id: "3",
-    date: "31/03/2026",
-    description: "Venda Hotmart #1187",
-    type: "VENDA" as const,
-    valor: 197.0,
-    status: "CONCLUIDO" as const,
-  },
-  {
-    id: "4",
-    date: "31/03/2026",
-    description: "Reembolso Pedido #4480",
-    type: "REEMBOLSO" as const,
-    valor: -297.0,
-    status: "ANALISE" as const,
-  },
-  {
-    id: "5",
-    date: "30/03/2026",
-    description: "Venda Direta - Site",
-    type: "VENDA" as const,
-    valor: 594.0,
-    status: "APROVADO" as const,
-  },
-];
+const TRANSACTIONS: { id: string; date: string; description: string; type: "VENDA" | "TAXA" | "REEMBOLSO"; valor: number; status: "APROVADO" | "PROCESSANDO" | "CONCLUIDO" | "ANALISE" }[] = [];
 
 /* ── Channel data ───────────────────────────────────────────── */
 
-const CHANNELS = [
-  { name: "Shopify", pct: 65, color: "#00628c" },
-  { name: "Hotmart", pct: 20, color: "#0091CC" },
-  { name: "Direto", pct: 15, color: "#7dd3fc" },
-];
+const CHANNELS: { name: string; pct: number; color: string }[] = [];
 
 /* ── Type & status badge maps ───────────────────────────────── */
 
@@ -230,12 +185,6 @@ export default function FinanceContent({
                 className="text-[2.25rem] font-bold tracking-tight leading-none text-foreground"
                 delay={0.3}
               />
-              <div className="mt-3 flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                  <ArrowUpRight className="h-3 w-3" />
-                  +12.5%
-                </span>
-              </div>
             </CardContent>
           </Card>
         </BlurFade>
@@ -258,12 +207,6 @@ export default function FinanceContent({
                 className="text-[2.25rem] font-bold tracking-tight leading-none text-foreground"
                 delay={0.4}
               />
-              <div className="mt-3 flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                  <ArrowUpRight className="h-3 w-3" />
-                  +8.2%
-                </span>
-              </div>
             </CardContent>
           </Card>
         </BlurFade>
@@ -286,12 +229,6 @@ export default function FinanceContent({
                 className="text-[2.25rem] font-bold tracking-tight leading-none text-foreground"
                 delay={0.5}
               />
-              <div className="mt-3 flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-700">
-                  <ArrowDownRight className="h-3 w-3" />
-                  -3.1%
-                </span>
-              </div>
             </CardContent>
           </Card>
         </BlurFade>
@@ -314,12 +251,6 @@ export default function FinanceContent({
                 className="text-[2.25rem] font-bold tracking-tight leading-none text-foreground"
                 delay={0.6}
               />
-              <div className="mt-3 flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-                  <ArrowUpRight className="h-3 w-3" />
-                  +2.3pp
-                </span>
-              </div>
             </CardContent>
           </Card>
         </BlurFade>
@@ -491,7 +422,7 @@ export default function FinanceContent({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_TRANSACTIONS.map((tx) => (
+                {TRANSACTIONS.map((tx) => (
                   <TableRow key={tx.id} className="border-muted/40">
                     <TableCell className="text-sm text-muted-foreground">
                       {tx.date}

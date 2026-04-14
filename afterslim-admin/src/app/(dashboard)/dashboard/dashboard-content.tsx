@@ -74,7 +74,7 @@ export default function DashboardContent({
             title="Receita Total"
             value={formatCurrency(revenue)}
             numericValue={revenue}
-            trend={12.5}
+            trend={0}
             trendLabel="vs mes anterior"
           />
         </BlurFade>
@@ -84,7 +84,7 @@ export default function DashboardContent({
             title="Total de Pedidos"
             value={ordersCount.toLocaleString("pt-BR")}
             numericValue={ordersCount}
-            trend={8.2}
+            trend={0}
             trendLabel="vs mes anterior"
           />
         </BlurFade>
@@ -94,7 +94,7 @@ export default function DashboardContent({
             title="Ticket Medio"
             value={formatCurrency(avgOrder)}
             numericValue={avgOrder}
-            trend={-1.5}
+            trend={0}
             trendLabel="vs mes anterior"
           />
         </BlurFade>

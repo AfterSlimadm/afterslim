@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   Plus,
   ArrowUpRight,
-  ArrowDownRight,
   TrendingUp,
   Brain,
   Pill,
@@ -59,91 +58,12 @@ interface ProductCard {
   iconBg: string;
 }
 
-interface StockMovement {
-  date: string;
-  product: string;
-  type: "ENTRADA" | "SAIDA";
-  quantity: number;
-  responsible: string;
-  initials: string;
-}
+/* ── Stock icon helper ────────────────────────────────────── */
 
-/* ── Static mock data (matches Stitch design) ────────────── */
-
-const MOCK_PRODUCTS: ProductCard[] = [
-  {
-    id: "1",
-    name: "Berberina Premium 500mg",
-    sku: "AS-BR-500",
-    stock: 1247,
-    reorderPoint: 200,
-    status: "NORMAL",
-    icon: <Pill className="size-5 text-[#00628c]" />,
-    iconBg: "bg-[#00628c]/10",
-  },
-  {
-    id: "2",
-    name: "Berberina + Cromo",
-    sku: "AS-BC-200",
-    stock: 89,
-    reorderPoint: 100,
-    status: "BAIXO",
-    icon: <FlaskConical className="size-5 text-amber-600" />,
-    iconBg: "bg-amber-500/10",
-  },
-  {
-    id: "3",
-    name: "Kit 3 Meses",
-    sku: "AS-KIT-03",
-    stock: 12,
-    reorderPoint: 25,
-    status: "CRITICO",
-    icon: <Box className="size-5 text-red-600" />,
-    iconBg: "bg-red-500/10",
-  },
-];
-
-const MOCK_MOVEMENTS: StockMovement[] = [
-  {
-    date: "28/03/2026",
-    product: "Berberina Premium 500mg",
-    type: "ENTRADA",
-    quantity: 500,
-    responsible: "Vitor Almeida",
-    initials: "VA",
-  },
-  {
-    date: "27/03/2026",
-    product: "Kit 3 Meses",
-    type: "SAIDA",
-    quantity: 8,
-    responsible: "Allan Costa",
-    initials: "AC",
-  },
-  {
-    date: "26/03/2026",
-    product: "Berberina + Cromo",
-    type: "SAIDA",
-    quantity: 23,
-    responsible: "Vitor Almeida",
-    initials: "VA",
-  },
-  {
-    date: "25/03/2026",
-    product: "Berberina Premium 500mg",
-    type: "ENTRADA",
-    quantity: 200,
-    responsible: "Fornecedor",
-    initials: "FN",
-  },
-  {
-    date: "24/03/2026",
-    product: "Berberina + Cromo",
-    type: "ENTRADA",
-    quantity: 150,
-    responsible: "Fornecedor",
-    initials: "FN",
-  },
+const STOCK_ICONS = [
+  { icon: <Pill className="size-5 text-[#00628c]" />, iconBg: "bg-[#00628c]/10" },
+  { icon: <FlaskConical className="size-5 text-amber-600" />, iconBg: "bg-amber-500/10" },
+  { icon: <Box className="size-5 text-red-600" />, iconBg: "bg-red-500/10" },
 ];
 
 /* ── Helpers ──────────────────────────────────────────────── */
@@ -210,23 +130,24 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
   const [restockQty, setRestockQty] = useState("");
   const [restockSku, setRestockSku] = useState(inventory[0]?.sku ?? "");
 
-  // Merge real DB data into mock cards where SKU matches
-  const products = MOCK_PRODUCTS.map((mock) => {
-    const real = inventory.find((r) => r.sku === mock.sku);
-    if (real) {
-      return {
-        ...mock,
-        stock: real.stock_qty,
-        reorderPoint: real.reorder_point,
-        status:
-          real.stock_qty <= real.reorder_point * 0.5
-            ? ("CRITICO" as StockStatus)
-            : real.stock_qty <= real.reorder_point
-            ? ("BAIXO" as StockStatus)
-            : ("NORMAL" as StockStatus),
-      };
-    }
-    return mock;
+  // Build product cards from real DB data
+  const products: ProductCard[] = inventory.map((row, i) => {
+    const icons = STOCK_ICONS[i % STOCK_ICONS.length];
+    const status: StockStatus =
+      row.stock_qty <= row.reorder_point * 0.5
+        ? "CRITICO"
+        : row.stock_qty <= row.reorder_point
+        ? "BAIXO"
+        : "NORMAL";
+    return {
+      id: row.id ?? String(i),
+      name: row.name ?? row.sku,
+      sku: row.sku,
+      stock: row.stock_qty,
+      reorderPoint: row.reorder_point,
+      status,
+      ...icons,
+    };
   });
 
   const alerts = products.filter((p) => p.status !== "NORMAL");
@@ -352,16 +273,8 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                       Relatorio Inteligente de Demanda
                     </h3>
                     <p className="text-sm text-white/75 leading-relaxed mb-4">
-                      Com base nas vendas dos ultimos 30 dias, a previsao indica
-                      necessidade de reposicao de{" "}
-                      <span className="font-semibold text-white">
-                        Berberina + Cromo
-                      </span>{" "}
-                      em ate 5 dias e{" "}
-                      <span className="font-semibold text-white">
-                        Kit 3 Meses
-                      </span>{" "}
-                      em ate 2 dias.
+                      Analise automatica de demanda com base nas vendas recentes.
+                      Configure alertas para receber notificacoes de reposicao.
                     </p>
                     <Button
                       variant="outline"
@@ -411,36 +324,11 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {MOCK_MOVEMENTS.map((mov, i) => (
-                      <TableRow
-                        key={i}
-                        className="border-border/30 hover:bg-muted/30"
-                      >
-                        <TableCell className="text-sm text-muted-foreground pl-6">
-                          {mov.date}
-                        </TableCell>
-                        <TableCell className="text-sm font-medium text-foreground">
-                          {mov.product}
-                        </TableCell>
-                        <TableCell>{typeBadge(mov.type)}</TableCell>
-                        <TableCell className="text-sm font-semibold text-foreground">
-                          {mov.type === "ENTRADA" ? "+" : "-"}
-                          {formatNumber(mov.quantity)}
-                        </TableCell>
-                        <TableCell className="pr-6">
-                          <div className="flex items-center gap-2">
-                            <Avatar size="sm">
-                              <AvatarFallback className="text-[10px] bg-[#00628c]/10 text-[#00628c]">
-                                {mov.initials}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="text-sm text-foreground">
-                              {mov.responsible}
-                            </span>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    <TableRow>
+                      <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                        Nenhuma movimentacao registrada
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </CardContent>

@@ -300,7 +300,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                 <Label htmlFor="cost-desc">Descricao</Label>
                 <Input
                   id="cost-desc"
-                  placeholder="Ex: Estoque 500un berberina"
+                  placeholder="Ex: Estoque 500un AfterSlim"
                   value={formDesc}
                   onChange={(e) => setFormDesc(e.target.value)}
                 />
