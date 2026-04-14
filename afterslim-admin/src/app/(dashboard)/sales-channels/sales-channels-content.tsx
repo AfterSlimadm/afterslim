@@ -32,13 +32,7 @@ const CHANNEL_CONFIG: Record<
   { label: string; icon: React.ElementType; color: string }
 > = {
   website: { label: "Website", icon: Globe, color: "badge-success" },
-  shopify: { label: "Shopify", icon: ShoppingBag, color: "badge-success" },
-  hotmart: { label: "Hotmart", icon: ShoppingBag, color: "badge-warning" },
-  tiktok_shop: { label: "TikTok Shop", icon: ShoppingBag, color: "badge-info" },
-  instagram: { label: "Instagram", icon: ShoppingBag, color: "badge-purple" },
-  affiliate: { label: "Afiliado", icon: Users, color: "badge-warning" },
-  creator: { label: "Criador", icon: Users, color: "badge-neutral" },
-  direct: { label: "Venda Direta", icon: Globe, color: "badge-info" },
+  amazon: { label: "Amazon", icon: ShoppingBag, color: "badge-warning" },
   other: { label: "Outro", icon: Globe, color: "badge-neutral" },
 };
 
@@ -77,7 +71,7 @@ export default function SalesChannelsContent({
       <div className="page-header">
         <h1 className="page-title">Canais de Venda</h1>
         <p className="page-description">
-          Metricas de receita e pedidos por canal. TikTok Shop, Website, Afiliados.
+          Métricas de receita e pedidos por canal. Website e Amazon.
         </p>
       </div>
 

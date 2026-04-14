@@ -28,7 +28,7 @@ import { getLocaleFromRole, t, type Locale } from "@/lib/i18n";
 const NAV_LABEL_MAP: Record<string, { pt: string; en: string }> = {
   // Group labels
   "Principal": { pt: "Principal", en: "Main" },
-  "Operacoes": { pt: "Operacoes", en: "Operations" },
+  "Operações": { pt: "Operações", en: "Operations" },
   "Financeiro": { pt: "Financeiro", en: "Finance" },
   "Planejamento": { pt: "Planejamento", en: "Planning" },
   "Equipe": { pt: "Equipe", en: "Team" },
@@ -55,7 +55,7 @@ const NAV_LABEL_MAP: Record<string, { pt: string; en: string }> = {
   "Mensagens": { pt: "Mensagens", en: "Messages" },
   "Tarefas": { pt: "Tarefas", en: "Tasks" },
   "Memoria": { pt: "Memoria", en: "Memory" },
-  "Configuracoes": { pt: "Configuracoes", en: "Settings" },
+  "Configurações": { pt: "Configurações", en: "Settings" },
 };
 
 function translateLabel(label: string, locale: Locale): string {
