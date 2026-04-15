@@ -4,7 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout | AfterSlim</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+.checkout-header { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.checkout-header a { color: #666; text-decoration: none; font-size: 14px; }
+.checkout-header a:hover { color: #111; }
+.checkout-header img { height: 28px; }
+.checkout-layout { max-width: 1100px; margin: 0 auto; padding: 32px 16px; display: flex; gap: 32px; }
+.checkout-main { flex: 1; min-width: 0; }
+.checkout-sidebar { width: 360px; flex-shrink: 0; }
+.steps-bar { display: flex; gap: 0; margin-bottom: 32px; }
+.step-indicator { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: 600; color: #999; border-bottom: 3px solid #e5e5e5; cursor: default; }
+.step-indicator.active { color: #ea580c; border-bottom-color: #ea580c; }
+.step-indicator.completed { color: #16a34a; border-bottom-color: #16a34a; cursor: pointer; }
+.step-number { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #e5e5e5; color: #999; font-size: 12px; margin-right: 8px; vertical-align: middle; }
+.step-indicator.active .step-number { background: #ea580c; color: #fff; }
+.step-indicator.completed .step-number { background: #16a34a; color: #fff; }
+.step-card { background: #fff; border-radius: 12px; border: 1px solid #e5e5e5; padding: 32px; margin-bottom: 16px; }
+.step-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #1a1a1a; }
+.step-card.collapsed { padding: 20px 32px; opacity: 0.5; pointer-events: none; }
+.step-card.collapsed h2 { margin-bottom: 0; font-size: 16px; color: #999; }
+.step-card.done { padding: 20px 32px; opacity: 1; pointer-events: auto; cursor: pointer; }
+.step-card.done h2 { margin-bottom: 8px; font-size: 16px; color: #16a34a; }
+.step-summary { font-size: 14px; color: #666; line-height: 1.5; }
+.step-summary span { display: block; }
+.form-row { display: flex; gap: 16px; margin-bottom: 16px; }
+.form-group { flex: 1; display: flex; flex-direction: column; }
+.form-group label { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; }
+.form-group input, .form-group select { padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; color: #1a1a1a; transition: border-color 0.2s; outline: none; background: #fff; }
+.form-group input:focus, .form-group select:focus { border-color: #ea580c; box-shadow: 0 0 0 3px rgba(234,88,12,0.1); }
+.form-group input.error { border-color: #dc2626; }
+.btn-next { width: 100%; padding: 16px; background: #ea580c; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+.btn-next:hover { background: #c2410c; }
+.stripe-element-container { padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px; background: #fff; margin-bottom: 16px; min-height: 44px; }
+.stripe-element-container.focused { border-color: #ea580c; box-shadow: 0 0 0 3px rgba(234,88,12,0.1); }
+.sidebar-card { background: #fff; border-radius: 12px; border: 1px solid #e5e5e5; padding: 24px; margin-bottom: 16px; position: sticky; top: 24px; }
+.sidebar-card h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: #999; margin-bottom: 16px; }
+.sidebar-product { display: flex; gap: 14px; align-items: center; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; margin-bottom: 16px; }
+.sidebar-product img { width: 72px; height: 72px; border-radius: 8px; object-fit: contain; background: #f8f8f8; padding: 4px; }
+.sidebar-product-name { font-size: 14px; font-weight: 600; line-height: 1.3; margin-bottom: 2px; }
+.sidebar-product-variant { font-size: 12px; color: #888; margin-bottom: 4px; }
+.sidebar-product-price { font-size: 15px; font-weight: 700; }
+.sidebar-row { display: flex; justify-content: space-between; font-size: 14px; color: #666; margin-bottom: 8px; }
+.sidebar-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; padding-top: 12px; border-top: 1px solid #e5e5e5; margin-top: 4px; }
+.sidebar-free { color: #16a34a; }
+.trust-badges { display: flex; flex-direction: column; gap: 10px; padding-top: 16px; border-top: 1px solid #f0f0f0; }
+.trust-badge { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #666; }
+.trust-icon { width: 32px; height: 32px; border-radius: 50%; background: #f0fdf4; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.trust-icon svg { width: 16px; height: 16px; color: #16a34a; }
+.processing-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.9); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
+.processing-overlay.active { display: flex; }
+.processing-spinner { width: 40px; height: 40px; border: 3px solid #e5e5e5; border-top-color: #ea580c; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.processing-text { font-size: 16px; color: #666; }
+.checkout-error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; display: none; }
+@media (max-width: 768px) {
+  .checkout-layout { flex-direction: column-reverse; gap: 16px; padding: 16px; }
+  .checkout-sidebar { width: 100%; }
+  .sidebar-card { position: static; }
+  .form-row { flex-direction: column; gap: 12px; }
+  .step-card { padding: 24px 20px; }
+}
+  </style>
 </head>
 <body>
 
@@ -182,6 +244,8 @@
   </div>
 
   <script src="https://js.stripe.com/v3/"></script>
-  <script src="checkout-app.js"></script>
+  <script>
+(function(){var PK='pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';var API_URL='/api/checkout';var PM={'1-onetime':'price_1TC4qvAy7m7ndbNOmzhrCfLv','1-subscribe':'price_1TMbv8Ay7m7ndbNOKKiA3vxk','2-onetime':'price_1TMbxdAy7m7ndbNOYi3z5QoA','2-subscribe':'price_1TMbzPAy7m7ndbNO1zsXcJ6e','3-onetime':'price_1TMc1AAy7m7ndbNO7vOXSCU6','3-subscribe':'price_1TMc2MAy7m7ndbNOh5oPM3MF'};var PI={'1-onetime':{name:'AfterSlim GLP-1 Companion',variant:'1 bottle - 30 day supply',price:37.99},'1-subscribe':{name:'AfterSlim GLP-1 Companion',variant:'1 bottle - monthly subscription',price:27.99},'2-onetime':{name:'AfterSlim GLP-1 Companion',variant:'2 bottles - 60 day supply',price:57.99},'2-subscribe':{name:'AfterSlim GLP-1 Companion',variant:'2 bottles - monthly subscription',price:47.99},'3-onetime':{name:'AfterSlim GLP-1 Companion',variant:'3 bottles - 90 day supply',price:67.99},'3-subscribe':{name:'AfterSlim GLP-1 Companion',variant:'3 bottles - monthly subscription',price:57.99}};var params=new URLSearchParams(window.location.search);var rawQty=parseInt(params.get('qty'))||1;var qty=[1,2,3].indexOf(rawQty)>=0?rawQty:1;var isSub=params.get('subscribe')==='true';var key=qty+'-'+(isSub?'subscribe':'onetime');var priceId=PM[key];var info=PI[key];var currentStep=1;var cust={name:'',email:'',phone:''};var ship={address:'',city:'',state:'',zip:'',country:'US'};var stripe,elements,cardEl;var steps=[null,document.getElementById('step1'),document.getElementById('step2'),document.getElementById('step3')];var inds=document.querySelectorAll('.step-indicator');var errEl=document.getElementById('checkout-error');var procEl=document.getElementById('processing');function initSidebar(){var e;e=document.getElementById('sidebar-name');if(e)e.textContent=info.name;e=document.getElementById('sidebar-variant');if(e)e.textContent=info.variant;e=document.getElementById('sidebar-price');if(e)e.textContent='$'+info.price.toFixed(2);e=document.getElementById('sidebar-subtotal');if(e)e.textContent='$'+info.price.toFixed(2);e=document.getElementById('sidebar-total');if(e)e.textContent='$'+info.price.toFixed(2);}function showStep(s){currentStep=s;for(var i=1;i<=3;i++){var c=steps[i],ind=inds[i-1];if(!c||!ind)continue;var f=c.querySelector('.step-form'),sm=c.querySelector('.step-summary');if(i<s){c.className='step-card done';ind.className='step-indicator completed';if(f)f.style.display='none';if(sm)sm.style.display='block';}else if(i===s){c.className='step-card';ind.className='step-indicator active';if(f)f.style.display='block';if(sm)sm.style.display='none';}else{c.className='step-card collapsed';ind.className='step-indicator';if(f)f.style.display='none';if(sm)sm.style.display='none';}}}function v1(){var n=document.getElementById('f-name').value.trim();var em=document.getElementById('f-email').value.trim();var ph=document.getElementById('f-phone').value.trim();var ok=true;if(!n||n.length<2){document.getElementById('f-name').classList.add('error');ok=false;}else{document.getElementById('f-name').classList.remove('error');}if(!em||em.indexOf('@')<1){document.getElementById('f-email').classList.add('error');ok=false;}else{document.getElementById('f-email').classList.remove('error');}if(ok){cust={name:n,email:em,phone:ph};document.getElementById('summary1').innerHTML='<span>'+n+'</span><span>'+em+'</span>'+(ph?'<span>'+ph+'</span>':'');showStep(2);}}function v2(){var a=document.getElementById('f-address').value.trim();var ci=document.getElementById('f-city').value.trim();var st=document.getElementById('f-state').value.trim();var z=document.getElementById('f-zip').value.trim();var co=document.getElementById('f-country').value;var ok=true;['f-address','f-city','f-state','f-zip'].forEach(function(id){var el=document.getElementById(id);if(!el.value.trim()){el.classList.add('error');ok=false;}else{el.classList.remove('error');}});if(ok){ship={address:a,city:ci,state:st,zip:z,country:co};document.getElementById('summary2').innerHTML='<span>'+a+'</span><span>'+ci+', '+st+' '+z+'</span><span>'+co+'</span>';showStep(3);initStripe();}}function initStripe(){if(stripe)return;stripe=Stripe(PK);elements=stripe.elements();cardEl=elements.create('card',{style:{base:{fontSize:'16px',color:'#1a1a1a','::placeholder':{color:'#999'}}}});cardEl.mount('#card-element');cardEl.on('focus',function(){document.getElementById('card-element').parentElement.classList.add('focused');});cardEl.on('blur',function(){document.getElementById('card-element').parentElement.classList.remove('focused');});}async function pay(){errEl.style.display='none';procEl.classList.add('active');try{var res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:priceId,customer_email:cust.email,customer_name:cust.name,shipping:ship})});if(!res.ok){var ed=await res.json().catch(function(){return{};});throw new Error(ed.error||'Failed to create payment');}var data=await res.json();var result=await stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:cardEl,billing_details:{name:cust.name,email:cust.email,phone:cust.phone||undefined,address:{line1:ship.address,city:ship.city,state:ship.state,postal_code:ship.zip,country:ship.country}}}});if(result.error){throw new Error(result.error.message);}window.location.href='/checkout/success?payment_id='+(result.paymentIntent?result.paymentIntent.id:'');}catch(err){procEl.classList.remove('active');errEl.textContent=err.message||'Something went wrong.';errEl.style.display='block';}}document.addEventListener('click',function(e){var d=e.target.closest('.step-card.done');if(d){var sn=parseInt(d.id.replace('step',''));if(sn&&sn<currentStep)showStep(sn);}});document.getElementById('btn-step1').addEventListener('click',v1);document.getElementById('btn-step2').addEventListener('click',v2);document.getElementById('btn-pay').addEventListener('click',pay);document.querySelectorAll('.step-form input').forEach(function(inp){inp.addEventListener('keypress',function(e){if(e.key==='Enter'){var b=this.closest('.step-card').querySelector('.btn-next');if(b)b.click();}});});initSidebar();showStep(1);})();
+  </script>
 </body>
 </html>
