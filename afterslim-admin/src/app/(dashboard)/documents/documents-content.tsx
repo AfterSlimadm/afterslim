@@ -91,7 +91,7 @@ interface DocumentsContentProps {
 export default function DocumentsContent({ documents }: DocumentsContentProps) {
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<"all" | DocumentCategory>("all");
+  const [categoryFilter, setCategoryFilter] = useState<"all" | "others" | DocumentCategory>("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
@@ -123,7 +123,11 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
           (doc.description?.toLowerCase().includes(q) ?? false);
         if (!matchesSearch) return false;
       }
-      if (categoryFilter !== "all" && doc.category !== categoryFilter) return false;
+      if (categoryFilter === "others") {
+        if (["contract", "invoice"].includes(doc.category)) return false;
+      } else if (categoryFilter !== "all" && doc.category !== categoryFilter) {
+        return false;
+      }
       return true;
     });
   }, [documents, search, categoryFilter]);
@@ -369,44 +373,33 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
         </Dialog>
       </div>
 
-      {/* KPI Cards */}
+      {/* KPI Cards (clicáveis como filtro) */}
       <div className="kpi-grid">
-        <Card className="gap-0 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-5 px-5">
-            <p className="text-2xl font-bold">{stats.total}</p>
-          </CardContent>
-        </Card>
-        <Card className="gap-0 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Contratos</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-5 px-5">
-            <p className="text-2xl font-bold">{stats.contracts}</p>
-          </CardContent>
-        </Card>
-        <Card className="gap-0 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Notas Fiscais</CardTitle>
-            <Receipt className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-5 px-5">
-            <p className="text-2xl font-bold">{stats.invoices}</p>
-          </CardContent>
-        </Card>
-        <Card className="gap-0 py-0">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Outros</CardTitle>
-            <File className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="pb-5 px-5">
-            <p className="text-2xl font-bold">{stats.other}</p>
-          </CardContent>
-        </Card>
+        {([
+          { key: "all" as const, label: "Total", value: stats.total, icon: FileText },
+          { key: "contract" as const, label: "Contratos", value: stats.contracts, icon: FileText },
+          { key: "invoice" as const, label: "Notas Fiscais", value: stats.invoices, icon: Receipt },
+          { key: "others" as const, label: "Outros", value: stats.other, icon: File },
+        ]).map((item) => (
+          <Card
+            key={item.key}
+            className={cn(
+              "gap-0 py-0 cursor-pointer transition-colors",
+              categoryFilter === item.key
+                ? "ring-2 ring-primary border-primary"
+                : "hover:border-primary/40"
+            )}
+            onClick={() => setCategoryFilter(item.key)}
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
+              <CardTitle className="text-sm font-medium text-muted-foreground">{item.label}</CardTitle>
+              <item.icon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent className="pb-5 px-5">
+              <p className="text-2xl font-bold">{item.value}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       {/* Filters */}
@@ -422,7 +415,7 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
         </div>
         <Select
           value={categoryFilter}
-          onValueChange={(v) => setCategoryFilter(v as "all" | DocumentCategory)}
+          onValueChange={(v) => setCategoryFilter(v as "all" | "others" | DocumentCategory)}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Todas categorias" />
