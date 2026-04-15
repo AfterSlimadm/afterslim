@@ -255,7 +255,7 @@ export default function RemindersContent({ reminders: initial }: RemindersConten
                 <TableHead>Responsável</TableHead>
                 <TableHead>Vencimento</TableHead>
                 <TableHead>Criado em</TableHead>
-                <TableHead className="w-[100px]">Acoes</TableHead>
+                <TableHead className="w-[100px]">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
