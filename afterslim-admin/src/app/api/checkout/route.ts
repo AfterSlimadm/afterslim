@@ -1,12 +1,28 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
-import { getAdminClient } from "@/lib/supabase/admin";
 
 const ALLOWED_ORIGINS = [
   "https://afterslim.com",
   "https://www.afterslim.com",
   "http://localhost:3000",
 ];
+
+// Allowed Stripe Price IDs — only these can be used in checkout
+const VALID_PRICE_IDS = new Set([
+  "price_1TC4qvAy7m7ndbNOmzhrCfLv", // 1 Bottle one-time $37.99
+  "price_1TMbv8Ay7m7ndbNOKKiA3vxk",  // 1 Bottle subscription $27.99/mo
+  "price_1TMbxdAy7m7ndbNOYi3z5QoA", // 2 Bottles one-time $57.99
+  "price_1TMbzPAy7m7ndbNO1zsXcJ6e",  // 2 Bottles subscription $47.99/mo
+  "price_1TMc1AAy7m7ndbNO7vOXSCU6", // 3 Bottles one-time $67.99
+  "price_1TMc2MAy7m7ndbNOh5oPM3MF",  // 3 Bottles subscription $57.99/mo
+]);
+
+// Recurring Price IDs (subscriptions)
+const RECURRING_PRICE_IDS = new Set([
+  "price_1TMbv8Ay7m7ndbNOKKiA3vxk",
+  "price_1TMbzPAy7m7ndbNO1zsXcJ6e",
+  "price_1TMc2MAy7m7ndbNOh5oPM3MF",
+]);
 
 function corsHeaders(origin: string | null) {
   const allowed = ALLOWED_ORIGINS.includes(origin ?? "")
@@ -26,68 +42,35 @@ export async function OPTIONS(request: Request) {
 
 /**
  * POST /api/checkout
- * Creates a Stripe Checkout Session for a product purchase.
- * Body: { product_id?: string, quantity?: number }
- * If no product_id, defaults to the main Berberine product.
+ * Creates a Stripe Checkout Session using a pre-configured Price ID.
+ * Body: { price_id: string }
  */
 export async function POST(request: Request) {
   const origin = request.headers.get("origin") ?? "https://afterslim.com";
   try {
     const body = await request.json().catch(() => ({}));
-    const quantity = Math.max(1, Math.min(10, Number(body.quantity) || 1));
+    const priceId = body.price_id;
 
-    const supabase = getAdminClient();
-    const stripe = getStripe();
-
-    // Fetch product (default: first active product)
-    const { data: product, error: productError } = body.product_id
-      ? await supabase
-          .from("products")
-          .select("id, name, price_cents, images, slug")
-          .eq("id", body.product_id)
-          .single()
-      : await supabase
-          .from("products")
-          .select("id, name, price_cents, images, slug")
-          .eq("is_active", true)
-          .order("created_at", { ascending: true })
-          .limit(1)
-          .single();
-
-    if (productError || !product) {
+    if (!priceId || !VALID_PRICE_IDS.has(priceId)) {
       return NextResponse.json(
-        { error: "Produto nao encontrado" },
-        { status: 404 }
+        { error: "Invalid price_id" },
+        { status: 400, headers: corsHeaders(origin) }
       );
     }
 
-    const images = product.images as string[] | null;
+    const stripe = getStripe();
+    const isSubscription = RECURRING_PRICE_IDS.has(priceId);
 
-    // Create Stripe Checkout Session (embedded mode)
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
-      mode: "payment",
+      mode: isSubscription ? "subscription" : "payment",
       payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            unit_amount: product.price_cents,
-            product_data: {
-              name: product.name,
-              images: images?.length ? [images[0]] : [],
-            },
-          },
-          quantity,
-        },
-      ],
+      line_items: [{ price: priceId, quantity: 1 }],
       shipping_address_collection: {
         allowed_countries: ["US", "CA", "GB", "AU"],
       },
       metadata: {
-        product_id: product.id,
-        product_slug: product.slug,
-        quantity: String(quantity),
+        price_id: priceId,
       },
       return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     });

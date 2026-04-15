@@ -246,19 +246,40 @@
     const STRIPE_PK = 'pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
     const API_URL = '/api/checkout';
 
-    // Prices for display only — real price is calculated by backend/Stripe
-    const DISPLAY_PRICES = { 1: 59.99, 2: 99.98, 3: 119.97 };
-    const UNIT_PRICES = { 1: '$59.99', 2: '$49.99/ea', 3: '$39.99/ea' };
-
-    function updateSummary(qty) {
-      const total = DISPLAY_PRICES[qty] || qty * 59.99;
-      document.getElementById('unit-price').textContent = UNIT_PRICES[qty] || '$59.99';
-      document.getElementById('subtotal').textContent = '$' + total.toFixed(2);
-      document.getElementById('total').textContent = '$' + total.toFixed(2);
-      if (qty > 1) {
-        const variant = document.querySelector('.product-variant');
-        variant.textContent = qty + ' bottles - ' + (qty * 30) + ' day supply';
+    // Price ID mapping: [qty][subscribe|onetime]
+    const PRICE_IDS = {
+      1: {
+        onetime:   'price_1TC4qvAy7m7ndbNOmzhrCfLv',  // $37.99
+        subscribe: 'price_1TMbv8Ay7m7ndbNOKKiA3vxk',   // $27.99/mo
+      },
+      2: {
+        onetime:   'price_1TMbxdAy7m7ndbNOYi3z5QoA',  // $57.99
+        subscribe: 'price_1TMbzPAy7m7ndbNO1zsXcJ6e',   // $47.99/mo
+      },
+      3: {
+        onetime:   'price_1TMc1AAy7m7ndbNO7vOXSCU6',  // $67.99
+        subscribe: 'price_1TMc2MAy7m7ndbNOh5oPM3MF',   // $57.99/mo
       }
+    };
+
+    // Display prices for the order summary sidebar
+    const DISPLAY_INFO = {
+      1: { onetime: { total: 37.99, unit: '$37.99', variant: '1 bottle - 30 day supply' },
+           subscribe: { total: 27.99, unit: '$27.99/mo', variant: '1 bottle - 30 day supply (monthly)' } },
+      2: { onetime: { total: 57.99, unit: '$29.00/bottle', variant: '2 bottles - 60 day supply' },
+           subscribe: { total: 47.99, unit: '$24.00/bottle', variant: '2 bottles - 60 day supply (monthly)' } },
+      3: { onetime: { total: 67.99, unit: '$22.66/bottle', variant: '3 bottles - 90 day supply' },
+           subscribe: { total: 57.99, unit: '$19.33/bottle', variant: '3 bottles - 90 day supply (monthly)' } }
+    };
+
+    function updateSummary(qty, isSubscribe) {
+      const type = isSubscribe ? 'subscribe' : 'onetime';
+      const info = DISPLAY_INFO[qty][type];
+      document.getElementById('unit-price').textContent = info.unit;
+      document.getElementById('subtotal').textContent = '$' + info.total.toFixed(2);
+      document.getElementById('total').textContent = '$' + info.total.toFixed(2);
+      document.querySelector('.product-variant').textContent = info.variant;
+      document.querySelector('.product-name').textContent = 'AfterSlim GLP-1 Companion';
     }
 
     async function initCheckout() {
@@ -268,15 +289,17 @@
       try {
         const params = new URLSearchParams(window.location.search);
         const raw = parseInt(params.get('qty')) || 1;
-        const quantity = [1, 2, 3].includes(raw) ? raw : 1;
-        const subscribe = params.get('subscribe') === 'true';
+        const qty = [1, 2, 3].includes(raw) ? raw : 1;
+        const isSubscribe = params.get('subscribe') === 'true';
+        const type = isSubscribe ? 'subscribe' : 'onetime';
+        const priceId = PRICE_IDS[qty][type];
 
-        updateSummary(quantity);
+        updateSummary(qty, isSubscribe);
 
         const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ quantity, subscribe }),
+          body: JSON.stringify({ price_id: priceId }),
         });
 
         if (!res.ok) {
