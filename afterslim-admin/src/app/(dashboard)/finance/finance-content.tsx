@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -103,6 +105,7 @@ export default function FinanceContent({
   summary,
   revenueTrend,
 }: FinanceContentProps) {
+  const router = useRouter();
   const [period, setPeriod] = useState<string>("30d");
 
   const totalRevenue = summary?.totalIncome ?? 0;
@@ -118,6 +121,28 @@ export default function FinanceContent({
     const sliced = revenueTrend.slice(-periodDays);
     return sliced;
   }, [revenueTrend, periodDays]);
+
+  const handleExportCsv = useCallback(() => {
+    const rows = [
+      ["Métrica", "Valor"],
+      ["Receita Bruta", formatUSD(totalRevenue)],
+      ["Receita Líquida", formatUSD(netRevenue)],
+      ["Custos", formatUSD(totalExpenses)],
+      ["Margem", `${margin.toFixed(1)}%`],
+      [],
+      ["Data", "Receita"],
+      ...chartData.map((d) => [d.date, formatUSD(d.revenue)]),
+    ];
+    const csv = rows.map((r) => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `afterslim-financeiro-${period}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Relatório exportado com sucesso");
+  }, [totalRevenue, netRevenue, totalExpenses, margin, chartData, period]);
 
   return (
     <div className="page-container">
@@ -150,13 +175,14 @@ export default function FinanceContent({
                 </button>
               ))}
             </div>
-            <Button variant="outline" size="sm" className="gap-2">
+            <Button variant="outline" size="sm" className="gap-2" onClick={handleExportCsv}>
               <Download className="h-4 w-4" />
               Exportar Relatório
             </Button>
             <Button
               size="sm"
               className="gap-2 bg-[#00628c] hover:bg-[#00496a] text-white"
+              onClick={() => router.push("/finance/transactions")}
             >
               <FileText className="h-4 w-4" />
               Ver Faturas
@@ -395,6 +421,7 @@ export default function FinanceContent({
               variant="link"
               size="sm"
               className="text-[#00628c] text-xs font-semibold p-0 h-auto"
+              onClick={() => router.push("/finance/transactions")}
             >
               Ver tudo
               <ArrowUpRight className="h-3.5 w-3.5 ml-1" />

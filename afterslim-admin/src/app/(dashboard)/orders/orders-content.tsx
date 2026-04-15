@@ -16,6 +16,7 @@ import {
   Printer,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatCurrency, formatDate, cn, getInitials } from "@/lib/utils";
@@ -41,6 +42,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import type { Order } from "@/lib/types";
 import { useAuth } from "@/components/auth-provider";
 import { useRouter } from "next/navigation";
@@ -185,6 +199,10 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
   const isSupport = role === "support";
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterChannel, setFilterChannel] = useState<string>("all");
 
   /* -- Filtered orders -- */
   const filteredOrders = useMemo(() => {
@@ -200,6 +218,23 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
       );
     }
 
+    // Date range filter
+    if (dateFrom) {
+      const from = new Date(dateFrom);
+      from.setHours(0, 0, 0, 0);
+      result = result.filter((o) => new Date(o.created_at) >= from);
+    }
+    if (dateTo) {
+      const to = new Date(dateTo);
+      to.setHours(23, 59, 59, 999);
+      result = result.filter((o) => new Date(o.created_at) <= to);
+    }
+
+    // Status filter
+    if (filterStatus !== "all") {
+      result = result.filter((o) => o.status === filterStatus);
+    }
+
     // Sort newest first
     result.sort(
       (a, b) =>
@@ -207,7 +242,7 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
     );
 
     return result;
-  }, [orders, search]);
+  }, [orders, search, dateFrom, dateTo, filterStatus]);
 
   /* -- Pagination -- */
   const totalPages = Math.max(1, Math.ceil(filteredOrders.length / PAGE_SIZE));
@@ -298,32 +333,136 @@ export default function OrdersContent({ orders }: OrdersContentProps) {
               />
             </div>
 
-            {/* Date picker placeholder */}
-            <Button
-              variant="outline"
-              className="gap-2 border-border/15 bg-white shadow-none text-muted-foreground"
-              onClick={() => toast.info(t("orders.dateFilterSoon", locale))}
-            >
-              <Calendar className="h-4 w-4" />
-              <span className="hidden sm:inline">{t("orders.selectDate", locale)}</span>
-            </Button>
+            {/* Date picker */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "gap-2 border-border/15 bg-white shadow-none",
+                    dateFrom || dateTo ? "text-foreground" : "text-muted-foreground"
+                  )}
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span className="hidden sm:inline">
+                    {dateFrom || dateTo
+                      ? `${dateFrom || "..."} - ${dateTo || "..."}`
+                      : t("orders.selectDate", locale)}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-72 space-y-3" align="start">
+                <p className="text-sm font-semibold text-foreground">Filtrar por data</p>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">De</Label>
+                  <Input
+                    type="date"
+                    value={dateFrom}
+                    onChange={(e) => { setDateFrom(e.target.value); setPage(1); }}
+                    className="border-border/30"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Até</Label>
+                  <Input
+                    type="date"
+                    value={dateTo}
+                    onChange={(e) => { setDateTo(e.target.value); setPage(1); }}
+                    className="border-border/30"
+                  />
+                </div>
+                {(dateFrom || dateTo) && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => { setDateFrom(""); setDateTo(""); setPage(1); }}
+                  >
+                    <X className="h-3 w-3 mr-1" />
+                    Limpar datas
+                  </Button>
+                )}
+              </PopoverContent>
+            </Popover>
 
             {/* Filters */}
-            <Button
-              variant="outline"
-              className="gap-2 border-border/15 bg-white shadow-none text-muted-foreground"
-              onClick={() => toast.info(t("orders.advancedFiltersSoon", locale))}
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              <span className="hidden sm:inline">{t("orders.filters", locale)}</span>
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "gap-2 border-border/15 bg-white shadow-none",
+                    filterStatus !== "all" ? "text-foreground" : "text-muted-foreground"
+                  )}
+                >
+                  <SlidersHorizontal className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t("orders.filters", locale)}</span>
+                  {filterStatus !== "all" && (
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#00628c] text-[10px] font-bold text-white">
+                      1
+                    </span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-72 space-y-4" align="start">
+                <p className="text-sm font-semibold text-foreground">Filtros</p>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Status</Label>
+                  <Select value={filterStatus} onValueChange={(v) => { setFilterStatus(v); setPage(1); }}>
+                    <SelectTrigger className="border-border/30">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos</SelectItem>
+                      <SelectItem value="pending">Novo</SelectItem>
+                      <SelectItem value="processing">Processando</SelectItem>
+                      <SelectItem value="shipped">Enviado</SelectItem>
+                      <SelectItem value="delivered">Entregue</SelectItem>
+                      <SelectItem value="cancelled">Problema</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                {filterStatus !== "all" && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => { setFilterStatus("all"); setPage(1); }}
+                  >
+                    <X className="h-3 w-3 mr-1" />
+                    Limpar filtros
+                  </Button>
+                )}
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Export CSV */}
           {!isSupport && (
             <Button
               className="gap-2 bg-[#00628c] hover:bg-[#00496a] text-white shadow-none"
-              onClick={() => toast.info(t("orders.exportSoon", locale))}
+              onClick={() => {
+                const header = ["Pedido", "Cliente", "E-mail", "Status", "Data", "Total"];
+                const rows = filteredOrders.map((o) => [
+                  o.order_number ?? o.id,
+                  o.customer?.name ?? "",
+                  o.customer?.email ?? "",
+                  o.status,
+                  new Date(o.created_at).toLocaleDateString("pt-BR"),
+                  formatCurrency(o.total),
+                ]);
+                const csv = [header, ...rows]
+                  .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))
+                  .join("\n");
+                const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `afterslim-pedidos-${new Date().toISOString().slice(0, 10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                toast.success("CSV exportado com sucesso");
+              }}
             >
               <Download className="h-4 w-4" />
               {t("orders.exportCsv", locale)}

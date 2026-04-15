@@ -126,10 +126,20 @@ interface InventoryContentProps {
   inventory: InventoryRow[];
 }
 
+interface StockMovement {
+  id: string;
+  date: string;
+  product: string;
+  type: "ENTRADA" | "SAIDA";
+  qty: number;
+  responsible: string;
+}
+
 export default function InventoryContent({ inventory }: InventoryContentProps) {
   const [addOpen, setAddOpen] = useState(false);
   const [restockQty, setRestockQty] = useState("");
   const [restockSku, setRestockSku] = useState(inventory[0]?.sku ?? "");
+  const [movements, setMovements] = useState<StockMovement[]>([]);
 
   // Build product cards from real DB data
   const products: ProductCard[] = inventory.map((row, i) => {
@@ -167,7 +177,17 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
         body: JSON.stringify({ sku: restockSku, addQty: qty }),
       });
       if (!res.ok) throw new Error("Erro ao atualizar estoque");
-      toast.success(`+${qty} unidades adicionadas ao estoque`);
+      const product = products.find((p) => p.sku === restockSku);
+      const newMovement: StockMovement = {
+        id: crypto.randomUUID(),
+        date: new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+        product: product?.name ?? restockSku,
+        type: "ENTRADA",
+        qty,
+        responsible: "Admin",
+      };
+      setMovements((prev) => [newMovement, ...prev]);
+      toast.success(`+${qty} unidades adicionadas ao estoque de ${product?.name ?? restockSku}`);
       setRestockQty("");
       setAddOpen(false);
       window.location.reload();
@@ -280,6 +300,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                     <Button
                       variant="outline"
                       className="bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white rounded-full text-sm px-4"
+                      onClick={() => toast.info("Automação de reposição em breve")}
                     >
                       <TrendingUp className="size-4 mr-1.5" />
                       Configurar Automação
@@ -298,7 +319,10 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                   <CardTitle className="text-base font-semibold">
                     Movimentação de Estoque
                   </CardTitle>
-                  <button className="text-sm font-medium text-[#00628c] hover:text-[#00496a] transition-colors">
+                  <button
+                    className="text-sm font-medium text-[#00628c] hover:text-[#00496a] transition-colors"
+                    onClick={() => toast.info("Relatório completo em breve")}
+                  >
                     Ver Relatório Completo
                   </button>
                 </div>
@@ -325,11 +349,31 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
-                        Nenhuma movimentação registrada
-                      </TableCell>
-                    </TableRow>
+                    {movements.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                          Nenhuma movimentação registrada
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      movements.map((m) => (
+                        <TableRow key={m.id}>
+                          <TableCell className="pl-6 text-sm text-muted-foreground">
+                            {m.date}
+                          </TableCell>
+                          <TableCell className="text-sm font-medium text-foreground">
+                            {m.product}
+                          </TableCell>
+                          <TableCell>{typeBadge(m.type)}</TableCell>
+                          <TableCell className="text-sm font-semibold text-foreground">
+                            +{m.qty}
+                          </TableCell>
+                          <TableCell className="pr-6 text-sm text-muted-foreground">
+                            {m.responsible}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>

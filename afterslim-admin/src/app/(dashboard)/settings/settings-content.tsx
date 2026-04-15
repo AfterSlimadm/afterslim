@@ -8,6 +8,17 @@ import {
   Mail,
   MessageSquare,
   Smartphone,
+  Bell,
+  ShoppingCart,
+  Package,
+  DollarSign,
+  Link2,
+  CreditCard,
+  Users,
+  UserPlus,
+  Shield,
+  Key,
+  Monitor,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +32,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { toast } from "sonner";
 import type { TeamMember } from "@/lib/queries/team";
@@ -111,6 +138,15 @@ export default function SettingsContent({
   const [whatsappNotif, setWhatsappNotif] = useState(
     initialSettings.channel_whatsapp !== false
   );
+
+  // Notification preferences
+  const [notifNewOrder, setNotifNewOrder] = useState(true);
+  const [notifLowStock, setNotifLowStock] = useState(true);
+  const [notifPayment, setNotifPayment] = useState(false);
+  const [notifDailySummary, setNotifDailySummary] = useState(false);
+
+  // Security
+  const [twoFactor, setTwoFactor] = useState(false);
 
   // Saving
   const [saving, setSaving] = useState(false);
@@ -481,46 +517,302 @@ export default function SettingsContent({
             </BlurFade>
           </TabsContent>
 
-          {/* ── Notificações Tab (placeholder) ──────────────── */}
-          <TabsContent value="notificações">
+          {/* ── Notificações Tab ──────────────────────────── */}
+          <TabsContent value="notificações" className="space-y-6">
             <BlurFade delay={0.1}>
-              <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <p className="text-sm text-muted-foreground">
-                  Configurações de notificações em breve.
-                </p>
+              <div className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                <h2 className="mb-6 text-base font-semibold text-foreground flex items-center gap-2">
+                  <Bell className="size-4 text-muted-foreground" />
+                  Preferências de Notificação
+                </h2>
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-[#dae3ee]/60">
+                        <ShoppingCart className="size-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Novo pedido recebido</p>
+                        <p className="text-xs text-muted-foreground">Receba alertas a cada novo pedido</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifNewOrder}
+                      onCheckedChange={setNotifNewOrder}
+                      className="data-[state=checked]:bg-[#00628c]"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-[#dae3ee]/60">
+                        <Package className="size-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Estoque baixo</p>
+                        <p className="text-xs text-muted-foreground">Alerta quando o estoque atingir o ponto de recompra</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifLowStock}
+                      onCheckedChange={setNotifLowStock}
+                      className="data-[state=checked]:bg-[#00628c]"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-[#dae3ee]/60">
+                        <DollarSign className="size-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Pagamento recebido</p>
+                        <p className="text-xs text-muted-foreground">Notificação ao confirmar pagamento</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifPayment}
+                      onCheckedChange={setNotifPayment}
+                      className="data-[state=checked]:bg-[#00628c]"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-[#dae3ee]/60">
+                        <Mail className="size-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Resumo diário</p>
+                        <p className="text-xs text-muted-foreground">Receba um resumo diário por e-mail</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifDailySummary}
+                      onCheckedChange={setNotifDailySummary}
+                      className="data-[state=checked]:bg-[#00628c]"
+                    />
+                  </div>
+                </div>
               </div>
             </BlurFade>
           </TabsContent>
 
-          {/* ── Integração Tab (placeholder) ────────────────── */}
-          <TabsContent value="integração">
+          {/* ── Integração Tab ────────────────────────────── */}
+          <TabsContent value="integração" className="space-y-6">
             <BlurFade delay={0.1}>
-              <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <p className="text-sm text-muted-foreground">
-                  Configurações de integração em breve.
-                </p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                {/* CartRover */}
+                <Card className="border-0 shadow-sm">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50">
+                        <Truck className="size-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-sm font-semibold">CartRover</CardTitle>
+                        <CardDescription className="text-xs">Fulfillment</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="secondary" className="bg-red-50 text-red-700 text-[10px]">Desconectado</Badge>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => toast.info("Configuração do CartRover em breve")}
+                      >
+                        <Link2 className="size-3 mr-1" />
+                        Configurar
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Stripe */}
+                <Card className="border-0 shadow-sm">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-purple-50">
+                        <CreditCard className="size-5 text-purple-600" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-sm font-semibold">Stripe</CardTitle>
+                        <CardDescription className="text-xs">Pagamentos</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="secondary" className="bg-red-50 text-red-700 text-[10px]">Desconectado</Badge>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => toast.info("Configuração do Stripe em breve")}
+                      >
+                        <Link2 className="size-3 mr-1" />
+                        Configurar
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* WhatsApp Business */}
+                <Card className="border-0 shadow-sm">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50">
+                        <MessageSquare className="size-5 text-emerald-600" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-sm font-semibold">WhatsApp Business</CardTitle>
+                        <CardDescription className="text-xs">Mensagens</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 text-[10px]">Conectado</Badge>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => toast.info("Gerenciamento do WhatsApp em breve")}
+                      >
+                        Gerenciar
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </BlurFade>
           </TabsContent>
 
-          {/* ── Equipe Tab (placeholder) ────────────────────── */}
-          <TabsContent value="equipe">
+          {/* ── Equipe Tab ────────────────────────────────── */}
+          <TabsContent value="equipe" className="space-y-6">
             <BlurFade delay={0.1}>
-              <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <p className="text-sm text-muted-foreground">
-                  Gerenciamento de equipe em breve.
-                </p>
+              <div className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-base font-semibold text-foreground flex items-center gap-2">
+                    <Users className="size-4 text-muted-foreground" />
+                    Membros da Equipe
+                  </h2>
+                  <Button
+                    size="sm"
+                    className="bg-[#00628c] hover:bg-[#00496a] text-white gap-1.5"
+                    onClick={() => toast.info("Convite de membros em breve")}
+                  >
+                    <UserPlus className="size-4" />
+                    Convidar Membro
+                  </Button>
+                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-border/40">
+                      <TableHead className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">Nome</TableHead>
+                      <TableHead className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">Papel</TableHead>
+                      <TableHead className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {[
+                      { name: "Vitor Araújo", role: "Owner", status: "Ativo" },
+                      { name: "Henrique Vaz", role: "Admin", status: "Ativo" },
+                      { name: "Fernando Quintas", role: "Admin", status: "Ativo" },
+                      { name: "Allan Godoy", role: "Admin", status: "Ativo" },
+                    ].map((member) => (
+                      <TableRow key={member.name} className="border-border/40">
+                        <TableCell className="text-sm font-medium text-foreground">{member.name}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant="secondary"
+                            className={member.role === "Owner" ? "bg-[#00628c]/10 text-[#00628c]" : "bg-muted text-muted-foreground"}
+                          >
+                            {member.role}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="secondary" className="bg-emerald-50 text-emerald-700">
+                            {member.status}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             </BlurFade>
           </TabsContent>
 
-          {/* ── Seguranca Tab (placeholder) ─────────────────── */}
-          <TabsContent value="seguranca">
+          {/* ── Segurança Tab ─────────────────────────────── */}
+          <TabsContent value="seguranca" className="space-y-6">
             <BlurFade delay={0.1}>
-              <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <p className="text-sm text-muted-foreground">
-                  Configurações de segurança em breve.
-                </p>
+              <div className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                <h2 className="mb-6 text-base font-semibold text-foreground flex items-center gap-2">
+                  <Shield className="size-4 text-muted-foreground" />
+                  Segurança da Conta
+                </h2>
+                <div className="space-y-6">
+                  {/* 2FA */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-[#dae3ee]/60">
+                        <Key className="size-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Autenticação em dois fatores (2FA)</p>
+                        <p className="text-xs text-muted-foreground">Adicione uma camada extra de segurança</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={twoFactor}
+                      onCheckedChange={setTwoFactor}
+                      className="data-[state=checked]:bg-[#00628c]"
+                    />
+                  </div>
+
+                  {/* Active sessions */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-[#dae3ee]/60">
+                        <Monitor className="size-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Sessões ativas</p>
+                        <p className="text-xs text-muted-foreground">1 sessão ativa</p>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs"
+                      onClick={() => toast.info("Encerramento de sessões em breve")}
+                    >
+                      Encerrar outras sessões
+                    </Button>
+                  </div>
+
+                  {/* Change password */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-9 items-center justify-center rounded-lg bg-[#dae3ee]/60">
+                        <Shield className="size-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Alterar senha</p>
+                        <p className="text-xs text-muted-foreground">Atualize sua senha periodicamente</p>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs"
+                      onClick={() => toast.info("Alteração de senha em breve")}
+                    >
+                      Alterar senha
+                    </Button>
+                  </div>
+                </div>
               </div>
             </BlurFade>
           </TabsContent>
