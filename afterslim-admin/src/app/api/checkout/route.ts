@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
     if (productError || !product) {
       return NextResponse.json(
-        { error: "Produto nao encontrado" },
+        { error: "Produto não encontrado" },
         { status: 404 }
       );
     }

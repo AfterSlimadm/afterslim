@@ -138,7 +138,7 @@ export default function TransactionsContent({
         setUploadedName(data.name);
       }
     } catch {
-      setUploadError("Erro de conexao ao fazer upload.");
+      setUploadError("Erro de conexão ao fazer upload.");
       setSelectedFile(null);
     } finally {
       setIsUploading(false);
@@ -339,7 +339,7 @@ export default function TransactionsContent({
               <div className="grid gap-2">
                 <Label htmlFor="tx-attachment">Anexo (opcional)</Label>
                 <p className="text-xs text-muted-foreground">
-                  PDF, PNG, JPG ou WEBP. Maximo 10MB.
+                  PDF, PNG, JPG ou WEBP. Máximo 10MB.
                 </p>
                 {!uploadedUrl && !isUploading && (
                   <div className="flex items-center gap-2">

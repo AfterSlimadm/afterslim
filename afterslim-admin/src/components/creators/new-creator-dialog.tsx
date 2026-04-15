@@ -124,7 +124,7 @@ export function NewCreatorDialog({ children }: NewCreatorDialogProps) {
         <DialogHeader>
           <DialogTitle>Novo Criador</DialogTitle>
           <DialogDescription>
-            Adicione um influencer ou criador de conteudo ao pipeline.
+            Adicione um influencer ou criador de conteúdo ao pipeline.
           </DialogDescription>
         </DialogHeader>
 
@@ -165,7 +165,7 @@ export function NewCreatorDialog({ children }: NewCreatorDialogProps) {
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label>Nivel</Label>
+              <Label>Nível</Label>
               <Select value={tier} onValueChange={setTier}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecionar" />
@@ -245,7 +245,7 @@ export function NewCreatorDialog({ children }: NewCreatorDialogProps) {
             <Label htmlFor="creator-notes">Notas</Label>
             <Textarea
               id="creator-notes"
-              placeholder="Observacoes sobre o criador..."
+              placeholder="Observações sobre o criador..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={2}

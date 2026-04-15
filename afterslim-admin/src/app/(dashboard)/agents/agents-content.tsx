@@ -276,7 +276,7 @@ export default function AgentsContent({ agentStatuses }: AgentsContentProps) {
         <div>
           <h2 className="section-title">Em Breve</h2>
           <p className="text-sm text-muted-foreground">
-            Estes agentes estao em desenvolvimento
+            Estes agentes estão em desenvolvimento
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

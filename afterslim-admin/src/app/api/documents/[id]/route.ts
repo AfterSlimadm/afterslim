@@ -23,7 +23,7 @@ export async function DELETE(
 
   if (fetchError || !doc) {
     return NextResponse.json(
-      { error: "Documento nao encontrado" },
+      { error: "Documento não encontrado" },
       { status: 404 }
     );
   }

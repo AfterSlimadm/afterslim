@@ -172,7 +172,7 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
         setUploadedSize(file.size);
       }
     } catch {
-      setUploadError("Erro de conexao ao fazer upload.");
+      setUploadError("Erro de conexão ao fazer upload.");
     } finally {
       setIsUploading(false);
     }
@@ -281,12 +281,12 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
             <DialogHeader>
               <DialogTitle>Novo Documento</DialogTitle>
               <DialogDescription>
-                Faca upload de um contrato, nota fiscal ou outro documento.
+                Faça upload de um contrato, nota fiscal ou outro documento.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="doc-title">Titulo</Label>
+                <Label htmlFor="doc-title">Título</Label>
                 <Input
                   id="doc-title"
                   placeholder="Ex: Contrato VQ Group Fulfillment"
@@ -322,7 +322,7 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
               <div className="grid gap-2">
                 <Label htmlFor="doc-file">Arquivo</Label>
                 <p className="text-xs text-muted-foreground">
-                  PDF, DOC, DOCX, XLS, XLSX, PNG, JPG. Maximo 10MB.
+                  PDF, DOC, DOCX, XLS, XLSX, PNG, JPG. Máximo 10MB.
                 </p>
                 {!uploadedUrl && !isUploading && (
                   <Input
@@ -443,7 +443,7 @@ export default function DocumentsContent({ documents }: DocumentsContentProps) {
           <p className="font-medium">Nenhum documento encontrado</p>
           <p className="text-sm">
             {documents.length === 0
-              ? "Faca upload do seu primeiro documento."
+              ? "Faça upload do seu primeiro documento."
               : "Tente ajustar sua busca ou filtros."}
           </p>
         </div>

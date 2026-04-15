@@ -21,14 +21,14 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   openGraph: {
     title: "AfterSlim Admin",
-    description: "Pedidos, financeiro, estoque e gestao completa",
+    description: "Pedidos, financeiro, estoque e gestão completa",
     images: [{ url: "/og-admin.jpg", width: 1200, height: 630, alt: "AfterSlim Admin Dashboard" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "AfterSlim Admin",
-    description: "Pedidos, financeiro, estoque e gestao completa",
+    description: "Pedidos, financeiro, estoque e gestão completa",
     images: ["/og-admin.jpg"],
   },
   icons: {

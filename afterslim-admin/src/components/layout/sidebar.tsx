@@ -54,7 +54,7 @@ const NAV_LABEL_MAP: Record<string, { pt: string; en: string }> = {
   "Agentes": { pt: "Agentes", en: "Agents" },
   "Mensagens": { pt: "Mensagens", en: "Messages" },
   "Tarefas": { pt: "Tarefas", en: "Tasks" },
-  "Memoria": { pt: "Memoria", en: "Memory" },
+  "Memória": { pt: "Memória", en: "Memory" },
   "Configurações": { pt: "Configurações", en: "Settings" },
 };
 

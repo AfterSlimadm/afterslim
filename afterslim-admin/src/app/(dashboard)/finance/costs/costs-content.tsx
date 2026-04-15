@@ -157,7 +157,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
         setReceiptName(data.name);
       }
     } catch {
-      toast.error("Erro de conexao ao fazer upload");
+      toast.error("Erro de conexão ao fazer upload");
     } finally {
       setIsUploading(false);
     }
@@ -364,7 +364,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="cost-notes">Observacoes (opcional)</Label>
+                <Label htmlFor="cost-notes">Observações (opcional)</Label>
                 <Textarea
                   id="cost-notes"
                   placeholder="Detalhes adicionais..."
@@ -414,7 +414,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                 disabled={isSaving}
               >
                 {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
-                {isSaving ? "Salvando..." : editingCost ? "Salvar Alteracoes" : "Registrar Custo"}
+                {isSaving ? "Salvando..." : editingCost ? "Salvar Alterações" : "Registrar Custo"}
               </Button>
             </div>
           </DialogContent>

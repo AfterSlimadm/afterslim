@@ -9,7 +9,7 @@ export default async function CampaignsPage() {
       <div className="mb-6">
         <h1 className="page-title">Campanhas</h1>
         <p className="page-description">
-          Gerencie campanhas com criadores de conteudo e influencers.
+          Gerencie campanhas com criadores de conteúdo e influencers.
         </p>
       </div>
 

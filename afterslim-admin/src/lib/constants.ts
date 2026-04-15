@@ -67,7 +67,7 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Operacoes",
+    label: "Operações",
     items: [
       {
         label: "Pedidos",
@@ -106,8 +106,8 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: DollarSign,
         roles: ["owner", "admin"],
         children: [
-          { label: "Visao Geral", href: "/finance" },
-          { label: "Transacoes", href: "/finance/transactions" },
+          { label: "Visão Geral", href: "/finance" },
+          { label: "Transações", href: "/finance/transactions" },
           { label: "Custos", href: "/finance/costs" },
           { label: "Metas", href: "/finance/goals" },
         ],
@@ -161,10 +161,10 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: Bot,
         roles: ["owner", "admin"],
         children: [
-          { label: "Visao Geral", href: "/agents" },
+          { label: "Visão Geral", href: "/agents" },
           { label: "Mensagens", href: "/agents/messages" },
           { label: "Tarefas", href: "/agents/tasks" },
-          { label: "Memoria", href: "/agents/memory" },
+          { label: "Memória", href: "/agents/memory" },
         ],
       },
     ],
@@ -173,7 +173,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Sistema",
     items: [
       {
-        label: "Configuracoes",
+        label: "Configurações",
         href: "/settings",
         icon: Settings,
         roles: ["owner", "admin"],
@@ -309,7 +309,7 @@ export const AGENTS: AgentInfo[] = [
   },
   {
     id: "as-legal",
-    name: "Equipe Juridica",
+    name: "Equipe Jurídica",
     description: "Regulamentações, contratos, políticas de privacidade, orientação jurídica",
     avatar: "LG",
     active: false,
@@ -323,7 +323,7 @@ export const AGENTS: AgentInfo[] = [
   },
   {
     id: "as-management",
-    name: "Gestao",
+    name: "Gestão",
     description: "KPIs, relatórios executivos, prioridades semanais, análise SWOT",
     avatar: "MG",
     active: false,
@@ -331,7 +331,7 @@ export const AGENTS: AgentInfo[] = [
   {
     id: "as-content",
     name: "Agente de Conteúdo",
-    description: "Legendas Instagram, roteiros de Reels, hashtags, calendario de conteudo",
+    description: "Legendas Instagram, roteiros de Reels, hashtags, calendário de conteúdo",
     avatar: "CT",
     active: false,
   },
@@ -391,7 +391,7 @@ export const IDEA_CATEGORY_DESCRIPTIONS: Record<
   (typeof IDEA_CATEGORIES)[number],
   string
 > = {
-  Marketing: "Campanhas, anuncios, conteudo",
+  Marketing: "Campanhas, anúncios, conteúdo",
   Produto: "Formulação, embalagem, novos SKUs",
   "Operações": "Fulfillment, envio, fornecedor",
   Tecnologia: "Site, admin, automação",
@@ -422,7 +422,7 @@ export const REMINDER_STATUS_CONFIG: Record<
   { label: string; color: string; icon: string }
 > = {
   pending: { label: "Pendente", color: "badge-warning", icon: "Clock" },
-  done: { label: "Concluido", color: "badge-success", icon: "CheckCircle" },
+  done: { label: "Concluído", color: "badge-success", icon: "CheckCircle" },
   dismissed: { label: "Descartado", color: "badge-neutral", icon: "XCircle" },
 };
 
@@ -479,7 +479,7 @@ export const SUPPORT_TASK_TYPE_CONFIG: Record<
   { label: string; icon: string; color: string }
 > = {
   called_customer:       { label: "Ligou para o cliente", icon: "Phone", color: "badge-info" },
-  sent_sms:              { label: "Enviou SMS de recuperacao", icon: "MessageSquare", color: "badge-info" },
+  sent_sms:              { label: "Enviou SMS de recuperação", icon: "MessageSquare", color: "badge-info" },
   sent_email:            { label: "Enviou e-mail", icon: "Mail", color: "badge-info" },
   offered_partial_refund:{ label: "Ofereceu reembolso parcial", icon: "DollarSign", color: "badge-warning" },
   customer_accepted:     { label: "Cliente aceitou", icon: "CheckCircle", color: "badge-success" },

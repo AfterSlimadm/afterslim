@@ -211,7 +211,7 @@ export default function OrderDetailPage({
           <p className="text-sm">
             {locale === "en"
               ? `Order #${id} does not exist or was removed.`
-              : `O pedido #${id} nao existe ou foi removido.`}
+              : `O pedido #${id} não existe ou foi removido.`}
           </p>
         </div>
       </div>

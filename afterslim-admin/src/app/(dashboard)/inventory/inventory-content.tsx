@@ -274,7 +274,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                       Relatório Inteligente de Demanda
                     </h3>
                     <p className="text-sm text-white/75 leading-relaxed mb-4">
-                      Analise automatica de demanda com base nas vendas recentes.
+                      Análise automática de demanda com base nas vendas recentes.
                       Configure alertas para receber notificações de reposição.
                     </p>
                     <Button
@@ -413,7 +413,7 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                   <div className="text-center py-6">
                     <Package className="size-8 mx-auto text-muted-foreground/40 mb-2" />
                     <p className="text-sm text-muted-foreground">
-                      Todos os produtos estao com estoque normal
+                      Todos os produtos estão com estoque normal
                     </p>
                   </div>
                 )}

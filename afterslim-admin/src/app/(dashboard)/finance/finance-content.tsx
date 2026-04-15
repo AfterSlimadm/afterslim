@@ -129,7 +129,7 @@ export default function FinanceContent({
               Financeiro
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Relatório detalhado de performance e saude financeira.
+              Relatório detalhado de performance e saúde financeira.
             </p>
           </div>
           <div className="flex items-center gap-3">

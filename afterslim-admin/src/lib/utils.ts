@@ -139,7 +139,7 @@ export function truncate(text: string, maxLength: number): string {
 }
 
 /**
- * Generate initials from a name string (e.g. "Joao Silva" -> "JS").
+ * Generate initials from a name string (e.g. "João Silva" -> "JS").
  */
 export function getInitials(name: string): string {
   return name

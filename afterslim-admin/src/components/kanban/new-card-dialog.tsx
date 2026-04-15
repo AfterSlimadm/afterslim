@@ -194,7 +194,7 @@ export function NewCardDialog({
               <Label htmlFor="card-assignee">Responsável</Label>
               <Input
                 id="card-assignee"
-                placeholder="Ex: Joao Silva"
+                placeholder="Ex: João Silva"
                 value={assignee}
                 onChange={(e) => setAssignee(e.target.value)}
               />

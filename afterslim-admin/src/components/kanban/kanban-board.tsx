@@ -217,7 +217,7 @@ export function KanbanBoard({
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
         <p className="text-lg font-medium">Nenhuma coluna criada</p>
         <p className="text-sm mt-1">
-          Crie colunas no banco de dados para comecar a usar o quadro Kanban.
+          Crie colunas no banco de dados para começar a usar o quadro Kanban.
         </p>
       </div>
     );

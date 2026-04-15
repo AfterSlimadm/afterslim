@@ -43,7 +43,7 @@ const translations = {
 
   // Navigation group labels
   "nav.main": { pt: "Principal", en: "Main" },
-  "nav.operations": { pt: "Operacoes", en: "Operations" },
+  "nav.operations": { pt: "Operações", en: "Operations" },
   "nav.finance": { pt: "Financeiro", en: "Finance" },
   "nav.planning": { pt: "Planejamento", en: "Planning" },
   "nav.team": { pt: "Equipe", en: "Team" },
@@ -63,7 +63,7 @@ const translations = {
   "table.status": { pt: "Status", en: "Status" },
   "table.date": { pt: "Data", en: "Date" },
   "table.value": { pt: "Valor", en: "Amount" },
-  "table.actions": { pt: "Acoes", en: "Actions" },
+  "table.actions": { pt: "Ações", en: "Actions" },
   "table.payment": { pt: "Pagamento", en: "Payment" },
   "table.items": { pt: "Itens", en: "Items" },
 
@@ -74,7 +74,7 @@ const translations = {
   "order.markAs": { pt: "Marcar como", en: "Mark as" },
   "order.addNote": { pt: "Adicionar Nota", en: "Add Note" },
   "order.addNoteDesc": {
-    pt: "Adicione uma nota interna a este pedido. Notas sao visiveis apenas para a equipe admin.",
+    pt: "Adicione uma nota interna a este pedido. Notas são visíveis apenas para a equipe admin.",
     en: "Add an internal note to this order. Notes are only visible to the admin team.",
   },
   "order.note": { pt: "Nota", en: "Note" },
@@ -90,7 +90,7 @@ const translations = {
   "order.subtotal": { pt: "Subtotal", en: "Subtotal" },
   "order.discount": { pt: "Desconto", en: "Discount" },
   "order.shipping": { pt: "Frete", en: "Shipping" },
-  "order.free": { pt: "Gratis", en: "Free" },
+  "order.free": { pt: "Grátis", en: "Free" },
   "order.noItems": { pt: "Nenhum item neste pedido.", en: "No items in this order." },
   "order.history": { pt: "Hist\u00f3rico do Pedido", en: "Order History" },
   "order.historyDesc": {
@@ -102,19 +102,19 @@ const translations = {
   "order.ordersCount": { pt: "pedidos", en: "orders" },
   "order.spent": { pt: "gasto", en: "spent" },
   "order.customerNoData": {
-    pt: "Dados do cliente nao disponiveis.",
+    pt: "Dados do cliente não disponíveis.",
     en: "Customer data not available.",
   },
-  "order.shippingAddress": { pt: "Endereco de Entrega", en: "Shipping Address" },
-  "order.addressNotProvided": { pt: "Endereco nao informado.", en: "Address not provided." },
-  "order.trackingCode": { pt: "Codigo de Rastreio", en: "Tracking Code" },
+  "order.shippingAddress": { pt: "Endereço de Entrega", en: "Shipping Address" },
+  "order.addressNotProvided": { pt: "Endereço não informado.", en: "Address not provided." },
+  "order.trackingCode": { pt: "Código de Rastreio", en: "Tracking Code" },
   "order.payment": { pt: "Pagamento", en: "Payment" },
-  "order.method": { pt: "Metodo", en: "Method" },
+  "order.method": { pt: "Método", en: "Method" },
   "order.orderSummary": { pt: "Resumo do Pedido", en: "Order Summary" },
   "order.notes": { pt: "Notas", en: "Notes" },
-  "order.notFound": { pt: "Pedido nao encontrado", en: "Order not found" },
+  "order.notFound": { pt: "Pedido não encontrado", en: "Order not found" },
   "order.notFoundDesc": {
-    pt: "O pedido #{id} nao existe ou foi removido.",
+    pt: "O pedido #{id} não existe ou foi removido.",
     en: "Order #{id} does not exist or was removed.",
   },
   "order.loading": { pt: "Carregando pedido...", en: "Loading order..." },
@@ -123,7 +123,7 @@ const translations = {
   // Orders list page
   "orders.title": { pt: "Pedidos", en: "Orders" },
   "orders.description": {
-    pt: "Gerencie e acompanhe as transacoes da AfterSlim em tempo real.",
+    pt: "Gerencie e acompanhe as transações da AfterSlim em tempo real.",
     en: "View orders, customer details, and track your support actions.",
   },
   "orders.search": { pt: "Pesquisar pedidos...", en: "Search orders..." },
@@ -145,8 +145,8 @@ const translations = {
   "orders.product": { pt: "produto", en: "product" },
   "orders.products": { pt: "produtos", en: "products" },
   "orders.dateFilterSoon": { pt: "Filtro de data em breve", en: "Date filter coming soon" },
-  "orders.advancedFiltersSoon": { pt: "Filtros avancados em breve", en: "Advanced filters coming soon" },
-  "orders.exportSoon": { pt: "Funcao de exportacao em breve", en: "Export feature coming soon" },
+  "orders.advancedFiltersSoon": { pt: "Filtros avançados em breve", en: "Advanced filters coming soon" },
+  "orders.exportSoon": { pt: "Função de exportação em breve", en: "Export feature coming soon" },
   "orders.printSoon": { pt: "Imprimir fatura em breve", en: "Print invoice coming soon" },
   "orders.statusUpdateSoon": { pt: "Atualizar status em breve", en: "Status update coming soon" },
 
@@ -158,7 +158,7 @@ const translations = {
   "orderTable.status": { pt: "Status", en: "Status" },
   "orderTable.payment": { pt: "Pagamento", en: "Payment" },
   "orderTable.date": { pt: "Data", en: "Date" },
-  "orderTable.actions": { pt: "Acoes", en: "Actions" },
+  "orderTable.actions": { pt: "Ações", en: "Actions" },
   "orderTable.noOrders": { pt: "Nenhum pedido encontrado.", en: "No orders found." },
   "orderTable.unknown": { pt: "Desconhecido", en: "Unknown" },
   "orderTable.item": { pt: "item", en: "item" },
@@ -170,14 +170,14 @@ const translations = {
   // Support tasks page
   "tasks.title": { pt: "Tarefas de Suporte", en: "Support Tasks" },
   "tasks.description": {
-    pt: "Acompanhe acoes de atendimento ao cliente e recuperacao de vendas.",
+    pt: "Acompanhe ações de atendimento ao cliente e recuperação de vendas.",
     en: "Track customer support actions and sales recovery.",
   },
   "tasks.total": { pt: "Total", en: "Total" },
   "tasks.pending": { pt: "Pendentes", en: "Pending" },
-  "tasks.completed": { pt: "Concluidas", en: "Completed" },
+  "tasks.completed": { pt: "Concluídas", en: "Completed" },
   "tasks.searchPlaceholder": {
-    pt: "Buscar por descricao, usuario ou pedido...",
+    pt: "Buscar por descrição, usuário ou pedido...",
     en: "Search by description, user or order...",
   },
   "tasks.taskType": { pt: "Tipo de tarefa", en: "Task type" },
@@ -185,7 +185,7 @@ const translations = {
   "tasks.noTasks": { pt: "Nenhuma tarefa encontrada", en: "No tasks found" },
   "tasks.adjustFilters": { pt: "Tente ajustar os filtros.", en: "Try adjusting the filters." },
   "tasks.willAppear": {
-    pt: "Tarefas de suporte aparecerao aqui quando criadas.",
+    pt: "Tarefas de suporte aparecerão aqui quando criadas.",
     en: "Support tasks will appear here when created.",
   },
 
@@ -198,7 +198,7 @@ const translations = {
 
   // Support task types
   "taskType.called_customer": { pt: "Ligou para o cliente", en: "Called customer" },
-  "taskType.sent_sms": { pt: "Enviou SMS de recuperacao", en: "Sent recovery SMS" },
+  "taskType.sent_sms": { pt: "Enviou SMS de recuperação", en: "Sent recovery SMS" },
   "taskType.sent_email": { pt: "Enviou e-mail", en: "Sent email" },
   "taskType.offered_partial_refund": { pt: "Ofereceu reembolso parcial", en: "Offered partial refund" },
   "taskType.customer_accepted": { pt: "Cliente aceitou", en: "Customer accepted" },
@@ -229,7 +229,7 @@ const translations = {
   "toast.noteAdded": { pt: "Nota adicionada com sucesso", en: "Note added successfully" },
   "toast.noteError": { pt: "Erro ao salvar nota. Tente novamente.", en: "Error saving note. Try again." },
   "toast.fetchError": { pt: "Erro ao carregar pedido", en: "Error loading order" },
-  "toast.printSoon": { pt: "Impressao de fatura em breve", en: "Print invoice coming soon" },
+  "toast.printSoon": { pt: "Impressão de fatura em breve", en: "Print invoice coming soon" },
 } as const;
 
 export type TranslationKey = keyof typeof translations;

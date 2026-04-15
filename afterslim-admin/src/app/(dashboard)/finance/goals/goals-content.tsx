@@ -111,7 +111,7 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
           </h1>
           <p className="page-description">
             Defina metas e acompanhe o progresso de receita, despesas e
-            metricas-chave.
+            métricas-chave.
           </p>
         </div>
 
@@ -219,7 +219,7 @@ export default function GoalsContent({ goalRows }: GoalsContentProps) {
           <Target />
           <p className="font-medium">Nenhuma meta ativa</p>
           <p className="text-sm">
-            Crie uma meta para comecar a acompanhar seus objetivos financeiros.
+            Crie uma meta para começar a acompanhar seus objetivos financeiros.
           </p>
         </div>
       )}

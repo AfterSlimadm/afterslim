@@ -76,7 +76,7 @@ export default function SettingsContent({
   );
   const [address, setAddress] = useState(
     (initialSettings.address as string) ||
-      "Av. Paulista, 1000 - Bela Vista, Sao Paulo - SP"
+      "Av. Paulista, 1000 - Bela Vista, São Paulo - SP"
   );
 
   // Regional preferences
@@ -134,7 +134,7 @@ export default function SettingsContent({
         channel_sms: smsNotif,
         channel_whatsapp: whatsappNotif,
       });
-      toast.success("Configuracoes salvas com sucesso");
+      toast.success("Configurações salvas com sucesso");
     } catch (err) {
       toast.error(
         `Erro ao salvar: ${err instanceof Error ? err.message : "desconhecido"}`
@@ -153,7 +153,7 @@ export default function SettingsContent({
     setPhone((initialSettings.phone as string) || "+55 (11) 99999-9999");
     setAddress(
       (initialSettings.address as string) ||
-        "Av. Paulista, 1000 - Bela Vista, Sao Paulo - SP"
+        "Av. Paulista, 1000 - Bela Vista, São Paulo - SP"
     );
     setCurrency((initialSettings.currency as string) || "USD");
     setTimezone((initialSettings.timezone as string) || "America/New_York");
@@ -168,7 +168,7 @@ export default function SettingsContent({
     setEmailNotif(initialSettings.channel_email !== false);
     setSmsNotif(initialSettings.channel_sms === true);
     setWhatsappNotif(initialSettings.channel_whatsapp !== false);
-    toast.info("Alteracoes descartadas");
+    toast.info("Alterações descartadas");
   }
 
   // ── Label component (Clinical Editorial) ───────────────────
@@ -189,10 +189,10 @@ export default function SettingsContent({
       <BlurFade delay={0}>
         <div className="page-header">
           <h1 className="text-[1.75rem] font-semibold tracking-tight text-foreground">
-            Configuracoes
+            Configurações
           </h1>
           <p className="text-sm text-muted-foreground">
-            Gerencie as diretrizes e preferencias do ecossistema AfterSlim.
+            Gerencie as diretrizes e preferências do ecossistema AfterSlim.
           </p>
         </div>
       </BlurFade>
@@ -214,7 +214,7 @@ export default function SettingsContent({
               Equipe
             </TabsTrigger>
             <TabsTrigger value="seguranca" className="text-sm">
-              Seguranca
+              Segurança
             </TabsTrigger>
           </TabsList>
 
@@ -263,7 +263,7 @@ export default function SettingsContent({
                       />
                     </div>
                     <div className="space-y-2">
-                      <FieldLabel>Endereco comercial</FieldLabel>
+                      <FieldLabel>Endereço comercial</FieldLabel>
                       <Input
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
@@ -276,7 +276,7 @@ export default function SettingsContent({
                 {/* Regional Preferences Card */}
                 <div className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                   <h2 className="mb-6 text-base font-semibold text-foreground">
-                    Preferencias Regionais
+                    Preferências Regionais
                   </h2>
                   <div className="space-y-5">
                     <div className="space-y-2">
@@ -290,14 +290,14 @@ export default function SettingsContent({
                             Real Brasileiro (BRL)
                           </SelectItem>
                           <SelectItem value="USD">
-                            Dolar Americano (USD)
+                            Dólar Americano (USD)
                           </SelectItem>
                           <SelectItem value="EUR">Euro (EUR)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <FieldLabel>Fuso horario</FieldLabel>
+                      <FieldLabel>Fuso horário</FieldLabel>
                       <Select value={timezone} onValueChange={setTimezone}>
                         <SelectTrigger className="border-0 bg-[#dae3ee]/60 shadow-none focus:ring-1 focus:ring-[#00628c]/30">
                           <SelectValue />
@@ -326,10 +326,10 @@ export default function SettingsContent({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="pt-BR">
-                            Portugues (PT-BR)
+                            Português (PT-BR)
                           </SelectItem>
                           <SelectItem value="en-US">English (EN-US)</SelectItem>
-                          <SelectItem value="es">Espanol (ES)</SelectItem>
+                          <SelectItem value="es">Español (ES)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -384,7 +384,7 @@ export default function SettingsContent({
                 {/* Notification Channels Card */}
                 <div className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                   <h2 className="mb-6 text-base font-semibold text-foreground">
-                    Canais de Notificacao
+                    Canais de Notificação
                   </h2>
                   <div className="space-y-5">
                     {/* Email toggle */}
@@ -475,7 +475,7 @@ export default function SettingsContent({
                   ) : (
                     <Save className="size-4" />
                   )}
-                  {saving ? "Salvando..." : "Salvar Alteracoes"}
+                  {saving ? "Salvando..." : "Salvar Alterações"}
                 </Button>
               </div>
             </BlurFade>
@@ -486,7 +486,7 @@ export default function SettingsContent({
             <BlurFade delay={0.1}>
               <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <p className="text-sm text-muted-foreground">
-                  Configuracoes de notificações em breve.
+                  Configurações de notificações em breve.
                 </p>
               </div>
             </BlurFade>
@@ -497,7 +497,7 @@ export default function SettingsContent({
             <BlurFade delay={0.1}>
               <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <p className="text-sm text-muted-foreground">
-                  Configuracoes de integração em breve.
+                  Configurações de integração em breve.
                 </p>
               </div>
             </BlurFade>
@@ -519,7 +519,7 @@ export default function SettingsContent({
             <BlurFade delay={0.1}>
               <div className="rounded-2xl bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <p className="text-sm text-muted-foreground">
-                  Configuracoes de seguranca em breve.
+                  Configurações de segurança em breve.
                 </p>
               </div>
             </BlurFade>

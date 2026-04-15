@@ -130,7 +130,7 @@ export default function SalesChannelsContent({
           <ShoppingBag />
           <p className="font-medium">Nenhum pedido registrado ainda</p>
           <p className="text-sm">
-            Quando os pedidos comecarem a entrar, as metricas por canal aparecem aqui.
+            Quando os pedidos começarem a entrar, as métricas por canal aparecem aqui.
           </p>
         </div>
       ) : (

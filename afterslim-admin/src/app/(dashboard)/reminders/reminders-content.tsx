@@ -194,7 +194,7 @@ export default function RemindersContent({ reminders: initial }: RemindersConten
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Concluidos</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Concluídos</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -249,7 +249,7 @@ export default function RemindersContent({ reminders: initial }: RemindersConten
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Titulo</TableHead>
+                <TableHead>Título</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Prioridade</TableHead>
                 <TableHead>Responsável</TableHead>
@@ -423,7 +423,7 @@ function NewReminderDialog({ onCreated }: { onCreated: () => void }) {
         </DialogHeader>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Titulo *</Label>
+            <Label htmlFor="title">Título *</Label>
             <Input
               id="title"
               placeholder="Ex: Ligar pro fornecedor"

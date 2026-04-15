@@ -67,7 +67,7 @@ function LoginForm() {
         toast.error(
           isSupportPortal
             ? "Unauthorized account. Contact your administrator."
-            : "Conta nao autorizada. Contate o administrador."
+            : "Conta não autorizada. Contate o administrador."
         );
         return;
       }
@@ -310,7 +310,7 @@ function LoginForm() {
             <p className="text-xs text-[#bec8d1]">
               {isSupportPortal
                 ? "Authorized personnel only. All actions are logged."
-                : "Uso interno. Acesso nao autorizado e proibido."}
+                : "Uso interno. Acesso não autorizado é proibido."}
             </p>
           </motion.footer>
         </motion.div>
