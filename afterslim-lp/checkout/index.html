@@ -219,19 +219,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
               <p>Complete your contact and shipping information to continue</p>
             </div>
             <div class="step-form" id="payment-form" style="display:none">
-              <div class="form-group" style="margin-bottom:16px">
-                <label>Card Details</label>
-                <div class="stripe-element-container">
-                  <div id="card-element"></div>
-                </div>
+              <p style="font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:10px">Card Details</p>
+              <div class="stripe-element-container">
+                <div id="card-element"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;margin:12px 0 16px 0">
+                <svg viewBox="0 0 38 24" style="height:20px"><rect width="38" height="24" rx="3" fill="#1A1F71"/><text x="19" y="16" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">VISA</text></svg>
+                <svg viewBox="0 0 38 24" style="height:20px"><rect width="38" height="24" rx="3" fill="#252525"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.7a7 7 0 010 10.6 7 7 0 000-10.6z" fill="#FF5F00"/></svg>
+                <svg viewBox="0 0 38 24" style="height:20px"><rect width="38" height="24" rx="3" fill="#2E77BC"/><text x="19" y="16" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">AMEX</text></svg>
+                <span style="font-size:11px;color:#999;margin-left:auto">
+                  <svg style="width:12px;height:12px;vertical-align:middle;margin-right:3px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Secured by Stripe
+                </span>
               </div>
               <button type="button" class="btn-next" id="btn-pay" onclick="window.__pay&&window.__pay()">
                 Pay Now
               </button>
-              <p style="text-align:center;margin-top:12px;font-size:12px;color:#999">
-                <svg style="width:12px;height:12px;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Secured by Stripe. Your payment info is encrypted.
-              </p>
             </div>
           </div>
         </div>
