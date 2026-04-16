@@ -183,26 +183,32 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                   </div>
                 </div>
               </div>
-              <div id="shipping-methods" style="display:none;margin-top:16px">
-                <p style="font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:10px">Shipping Method</p>
-                <label class="shipping-option selected" id="ship-standard">
-                  <input type="radio" name="shipping-method" value="standard" checked>
-                  <div class="shipping-option-info">
-                    <span class="shipping-option-name">Standard Shipping</span>
-                    <span class="shipping-option-time">5-7 business days</span>
-                  </div>
-                  <span class="shipping-option-price" style="color:#16a34a;font-weight:700">Free</span>
-                </label>
-                <label class="shipping-option" id="ship-express">
-                  <input type="radio" name="shipping-method" value="express">
-                  <div class="shipping-option-info">
-                    <span class="shipping-option-name">DHL Expedited</span>
-                    <span class="shipping-option-time">2-3 business days</span>
-                  </div>
-                  <span class="shipping-option-price">$4.99</span>
-                </label>
+              <button type="button" class="btn-next" id="btn-step2-address" onclick="ckShowShipping()" style="display:none">Continue</button>
               </div>
-              <button type="button" class="btn-next" id="btn-step2" onclick="ckStep2()" style="display:none">Continue to Payment</button>
+              <!-- Shipping method selection (appears after address) -->
+              <div id="shipping-methods" style="display:none;margin-top:16px">
+                <div style="background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px;margin-bottom:12px">
+                  <div id="address-summary-inline" style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0">
+                  </div>
+                  <p style="font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:10px">Choose a shipping method:</p>
+                  <label class="shipping-option selected" id="ship-standard">
+                    <input type="radio" name="shipping-method" value="standard" checked>
+                    <div class="shipping-option-info">
+                      <span class="shipping-option-name">Standard Shipping</span>
+                      <span class="shipping-option-time">5-7 business days</span>
+                    </div>
+                    <span class="shipping-option-price" style="color:#16a34a;font-weight:700">Free</span>
+                  </label>
+                  <label class="shipping-option" id="ship-express">
+                    <input type="radio" name="shipping-method" value="express">
+                    <div class="shipping-option-info">
+                      <span class="shipping-option-name">DHL Expedited</span>
+                      <span class="shipping-option-time">2-3 business days</span>
+                    </div>
+                    <span class="shipping-option-price">$4.99</span>
+                  </label>
+                </div>
+                <button type="button" class="btn-next" id="btn-step2" onclick="ckStep2()">Continue to Payment</button>
             </div>
             <div class="step-summary" id="summary2" style="display:none"></div>
           </div>
@@ -387,6 +393,21 @@ function ckStep1(){
   }
 }
 
+function ckShowShipping(){
+  var a=document.getElementById('f-address').value.trim();
+  var ci=document.getElementById('f-city').value.trim();
+  var st=document.getElementById('f-state').value.trim();
+  var z=document.getElementById('f-zip').value.trim();
+  var ok=true;
+  ['f-address','f-city','f-state','f-zip'].forEach(function(id){var el=document.getElementById(id);if(!el.value.trim()){el.classList.add('error');ok=false;}else{el.classList.remove('error');}});
+  if(!ok)return;
+  // Hide address form, show shipping methods
+  document.getElementById('shipping-fields').style.display='none';
+  document.getElementById('btn-step2-address').style.display='none';
+  document.getElementById('shipping-methods').style.display='block';
+  document.getElementById('address-summary-inline').innerHTML='<span style="font-weight:600;font-size:14px;color:#1a1a1a">'+a+'</span><br><span style="font-size:13px;color:#666">'+ci+', '+st+' '+z+'</span>';
+}
+
 function ckStep2(){
   var a=document.getElementById('f-address').value.trim();
   var ci=document.getElementById('f-city').value.trim();
@@ -461,15 +482,14 @@ if(zipInput){zipInput.addEventListener('input',function(){
           document.getElementById('zip-city-label').textContent=p['place name']+' / '+p['state abbreviation'];
           document.getElementById('zip-city-label').style.color='#666';
           document.getElementById('shipping-fields').style.display='block';
-          document.getElementById('shipping-methods').style.display='block';
-          document.getElementById('btn-step2').style.display='block';
+          document.getElementById('btn-step2-address').style.display='block';
           document.getElementById('f-address').focus();
         }
       }).catch(function(){
         document.getElementById('zip-city-label').textContent='ZIP Code not found';
         document.getElementById('zip-city-label').style.color='#dc2626';
         document.getElementById('shipping-fields').style.display='none';
-        document.getElementById('btn-step2').style.display='none';
+        document.getElementById('btn-step2-address').style.display='none';
       });
     },400);
   }else{
