@@ -13,14 +13,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .checkout-header img { height: 28px; }
 .checkout-layout { max-width: 1100px; margin: 0 auto; padding: 32px 16px; display: flex; gap: 32px; }
 .checkout-main { flex: 1; min-width: 0; }
+.checkout-columns { display: flex; gap: 24px; }
+.checkout-left { flex: 1; min-width: 0; }
+.checkout-right { width: 340px; flex-shrink: 0; }
 .checkout-sidebar { width: 360px; flex-shrink: 0; }
-.steps-bar { display: flex; gap: 0; margin-bottom: 32px; }
-.step-indicator { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: 600; color: #999; border-bottom: 3px solid #e5e5e5; cursor: default; }
-.step-indicator.active { color: #ea580c; border-bottom-color: #ea580c; }
-.step-indicator.completed { color: #16a34a; border-bottom-color: #16a34a; cursor: pointer; }
-.step-number { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #e5e5e5; color: #999; font-size: 12px; margin-right: 8px; vertical-align: middle; }
-.step-indicator.active .step-number { background: #ea580c; color: #fff; }
-.step-indicator.completed .step-number { background: #16a34a; color: #fff; }
+.step-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.step-card-header h2 { margin-bottom: 0; }
+.step-count { font-size: 13px; color: #999; font-weight: 500; }
+.payment-card { min-height: 200px; }
+.payment-card.waiting { opacity: 0.5; }
+.payment-waiting { color: #999; font-size: 14px; padding: 24px 0; text-align: center; }
+.payment-waiting p { line-height: 1.5; }
 .step-card { background: #fff; border-radius: 12px; border: 1px solid #e5e5e5; padding: 32px; margin-bottom: 16px; }
 .step-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #1a1a1a; }
 .step-card.collapsed { padding: 20px 32px; opacity: 0.5; pointer-events: none; }
@@ -59,8 +62,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 @keyframes spin { to { transform: rotate(360deg); } }
 .processing-text { font-size: 16px; color: #666; }
 .checkout-error { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; display: none; }
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .checkout-layout { flex-direction: column-reverse; gap: 16px; padding: 16px; }
+  .checkout-columns { flex-direction: column; }
+  .checkout-right { width: 100%; }
   .checkout-sidebar { width: 100%; }
   .sidebar-card { position: static; }
   .form-row { flex-direction: column; gap: 12px; }
@@ -78,112 +83,116 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
 
   <div class="checkout-layout">
-    <!-- Main content -->
+    <!-- Left + Right form columns -->
     <div class="checkout-main">
+      <div class="checkout-columns">
+        <!-- Left column: Contact & Shipping steps -->
+        <div class="checkout-left">
+          <!-- Error message -->
+          <div class="checkout-error" id="checkout-error"></div>
 
-      <!-- Steps bar -->
-      <div class="steps-bar">
-        <div class="step-indicator active">
-          <span class="step-number">1</span> Contact
+          <!-- Step 1: Contact -->
+          <div class="step-card" id="step1">
+            <div class="step-card-header">
+              <h2>Contact Information</h2>
+              <span class="step-count">1 of 3</span>
+            </div>
+            <div class="step-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-name">Full Name</label>
+                  <input type="text" id="f-name" placeholder="John Smith" autocomplete="name" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-email">Email</label>
+                  <input type="email" id="f-email" placeholder="john@example.com" autocomplete="email" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-phone">Phone <span style="color:#999;font-weight:400">(optional)</span></label>
+                  <input type="tel" id="f-phone" placeholder="(555) 123-4567" autocomplete="tel">
+                </div>
+              </div>
+              <button type="button" class="btn-next" id="btn-step1" onclick="window.__v1&&window.__v1()">Continue to Shipping</button>
+            </div>
+            <div class="step-summary" id="summary1" style="display:none"></div>
+          </div>
+
+          <!-- Step 2: Shipping -->
+          <div class="step-card collapsed" id="step2">
+            <div class="step-card-header">
+              <h2>Shipping Address</h2>
+              <span class="step-count">2 of 3</span>
+            </div>
+            <div class="step-form" style="display:none">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-address">Street Address</label>
+                  <input type="text" id="f-address" placeholder="123 Main St, Apt 4" autocomplete="address-line1" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-city">City</label>
+                  <input type="text" id="f-city" placeholder="Miami" autocomplete="address-level2" required>
+                </div>
+                <div class="form-group">
+                  <label for="f-state">State</label>
+                  <input type="text" id="f-state" placeholder="FL" maxlength="2" autocomplete="address-level1" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-zip">ZIP Code</label>
+                  <input type="text" id="f-zip" placeholder="33101" maxlength="10" autocomplete="postal-code" required>
+                </div>
+                <div class="form-group">
+                  <label for="f-country">Country</label>
+                  <select id="f-country" autocomplete="country">
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn-next" id="btn-step2" onclick="window.__v2&&window.__v2()">Continue to Payment</button>
+            </div>
+            <div class="step-summary" id="summary2" style="display:none"></div>
+          </div>
         </div>
-        <div class="step-indicator">
-          <span class="step-number">2</span> Shipping
-        </div>
-        <div class="step-indicator">
-          <span class="step-number">3</span> Payment
+
+        <!-- Right column: Payment (always visible, grayed until step 3) -->
+        <div class="checkout-right">
+          <div class="step-card payment-card" id="step3">
+            <div class="step-card-header">
+              <h2>Payment</h2>
+              <span class="step-count">3 of 3</span>
+            </div>
+            <div class="payment-waiting" id="payment-waiting">
+              <p>Complete your contact and shipping information to continue</p>
+            </div>
+            <div class="step-form" id="payment-form" style="display:none">
+              <div class="form-group" style="margin-bottom:16px">
+                <label>Card Details</label>
+                <div class="stripe-element-container">
+                  <div id="card-element"></div>
+                </div>
+              </div>
+              <button type="button" class="btn-next" id="btn-pay" onclick="window.__pay&&window.__pay()">
+                Pay Now
+              </button>
+              <p style="text-align:center;margin-top:12px;font-size:12px;color:#999">
+                <svg style="width:12px;height:12px;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Secured by Stripe. Your payment info is encrypted.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Error message -->
-      <div class="checkout-error" id="checkout-error"></div>
-
-      <!-- Step 1: Contact -->
-      <div class="step-card" id="step1">
-        <h2>Contact Information</h2>
-        <div class="step-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="f-name">Full Name</label>
-              <input type="text" id="f-name" placeholder="John Smith" autocomplete="name" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="f-email">Email</label>
-              <input type="email" id="f-email" placeholder="john@example.com" autocomplete="email" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="f-phone">Phone <span style="color:#999;font-weight:400">(optional)</span></label>
-              <input type="tel" id="f-phone" placeholder="(555) 123-4567" autocomplete="tel">
-            </div>
-          </div>
-          <button type="button" class="btn-next" id="btn-step1" onclick="window.__v1&&window.__v1()">Continue to Shipping</button>
-        </div>
-        <div class="step-summary" id="summary1" style="display:none"></div>
-      </div>
-
-      <!-- Step 2: Shipping -->
-      <div class="step-card collapsed" id="step2">
-        <h2>Shipping Address</h2>
-        <div class="step-form" style="display:none">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="f-address">Street Address</label>
-              <input type="text" id="f-address" placeholder="123 Main St, Apt 4" autocomplete="address-line1" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="f-city">City</label>
-              <input type="text" id="f-city" placeholder="Miami" autocomplete="address-level2" required>
-            </div>
-            <div class="form-group">
-              <label for="f-state">State</label>
-              <input type="text" id="f-state" placeholder="FL" maxlength="2" autocomplete="address-level1" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="f-zip">ZIP Code</label>
-              <input type="text" id="f-zip" placeholder="33101" maxlength="10" autocomplete="postal-code" required>
-            </div>
-            <div class="form-group">
-              <label for="f-country">Country</label>
-              <select id="f-country" autocomplete="country">
-                <option value="US">United States</option>
-                <option value="CA">Canada</option>
-                <option value="GB">United Kingdom</option>
-                <option value="AU">Australia</option>
-              </select>
-            </div>
-          </div>
-          <button type="button" class="btn-next" id="btn-step2" onclick="window.__v2&&window.__v2()">Continue to Payment</button>
-        </div>
-        <div class="step-summary" id="summary2" style="display:none"></div>
-      </div>
-
-      <!-- Step 3: Payment -->
-      <div class="step-card collapsed" id="step3">
-        <h2>Payment</h2>
-        <div class="step-form" style="display:none">
-          <div class="form-group" style="margin-bottom:16px">
-            <label>Card Details</label>
-            <div class="stripe-element-container">
-              <div id="card-element"></div>
-            </div>
-          </div>
-          <button type="button" class="btn-next" id="btn-pay" onclick="window.__pay&&window.__pay()">
-            Pay Now
-          </button>
-          <p style="text-align:center;margin-top:12px;font-size:12px;color:#999">
-            <svg style="width:12px;height:12px;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Secured by Stripe. Your payment info is encrypted.
-          </p>
-        </div>
-      </div>
-
     </div>
 
     <!-- Sidebar -->
@@ -252,14 +261,22 @@ function ckInitSidebar(){
 
 function ckShowStep(s){
   CK_step=s;
-  for(var i=1;i<=3;i++){
+  // Left column steps (1 and 2)
+  for(var i=1;i<=2;i++){
     var c=document.getElementById('step'+i);
-    var ind=document.querySelectorAll('.step-indicator')[i-1];
-    if(!c||!ind)continue;
+    if(!c)continue;
     var f=c.querySelector('.step-form'),sm=c.querySelector('.step-summary');
-    if(i<s){c.className='step-card done';ind.className='step-indicator completed';if(f)f.style.display='none';if(sm)sm.style.display='block';}
-    else if(i===s){c.className='step-card';ind.className='step-indicator active';if(f)f.style.display='block';if(sm)sm.style.display='none';}
-    else{c.className='step-card collapsed';ind.className='step-indicator';if(f)f.style.display='none';if(sm)sm.style.display='none';}
+    if(i<s){c.className='step-card done';if(f)f.style.display='none';if(sm)sm.style.display='block';}
+    else if(i===s){c.className='step-card';if(f)f.style.display='block';if(sm)sm.style.display='none';}
+    else{c.className='step-card collapsed';if(f)f.style.display='none';if(sm)sm.style.display='none';}
+  }
+  // Right column: Payment (step 3)
+  var pay=document.getElementById('step3');
+  var payWait=document.getElementById('payment-waiting');
+  var payForm=document.getElementById('payment-form');
+  if(pay){
+    if(s<3){pay.className='step-card payment-card waiting';if(payWait)payWait.style.display='block';if(payForm)payForm.style.display='none';}
+    else{pay.className='step-card payment-card';if(payWait)payWait.style.display='none';if(payForm)payForm.style.display='block';}
   }
 }
 
