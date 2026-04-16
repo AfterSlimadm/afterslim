@@ -325,6 +325,8 @@ function ckInitSidebar(){
 
 function ckShowStep(s){
   CK_step=s;
+  var leftCol=document.querySelector('.checkout-left');
+  var rightCol=document.querySelector('.checkout-right');
   // Left column steps (1 and 2)
   for(var i=1;i<=2;i++){
     var c=document.getElementById('step'+i);
@@ -338,9 +340,17 @@ function ckShowStep(s){
   var pay=document.getElementById('step3');
   var payWait=document.getElementById('payment-waiting');
   var payForm=document.getElementById('payment-form');
-  if(pay){
-    if(s<3){pay.className='step-card payment-card waiting';if(payWait)payWait.style.display='block';if(payForm)payForm.style.display='none';}
-    else{pay.className='step-card payment-card';if(payWait)payWait.style.display='none';if(payForm)payForm.style.display='block';}
+  if(s<3){
+    // Steps 1-2: normal 2-column layout
+    if(leftCol)leftCol.style.display='block';
+    if(rightCol)rightCol.style.flex='1';
+    if(pay){pay.className='step-card payment-card waiting';if(payWait)payWait.style.display='block';if(payForm)payForm.style.display='none';}
+  }else{
+    // Step 3: left column shrinks, payment expands
+    if(leftCol)leftCol.style.display='block';
+    if(leftCol)leftCol.style.flex='0 0 280px';
+    if(rightCol)rightCol.style.flex='1';
+    if(pay){pay.className='step-card payment-card';if(payWait)payWait.style.display='none';if(payForm)payForm.style.display='block';}
   }
 }
 
