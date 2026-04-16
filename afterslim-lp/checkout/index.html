@@ -28,8 +28,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .step-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #1a1a1a; }
 .step-card.collapsed { padding: 20px 32px; opacity: 0.5; pointer-events: none; }
 .step-card.collapsed h2 { margin-bottom: 0; font-size: 16px; color: #999; }
-.step-card.done { padding: 20px 32px; opacity: 1; pointer-events: auto; cursor: pointer; }
+.step-card.done { padding: 20px 32px; opacity: 1; pointer-events: auto; cursor: pointer; border-color: #16a34a; border-width: 2px; }
 .step-card.done h2 { margin-bottom: 8px; font-size: 16px; color: #16a34a; }
+.step-card.done .step-card-header::after { content: '\270E'; font-size: 18px; color: #999; margin-left: 8px; }
+.step-card.done .step-count { display: none; }
 .step-summary { font-size: 14px; color: #666; line-height: 1.5; }
 .step-summary span { display: block; }
 .form-row { display: flex; gap: 16px; margin-bottom: 16px; }
@@ -38,7 +40,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .form-group input, .form-group select { padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; color: #1a1a1a; transition: border-color 0.2s; outline: none; background: #fff; }
 .form-group input:focus, .form-group select:focus { border-color: #ea580c; box-shadow: 0 0 0 3px rgba(234,88,12,0.1); }
 .form-group input.error { border-color: #dc2626; }
-.btn-next { width: 100%; padding: 16px; background: #ea580c; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+.btn-next { width: 100%; padding: 18px; background: #ea580c; color: #fff; border: none; border-radius: 8px; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: background 0.2s; letter-spacing: 0.3px; }
 .btn-next:hover { background: #c2410c; }
 .stripe-element-container { padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px; background: #fff; margin-bottom: 16px; min-height: 44px; }
 .stripe-element-container.focused { border-color: #ea580c; box-shadow: 0 0 0 3px rgba(234,88,12,0.1); }
