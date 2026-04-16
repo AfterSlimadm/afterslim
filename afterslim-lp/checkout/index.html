@@ -393,6 +393,13 @@ function ckStep1(){
   }
 }
 
+function ckEditAddress(){
+  document.getElementById('shipping-methods').style.display='none';
+  document.querySelector('#step2 .form-row').style.display='flex';
+  document.getElementById('shipping-fields').style.display='block';
+  document.getElementById('btn-step2-address').style.display='block';
+}
+
 function ckShowShipping(){
   var a=document.getElementById('f-address').value.trim();
   var ci=document.getElementById('f-city').value.trim();
@@ -401,11 +408,12 @@ function ckShowShipping(){
   var ok=true;
   ['f-address','f-city','f-state','f-zip'].forEach(function(id){var el=document.getElementById(id);if(!el.value.trim()){el.classList.add('error');ok=false;}else{el.classList.remove('error');}});
   if(!ok)return;
-  // Hide address form, show shipping methods
+  // Hide address form and ZIP row, show shipping methods
   document.getElementById('shipping-fields').style.display='none';
   document.getElementById('btn-step2-address').style.display='none';
+  document.querySelector('#step2 .form-row').style.display='none';
   document.getElementById('shipping-methods').style.display='block';
-  document.getElementById('address-summary-inline').innerHTML='<span style="font-weight:600;font-size:14px;color:#1a1a1a">'+a+'</span><br><span style="font-size:13px;color:#666">'+ci+', '+st+' '+z+'</span>';
+  document.getElementById('address-summary-inline').innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid #e0e0e0;border-radius:8px;background:#fff"><div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#1a1a1a"></div><div><span style="font-weight:600;font-size:13px;color:#1a1a1a">'+a+'</span><br><span style="font-size:12px;color:#888">'+ci+', '+st+' '+z+'</span></div></div><span style="cursor:pointer;color:#999;font-size:18px" onclick="ckEditAddress()">&#9998;</span></div>';
 }
 
 function ckStep2(){
