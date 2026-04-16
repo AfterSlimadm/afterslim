@@ -290,7 +290,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
         <h3>Order Summary</h3>
 
         <div class="sidebar-product">
-          <img src="/images/afterslim-bottle-nobg.png" alt="AfterSlim"/>
+          <img id="sidebar-img" src="/images/bottlereal.png" alt="AfterSlim"/>
           <div>
             <div class="sidebar-product-name" id="sidebar-name">AfterSlim GLP-1 Companion</div>
             <div class="sidebar-product-variant" id="sidebar-variant">1 bottle - 30 day supply</div>
@@ -340,7 +340,9 @@ var CK_ship={address:'',city:'',state:'',zip:'',country:'US'};
 var CK_stripe,CK_elements,CK_cardEl;
 
 function ckInitSidebar(){
+  var bottleImages={1:'/images/bottlereal.png',2:'/images/bottlereal2.png',3:'/images/bottlereal3.png'};
   var e;
+  e=document.getElementById('sidebar-img');if(e)e.src=bottleImages[CK_qty]||bottleImages[1];
   e=document.getElementById('sidebar-name');if(e)e.textContent=CK_info.name;
   e=document.getElementById('sidebar-variant');if(e)e.textContent=CK_info.variant;
   e=document.getElementById('sidebar-price');if(e)e.textContent='$'+CK_info.price.toFixed(2);
