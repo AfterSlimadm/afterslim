@@ -28,10 +28,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .step-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #1a1a1a; }
 .step-card.collapsed { padding: 20px 32px; opacity: 0.5; pointer-events: none; }
 .step-card.collapsed h2 { margin-bottom: 0; font-size: 16px; color: #999; }
-.step-card.done { padding: 20px 32px; opacity: 1; pointer-events: auto; cursor: pointer; border-color: #16a34a; border-width: 2px; position: relative; }
-.step-card.done h2 { margin-bottom: 8px; font-size: 16px; color: #16a34a; }
+.step-card.done { padding: 12px 16px; opacity: 1; pointer-events: auto; cursor: pointer; border-color: #e5e5e5; border-width: 1px; position: relative; background: #fafafa; }
+.step-card.done h2 { margin-bottom: 4px; font-size: 13px; color: #16a34a; font-weight: 600; }
 .step-card.done .step-count { display: none; }
-.step-card.done .edit-icon { display: block; }
+.step-card.done .edit-icon { display: block; width: 20px; height: 20px; top: 12px; right: 16px; }
+.step-card.done .step-summary { font-size: 13px; color: #666; line-height: 1.4; }
+.step-card.done .step-summary .summary-name { font-size: 13px; font-weight: 600; }
 .edit-icon { display: none; position: absolute; top: 20px; right: 24px; width: 32px; height: 32px; cursor: pointer; color: #999; }
 .edit-icon:hover { color: #16a34a; }
 .step-summary { font-size: 14px; color: #444; line-height: 1.6; }
