@@ -219,18 +219,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
               <p>Complete your contact and shipping information to continue</p>
             </div>
             <div class="step-form" id="payment-form" style="display:none">
-              <p style="font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:10px">Card Details</p>
-              <div class="stripe-element-container">
-                <div id="card-element"></div>
+              <!-- Credit Card option -->
+              <div class="payment-method-card selected" style="border:2px solid #16a34a;border-radius:10px;padding:16px;margin-bottom:16px">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <svg style="width:20px;height:20px;color:#16a34a" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    <span style="font-size:15px;font-weight:600">Credit Card</span>
+                  </div>
+                  <span style="background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px">Instant Approval</span>
+                </div>
+                <div style="display:flex;gap:6px;margin-bottom:12px">
+                  <svg viewBox="0 0 38 24" style="height:22px"><rect width="38" height="24" rx="3" fill="#1A1F71"/><text x="19" y="16" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">VISA</text></svg>
+                  <svg viewBox="0 0 38 24" style="height:22px"><rect width="38" height="24" rx="3" fill="#252525"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.7a7 7 0 010 10.6 7 7 0 000-10.6z" fill="#FF5F00"/></svg>
+                  <svg viewBox="0 0 38 24" style="height:22px"><rect width="38" height="24" rx="3" fill="#2E77BC"/><text x="19" y="16" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">AMEX</text></svg>
+                  <svg viewBox="0 0 38 24" style="height:22px"><rect width="38" height="24" rx="3" fill="#F47216"/><text x="19" y="16" text-anchor="middle" fill="#fff" font-size="6" font-weight="700">DISC</text></svg>
+                </div>
+                <div class="stripe-element-container">
+                  <div id="card-element"></div>
+                </div>
               </div>
-              <div style="display:flex;align-items:center;gap:8px;margin:12px 0 16px 0">
-                <svg viewBox="0 0 38 24" style="height:20px"><rect width="38" height="24" rx="3" fill="#1A1F71"/><text x="19" y="16" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">VISA</text></svg>
-                <svg viewBox="0 0 38 24" style="height:20px"><rect width="38" height="24" rx="3" fill="#252525"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.7a7 7 0 010 10.6 7 7 0 000-10.6z" fill="#FF5F00"/></svg>
-                <svg viewBox="0 0 38 24" style="height:20px"><rect width="38" height="24" rx="3" fill="#2E77BC"/><text x="19" y="16" text-anchor="middle" fill="#fff" font-size="7" font-weight="700">AMEX</text></svg>
-                <span style="font-size:11px;color:#999;margin-left:auto">
-                  <svg style="width:12px;height:12px;vertical-align:middle;margin-right:3px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  Secured by Stripe
-                </span>
+              <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px">
+                <svg style="width:14px;height:14px;color:#16a34a" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span style="font-size:12px;color:#999">Secured by Stripe. Your payment info is encrypted.</span>
               </div>
               <button type="button" class="btn-next" id="btn-pay" onclick="ckPay()">
                 Pay Now
@@ -350,7 +360,9 @@ function ckStep2(){
   ['f-address','f-city','f-state','f-zip'].forEach(function(id){var el=document.getElementById(id);if(!el.value.trim()){el.classList.add('error');ok=false;}else{el.classList.remove('error');}});
   if(ok){
     CK_ship={address:a,city:ci,state:st,zip:z,country:co};
-    document.getElementById('summary2').innerHTML='<span>'+a+'</span><span>'+ci+', '+st+' '+z+'</span><span>'+co+'</span>';
+    var shipMethod=document.querySelector('input[name="shipping-method"]:checked');
+    var shipLabel=shipMethod&&shipMethod.value==='express'?'DHL Expedited - $4.99 (2-3 days)':'Standard Shipping - Free (5-7 days)';
+    document.getElementById('summary2').innerHTML='<span class="summary-name">Shipping address:</span><span>'+a+'</span><span>'+ci+', '+st+' '+z+'</span><span style="margin-top:8px;font-weight:600">'+shipLabel+'</span>';
     ckShowStep(3);
     ckInitStripe();
   }
