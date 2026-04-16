@@ -137,7 +137,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                   <label for="f-phone">Phone (optional)</label>
                 </div>
               </div>
-              <button type="button" class="btn-next" id="btn-step1" onclick="window.__v1&&window.__v1()">Continue to Shipping</button>
+              <button type="button" class="btn-next" id="btn-step1" onclick="ckStep1()">Continue to Shipping</button>
             </div>
             <div class="step-summary" id="summary1" style="display:none"></div>
           </div>
@@ -202,7 +202,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                   <span class="shipping-option-price">$4.99</span>
                 </label>
               </div>
-              <button type="button" class="btn-next" id="btn-step2" onclick="window.__v2&&window.__v2()" style="display:none">Continue to Payment</button>
+              <button type="button" class="btn-next" id="btn-step2" onclick="ckStep2()" style="display:none">Continue to Payment</button>
             </div>
             <div class="step-summary" id="summary2" style="display:none"></div>
           </div>
@@ -232,7 +232,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                   Secured by Stripe
                 </span>
               </div>
-              <button type="button" class="btn-next" id="btn-pay" onclick="window.__pay&&window.__pay()">
+              <button type="button" class="btn-next" id="btn-pay" onclick="ckPay()">
                 Pay Now
               </button>
             </div>
