@@ -28,10 +28,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .step-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: #1a1a1a; }
 .step-card.collapsed { padding: 20px 32px; opacity: 0.5; pointer-events: none; }
 .step-card.collapsed h2 { margin-bottom: 0; font-size: 16px; color: #999; }
-.step-card.done { padding: 20px 32px; opacity: 1; pointer-events: auto; cursor: pointer; border-color: #16a34a; border-width: 2px; }
+.step-card.done { padding: 20px 32px; opacity: 1; pointer-events: auto; cursor: pointer; border-color: #16a34a; border-width: 2px; position: relative; }
 .step-card.done h2 { margin-bottom: 8px; font-size: 16px; color: #16a34a; }
-.step-card.done .step-card-header::after { content: '\270E'; font-size: 18px; color: #999; margin-left: 8px; }
 .step-card.done .step-count { display: none; }
+.step-card.done .edit-icon { display: block; }
+.edit-icon { display: none; position: absolute; top: 20px; right: 24px; width: 32px; height: 32px; cursor: pointer; color: #999; }
+.edit-icon:hover { color: #16a34a; }
+.step-summary { font-size: 14px; color: #444; line-height: 1.6; }
+.step-summary .summary-name { font-weight: 700; color: #1a1a1a; font-size: 15px; }
+.step-summary span { display: block; }
 .step-summary { font-size: 14px; color: #666; line-height: 1.5; }
 .step-summary span { display: block; }
 .form-row { display: flex; gap: 16px; margin-bottom: 16px; }
@@ -95,6 +100,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 
           <!-- Step 1: Contact -->
           <div class="step-card" id="step1">
+            <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             <div class="step-card-header">
               <h2>Contact Information</h2>
               <span class="step-count">1 of 3</span>
@@ -125,6 +131,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 
           <!-- Step 2: Shipping -->
           <div class="step-card collapsed" id="step2">
+            <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             <div class="step-card-header">
               <h2>Shipping Address</h2>
               <span class="step-count">2 of 3</span>
@@ -133,23 +140,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
               <div class="form-row">
                 <div class="form-group">
                   <label for="f-address">Street Address</label>
-                  <input type="text" id="f-address" placeholder="123 Main St, Apt 4" autocomplete="address-line1" required>
+                  <input type="text" id="f-address" placeholder="" autocomplete="address-line1" required>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
                   <label for="f-city">City</label>
-                  <input type="text" id="f-city" placeholder="Miami" autocomplete="address-level2" required>
+                  <input type="text" id="f-city" placeholder="" autocomplete="address-level2" required>
                 </div>
                 <div class="form-group">
                   <label for="f-state">State</label>
-                  <input type="text" id="f-state" placeholder="FL" maxlength="2" autocomplete="address-level1" required>
+                  <input type="text" id="f-state" placeholder="" maxlength="2" autocomplete="address-level1" required>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
                   <label for="f-zip">ZIP Code</label>
-                  <input type="text" id="f-zip" placeholder="33101" maxlength="10" autocomplete="postal-code" required>
+                  <input type="text" id="f-zip" placeholder="" maxlength="10" autocomplete="postal-code" required>
                 </div>
                 <div class="form-group">
                   <label for="f-country">Country</label>
@@ -291,7 +298,7 @@ function ckStep1(){
   if(!em||em.indexOf('@')<1){document.getElementById('f-email').classList.add('error');ok=false;}else{document.getElementById('f-email').classList.remove('error');}
   if(ok){
     CK_cust={name:n,email:em,phone:ph};
-    document.getElementById('summary1').innerHTML='<span>'+n+'</span><span>'+em+'</span>'+(ph?'<span>'+ph+'</span>':'');
+    document.getElementById('summary1').innerHTML='<span class="summary-name">'+n+'</span><span>'+em+'</span>'+(ph?'<span>'+ph+'</span>':'');
     ckShowStep(2);
   }
 }
