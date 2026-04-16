@@ -180,7 +180,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn-next" id="btn-step2" onclick="window.__v2&&window.__v2()">Continue to Payment</button>
+              <button type="button" class="btn-next" id="btn-step2" onclick="window.__v2&&window.__v2()" style="display:none">Continue to Payment</button>
             </div>
             <div class="step-summary" id="summary2" style="display:none"></div>
           </div>
@@ -378,11 +378,13 @@ if(zipInput){zipInput.addEventListener('input',function(){
           document.getElementById('f-state').value=p['state abbreviation'];
           document.getElementById('zip-city-label').textContent=p['place name']+' / '+p['state abbreviation'];
           document.getElementById('shipping-fields').style.display='block';
+          document.getElementById('btn-step2').style.display='block';
           document.getElementById('f-address').focus();
         }
       }).catch(function(){
         document.getElementById('zip-city-label').textContent='';
         document.getElementById('shipping-fields').style.display='block';
+        document.getElementById('btn-step2').style.display='block';
       });
     },400);
   }else{
