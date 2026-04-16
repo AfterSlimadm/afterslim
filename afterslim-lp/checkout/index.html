@@ -366,20 +366,25 @@ if(zipInput){zipInput.addEventListener('input',function(){
   if(zip.length>=5){
     zipTimer=setTimeout(function(){
       document.getElementById('zip-city-label').textContent='Looking up...';
-      fetch('https://api.zippopotam.us/us/'+zip).then(function(r){return r.json();}).then(function(data){
+      fetch('https://api.zippopotam.us/us/'+zip).then(function(r){
+        if(!r.ok) throw new Error('not found');
+        return r.json();
+      }).then(function(data){
         if(data.places&&data.places[0]){
           var p=data.places[0];
           document.getElementById('f-city').value=p['place name'];
           document.getElementById('f-state').value=p['state abbreviation'];
           document.getElementById('zip-city-label').textContent=p['place name']+' / '+p['state abbreviation'];
+          document.getElementById('zip-city-label').style.color='#666';
           document.getElementById('shipping-fields').style.display='block';
           document.getElementById('btn-step2').style.display='block';
           document.getElementById('f-address').focus();
         }
       }).catch(function(){
-        document.getElementById('zip-city-label').textContent='';
-        document.getElementById('shipping-fields').style.display='block';
-        document.getElementById('btn-step2').style.display='block';
+        document.getElementById('zip-city-label').textContent='ZIP Code not found';
+        document.getElementById('zip-city-label').style.color='#dc2626';
+        document.getElementById('shipping-fields').style.display='none';
+        document.getElementById('btn-step2').style.display='none';
       });
     },400);
   }else{
