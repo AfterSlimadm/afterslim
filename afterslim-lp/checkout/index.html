@@ -608,7 +608,10 @@ document.querySelectorAll('.form-group input').forEach(function(inp){
 // Express pay (Apple/Google)
 function ckExpressPay(type){
   if(type==='paypal'){
-    alert('PayPal will be available soon. Please use credit card or another payment method.');
+    var errEl=document.getElementById('checkout-error');
+    errEl.textContent='PayPal will be available soon. Please use credit card or another payment method.';
+    errEl.style.display='block';
+    setTimeout(function(){errEl.style.display='none';},4000);
     return;
   }
   if(CK_payRequest){
@@ -616,12 +619,13 @@ function ckExpressPay(type){
       if(result){
         CK_payRequest.show();
       }else{
-        if(type==='apple') alert('Apple Pay is not available on this device. Please use Safari with Apple Pay configured.');
-        else alert('Google Pay is not available on this browser. Please use Chrome with a card saved in Google Pay.');
+        var errEl=document.getElementById('checkout-error');
+        if(type==='apple') errEl.textContent='Apple Pay is not available on this browser. Please use Safari on an Apple device.';
+        else errEl.textContent='Google Pay is not available on this browser. Please use Chrome with Google Pay configured.';
+        errEl.style.display='block';
+        setTimeout(function(){errEl.style.display='none';},4000);
       }
     });
-  }else{
-    alert('Payment system is loading. Please try again in a moment.');
   }
 }
 
