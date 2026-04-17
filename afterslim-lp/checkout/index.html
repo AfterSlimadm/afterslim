@@ -380,6 +380,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="processing-text">Processing your payment...</div>
   </div>
 
+  <script src="https://pay.google.com/gp/p/js/pay.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
   <script>
 var CK_PK='pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
@@ -614,19 +615,65 @@ function ckExpressPay(type){
     setTimeout(function(){errEl.style.display='none';},4000);
     return;
   }
-  if(CK_payRequest){
-    CK_payRequest.canMakePayment().then(function(result){
-      if(result){
-        CK_payRequest.show();
-      }else{
-        var errEl=document.getElementById('checkout-error');
-        if(type==='apple') errEl.textContent='Apple Pay is not available on this browser. Please use Safari on an Apple device.';
-        else errEl.textContent='Google Pay is not available on this browser. Please use Chrome with Google Pay configured.';
-        errEl.style.display='block';
-        setTimeout(function(){errEl.style.display='none';},4000);
-      }
-    });
+  if(type==='apple'){
+    if(CK_payRequest){
+      CK_payRequest.canMakePayment().then(function(result){
+        if(result) CK_payRequest.show();
+        else ckShowExpressError('Apple Pay is not available on this browser. Please use Safari on an Apple device.');
+      });
+    }
+    return;
   }
+  if(type==='google'){
+    ckGooglePay();
+    return;
+  }
+}
+
+function ckShowExpressError(msg){
+  var errEl=document.getElementById('checkout-error');
+  errEl.textContent=msg;
+  errEl.style.display='block';
+  setTimeout(function(){errEl.style.display='none';},4000);
+}
+
+// Google Pay API direct integration
+function ckGooglePay(){
+  var gClient=new google.payments.api.PaymentsClient({environment:'PRODUCTION'});
+  var baseMethod={type:'CARD',parameters:{allowedAuthMethods:['PAN_ONLY','CRYPTOGRAM_3DS'],allowedCardNetworks:['VISA','MASTERCARD','AMEX','DISCOVER']}};
+  var tokenParams={type:'PAYMENT_GATEWAY',parameters:{gateway:'stripe',stripe:{version:'2020-08-27',publishableKey:CK_PK}}};
+
+  gClient.isReadyToPay({apiVersion:2,apiVersionMinor:0,allowedPaymentMethods:[Object.assign({},baseMethod,{tokenizationSpecification:tokenParams})]}).then(function(res){
+    if(!res.result){ckShowExpressError('Google Pay is not available. Please use another payment method.');return;}
+
+    var payData={
+      apiVersion:2,apiVersionMinor:0,
+      allowedPaymentMethods:[Object.assign({},baseMethod,{tokenizationSpecification:tokenParams})],
+      transactionInfo:{totalPriceStatus:'FINAL',totalPrice:CK_info.price.toFixed(2),currencyCode:'USD',countryCode:'US'},
+      merchantInfo:{merchantName:'AfterSlim'},
+      emailRequired:true,
+      shippingAddressRequired:true,
+      shippingAddressParameters:{allowedCountryCodes:['US']}
+    };
+
+    gClient.loadPaymentData(payData).then(function(paymentData){
+      document.getElementById('processing').classList.add('active');
+      var token=JSON.parse(paymentData.paymentMethodData.tokenizationData.token);
+      var shipAddr=paymentData.shippingAddress||{};
+      var shipData={address:(shipAddr.address1||''),city:shipAddr.locality||'',state:shipAddr.administrativeArea||'',zip:shipAddr.postalCode||'',country:'US'};
+      var email=paymentData.email||'';
+      var name=paymentData.paymentMethodData.info&&paymentData.paymentMethodData.info.billingAddress?paymentData.paymentMethodData.info.billingAddress.name:'';
+
+      fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:email,customer_name:name,shipping:shipData})}).then(function(r){return r.json();}).then(function(data){
+        CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:{token:token.id},billing_details:{name:name,email:email}}}).then(function(result){
+          if(result.error){document.getElementById('processing').classList.remove('active');ckShowExpressError(result.error.message);}
+          else{window.location.href='/checkout/success?payment_id='+result.paymentIntent.id;}
+        });
+      }).catch(function(e){document.getElementById('processing').classList.remove('active');ckShowExpressError('Payment failed. Please try again.');});
+    }).catch(function(err){
+      if(err.statusCode!=='CANCELED') ckShowExpressError('Google Pay failed. Please try another method.');
+    });
+  });
 }
 
 // Payment method selection
