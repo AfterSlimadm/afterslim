@@ -15,8 +15,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .checkout-layout { max-width: 1100px; margin: 0 auto; padding: 32px 16px; display: flex; gap: 32px; }
 .checkout-main { flex: 1; min-width: 0; }
 .checkout-columns { display: flex; gap: 24px; }
-.checkout-left { flex: 1; min-width: 0; }
-.checkout-right { flex: 1; min-width: 0; }
+.checkout-left { flex: 1; min-width: 0; transition: flex 0.3s; }
+.checkout-right { flex: 1; min-width: 0; transition: flex 0.3s; }
+.checkout-columns.payment-active .checkout-left { flex: 0 0 280px; }
+.checkout-columns.payment-active .checkout-right { flex: 1; }
 .checkout-sidebar { width: 360px; flex-shrink: 0; }
 .step-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; }
 .step-card-header h2 { margin-bottom: 0; }
@@ -91,6 +93,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 @media (max-width: 900px) {
   .checkout-layout { flex-direction: column; gap: 12px; padding: 12px; }
   .checkout-columns { flex-direction: column; padding: 0 4px; }
+  .checkout-columns.payment-active .checkout-left { flex: 1; }
   .checkout-right { width: 100%; }
   .checkout-sidebar { width: 100%; order: -1; }
   .checkout-main { order: 0; }
@@ -403,16 +406,12 @@ function ckShowStep(s){
   var pay=document.getElementById('step3');
   var payWait=document.getElementById('payment-waiting');
   var payForm=document.getElementById('payment-form');
+  var cols=document.querySelector('.checkout-columns');
   if(s<3){
-    // Steps 1-2: normal 2-column layout
-    if(leftCol)leftCol.style.display='block';
-    if(rightCol)rightCol.style.flex='1';
+    if(cols)cols.classList.remove('payment-active');
     if(pay){pay.className='step-card payment-card waiting';if(payWait)payWait.style.display='block';if(payForm)payForm.style.display='none';}
   }else{
-    // Step 3: left column shrinks, payment expands
-    if(leftCol)leftCol.style.display='block';
-    if(leftCol)leftCol.style.flex='0 0 280px';
-    if(rightCol)rightCol.style.flex='1';
+    if(cols)cols.classList.add('payment-active');
     if(pay){pay.className='step-card payment-card';if(payWait)payWait.style.display='none';if(payForm)payForm.style.display='block';}
   }
 }
