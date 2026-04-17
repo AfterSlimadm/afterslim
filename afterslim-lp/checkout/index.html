@@ -460,6 +460,7 @@ function ckStep2(){
     var shipMethod=document.querySelector('input[name="shipping-method"]:checked');
     var shipLabel=shipMethod&&shipMethod.value==='express'?'DHL Expedited - $4.99 (2-3 days)':'Standard Shipping - Free (5-7 days)';
     document.getElementById('summary2').innerHTML='<span class="summary-name">Shipping address:</span><span>'+a+'</span><span>'+ci+', '+st+' '+z+'</span><span style="margin-top:8px;font-weight:600">'+shipLabel+'</span>';
+    document.getElementById('shipping-methods').style.display='none';
     ckShowStep(3);
     ckInitStripe();
   }
