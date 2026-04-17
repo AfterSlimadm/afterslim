@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no, email=no, address=no">
   <title>Checkout | AfterSlim</title>
   <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -425,7 +426,11 @@ function ckStep1(){
   if(!em||em.indexOf('@')<1){document.getElementById('f-email').classList.add('error');ok=false;}else{document.getElementById('f-email').classList.remove('error');}
   if(ok){
     CK_cust={name:n,email:em,phone:ph};
-    document.getElementById('summary1').innerHTML='<span class="summary-name">'+n+'</span><span>'+em+'</span>'+(ph?'<span>'+ph+'</span>':'');
+    var s1=document.getElementById('summary1');
+    s1.innerHTML='';
+    var nameEl=document.createElement('div');nameEl.style.cssText='font-weight:700;font-size:13px;color:#1a1a1a';nameEl.textContent=n;s1.appendChild(nameEl);
+    var emailEl=document.createElement('div');emailEl.style.cssText='font-size:13px;color:#666';emailEl.textContent=em;s1.appendChild(emailEl);
+    if(ph){var phEl=document.createElement('div');phEl.style.cssText='font-size:13px;color:#666';phEl.textContent=ph;s1.appendChild(phEl);}
     ckShowStep(2);
   }
 }
