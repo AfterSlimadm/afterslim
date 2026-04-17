@@ -389,7 +389,14 @@ function ckShowStep(s){
     if(!c)continue;
     var f=c.querySelector('.step-form'),sm=c.querySelector('.step-summary');
     if(i<s){c.className='step-card done';if(f)f.style.display='none';if(sm)sm.style.display='block';}
-    else if(i===s){c.className='step-card';if(f)f.style.display='block';if(sm)sm.style.display='none';}
+    else if(i===s){c.className='step-card';if(f)f.style.display='block';if(sm)sm.style.display='none';
+      if(i===2){
+        document.querySelector('#step2 .form-row').style.display='flex';
+        document.getElementById('shipping-fields').style.display='block';
+        document.getElementById('btn-step2-address').style.display='block';
+        document.getElementById('shipping-methods').style.display='none';
+      }
+    }
     else{c.className='step-card collapsed';if(f)f.style.display='none';if(sm)sm.style.display='none';}
   }
   // Right column: Payment (step 3)
