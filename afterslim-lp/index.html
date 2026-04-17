@@ -5558,7 +5558,7 @@ ul, ol {
       </div>
     </div>
     <div class="section-cta">
-      <a href="#pricing" class="btn-shop-now">GET YOURS NOW</a>
+      <a href="#desktop-bundle" class="btn-shop-now">GET YOURS NOW</a>
     </div>
   </div>
 </section>
@@ -5657,7 +5657,7 @@ ul, ol {
     </div>
 
     <div class="section-cta">
-      <a href="#pricing" class="btn-shop-now">TRY AFTERSLIM</a>
+      <a href="#desktop-bundle" class="btn-shop-now">TRY AFTERSLIM</a>
     </div>
   </div>
 </section>
@@ -5737,7 +5737,7 @@ ul, ol {
         </div>
       </div>
       <div class="section-cta">
-        <a href="#pricing" class="btn-shop-now">ORDER NOW</a>
+        <a href="#desktop-bundle" class="btn-shop-now">ORDER NOW</a>
       </div>
     </div>
   </div>
@@ -6201,7 +6201,7 @@ ul, ol {
       </div>
     </div>
     <div class="section-cta" style="margin-top:40px;">
-      <a href="#pricing" class="btn-shop-now">GET AFTERSLIM NOW</a>
+      <a href="#desktop-bundle" class="btn-shop-now">GET AFTERSLIM NOW</a>
     </div>
   </div>
 </section>
@@ -6401,6 +6401,10 @@ function toggleSideMenu() {
       var href = this.getAttribute('href');
       if (href === '#') return;
       var target = document.querySelector(href);
+      // If desktop-bundle is hidden (mobile), scroll to mobile-bundle instead
+      if (href === '#desktop-bundle' && target && target.offsetParent === null) {
+        target = document.getElementById('mobile-bundle');
+      }
       if (target) {
         e.preventDefault();
         var navHeight = nav.offsetHeight;
