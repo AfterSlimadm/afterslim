@@ -248,6 +248,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
               <p>Complete your contact and shipping information to continue</p>
             </div>
             <div class="step-form" id="payment-form" style="display:none">
+              <!-- Express checkout: Apple Pay / Google Pay -->
+              <div id="express-checkout" style="display:none;margin-bottom:16px">
+                <p style="font-size:13px;color:#aaa;margin-bottom:10px">Express checkout</p>
+                <div id="payment-request-button" style="margin-bottom:12px"></div>
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+                  <div style="flex:1;height:1px;background:#e0e0e0"></div>
+                  <span style="font-size:13px;color:#aaa">OR</span>
+                  <div style="flex:1;height:1px;background:#e0e0e0"></div>
+                </div>
+              </div>
               <p style="font-size:13px;color:#aaa;margin-bottom:14px">All transactions are secure and encrypted.</p>
               <!-- Payment methods container -->
               <div style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;margin-bottom:16px">
@@ -265,7 +275,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                   </div>
                 </div>
                 <!-- Credit Card fields -->
-                <div style="padding:18px;background:#fafafa">
+                <div class="payment-method-card-fields" style="padding:18px;background:#fafafa">
                   <div class="stripe-element-container" style="margin-bottom:12px;background:#fff">
                     <div id="card-number"></div>
                   </div>
@@ -290,10 +300,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                   <span style="font-size:13px;font-weight:700;color:#003087;letter-spacing:-0.3px">Pay<span style="color:#009cde">Pal</span></span>
                 </div>
                 <!-- Afterpay option -->
-                <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer;opacity:0.5">
+                <div id="afterpay-option" onclick="ckSelectAfterpay()" style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer">
                   <div style="display:flex;align-items:center;gap:10px">
-                    <div style="width:20px;height:20px;border-radius:50%;border:2px solid #ccc"></div>
-                    <span style="font-size:15px;font-weight:500">Afterpay</span>
+                    <div id="afterpay-radio" style="width:20px;height:20px;border-radius:50%;border:2px solid #ccc"></div>
+                    <div>
+                      <span style="font-size:15px;font-weight:500">Afterpay</span>
+                      <span style="font-size:12px;color:#888;display:block">4 interest-free payments of $<span id="afterpay-installment"></span></span>
+                    </div>
                   </div>
                   <div style="background:#b2fce4;border-radius:4px;padding:3px 6px"><svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="#000" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
                 </div>
@@ -488,6 +501,31 @@ function ckInitStripe(){
   expEl.mount('#card-expiry');
   var cvcEl=CK_elements.create('cardCvc',{style:elStyle});
   cvcEl.mount('#card-cvc');
+
+  // Payment Request Button (Apple Pay / Google Pay)
+  var paymentRequest=CK_stripe.paymentRequest({
+    country:'US',
+    currency:'usd',
+    total:{label:'AfterSlim',amount:Math.round(CK_info.price*100)},
+    requestPayerName:true,
+    requestPayerEmail:true
+  });
+  var prButton=CK_elements.create('paymentRequestButton',{paymentRequest:paymentRequest});
+  paymentRequest.canMakePayment().then(function(result){
+    if(result){
+      document.getElementById('express-checkout').style.display='block';
+      prButton.mount('#payment-request-button');
+    }
+  });
+  paymentRequest.on('paymentmethod',function(ev){
+    document.getElementById('processing').classList.add('active');
+    fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:ev.payerEmail||CK_cust.email,customer_name:ev.payerName||CK_cust.name,shipping:CK_ship})}).then(function(r){return r.json();}).then(function(data){
+      CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:ev.paymentMethod.id}).then(function(result){
+        if(result.error){ev.complete('fail');document.getElementById('processing').classList.remove('active');document.getElementById('checkout-error').textContent=result.error.message;document.getElementById('checkout-error').style.display='block';}
+        else{ev.complete('success');window.location.href='/checkout/success?payment_id='+result.paymentIntent.id;}
+      });
+    }).catch(function(){ev.complete('fail');document.getElementById('processing').classList.remove('active');});
+  });
 }
 
 async function ckPay(){
@@ -495,12 +533,19 @@ async function ckPay(){
   var procEl=document.getElementById('processing');
   errEl.style.display='none';procEl.classList.add('active');
   try{
-    var res=await fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:CK_cust.email,customer_name:CK_cust.name,shipping:CK_ship})});
+    var payBody={price_id:CK_priceId,customer_email:CK_cust.email,customer_name:CK_cust.name,shipping:CK_ship};
+    if(CK_payMethod==='afterpay') payBody.payment_method_type='afterpay_clearpay';
+    var res=await fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payBody)});
     if(!res.ok){var ed=await res.json().catch(function(){return{};});throw new Error(ed.error||'Failed to create payment');}
     var data=await res.json();
-    var result=await CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:CK_cardEl,billing_details:{name:CK_cust.name,email:CK_cust.email,phone:CK_cust.phone||undefined,address:{line1:CK_ship.address,city:CK_ship.city,state:CK_ship.state,postal_code:CK_ship.zip,country:CK_ship.country}}}});
-    if(result.error){throw new Error(result.error.message);}
-    window.location.href='/checkout/success?payment_id='+(result.paymentIntent?result.paymentIntent.id:'');
+    if(CK_payMethod==='afterpay'){
+      var result=await CK_stripe.confirmAfterpayClearpayPayment(data.clientSecret,{payment_method:{billing_details:{name:CK_cust.name,email:CK_cust.email,address:{line1:CK_ship.address,city:CK_ship.city,state:CK_ship.state,postal_code:CK_ship.zip,country:CK_ship.country}}},return_url:window.location.origin+'/checkout/success'});
+      if(result.error){throw new Error(result.error.message);}
+    }else{
+      var result=await CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:CK_cardEl,billing_details:{name:CK_cust.name,email:CK_cust.email,phone:CK_cust.phone||undefined,address:{line1:CK_ship.address,city:CK_ship.city,state:CK_ship.state,postal_code:CK_ship.zip,country:CK_ship.country}}}});
+      if(result.error){throw new Error(result.error.message);}
+      window.location.href='/checkout/success?payment_id='+(result.paymentIntent?result.paymentIntent.id:'');
+    }
   }catch(err){procEl.classList.remove('active');errEl.textContent=err.message||'Something went wrong.';errEl.style.display='block';}
 }
 
@@ -572,6 +617,23 @@ document.querySelectorAll('.shipping-option').forEach(function(opt){
 document.querySelectorAll('.form-group input').forEach(function(inp){
   inp.addEventListener('input',function(){this.classList.remove('error');});
 });
+
+// Payment method selection
+var CK_payMethod='card';
+
+function ckSelectCard(){
+  CK_payMethod='card';
+  document.querySelector('#step3 .payment-method-card-fields').style.display='block';
+}
+
+function ckSelectAfterpay(){
+  CK_payMethod='afterpay';
+  document.querySelector('#step3 .payment-method-card-fields').style.display='none';
+}
+
+// Set afterpay installment amount
+var apEl=document.getElementById('afterpay-installment');
+if(apEl) apEl.textContent=(CK_info.price/4).toFixed(2);
 
 window.__v1=ckStep1;
 window.__v2=ckStep2;

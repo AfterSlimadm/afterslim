@@ -109,9 +109,14 @@ export async function POST(request: Request) {
       // One-time payment: create PaymentIntent
       const priceInfo = PRICE_AMOUNTS[priceId];
 
+      const pmTypes: string[] = body.payment_method_type === "afterpay_clearpay"
+        ? ["afterpay_clearpay"]
+        : ["card"];
+
       const paymentIntent = await stripe.paymentIntents.create({
         amount: priceInfo.cents,
         currency: "usd",
+        payment_method_types: pmTypes,
         description: priceInfo.label,
         metadata: { price_id: priceId },
         receipt_email: body.customer_email || undefined,
