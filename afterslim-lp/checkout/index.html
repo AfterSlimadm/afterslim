@@ -505,9 +505,7 @@ function ckStep2(){
 }
 
 function ckInitStripe(){
-  if(CK_stripe)return;
-  CK_stripe=Stripe(CK_PK,{locale:'en'});
-  CK_elements=CK_stripe.elements();
+  if(CK_cardEl)return;
   var elStyle={base:{fontSize:'16px',color:'#1a1a1a','::placeholder':{color:'#999'}}};
   CK_cardEl=CK_elements.create('cardNumber',{style:elStyle,showIcon:true});
   CK_cardEl.mount('#card-number');
@@ -515,32 +513,6 @@ function ckInitStripe(){
   expEl.mount('#card-expiry');
   var cvcEl=CK_elements.create('cardCvc',{style:elStyle});
   cvcEl.mount('#card-cvc');
-
-  // Payment Request (Apple Pay / Google Pay)
-  CK_payRequest=CK_stripe.paymentRequest({
-    country:'US',
-    currency:'usd',
-    total:{label:'AfterSlim',amount:Math.round(CK_info.price*100)},
-    requestPayerName:true,
-    requestPayerEmail:true
-  });
-  CK_payRequest.canMakePayment().then(function(result){
-    if(result){
-      // Hide static buttons, show native PR button
-      document.getElementById('express-buttons').style.display='none';
-      var prBtn=CK_elements.create('paymentRequestButton',{paymentRequest:CK_payRequest});
-      prBtn.mount('#payment-request-button');
-    }
-  });
-  CK_payRequest.on('paymentmethod',function(ev){
-    document.getElementById('processing').classList.add('active');
-    fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:ev.payerEmail||CK_cust.email,customer_name:ev.payerName||CK_cust.name,shipping:CK_ship})}).then(function(r){return r.json();}).then(function(data){
-      CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:ev.paymentMethod.id}).then(function(result){
-        if(result.error){ev.complete('fail');document.getElementById('processing').classList.remove('active');document.getElementById('checkout-error').textContent=result.error.message;document.getElementById('checkout-error').style.display='block';}
-        else{ev.complete('success');window.location.href='/checkout/success?payment_id='+result.paymentIntent.id;}
-      });
-    }).catch(function(){ev.complete('fail');document.getElementById('processing').classList.remove('active');});
-  });
 }
 
 async function ckPay(){
@@ -639,10 +611,6 @@ function ckExpressPay(type){
     alert('PayPal will be available soon. Please use credit card or another payment method.');
     return;
   }
-  if(!CK_stripe){
-    alert('Please complete contact and shipping information first.');
-    return;
-  }
   if(CK_payRequest){
     CK_payRequest.canMakePayment().then(function(result){
       if(result){
@@ -653,7 +621,7 @@ function ckExpressPay(type){
       }
     });
   }else{
-    alert('Please complete contact and shipping information first.');
+    alert('Payment system is loading. Please try again in a moment.');
   }
 }
 
@@ -677,6 +645,42 @@ if(apEl) apEl.textContent=(CK_info.price/4).toFixed(2);
 window.__v1=ckStep1;
 window.__v2=ckStep2;
 window.__pay=ckPay;
+
+// Init Stripe immediately for Apple Pay / Google Pay
+CK_stripe=Stripe(CK_PK,{locale:'en'});
+CK_elements=CK_stripe.elements();
+
+// Payment Request (Apple Pay / Google Pay) - init immediately
+CK_payRequest=CK_stripe.paymentRequest({
+  country:'US',
+  currency:'usd',
+  total:{label:'AfterSlim',amount:Math.round(CK_info.price*100)},
+  requestPayerName:true,
+  requestPayerEmail:true,
+  requestShipping:true,
+  shippingOptions:[
+    {id:'standard',label:'Standard Shipping (5-7 days)',amount:0},
+    {id:'express',label:'DHL Expedited (2-3 days)',amount:499}
+  ]
+});
+CK_payRequest.canMakePayment().then(function(result){
+  if(result){
+    document.getElementById('express-buttons').style.display='none';
+    var prBtn=CK_elements.create('paymentRequestButton',{paymentRequest:CK_payRequest});
+    prBtn.mount('#payment-request-button');
+  }
+});
+CK_payRequest.on('paymentmethod',function(ev){
+  document.getElementById('processing').classList.add('active');
+  var shipAddr=ev.shippingAddress||{};
+  var shipData={address:shipAddr.addressLine?shipAddr.addressLine[0]:'',city:shipAddr.city||'',state:shipAddr.region||'',zip:shipAddr.postalCode||'',country:shipAddr.country||'US'};
+  fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:ev.payerEmail||'',customer_name:ev.payerName||'',shipping:shipData})}).then(function(r){return r.json();}).then(function(data){
+    CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:ev.paymentMethod.id}).then(function(result){
+      if(result.error){ev.complete('fail');document.getElementById('processing').classList.remove('active');document.getElementById('checkout-error').textContent=result.error.message;document.getElementById('checkout-error').style.display='block';}
+      else{ev.complete('success');window.location.href='/checkout/success?payment_id='+result.paymentIntent.id;}
+    });
+  }).catch(function(){ev.complete('fail');document.getElementById('processing').classList.remove('active');});
+});
 
 ckInitSidebar();
 ckShowStep(1);
