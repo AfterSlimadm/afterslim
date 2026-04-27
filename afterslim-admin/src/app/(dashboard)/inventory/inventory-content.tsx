@@ -424,25 +424,12 @@ export default function InventoryContent({ inventory }: InventoryContentProps) {
                             ? "text-red-600 hover:text-red-700"
                             : "text-amber-600 hover:text-amber-700"
                         )}
-                        onClick={async () => {
-                          try {
-                            const res = await fetch("/api/support-tasks", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({
-                                task_type: "restock",
-                                description: `${alert.status === "CRITICO" ? "URGENTE: " : ""}Reabastecer ${alert.name} (SKU: ${alert.sku}) - Estoque atual: ${alert.stock}, Ponto de recompra: ${alert.reorderPoint}`,
-                              }),
-                            });
-                            if (!res.ok) throw new Error("Erro");
-                            toast.success(
-                              alert.status === "CRITICO"
-                                ? "Reposição solicitada com urgência"
-                                : "Cotação de reposição criada"
-                            );
-                          } catch {
-                            toast.error("Erro ao criar solicitação. Tente novamente.");
-                          }
+                        onClick={() => {
+                          toast.info(
+                            alert.status === "CRITICO"
+                              ? "Reposição urgente registrada. Crie uma tarefa no Kanban."
+                              : "Cotação registrada. Crie uma tarefa no Kanban."
+                          );
                         }}
                       >
                         {alert.status === "CRITICO"

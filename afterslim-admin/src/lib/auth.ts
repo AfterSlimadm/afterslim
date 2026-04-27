@@ -21,7 +21,6 @@ export interface AdminUser {
  */
 const ROUTE_PERMISSIONS: Record<string, AdminRole[]> = {
   "/orders":             ["owner", "admin", "support"],
-  "/support-tasks":      ["owner", "admin", "support"],
   "/support-dashboard":  ["owner", "admin", "support"],
 };
 

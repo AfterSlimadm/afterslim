@@ -1,5 +1,5 @@
 import { getAdminClient } from "@/lib/supabase/admin";
-import type { KanbanColumn } from "@/lib/types";
+import type { KanbanColumn, KanbanCard } from "@/lib/types";
 
 /**
  * Raw row shape from the kanban_columns table.
@@ -49,8 +49,9 @@ export async function getKanbanColumns(): Promise<KanbanColumn[]> {
 
 /**
  * Fetch all kanban cards with their column_id.
+ * Maps DB fields (tags, deadline) to front-end fields (labels, due_date).
  */
-export async function getKanbanCards() {
+export async function getKanbanCards(): Promise<KanbanCard[]> {
   const supabase = getAdminClient();
 
   const { data, error } = await supabase
@@ -63,5 +64,20 @@ export async function getKanbanCards() {
     return [];
   }
 
-  return data ?? [];
+  if (!data) return [];
+
+  return data.map((row) => ({
+    id: row.id,
+    column_id: row.column_id,
+    title: row.title,
+    description: row.description ?? null,
+    position: row.position ?? 0,
+    priority: row.priority ?? "medium",
+    assignee: row.assignee ?? null,
+    due_date: row.deadline ?? null,
+    labels: row.tags ?? [],
+    board_type: row.board_type ?? "task",
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  }));
 }

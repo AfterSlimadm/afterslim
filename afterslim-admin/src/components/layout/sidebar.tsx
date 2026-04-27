@@ -28,17 +28,14 @@ import { getLocaleFromRole, t, type Locale } from "@/lib/i18n";
 const NAV_LABEL_MAP: Record<string, { pt: string; en: string }> = {
   // Group labels
   "Principal": { pt: "Principal", en: "Main" },
-  "Operações": { pt: "Operações", en: "Operations" },
-  "Financeiro": { pt: "Financeiro", en: "Finance" },
-  "Planejamento": { pt: "Planejamento", en: "Planning" },
-  "Equipe": { pt: "Equipe", en: "Team" },
-  "Sistema": { pt: "Sistema", en: "System" },
+  "Operação": { pt: "Operação", en: "Operations" },
+  "Automações": { pt: "Automações", en: "Automations" },
+  "Administração": { pt: "Administração", en: "Administration" },
   // Item labels
   "Painel": { pt: "Painel", en: "Dashboard" },
   "Dashboard": { pt: "Dashboard", en: "Dashboard" },
   "Pedidos": { pt: "Pedidos", en: "Orders" },
   "Todos os Pedidos": { pt: "Todos os Pedidos", en: "All Orders" },
-  "Tarefas de Suporte": { pt: "Tarefas de Suporte", en: "Support Tasks" },
   "Estoque": { pt: "Estoque", en: "Inventory" },
   "Canais de Venda": { pt: "Canais de Venda", en: "Sales Channels" },
   "Visão Geral": { pt: "Visão Geral", en: "Overview" },
@@ -51,10 +48,12 @@ const NAV_LABEL_MAP: Record<string, { pt: string; en: string }> = {
   "Lembretes": { pt: "Lembretes", en: "Reminders" },
   "Criadores": { pt: "Criadores", en: "Creators" },
   "Todos os Criadores": { pt: "Todos os Criadores", en: "All Creators" },
+  "Afiliados": { pt: "Afiliados", en: "Affiliates" },
   "Agentes": { pt: "Agentes", en: "Agents" },
   "Mensagens": { pt: "Mensagens", en: "Messages" },
   "Tarefas": { pt: "Tarefas", en: "Tasks" },
   "Memória": { pt: "Memória", en: "Memory" },
+  "Financeiro": { pt: "Financeiro", en: "Finance" },
   "Configurações": { pt: "Configurações", en: "Settings" },
 };
 

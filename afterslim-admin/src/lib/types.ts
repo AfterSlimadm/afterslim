@@ -219,6 +219,8 @@ export interface KanbanColumn {
   cards?: KanbanCard[];
 }
 
+export type KanbanBoardType = "task" | "idea";
+
 export interface KanbanCard {
   id: string;
   column_id: string;
@@ -229,6 +231,7 @@ export interface KanbanCard {
   assignee: string | null;
   due_date: string | null;
   labels: string[];
+  board_type: KanbanBoardType;
   created_at: string;
   updated_at: string;
 }
@@ -453,6 +456,27 @@ export interface SupportTask {
   /* Joined */
   admin_user?: { display_name: string };
   order?: { id: string; order_number: string; status: string } | null;
+}
+
+// ─── Affiliates ──────────────────────────────────────────────
+
+export type WithdrawalStatus = "pending" | "approved" | "paid" | "rejected";
+
+export interface AffiliateBalance {
+  id: string;
+  creator_id: string;
+  balance_cents: number;
+  total_earned_cents: number;
+  updated_at: string;
+}
+
+export interface AffiliateWithdrawal {
+  id: string;
+  creator_id: string;
+  amount_cents: number;
+  status: WithdrawalStatus;
+  requested_at: string;
+  paid_at: string | null;
 }
 
 // ─── Misc ─────────────────────────────────────────────────────

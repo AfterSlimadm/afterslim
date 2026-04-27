@@ -21,9 +21,14 @@ import { NewCardDialog } from "./new-card-dialog";
 import type {
   KanbanColumn as KanbanColumnType,
   KanbanCard as KanbanCardType,
+  KanbanBoardType,
   IdeaPriority,
 } from "@/lib/types";
 
+const BOARD_TABS: { value: KanbanBoardType; label: string }[] = [
+  { value: "task", label: "Tarefas" },
+  { value: "idea", label: "Ideias" },
+];
 
 // ─── Props ────────────────────────────────────────────────────
 interface KanbanBoardProps {
@@ -41,6 +46,7 @@ export function KanbanBoard({
   const [activeCard, setActiveCard] = useState<KanbanCardType | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogColumnId, setDialogColumnId] = useState<string | undefined>();
+  const [activeBoardType, setActiveBoardType] = useState<KanbanBoardType>("task");
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -50,13 +56,13 @@ export function KanbanBoard({
     })
   );
 
-  // Get cards for a specific column, sorted by position
+  // Get cards for a specific column filtered by active board type, sorted by position
   const getColumnCards = useCallback(
     (columnId: string) =>
       cards
-        .filter((c) => c.column_id === columnId)
+        .filter((c) => c.column_id === columnId && c.board_type === activeBoardType)
         .sort((a, b) => a.position - b.position),
-    [cards]
+    [cards, activeBoardType]
   );
 
   // Find which column a card belongs to
@@ -206,6 +212,7 @@ export function KanbanBoard({
       assignee: data.assignee || null,
       due_date: data.dueDate ? new Date(data.dueDate).toISOString() : null,
       labels: data.labels,
+      board_type: activeBoardType,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -225,6 +232,26 @@ export function KanbanBoard({
 
   return (
     <>
+      {/* Board Type Tabs */}
+      <div className="flex gap-1 rounded-lg bg-muted/50 p-1 w-fit">
+        {BOARD_TABS.map((tab) => (
+          <button
+            key={tab.value}
+            onClick={() => setActiveBoardType(tab.value)}
+            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+              activeBoardType === tab.value
+                ? "bg-white text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {tab.label}
+            <span className="ml-2 text-xs text-muted-foreground">
+              {cards.filter((c) => c.board_type === tab.value).length}
+            </span>
+          </button>
+        ))}
+      </div>
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}

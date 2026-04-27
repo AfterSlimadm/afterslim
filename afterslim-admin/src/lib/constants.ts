@@ -11,7 +11,6 @@ import {
   FileText,
   Store,
   Bell,
-  ClipboardCheck,
   type LucideIcon,
 } from "lucide-react";
 import type { AdminRole } from "./auth";
@@ -67,7 +66,7 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Operações",
+    label: "Operação",
     items: [
       {
         label: "Pedidos",
@@ -76,12 +75,6 @@ export const NAV_GROUPS: NavGroup[] = [
         children: [
           { label: "Todos os Pedidos", href: "/orders" },
         ],
-      },
-      {
-        label: "Tarefas de Suporte",
-        href: "/support-tasks",
-        icon: ClipboardCheck,
-        roles: ["owner", "admin", "support"],
       },
       {
         label: "Estoque",
@@ -98,7 +91,40 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Financeiro",
+    label: "Automações",
+    items: [
+      {
+        label: "Kanban",
+        href: "/kanban",
+        icon: KanbanSquare,
+        roles: ["owner", "admin"],
+      },
+      {
+        label: "Criadores",
+        href: "/creators",
+        icon: Users,
+        roles: ["owner", "admin"],
+        children: [
+          { label: "Todos os Criadores", href: "/creators" },
+          { label: "Afiliados", href: "/creators/affiliates" },
+        ],
+      },
+      {
+        label: "Agentes",
+        href: "/agents",
+        icon: Bot,
+        roles: ["owner", "admin"],
+        children: [
+          { label: "Visão Geral", href: "/agents" },
+          { label: "Mensagens", href: "/agents/messages" },
+          { label: "Tarefas", href: "/agents/tasks" },
+          { label: "Memória", href: "/agents/memory" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Administração",
     items: [
       {
         label: "Financeiro",
@@ -118,21 +144,10 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: FileText,
         roles: ["owner", "admin"],
       },
-    ],
-  },
-  {
-    label: "Planejamento",
-    items: [
       {
         label: "Ideias",
         href: "/ideas",
         icon: Lightbulb,
-        roles: ["owner", "admin"],
-      },
-      {
-        label: "Kanban",
-        href: "/kanban",
-        icon: KanbanSquare,
         roles: ["owner", "admin"],
       },
       {
@@ -141,37 +156,6 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: Bell,
         roles: ["owner", "admin"],
       },
-    ],
-  },
-  {
-    label: "Equipe",
-    items: [
-      {
-        label: "Criadores",
-        href: "/creators",
-        icon: Users,
-        roles: ["owner", "admin"],
-        children: [
-          { label: "Todos os Criadores", href: "/creators" },
-        ],
-      },
-      {
-        label: "Agentes",
-        href: "/agents",
-        icon: Bot,
-        roles: ["owner", "admin"],
-        children: [
-          { label: "Visão Geral", href: "/agents" },
-          { label: "Mensagens", href: "/agents/messages" },
-          { label: "Tarefas", href: "/agents/tasks" },
-          { label: "Memória", href: "/agents/memory" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Sistema",
-    items: [
       {
         label: "Configurações",
         href: "/settings",

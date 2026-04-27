@@ -19,7 +19,6 @@ import { toast } from "sonner";
 import { formatCurrency, formatDate, formatDateTime, cn } from "@/lib/utils";
 import { ORDER_STATUS_CONFIG, PAYMENT_STATUS_CONFIG } from "@/lib/constants";
 import { useAuth } from "@/components/auth-provider";
-import { OrderSupportTasks } from "@/components/support/order-support-tasks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -658,8 +657,6 @@ export default function OrderDetailPage({
             </Card>
           )}
 
-          {/* Support Tasks */}
-          <OrderSupportTasks orderId={id} locale={locale} />
         </div>
       </div>
     </div>

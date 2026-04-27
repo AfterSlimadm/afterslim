@@ -53,7 +53,6 @@ const translations = {
   "nav.dashboard": { pt: "Painel", en: "Dashboard" },
   "nav.orders": { pt: "Pedidos", en: "Orders" },
   "nav.allOrders": { pt: "Todos os Pedidos", en: "All Orders" },
-  "nav.supportTasks": { pt: "Tarefas de Suporte", en: "Support Tasks" },
   "nav.collapse": { pt: "Recolher", en: "Collapse" },
 
   // Order table headers

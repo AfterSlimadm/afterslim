@@ -20,7 +20,7 @@ import {
 import {
   Globe,
   ShoppingBag,
-  Users,
+  Music,
   DollarSign,
   TrendingUp,
 } from "lucide-react";
@@ -33,6 +33,7 @@ const CHANNEL_CONFIG: Record<
 > = {
   website: { label: "Website", icon: Globe, color: "badge-success" },
   amazon: { label: "Amazon", icon: ShoppingBag, color: "badge-warning" },
+  tiktok_shop: { label: "TikTok Shop", icon: Music, color: "badge-info" },
   other: { label: "Outro", icon: Globe, color: "badge-neutral" },
 };
 
@@ -71,7 +72,7 @@ export default function SalesChannelsContent({
       <div className="page-header">
         <h1 className="page-title">Canais de Venda</h1>
         <p className="page-description">
-          Métricas de receita e pedidos por canal. Website e Amazon.
+          Métricas de receita e pedidos por canal. Website, Amazon e TikTok Shop.
         </p>
       </div>
 

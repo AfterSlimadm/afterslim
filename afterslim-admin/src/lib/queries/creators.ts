@@ -13,6 +13,9 @@ export interface CreatorRow {
   tier: string | null;
   status: string;
   notes: string | null;
+  coupon_id: string | null;
+  total_sales: number;
+  total_revenue_cents: number;
   metadata: Record<string, unknown>;
   created_at: string;
   updated_at: string;

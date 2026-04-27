@@ -32,6 +32,7 @@ const cardSchema = z.object({
   deadline: z.string().optional(),
   tags: z.array(z.string()).default([]),
   idea_id: z.string().uuid().optional(),
+  board_type: z.enum(["task", "idea"]).default("task"),
 });
 
 export async function POST(request: Request) {

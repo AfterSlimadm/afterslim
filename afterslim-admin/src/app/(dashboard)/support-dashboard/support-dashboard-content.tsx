@@ -298,10 +298,10 @@ export default function SupportDashboardContent({
 
           {tasks.length > 0 && (
             <Link
-              href="/support-tasks"
+              href="/kanban"
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-border/60 py-3 text-sm font-medium text-muted-foreground hover:bg-muted/40 transition-colors"
             >
-              View All Tasks
+              Ver no Kanban
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           )}

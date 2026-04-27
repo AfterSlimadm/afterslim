@@ -68,13 +68,15 @@ interface CreatorsContentProps {
 export default function CreatorsContent({ creators }: CreatorsContentProps) {
   const [search, setSearch] = useState("");
   const [tierFilter, setTierFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const filtered = creators.filter((c) => {
     const matchesSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.handle?.toLowerCase().includes(search.toLowerCase());
     const matchesTier = tierFilter === "all" || c.tier === tierFilter;
-    return matchesSearch && matchesTier;
+    const matchesStatus = statusFilter === "all" || c.status === statusFilter;
+    return matchesSearch && matchesTier && matchesStatus;
   });
 
   const activeCreators = creators.filter((c) => c.status === "active").length;
@@ -176,6 +178,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
             { value: "nano", label: "Nano" },
             { value: "micro", label: "Micro" },
             { value: "macro", label: "Macro" },
+            { value: "mega", label: "Mega" },
           ].map((t) => (
             <Button
               key={t.value}
@@ -184,6 +187,24 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
               onClick={() => setTierFilter(t.value)}
             >
               {t.label}
+            </Button>
+          ))}
+        </div>
+        <div className="flex gap-1">
+          {[
+            { value: "all", label: "Todos Status" },
+            { value: "active", label: "Ativos" },
+            { value: "prospect", label: "Prospectos" },
+            { value: "contacted", label: "Contatados" },
+            { value: "paused", label: "Pausados" },
+          ].map((s) => (
+            <Button
+              key={s.value}
+              variant={statusFilter === s.value ? "default" : "outline"}
+              size="sm"
+              onClick={() => setStatusFilter(s.value)}
+            >
+              {s.label}
             </Button>
           ))}
         </div>
@@ -201,7 +222,8 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
                 <TableHead>Nível</TableHead>
                 <TableHead>Seguidores</TableHead>
                 <TableHead>Engajamento</TableHead>
-                <TableHead>Nicho</TableHead>
+                <TableHead>Vendas</TableHead>
+                <TableHead>Receita</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="w-10" />
               </TableRow>
@@ -256,14 +278,13 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
                         ? `${Number(creator.engagement_rate).toFixed(1)}%`
                         : "—"}
                     </TableCell>
-                    <TableCell>
-                      {creator.niche ? (
-                        <Badge variant="outline" className="text-xs">
-                          {creator.niche}
-                        </Badge>
-                      ) : (
-                        "—"
-                      )}
+                    <TableCell className="font-mono text-sm">
+                      {creator.total_sales > 0 ? creator.total_sales : "—"}
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">
+                      {creator.total_revenue_cents > 0
+                        ? `$${(creator.total_revenue_cents / 100).toLocaleString("en-US", { minimumFractionDigits: 0 })}`
+                        : "—"}
                     </TableCell>
                     <TableCell>
                       <Badge
@@ -292,7 +313,7 @@ export default function CreatorsContent({ creators }: CreatorsContentProps) {
               })}
               {filtered.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
+                  <TableCell colSpan={10} className="text-center py-12 text-muted-foreground">
                     Nenhum criador encontrado
                   </TableCell>
                 </TableRow>
