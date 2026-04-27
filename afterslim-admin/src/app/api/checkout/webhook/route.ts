@@ -87,77 +87,100 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const metadata = session.metadata ?? {};
   const totalCents = session.amount_total ?? 0;
-  const qty = Number(metadata.quantity) || 1;
   const email = session.customer_details?.email ?? session.customer_email;
 
-  // Generate order number
-  const orderNumber = `AS-${Date.now().toString().slice(-6)}`;
+  // Resolve product/quantity. Prefer metadata (set by /api/checkout); fallback to stripe_prices lookup.
+  let productId: string | null = metadata.product_id ?? null;
+  let qty: number = Number(metadata.quantity) || 0;
+  let isSubscription: boolean = metadata.is_subscription === "true";
+  let interval: string | null = null;
 
-  // Create order and get the UUID back
+  if ((!productId || !qty) && metadata.price_id) {
+    const { data: priceRow } = await supabase
+      .from("stripe_prices")
+      .select("product_id, quantity, is_subscription, interval")
+      .eq("price_id", metadata.price_id)
+      .single();
+    if (priceRow) {
+      productId = productId ?? priceRow.product_id;
+      qty = qty || priceRow.quantity;
+      isSubscription = isSubscription || priceRow.is_subscription;
+      interval = priceRow.interval;
+    }
+  }
+
+  if (!qty) qty = 1;
+
+  // Fetch product info (name, price, sku) for order_item + CartRover
+  let product: { name: string; price_cents: number; sku: string | null } | null = null;
+  if (productId) {
+    const { data } = await supabase
+      .from("products")
+      .select("name, price_cents, sku")
+      .eq("id", productId)
+      .single();
+    product = data;
+  }
+
+  // Create order
   const { data: order, error: orderError } = await supabase
     .from("orders")
     .insert({
-      order_number: orderNumber,
       email,
       status: "paid",
       subtotal_cents: totalCents,
       total_cents: totalCents,
-      shipping_cents: 0,
-      discount_cents: 0,
-      tax_cents: 0,
       shipping_address: extractShippingAddress(session),
       stripe_checkout_session_id: session.id,
       stripe_payment_intent_id:
         typeof session.payment_intent === "string"
           ? session.payment_intent
           : null,
-      sales_channel: "website",
       metadata: {
-        product_id: metadata.product_id,
+        product_id: productId,
+        price_id: metadata.price_id,
         quantity: qty,
+        is_subscription: isSubscription,
       },
     })
-    .select("id")
+    .select("id, order_number")
     .single();
 
   if (orderError || !order) {
     console.error("[webhook] failed to create order:", orderError?.message);
     return;
   }
+  const orderNumber = order.order_number;
 
-  // Create order item using order UUID (not order_number)
-  if (metadata.product_id) {
-    const { data: product } = await supabase
-      .from("products")
-      .select("name, price_cents")
-      .eq("id", metadata.product_id)
-      .single();
+  // Create order item
+  if (productId && product) {
+    const { error: itemErr } = await supabase.from("order_items").insert({
+      order_id: order.id,
+      product_id: productId,
+      product_name: product.name,
+      quantity: qty,
+      unit_price_cents: Math.round(totalCents / qty),
+      is_subscription: isSubscription,
+      subscription_interval: isSubscription ? interval ?? "month" : null,
+    });
+    if (itemErr) console.error("[webhook] order_item insert failed:", itemErr.message);
 
-    if (product) {
-      await supabase.from("order_items").insert({
-        order_id: order.id,
-        product_id: metadata.product_id,
-        product_name: product.name,
-        quantity: qty,
-        unit_price_cents: product.price_cents,
-      });
-    }
-  }
-
-  // Update inventory
-  if (metadata.product_id) {
-    await supabase.rpc("decrement_stock", {
-      p_product_id: metadata.product_id,
+    // Decrement stock
+    const { error: stockErr } = await supabase.rpc("decrement_stock", {
+      p_product_id: productId,
       p_quantity: qty,
     });
+    if (stockErr) console.error("[webhook] decrement_stock failed:", stockErr.message);
+  } else {
+    console.error("[webhook] no product resolved for session", session.id, "metadata:", metadata);
   }
 
-  // Create income transaction so finance dashboard works
+  // Income transaction
   const totalDollars = totalCents / 100;
   await supabase.from("transactions").insert({
     type: "income",
     category: "sale",
-    description: `Pedido ${orderNumber}`,
+    description: `Order ${orderNumber}`,
     amount: totalDollars,
     currency: "USD",
     date: new Date().toISOString().split("T")[0],
@@ -166,23 +189,57 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     created_by: "webhook",
   });
 
-  // Forward buyer lead to Listflex
+  // Upsert customer record (denormalized view for admin dashboard)
   const customerName = session.customer_details?.name;
   const { fname, lname } = splitName(customerName);
+  const shippingAddr = extractShippingAddress(session);
+  if (email) {
+    const { data: existingCustomer } = await supabase
+      .from("customers")
+      .select("id, total_orders, total_spent")
+      .eq("email", email)
+      .single();
+
+    if (existingCustomer) {
+      await supabase
+        .from("customers")
+        .update({
+          first_name: fname || undefined,
+          last_name: lname || undefined,
+          phone: session.customer_details?.phone ?? undefined,
+          default_address: shippingAddr,
+          total_orders: existingCustomer.total_orders + 1,
+          total_spent: existingCustomer.total_spent + totalCents,
+        })
+        .eq("id", existingCustomer.id);
+    } else {
+      await supabase.from("customers").insert({
+        email,
+        first_name: fname,
+        last_name: lname,
+        phone: session.customer_details?.phone ?? null,
+        default_address: shippingAddr,
+        total_orders: 1,
+        total_spent: totalCents,
+      });
+    }
+  }
+
+  // Forward buyer lead to Listflex
   postBuyerLead({
     email: email ?? undefined,
     fname,
     lname,
     phone: session.customer_details?.phone ?? undefined,
     offer: "https://afterslim.com",
-    comments: `Order ${orderNumber} - $${totalDollars}`,
+    comments: `Order ${orderNumber} - $${totalDollars} - qty ${qty}${isSubscription ? " (subscription)" : ""}`,
   }).catch((err) => console.error("[listflex] buyer post failed:", err));
 
-  // Forward order to CartRover (FullStack Fulfillment)
-  const shipping = extractShippingAddress(session);
-  if (shipping && email) {
+  // Forward order to CartRover
+  if (shippingAddr && email && product) {
     try {
       const unitPrice = totalDollars / qty;
+      const sku = product.sku ?? "GP0363";
       const crResponse = await submitOrder({
         cart_order_id: orderNumber,
         cust_ref: order.id,
@@ -191,12 +248,12 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         cust_last_name: lname,
         ship_first_name: fname,
         ship_last_name: lname,
-        ship_address_1: shipping.line1 || "",
-        ship_address_2: shipping.line2 || undefined,
-        ship_city: shipping.city || "",
-        ship_state: shipping.state || "",
-        ship_zip: shipping.postal_code || "",
-        ship_country: shipping.country || "US",
+        ship_address_1: shippingAddr.line1 || "",
+        ship_address_2: shippingAddr.line2 || undefined,
+        ship_city: shippingAddr.city || "",
+        ship_state: shippingAddr.state || "",
+        ship_zip: shippingAddr.postal_code || "",
+        ship_country: shippingAddr.country || "US",
         sub_total: totalDollars,
         grand_total: totalDollars,
         shipping_handling: 0,
@@ -204,24 +261,25 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         order_discount: 0,
         items: [
           {
-            item: "GP0363", // GLP-1 Support - confirmed with FullStack
-            sku: "GP0363",
+            item: sku,
+            sku,
             quantity: qty,
             price: unitPrice,
             extended_amount: unitPrice * qty,
-            description: "GLP-1 Support - 30 Capsules",
+            description: product.name,
           },
         ],
       });
 
-      // Save CartRover ref and update status
       await supabase
         .from("orders")
         .update({
           status: "processing",
           metadata: {
-            product_id: metadata.product_id,
+            product_id: productId,
+            price_id: metadata.price_id,
             quantity: qty,
+            is_subscription: isSubscription,
             cartrover_ref: crResponse.order_number,
           },
         })
@@ -237,12 +295,11 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
       console.log("[webhook] order sent to CartRover:", orderNumber);
     } catch (err) {
-      // Don't block the webhook if CartRover fails - order is saved, can retry later
       console.error("[webhook] CartRover submission failed (non-blocking):", err);
     }
   }
 
-  console.log("[webhook] order created:", orderNumber, "id:", order.id);
+  console.log("[webhook] order created:", orderNumber, "id:", order.id, "qty:", qty);
 }
 
 async function handleCheckoutExpired(session: Stripe.Checkout.Session) {

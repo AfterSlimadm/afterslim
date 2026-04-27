@@ -1,28 +1,12 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
+import { getAdminClient } from "@/lib/supabase/admin";
 
 const ALLOWED_ORIGINS = [
   "https://afterslim.com",
   "https://www.afterslim.com",
   "http://localhost:3000",
 ];
-
-// Allowed Stripe Price IDs — only these can be used in checkout
-const VALID_PRICE_IDS = new Set([
-  "price_1TC4qvAy7m7ndbNOmzhrCfLv", // 1 Bottle one-time $37.99
-  "price_1TMbv8Ay7m7ndbNOKKiA3vxk", // 1 Bottle subscription $27.99/mo
-  "price_1TMbxdAy7m7ndbNOYi3z5QoA", // 2 Bottles one-time $57.99
-  "price_1TMbzPAy7m7ndbNO1zsXcJ6e", // 2 Bottles subscription $47.99/mo
-  "price_1TMc1AAy7m7ndbNO7vOXSCU6", // 3 Bottles one-time $67.99
-  "price_1TMc2MAy7m7ndbNOh5oPM3MF", // 3 Bottles subscription $57.99/mo
-]);
-
-// Recurring Price IDs (subscriptions)
-const RECURRING_PRICE_IDS = new Set([
-  "price_1TMbv8Ay7m7ndbNOKKiA3vxk",
-  "price_1TMbzPAy7m7ndbNO1zsXcJ6e",
-  "price_1TMc2MAy7m7ndbNOh5oPM3MF",
-]);
 
 function corsHeaders(origin: string | null) {
   const allowed = ALLOWED_ORIGINS.includes(origin ?? "")
@@ -43,7 +27,8 @@ export async function OPTIONS(request: Request) {
 /**
  * POST /api/checkout
  * Creates a Stripe Checkout Session using a pre-configured Price ID.
- * Body: { price_id: string }
+ * Validates price_id against `stripe_prices` table (source of truth).
+ * Body: { price_id: string, customer_email?: string, customer_name?: string }
  */
 export async function POST(request: Request) {
   const origin = request.headers.get("origin") ?? "https://afterslim.com";
@@ -51,7 +36,23 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     const priceId = body.price_id;
 
-    if (!priceId || !VALID_PRICE_IDS.has(priceId)) {
+    if (!priceId || typeof priceId !== "string") {
+      return NextResponse.json(
+        { error: "Missing price_id" },
+        { status: 400, headers: corsHeaders(origin) }
+      );
+    }
+
+    const supabase = getAdminClient();
+    const { data: priceRow, error: priceErr } = await supabase
+      .from("stripe_prices")
+      .select("price_id, product_id, quantity, is_subscription, interval, unit_amount_cents, is_active")
+      .eq("price_id", priceId)
+      .eq("is_active", true)
+      .single();
+
+    if (priceErr || !priceRow) {
+      console.error("[checkout] unknown or inactive price_id:", priceId, priceErr?.message);
       return NextResponse.json(
         { error: "Invalid price_id" },
         { status: 400, headers: corsHeaders(origin) }
@@ -59,11 +60,10 @@ export async function POST(request: Request) {
     }
 
     const stripe = getStripe();
-    const isSubscription = RECURRING_PRICE_IDS.has(priceId);
 
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
-      mode: isSubscription ? "subscription" : "payment",
+      mode: priceRow.is_subscription ? "subscription" : "payment",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
       shipping_address_collection: {
@@ -71,6 +71,9 @@ export async function POST(request: Request) {
       },
       metadata: {
         price_id: priceId,
+        product_id: priceRow.product_id,
+        quantity: String(priceRow.quantity),
+        is_subscription: String(priceRow.is_subscription),
       },
       return_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     });
@@ -82,7 +85,7 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error("[checkout] error:", err);
     return NextResponse.json(
-      { error: "Erro ao criar sessao de checkout" },
+      { error: "Failed to create checkout session" },
       { status: 500, headers: corsHeaders(origin) }
     );
   }
