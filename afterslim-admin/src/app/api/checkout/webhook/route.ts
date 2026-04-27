@@ -8,10 +8,11 @@ import type Stripe from "stripe";
 /**
  * POST /api/checkout/webhook
  * Stripe webhook handler.
- * - checkout.session.completed         -> create order + transaction + customer + CartRover + Listflex buyer
+ * - payment_intent.succeeded           -> create order (one-time AND first subscription payment)
+ * - checkout.session.completed         -> legacy Embedded Checkout path (still supported)
  * - checkout.session.expired           -> abandon lead + Listflex abandon
  * - invoice.paid (subscription_cycle)  -> renewal: create order + decrement_stock + CartRover (month 2+)
- * - customer.subscription.created      -> register subscription row
+ * - customer.subscription.created      -> tag subscription status on order metadata
  * - customer.subscription.updated      -> sync status / period
  * - customer.subscription.deleted      -> mark cancelled
  */
@@ -38,6 +39,9 @@ export async function POST(request: Request) {
   }
 
   switch (event.type) {
+    case "payment_intent.succeeded":
+      await handlePaymentIntentSucceeded(event.data.object as Stripe.PaymentIntent);
+      break;
     case "checkout.session.completed":
       await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
       break;
@@ -670,4 +674,248 @@ interface ShippingAddress {
   postal_code?: string | null;
   country?: string | null;
   name?: string | null;
+}
+
+/**
+ * payment_intent.succeeded
+ * Fires for both one-time payments and the FIRST subscription payment.
+ * (Renewal cycles fire `invoice.paid` with billing_reason='subscription_cycle' instead.)
+ *
+ * The PaymentIntent metadata is populated by /api/checkout with:
+ *   { price_id, product_id, quantity, is_subscription, interval?,
+ *     stripe_subscription_id?, stripe_customer_id? }
+ */
+async function handlePaymentIntentSucceeded(pi: Stripe.PaymentIntent) {
+  const supabase = getAdminClient();
+
+  // Idempotency
+  const { data: existing } = await supabase
+    .from("orders")
+    .select("id")
+    .eq("stripe_payment_intent_id", pi.id)
+    .maybeSingle();
+  if (existing) {
+    console.log("[webhook] payment_intent already processed:", pi.id);
+    return;
+  }
+
+  const meta = pi.metadata ?? {};
+  const productId = meta.product_id || null;
+  const qty = Number(meta.quantity) || 1;
+  const priceId = meta.price_id || null;
+  const isSubscription = meta.is_subscription === "true";
+  const interval = meta.interval || null;
+  const stripeSubscriptionId = meta.stripe_subscription_id || null;
+  const stripeCustomerId = meta.stripe_customer_id || null;
+
+  const totalCents = pi.amount_received ?? pi.amount ?? 0;
+  const email = pi.receipt_email ?? null;
+  const shipping = pi.shipping;
+  const customerName = shipping?.name ?? "";
+  const phone = shipping?.phone ?? null;
+  const { fname, lname } = splitName(customerName);
+  const shippingAddr: ShippingAddress | null = shipping?.address
+    ? {
+        line1: shipping.address.line1,
+        line2: shipping.address.line2,
+        city: shipping.address.city,
+        state: shipping.address.state,
+        postal_code: shipping.address.postal_code,
+        country: shipping.address.country,
+        name: customerName,
+      }
+    : null;
+
+  // Fetch product info
+  let product: { name: string; price_cents: number; sku: string | null } | null = null;
+  if (productId) {
+    const { data } = await supabase
+      .from("products")
+      .select("name, price_cents, sku")
+      .eq("id", productId)
+      .single();
+    product = data;
+  }
+
+  // Create order
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .insert({
+      email,
+      status: "paid",
+      subtotal_cents: totalCents,
+      total_cents: totalCents,
+      shipping_address: shippingAddr,
+      stripe_payment_intent_id: pi.id,
+      metadata: {
+        product_id: productId,
+        price_id: priceId,
+        quantity: qty,
+        is_subscription: isSubscription,
+        ...(stripeSubscriptionId
+          ? {
+              stripe_subscription_id: stripeSubscriptionId,
+              stripe_customer_id: stripeCustomerId,
+              subscription_first_name: fname,
+              subscription_last_name: lname,
+            }
+          : {}),
+      },
+    })
+    .select("id, order_number")
+    .single();
+
+  if (orderError || !order) {
+    console.error("[webhook] payment_intent: order insert failed:", orderError?.message);
+    return;
+  }
+  const orderNumber = order.order_number;
+
+  // Order item
+  if (productId && product) {
+    await supabase.from("order_items").insert({
+      order_id: order.id,
+      product_id: productId,
+      product_name: product.name,
+      quantity: qty,
+      unit_price_cents: Math.round(totalCents / qty),
+      is_subscription: isSubscription,
+      subscription_interval: isSubscription ? interval ?? "month" : null,
+    });
+
+    await supabase.rpc("decrement_stock", {
+      p_product_id: productId,
+      p_quantity: qty,
+    });
+  } else {
+    console.error("[webhook] payment_intent: no product resolved", pi.id, "meta:", meta);
+  }
+
+  // Income transaction
+  const totalDollars = totalCents / 100;
+  await supabase.from("transactions").insert({
+    type: "income",
+    category: isSubscription ? "subscription" : "sale",
+    description: `Order ${orderNumber}`,
+    amount: totalDollars,
+    currency: "USD",
+    date: new Date().toISOString().split("T")[0],
+    reference_id: order.id,
+    reference_type: "order",
+    created_by: "webhook",
+  });
+
+  // Upsert customer
+  if (email) {
+    const { data: existingCustomer } = await supabase
+      .from("customers")
+      .select("id, total_orders, total_spent")
+      .eq("email", email)
+      .single();
+    if (existingCustomer) {
+      await supabase
+        .from("customers")
+        .update({
+          first_name: fname || undefined,
+          last_name: lname || undefined,
+          phone: phone ?? undefined,
+          default_address: shippingAddr,
+          total_orders: existingCustomer.total_orders + 1,
+          total_spent: existingCustomer.total_spent + totalCents,
+        })
+        .eq("id", existingCustomer.id);
+    } else {
+      await supabase.from("customers").insert({
+        email,
+        first_name: fname,
+        last_name: lname,
+        phone,
+        default_address: shippingAddr,
+        total_orders: 1,
+        total_spent: totalCents,
+      });
+    }
+  }
+
+  // Listflex BUYERS
+  postBuyerLead({
+    email: email ?? undefined,
+    fname,
+    lname,
+    phone: phone ?? undefined,
+    offer: "https://afterslim.com",
+    comments: `Order ${orderNumber} - $${totalDollars} - qty ${qty}${isSubscription ? " (subscription)" : ""}`,
+  }).catch((err) => console.error("[listflex] buyer post failed:", err));
+
+  // CartRover
+  if (shippingAddr && email && product) {
+    try {
+      const sku = product.sku ?? "GP0363";
+      const unitPrice = totalDollars / qty;
+      const crResponse = await submitOrder({
+        cart_order_id: orderNumber,
+        cust_ref: order.id,
+        cust_email: email,
+        cust_first_name: fname,
+        cust_last_name: lname,
+        ship_first_name: fname,
+        ship_last_name: lname,
+        ship_address_1: shippingAddr.line1 || "",
+        ship_address_2: shippingAddr.line2 || undefined,
+        ship_city: shippingAddr.city || "",
+        ship_state: shippingAddr.state || "",
+        ship_zip: shippingAddr.postal_code || "",
+        ship_country: shippingAddr.country || "US",
+        sub_total: totalDollars,
+        grand_total: totalDollars,
+        shipping_handling: 0,
+        sales_tax: 0,
+        order_discount: 0,
+        items: [
+          {
+            item: sku,
+            sku,
+            quantity: qty,
+            price: unitPrice,
+            extended_amount: unitPrice * qty,
+            description: product.name,
+          },
+        ],
+      });
+
+      await supabase
+        .from("orders")
+        .update({
+          status: "processing",
+          metadata: {
+            product_id: productId,
+            price_id: priceId,
+            quantity: qty,
+            is_subscription: isSubscription,
+            ...(stripeSubscriptionId
+              ? {
+                  stripe_subscription_id: stripeSubscriptionId,
+                  stripe_customer_id: stripeCustomerId,
+                  subscription_first_name: fname,
+                  subscription_last_name: lname,
+                }
+              : {}),
+            cartrover_ref: crResponse.order_number,
+          },
+        })
+        .eq("id", order.id);
+
+      await supabase.from("order_events").insert({
+        order_id: order.id,
+        event_type: "status_changed",
+        old_value: "paid",
+        new_value: "processing",
+        actor: "cartrover",
+      });
+    } catch (err) {
+      console.error("[webhook] payment_intent CartRover failed (non-blocking):", err);
+    }
+  }
+
+  console.log("[webhook] payment_intent order created:", orderNumber, "id:", order.id, "qty:", qty);
 }

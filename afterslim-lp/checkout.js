@@ -1,26 +1,54 @@
 /**
- * AfterSlim Checkout — redirects pricing buttons to checkout page.
- * Works with lp-v3 button texts: "Try AfterSlim", "Get 2 Bottles", "Get 3 Bottles"
+ * AfterSlim Checkout — redirects Shop Now / CTA buttons to checkout page
+ * with the correct quantity and subscription parameters.
  */
 (function () {
-  var QTY_MAP = {
-    "try afterslim": 1,
-    "get 2 bottles": 2,
-    "get 3 bottles": 3,
-    "order now": 1,
-    "start protecting your gut": 2,
-  };
-
   document.addEventListener("click", function (e) {
-    var btn = e.target.closest("button, a");
-    if (!btn) return;
-    var text = (btn.textContent || "").trim().toLowerCase();
+    // Desktop first bundle: desktop-add-to-cart
+    var btn = e.target.closest(".desktop-add-to-cart");
+    if (btn) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Uses global variables from the desktop product section script
+      var qty = window.desktopSelectedQty || 2;
+      var isSubscribe = window.desktopPurchaseType === "subscribe";
+      var url = "/checkout?qty=" + qty;
+      if (isSubscribe) url += "&subscribe=true";
+      window.location.href = url;
+      return;
+    }
 
-    var qty = QTY_MAP[text];
-    if (qty === undefined) return;
+    // Desktop second bundle: btn-bundle-shop
+    btn = e.target.closest(".btn-bundle-shop");
+    if (btn) {
+      e.preventDefault();
+      e.stopPropagation();
+      var selectedOption = document.querySelector(".bundle-option.selected");
+      var qty = selectedOption ? selectedOption.getAttribute("data-qty") : "2";
+      var toggleBtn = document.querySelector(".bundle-toggle-btn.active");
+      var isSubscribe = toggleBtn && toggleBtn.getAttribute("data-type") === "subscribe";
+      var url = "/checkout?qty=" + qty;
+      if (isSubscribe) url += "&subscribe=true";
+      window.location.href = url;
+      return;
+    }
 
-    e.preventDefault();
-    e.stopPropagation();
-    window.location.href = "/checkout?qty=" + qty;
+    // Mobile bundle: mobile-add-to-cart
+    btn = e.target.closest(".mobile-add-to-cart");
+    if (btn) {
+      e.preventDefault();
+      e.stopPropagation();
+      var selectedQty = document.querySelector(".mobile-qty-option.selected");
+      var qtyIndex = selectedQty
+        ? Array.from(document.querySelectorAll(".mobile-qty-option")).indexOf(selectedQty) + 1
+        : 2;
+      var purchaseOption = document.querySelector(".mobile-purchase-option.selected");
+      var allOptions = document.querySelectorAll(".mobile-purchase-option");
+      var isSubscribe = purchaseOption === allOptions[0];
+      var url = "/checkout?qty=" + qtyIndex;
+      if (isSubscribe) url += "&subscribe=true";
+      window.location.href = url;
+      return;
+    }
   });
 })();
