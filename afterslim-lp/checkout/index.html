@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no, email=no, address=no">
   <title>Checkout | AfterSlim</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
   <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { overflow-x: hidden; overscroll-behavior: none; }
@@ -128,8 +130,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
         <p style="font-size:13px;color:#aaa;margin-bottom:10px;text-align:center">Express checkout</p>
         <div id="payment-request-button" style="margin-bottom:8px"></div>
         <div id="express-buttons" style="display:flex;gap:8px;margin-bottom:8px">
-          <button type="button" onclick="ckExpressPay('paypal')" style="flex:1;padding:12px;border:1px solid #e0e0e0;border-radius:6px;background:#FFC439;color:#003087;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;letter-spacing:-0.3px">
-            Pay<span style="color:#009cde">Pal</span>
+          <button type="button" onclick="ckExpressPay('paypal')" aria-label="PayPal" style="flex:1;padding:12px;border:1px solid #e0e0e0;border-radius:6px;background:#FFC439;cursor:pointer;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 101 32" style="height:20px" aria-hidden="true"><path fill="#253B80" d="M12.2 4.2H4.5c-.5 0-1 .4-1.1.9L.3 25c-.1.4.2.7.6.7h3.7c.5 0 1-.4 1.1-.9l.8-5.4c.1-.5.5-.9 1.1-.9h2.4c5.1 0 8-2.5 8.8-7.3.3-2.1 0-3.8-1-5-1-1.3-2.9-2-5.6-2zm.9 7.2c-.4 2.8-2.6 2.8-4.7 2.8H7.2l.8-5.3c0-.3.3-.5.6-.5h.6c1.4 0 2.8 0 3.5.8.4.5.6 1.2.4 2.2z"/><path fill="#253B80" d="M36.1 11.3h-3.7c-.3 0-.6.2-.6.5l-.2 1-.3-.4c-.8-1.2-2.7-1.6-4.6-1.6-4.3 0-8 3.3-8.7 7.9-.4 2.3.1 4.5 1.5 6 1.2 1.4 3 2 5.1 2 3.5 0 5.4-2.3 5.4-2.3l-.2 1c-.1.4.2.7.6.7h3.3c.5 0 1-.4 1.1-.9l2-12.6c.1-.3-.2-.6-.7-.6zm-5.2 7.7c-.4 2.3-2.2 3.8-4.5 3.8-1.1 0-2.1-.4-2.7-1.1-.6-.7-.8-1.7-.6-2.8.3-2.2 2.2-3.8 4.5-3.8 1.1 0 2 .4 2.6 1.1.7.8 1 1.8.7 2.8z"/><path fill="#253B80" d="M56 11.3h-3.7c-.4 0-.7.2-.9.5L46.1 20l-2.2-7.8c-.1-.5-.6-.8-1-.8H39.2c-.4 0-.7.4-.6.8l4.1 12-3.8 5.4c-.3.4 0 1 .5 1h3.7c.3 0 .7-.2.8-.5l12.3-17.7c.3-.4 0-1-.5-.9z"/><path fill="#179BD7" d="M68.5 4.2h-7.7c-.5 0-1 .4-1.1.9L56.6 25c-.1.4.2.7.6.7h3.9c.4 0 .7-.3.7-.6l.9-5.7c.1-.5.5-.9 1.1-.9h2.4c5.1 0 8-2.5 8.8-7.3.3-2.1 0-3.8-1-5-1.1-1.3-3-2-5.5-2zm.9 7.2c-.4 2.8-2.6 2.8-4.7 2.8h-1.2l.8-5.3c0-.3.3-.5.6-.5h.6c1.4 0 2.8 0 3.5.8.4.5.6 1.2.4 2.2z"/><path fill="#179BD7" d="M92.4 11.3h-3.7c-.3 0-.6.2-.6.5l-.2 1-.3-.4c-.8-1.2-2.7-1.6-4.6-1.6-4.3 0-8 3.3-8.7 7.9-.4 2.3.1 4.5 1.5 6 1.2 1.4 3 2 5.1 2 3.5 0 5.4-2.3 5.4-2.3l-.2 1c-.1.4.2.7.6.7h3.3c.5 0 1-.4 1.1-.9l2-12.6c.1-.3-.2-.6-.7-.6zm-5.2 7.7c-.4 2.3-2.2 3.8-4.5 3.8-1.1 0-2.1-.4-2.7-1.1-.6-.7-.8-1.7-.6-2.8.3-2.2 2.2-3.8 4.5-3.8 1.1 0 2 .4 2.6 1.1.7.8 1 1.8.7 2.8z"/><path fill="#179BD7" d="M96.8 4.7l-3.3 20.2c-.1.4.2.7.6.7h3.2c.5 0 1-.4 1.1-.9l3.2-19.6c.1-.4-.2-.7-.6-.7h-3.5c-.4 0-.7.2-.7.3z"/></svg>
           </button>
           <button type="button" onclick="ckExpressPay('apple')" style="flex:1;padding:12px;border:1px solid #1a1a1a;border-radius:6px;background:#000;color:#fff;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
             <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#fff"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
@@ -213,6 +215,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                 </div>
                 <div class="form-row">
                   <div class="form-group">
+                    <input type="text" id="f-address2" placeholder=" " autocomplete="address-line2">
+                    <label for="f-address2">Apartment, suite, etc. (optional)</label>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
                     <input type="text" id="f-city" placeholder=" " autocomplete="address-level2" required>
                     <label for="f-city">City</label>
                     <div class="field-error-msg">Required</div>
@@ -276,9 +284,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
               <!-- Payment methods container -->
               <div style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;margin-bottom:16px">
                 <!-- Credit Card header -->
-                <div style="background:#fff5f0;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0d0c0">
+                <div id="card-option" onclick="ckSelectCard()" style="background:#fff5f0;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0d0c0;cursor:pointer">
                   <div style="display:flex;align-items:center;gap:10px">
-                    <div style="width:20px;height:20px;border-radius:50%;border:2px solid #ea580c;display:flex;align-items:center;justify-content:center"><div style="width:10px;height:10px;border-radius:50%;background:#ea580c"></div></div>
+                    <div id="card-radio" style="width:20px;height:20px;border-radius:50%;border:2px solid #ea580c;display:flex;align-items:center;justify-content:center"><div id="card-radio-dot" style="width:10px;height:10px;border-radius:50%;background:#ea580c"></div></div>
                     <span style="font-size:15px;font-weight:600">Credit card</span>
                   </div>
                   <div style="display:flex;gap:5px;align-items:center">
@@ -305,13 +313,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                     <input type="text" id="card-name" placeholder="Name on card" value="" style="width:100%;border:none;outline:none;font-size:15px;color:#1a1a1a;background:transparent;padding:0">
                   </div>
                 </div>
-                <!-- PayPal option -->
-                <div style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer;opacity:0.5">
+                <!-- Apple Pay option -->
+                <div id="applepay-option" onclick="ckSelectApplePay()" style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer">
                   <div style="display:flex;align-items:center;gap:10px">
-                    <div style="width:20px;height:20px;border-radius:50%;border:2px solid #ccc"></div>
+                    <div id="applepay-radio" style="width:20px;height:20px;border-radius:50%;border:2px solid #ccc"></div>
+                    <span style="font-size:15px;font-weight:500">Apple Pay</span>
+                  </div>
+                  <div style="background:#000;border-radius:4px;padding:4px 8px;display:flex;align-items:center;gap:3px">
+                    <svg viewBox="0 0 170 72" style="height:18px" fill="#fff"><path d="M29.5 12.5c-1.8 2.2-4.7 3.9-7.6 3.7-.4-2.9 1.1-5.9 2.7-7.8 1.8-2.2 5-3.8 7.5-3.9.3 3 -.9 5.9-2.6 8zm2.6 4.1c-4.2-.2-7.8 2.4-9.8 2.4s-5.1-2.3-8.4-2.3c-4.3.1-8.3 2.5-10.5 6.4-4.5 7.8-1.2 19.3 3.2 25.6 2.1 3.1 4.7 6.6 8 6.5 3.2-.1 4.4-2.1 8.3-2.1s5 2.1 8.4 2c3.5-.1 5.7-3.2 7.8-6.3 2.4-3.6 3.4-7.1 3.5-7.3-.1-.1-6.7-2.6-6.8-10.3-.1-6.4 5.3-9.5 5.5-9.6-3-4.5-7.7-5-9.2-5.1zM60.9 8.8v43.1h6.7V37.2h9.3c8.5 0 14.5-5.8 14.5-14.2s-5.9-14.2-14.3-14.2H60.9zm6.7 5.6h7.7c5.9 0 9.2 3.1 9.2 8.6s-3.3 8.6-9.2 8.6h-7.7V14.4zM103.3 52.3c4.2 0 8.1-2.1 9.9-5.5h.1v5.1h6.2V30.5c0-6.2-5-10.2-12.6-10.2-7.1 0-12.4 4.1-12.6 9.7h6c.5-2.7 3-4.4 6.4-4.4 4.2 0 6.5 2 6.5 5.6v2.5l-8.4.5c-7.8.5-12.1 3.7-12.1 9.3 0 5.7 4.4 9.5 10.6 9.5zm1.8-5.1c-3.7 0-6-1.8-6-4.5 0-2.8 2.2-4.5 6.5-4.7l7.5-.5v2.6c0 4.2-3.5 7.1-8 7.1zM128.3 64c6.5 0 9.6-2.5 12.3-10.1l11.8-33.1h-6.8L137.7 46h-.1l-7.9-25.2h-7l11.4 31.4-.6 1.9c-1 3.3-2.7 4.5-5.7 4.5-.5 0-1.6 0-1.9-.1v5.2c.3.1 2 .2 2.4.2z"/></svg>
+                  </div>
+                </div>
+                <!-- PayPal option -->
+                <div id="paypal-option" onclick="ckSelectPayPal()" style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div id="paypal-radio" style="width:20px;height:20px;border-radius:50%;border:2px solid #ccc"></div>
                     <span style="font-size:15px;font-weight:500">PayPal</span>
                   </div>
-                  <span style="font-size:13px;font-weight:700;color:#003087;letter-spacing:-0.3px">Pay<span style="color:#009cde">Pal</span></span>
+                  <svg viewBox="0 0 101 32" style="height:22px"><path fill="#253B80" d="M12.2 4.2H4.5c-.5 0-1 .4-1.1.9L.3 25c-.1.4.2.7.6.7h3.7c.5 0 1-.4 1.1-.9l.8-5.4c.1-.5.5-.9 1.1-.9h2.4c5.1 0 8-2.5 8.8-7.3.3-2.1 0-3.8-1-5-1-1.3-2.9-2-5.6-2zm.9 7.2c-.4 2.8-2.6 2.8-4.7 2.8H7.2l.8-5.3c0-.3.3-.5.6-.5h.6c1.4 0 2.8 0 3.5.8.4.5.6 1.2.4 2.2z"/><path fill="#253B80" d="M36.1 11.3h-3.7c-.3 0-.6.2-.6.5l-.2 1-.3-.4c-.8-1.2-2.7-1.6-4.6-1.6-4.3 0-8 3.3-8.7 7.9-.4 2.3.1 4.5 1.5 6 1.2 1.4 3 2 5.1 2 3.5 0 5.4-2.3 5.4-2.3l-.2 1c-.1.4.2.7.6.7h3.3c.5 0 1-.4 1.1-.9l2-12.6c.1-.3-.2-.6-.7-.6zm-5.2 7.7c-.4 2.3-2.2 3.8-4.5 3.8-1.1 0-2.1-.4-2.7-1.1-.6-.7-.8-1.7-.6-2.8.3-2.2 2.2-3.8 4.5-3.8 1.1 0 2 .4 2.6 1.1.7.8 1 1.8.7 2.8z"/><path fill="#253B80" d="M56 11.3h-3.7c-.4 0-.7.2-.9.5L46.1 20l-2.2-7.8c-.1-.5-.6-.8-1-.8H39.2c-.4 0-.7.4-.6.8l4.1 12-3.8 5.4c-.3.4 0 1 .5 1h3.7c.3 0 .7-.2.8-.5l12.3-17.7c.3-.4 0-1-.5-.9z"/><path fill="#179BD7" d="M68.5 4.2h-7.7c-.5 0-1 .4-1.1.9L56.6 25c-.1.4.2.7.6.7h3.9c.4 0 .7-.3.7-.6l.9-5.7c.1-.5.5-.9 1.1-.9h2.4c5.1 0 8-2.5 8.8-7.3.3-2.1 0-3.8-1-5-1.1-1.3-3-2-5.5-2zm.9 7.2c-.4 2.8-2.6 2.8-4.7 2.8h-1.2l.8-5.3c0-.3.3-.5.6-.5h.6c1.4 0 2.8 0 3.5.8.4.5.6 1.2.4 2.2z"/><path fill="#179BD7" d="M92.4 11.3h-3.7c-.3 0-.6.2-.6.5l-.2 1-.3-.4c-.8-1.2-2.7-1.6-4.6-1.6-4.3 0-8 3.3-8.7 7.9-.4 2.3.1 4.5 1.5 6 1.2 1.4 3 2 5.1 2 3.5 0 5.4-2.3 5.4-2.3l-.2 1c-.1.4.2.7.6.7h3.3c.5 0 1-.4 1.1-.9l2-12.6c.1-.3-.2-.6-.7-.6zm-5.2 7.7c-.4 2.3-2.2 3.8-4.5 3.8-1.1 0-2.1-.4-2.7-1.1-.6-.7-.8-1.7-.6-2.8.3-2.2 2.2-3.8 4.5-3.8 1.1 0 2 .4 2.6 1.1.7.8 1 1.8.7 2.8z"/><path fill="#179BD7" d="M96.8 4.7l-3.3 20.2c-.1.4.2.7.6.7h3.2c.5 0 1-.4 1.1-.9l3.2-19.6c.1-.4-.2-.7-.6-.7h-3.5c-.4 0-.7.2-.7.3z"/></svg>
                 </div>
                 <!-- Afterpay option -->
                 <div id="afterpay-option" onclick="ckSelectAfterpay()" style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer">
@@ -322,7 +340,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
                       <span style="font-size:12px;color:#888;display:block">4 interest-free payments of $<span id="afterpay-installment"></span></span>
                     </div>
                   </div>
-                  <div style="background:#b2fce4;border-radius:4px;padding:3px 6px"><svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="#000" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+                  <div style="background:#b2fce4;border-radius:4px;padding:4px 8px;display:flex;align-items:center">
+                    <span style="color:#000;font-weight:800;font-size:12px;letter-spacing:-0.3px;font-family:Arial,sans-serif">afterpay&#10132;</span>
+                  </div>
                 </div>
               </div>
               <button type="button" class="btn-next" id="btn-pay" onclick="ckPay()">
@@ -357,9 +377,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
             </div>
           </div>
 
+          <div id="discount-row" style="display:flex;gap:8px;margin:14px 0 10px">
+            <input type="text" id="discount-input" placeholder="Discount code or gift card" autocomplete="off" style="flex:1;padding:10px 12px;border:1px solid #d4d4d4;border-radius:8px;font-size:14px;outline:none;background:#fff" />
+            <button type="button" id="discount-apply" onclick="ckApplyDiscount()" style="width:42px;border:1px solid #d4d4d4;border-radius:8px;background:#f5f5f5;cursor:pointer;display:flex;align-items:center;justify-content:center" aria-label="Apply">
+              <svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="#666" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <div id="discount-feedback" style="display:none;font-size:12px;margin-bottom:10px"></div>
           <div class="sidebar-row">
             <span>Subtotal</span>
             <span id="sidebar-subtotal">$37.99</span>
+          </div>
+          <div class="sidebar-row" id="sidebar-discount-row" style="display:none">
+            <span id="sidebar-discount-label" style="color:#16a34a">Discount</span>
+            <span id="sidebar-discount" style="color:#16a34a">-$0.00</span>
           </div>
           <div class="sidebar-row">
             <span>Shipping</span>
@@ -396,8 +427,9 @@ var CK_priceId=CK_PM[CK_key];
 var CK_info=CK_PI[CK_key];
 var CK_step=1;
 var CK_cust={name:'',email:'',phone:''};
-var CK_ship={address:'',city:'',state:'',zip:'',country:'US'};
+var CK_ship={address:'',address2:'',city:'',state:'',zip:'',country:'US'};
 var CK_stripe,CK_elements,CK_cardEl,CK_payRequest;
+var CK_discount={code:'',discountCents:0,label:''};
 
 function ckInitSidebar(){
   var bottleImages={1:'/images/bottlereal.png',2:'/images/bottlereal2.png',3:'/images/bottlereal3.png'};
@@ -424,8 +456,9 @@ function ckShowStep(s){
     else if(i===s){c.className='step-card';if(f)f.style.display='block';if(sm)sm.style.display='none';
       if(i===2){
         document.querySelector('#step2 .form-row').style.display='flex';
-        document.getElementById('shipping-fields').style.display='block';
-        document.getElementById('btn-step2-address').style.display='block';
+        var zipFilled=document.getElementById('f-zip').value.trim().replace(/\D/g,'').length>=5;
+        document.getElementById('shipping-fields').style.display=zipFilled?'block':'none';
+        document.getElementById('btn-step2-address').style.display=zipFilled?'block':'none';
         document.getElementById('shipping-methods').style.display='none';
       }
     }
@@ -472,6 +505,7 @@ function ckEditAddress(){
 
 function ckShowShipping(){
   var a=document.getElementById('f-address').value.trim();
+  var a2=document.getElementById('f-address2').value.trim();
   var ci=document.getElementById('f-city').value.trim();
   var st=document.getElementById('f-state').value.trim();
   var z=document.getElementById('f-zip').value.trim();
@@ -483,11 +517,13 @@ function ckShowShipping(){
   document.getElementById('btn-step2-address').style.display='none';
   document.querySelector('#step2 .form-row').style.display='none';
   document.getElementById('shipping-methods').style.display='block';
-  document.getElementById('address-summary-inline').innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid #e0e0e0;border-radius:8px;background:#fff"><div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#1a1a1a"></div><div><span style="font-weight:600;font-size:13px;color:#1a1a1a">'+a+'</span><br><span style="font-size:12px;color:#888">'+ci+', '+st+' '+z+'</span></div></div><span style="cursor:pointer;color:#999;font-size:18px" onclick="ckEditAddress()">&#9998;</span></div>';
+  var addrLine=a+(a2?', '+a2:'');
+  document.getElementById('address-summary-inline').innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid #e0e0e0;border-radius:8px;background:#fff"><div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#1a1a1a"></div><div><span style="font-weight:600;font-size:13px;color:#1a1a1a">'+addrLine+'</span><br><span style="font-size:12px;color:#888">'+ci+', '+st+' '+z+'</span></div></div><span style="cursor:pointer;color:#999;font-size:18px" onclick="ckEditAddress()">&#9998;</span></div>';
 }
 
 function ckStep2(){
   var a=document.getElementById('f-address').value.trim();
+  var a2=document.getElementById('f-address2').value.trim();
   var ci=document.getElementById('f-city').value.trim();
   var st=document.getElementById('f-state').value.trim();
   var z=document.getElementById('f-zip').value.trim();
@@ -495,10 +531,11 @@ function ckStep2(){
   var ok=true;
   ['f-address','f-city','f-state','f-zip'].forEach(function(id){var el=document.getElementById(id);if(!el.value.trim()){el.classList.add('error');ok=false;}else{el.classList.remove('error');}});
   if(ok){
-    CK_ship={address:a,city:ci,state:st,zip:z,country:co};
+    CK_ship={address:a,address2:a2,city:ci,state:st,zip:z,country:co};
     var shipMethod=document.querySelector('input[name="shipping-method"]:checked');
     var shipLabel=shipMethod&&shipMethod.value==='express'?'DHL Expedited - $4.99 (2-3 days)':'Standard Shipping - Free (5-7 days)';
-    document.getElementById('summary2').innerHTML='<span class="summary-name">Shipping address:</span><span>'+a+'</span><span>'+ci+', '+st+' '+z+'</span><span style="margin-top:8px;font-weight:600">'+shipLabel+'</span>';
+    var addrLine=a+(a2?', '+a2:'');
+    document.getElementById('summary2').innerHTML='<span class="summary-name">Shipping address:</span><span>'+addrLine+'</span><span>'+ci+', '+st+' '+z+'</span><span style="margin-top:8px;font-weight:600">'+shipLabel+'</span>';
     document.getElementById('shipping-methods').style.display='none';
     ckShowStep(3);
     ckInitStripe();
@@ -512,25 +549,35 @@ function ckInitStripe(){
   CK_cardEl.mount('#card-number');
   var expEl=CK_elements.create('cardExpiry',{style:elStyle});
   expEl.mount('#card-expiry');
-  var cvcEl=CK_elements.create('cardCvc',{style:elStyle});
+  var cvcEl=CK_elements.create('cardCvc',{style:elStyle,placeholder:'Security code'});
   cvcEl.mount('#card-cvc');
 }
 
 async function ckPay(){
   var errEl=document.getElementById('checkout-error');
   var procEl=document.getElementById('processing');
-  errEl.style.display='none';procEl.classList.add('active');
+  errEl.style.display='none';
+  if(CK_payMethod==='paypal'){
+    errEl.textContent='PayPal is not available yet. Please choose Credit card or Afterpay.';
+    errEl.style.display='block';return;
+  }
+  if(CK_payMethod==='applepay'){
+    errEl.textContent='Apple Pay is being configured. Please use the Express Checkout button at the top, or choose another method.';
+    errEl.style.display='block';return;
+  }
+  procEl.classList.add('active');
   try{
     var payBody={price_id:CK_priceId,customer_email:CK_cust.email,customer_name:CK_cust.name,shipping:CK_ship};
     if(CK_payMethod==='afterpay') payBody.payment_method_type='afterpay_clearpay';
+    if(CK_discount.code) payBody.promotion_code=CK_discount.code;
     var res=await fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payBody)});
     if(!res.ok){var ed=await res.json().catch(function(){return{};});throw new Error(ed.error||'Failed to create payment');}
     var data=await res.json();
     if(CK_payMethod==='afterpay'){
-      var result=await CK_stripe.confirmAfterpayClearpayPayment(data.clientSecret,{payment_method:{billing_details:{name:CK_cust.name,email:CK_cust.email,address:{line1:CK_ship.address,city:CK_ship.city,state:CK_ship.state,postal_code:CK_ship.zip,country:CK_ship.country}}},return_url:window.location.origin+'/checkout/success'});
+      var result=await CK_stripe.confirmAfterpayClearpayPayment(data.clientSecret,{payment_method:{billing_details:{name:CK_cust.name,email:CK_cust.email,address:{line1:CK_ship.address,line2:CK_ship.address2||undefined,city:CK_ship.city,state:CK_ship.state,postal_code:CK_ship.zip,country:CK_ship.country}}},return_url:window.location.origin+'/checkout/success'});
       if(result.error){throw new Error(result.error.message);}
     }else{
-      var result=await CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:CK_cardEl,billing_details:{name:CK_cust.name,email:CK_cust.email,phone:CK_cust.phone||undefined,address:{line1:CK_ship.address,city:CK_ship.city,state:CK_ship.state,postal_code:CK_ship.zip,country:CK_ship.country}}}});
+      var result=await CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:CK_cardEl,billing_details:{name:CK_cust.name,email:CK_cust.email,phone:CK_cust.phone||undefined,address:{line1:CK_ship.address,line2:CK_ship.address2||undefined,city:CK_ship.city,state:CK_ship.state,postal_code:CK_ship.zip,country:CK_ship.country}}}});
       if(result.error){throw new Error(result.error.message);}
       window.location.href='/checkout/success?payment_id='+(result.paymentIntent?result.paymentIntent.id:'');
     }
@@ -581,25 +628,88 @@ if(zipInput){zipInput.addEventListener('input',function(){
   }
 });}
 
+// Compute and apply sidebar totals (subtotal, discount, shipping, total)
+function ckUpdateSidebarTotals(){
+  var ship=document.querySelector('.shipping-option.selected input[type="radio"]');
+  var shipVal=ship?ship.value:'standard';
+  var shipCents=shipVal==='express'?499:0;
+  var subtotalCents=Math.round(CK_info.price*100);
+  var discountCents=Math.min(CK_discount.discountCents||0,subtotalCents);
+  var totalCents=Math.max(50,subtotalCents-discountCents+shipCents);
+  function fmt(c){return '$'+(c/100).toFixed(2);}
+  var subEl=document.getElementById('sidebar-subtotal');
+  var discRow=document.getElementById('sidebar-discount-row');
+  var discEl=document.getElementById('sidebar-discount');
+  var discLabel=document.getElementById('sidebar-discount-label');
+  var shipEl=document.getElementById('sidebar-shipping');
+  var totalEl=document.getElementById('sidebar-total');
+  var totalMobEl=document.getElementById('sidebar-total-mobile');
+  if(subEl)subEl.textContent=fmt(subtotalCents);
+  if(discRow)discRow.style.display=discountCents>0?'flex':'none';
+  if(discountCents>0){
+    if(discEl)discEl.textContent='-'+fmt(discountCents);
+    if(discLabel)discLabel.textContent='Discount ('+(CK_discount.code||CK_discount.label||'')+')';
+  }
+  if(shipEl){
+    if(shipCents===0){shipEl.textContent='Free';shipEl.style.color='#16a34a';shipEl.classList.add('sidebar-free');}
+    else{shipEl.textContent=fmt(shipCents);shipEl.style.color='#1a1a1a';shipEl.classList.remove('sidebar-free');}
+  }
+  if(totalEl)totalEl.textContent=fmt(totalCents);
+  if(totalMobEl)totalMobEl.textContent=fmt(totalCents);
+}
+
 // Shipping method selection
 document.querySelectorAll('.shipping-option').forEach(function(opt){
   opt.addEventListener('click',function(){
     document.querySelectorAll('.shipping-option').forEach(function(o){o.classList.remove('selected');});
     this.classList.add('selected');
     this.querySelector('input[type="radio"]').checked=true;
-    var val=this.querySelector('input[type="radio"]').value;
-    var shipEl=document.getElementById('sidebar-shipping');
-    var totalEl=document.getElementById('sidebar-total');
-    if(val==='express'){
-      if(shipEl)shipEl.textContent='$4.99';
-      if(shipEl)shipEl.style.color='#1a1a1a';
-      if(totalEl)totalEl.textContent='$'+(CK_info.price+4.99).toFixed(2);
-    }else{
-      if(shipEl){shipEl.textContent='Free';shipEl.style.color='#16a34a';}
-      if(totalEl)totalEl.textContent='$'+CK_info.price.toFixed(2);
-    }
+    ckUpdateSidebarTotals();
   });
 });
+
+// Discount code apply
+async function ckApplyDiscount(){
+  var input=document.getElementById('discount-input');
+  var btn=document.getElementById('discount-apply');
+  var feedback=document.getElementById('discount-feedback');
+  var code=(input.value||'').trim();
+  feedback.style.display='none';
+  if(!code){feedback.textContent='Enter a discount code';feedback.style.color='#dc2626';feedback.style.display='block';return;}
+  // Toggle to "Remove" if already applied
+  if(CK_discount.code){
+    CK_discount={code:'',discountCents:0,label:''};
+    input.value='';input.disabled=false;
+    btn.innerHTML='<svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="#666" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
+    btn.setAttribute('aria-label','Apply');
+    feedback.style.display='none';
+    ckUpdateSidebarTotals();
+    return;
+  }
+  btn.disabled=true;input.disabled=true;
+  feedback.textContent='Validating...';feedback.style.color='#666';feedback.style.display='block';
+  try{
+    var r=await fetch('/api/coupons/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:code,price_id:CK_priceId})});
+    var data=await r.json();
+    if(!data.valid){
+      feedback.textContent=data.error||'Invalid code';
+      feedback.style.color='#dc2626';
+      btn.disabled=false;input.disabled=false;
+      return;
+    }
+    CK_discount={code:data.code,discountCents:data.discount_cents,label:data.label};
+    feedback.textContent='✓ '+data.label+' applied';
+    feedback.style.color='#16a34a';
+    btn.innerHTML='<svg viewBox="0 0 24 24" style="width:18px;height:18px" fill="none" stroke="#dc2626" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    btn.setAttribute('aria-label','Remove');
+    btn.disabled=false;
+    ckUpdateSidebarTotals();
+  }catch(e){
+    feedback.textContent='Could not validate code. Please try again.';
+    feedback.style.color='#dc2626';
+    btn.disabled=false;input.disabled=false;
+  }
+}
 
 // Clear error on input
 document.querySelectorAll('.form-group input').forEach(function(inp){
@@ -679,14 +789,64 @@ function ckGooglePay(){
 // Payment method selection
 var CK_payMethod='card';
 
+function ckResetPayRadios(){
+  var cardOpt=document.getElementById('card-option');
+  var cardRadio=document.getElementById('card-radio');
+  var cardDot=document.getElementById('card-radio-dot');
+  var apOpt=document.getElementById('afterpay-option');
+  var apRadio=document.getElementById('afterpay-radio');
+  var ppOpt=document.getElementById('paypal-option');
+  var ppRadio=document.getElementById('paypal-radio');
+  var appOpt=document.getElementById('applepay-option');
+  var appRadio=document.getElementById('applepay-radio');
+  if(cardOpt)cardOpt.style.background='#fff';
+  if(cardRadio)cardRadio.style.border='2px solid #ccc';
+  if(cardDot)cardDot.style.background='transparent';
+  if(apOpt)apOpt.style.background='#fff';
+  if(apRadio){apRadio.style.border='2px solid #ccc';apRadio.innerHTML='';}
+  if(ppOpt)ppOpt.style.background='#fff';
+  if(ppRadio){ppRadio.style.border='2px solid #ccc';ppRadio.innerHTML='';}
+  if(appOpt)appOpt.style.background='#fff';
+  if(appRadio){appRadio.style.border='2px solid #ccc';appRadio.innerHTML='';}
+}
+function ckFillRadio(radioId){
+  var r=document.getElementById(radioId);
+  if(r){r.style.border='2px solid #ea580c';r.innerHTML='<div style="width:10px;height:10px;border-radius:50%;background:#ea580c;margin:3px"></div>';}
+}
 function ckSelectCard(){
   CK_payMethod='card';
+  ckResetPayRadios();
   document.querySelector('#step3 .payment-method-card-fields').style.display='block';
+  var cardOpt=document.getElementById('card-option');
+  var cardRadio=document.getElementById('card-radio');
+  var cardDot=document.getElementById('card-radio-dot');
+  if(cardOpt)cardOpt.style.background='#fff5f0';
+  if(cardRadio)cardRadio.style.border='2px solid #ea580c';
+  if(cardDot)cardDot.style.background='#ea580c';
 }
-
 function ckSelectAfterpay(){
   CK_payMethod='afterpay';
+  ckResetPayRadios();
   document.querySelector('#step3 .payment-method-card-fields').style.display='none';
+  var apOpt=document.getElementById('afterpay-option');
+  if(apOpt)apOpt.style.background='#fff5f0';
+  ckFillRadio('afterpay-radio');
+}
+function ckSelectPayPal(){
+  CK_payMethod='paypal';
+  ckResetPayRadios();
+  document.querySelector('#step3 .payment-method-card-fields').style.display='none';
+  var opt=document.getElementById('paypal-option');
+  if(opt)opt.style.background='#fff5f0';
+  ckFillRadio('paypal-radio');
+}
+function ckSelectApplePay(){
+  CK_payMethod='applepay';
+  ckResetPayRadios();
+  document.querySelector('#step3 .payment-method-card-fields').style.display='none';
+  var opt=document.getElementById('applepay-option');
+  if(opt)opt.style.background='#fff5f0';
+  ckFillRadio('applepay-radio');
 }
 
 // Set afterpay installment amount
