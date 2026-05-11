@@ -441,6 +441,17 @@ export const PARTNERS = [
   { id: "vitor", name: "Vitor Araujo", role: "CTO", share: 15, contributes: false },
 ] as const;
 
+// Quem pode pagar um custo: socios contribuintes + a propria Empresa.
+// "Empresa" (id: company) representa custos pagos pela conta bancaria da AfterSlim,
+// nao por um socio especifico. Usado em /finance/costs.
+export const COST_PAYERS = [
+  { id: "fernando", name: "Fernando Quintas", role: "CEO" },
+  { id: "henrique", name: "Henrique Vaz", role: "COO" },
+  { id: "company", name: "Empresa", role: "AfterSlim" },
+] as const;
+
+export type CostPayerId = (typeof COST_PAYERS)[number]["id"];
+
 export const DOCUMENT_CATEGORY_CONFIG: Record<
   DocumentCategory,
   { label: string; icon: string; color: string }

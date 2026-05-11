@@ -3,7 +3,7 @@
 import { useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { COST_CATEGORY_CONFIG, PARTNERS } from "@/lib/constants";
+import { COST_CATEGORY_CONFIG, COST_PAYERS, PARTNERS } from "@/lib/constants";
 import type { Cost, CostCategory } from "@/lib/types";
 import {
   Card,
@@ -31,6 +31,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -87,17 +94,14 @@ export default function CostsContent({ costs }: CostsContentProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
-  // Apenas sócios contribuintes (Fernando + Henrique) registram aportes/custos no AfterSlim
-  const CONTRIBUTORS = useMemo(
-    () => PARTNERS.filter((p) => p.contributes),
-    []
-  );
+  // Drill-down sheet (mostra todos os investimentos de um pagador)
+  const [drilldownPayerId, setDrilldownPayerId] = useState<string | null>(null);
 
   // Form state
   const [formDesc, setFormDesc] = useState("");
   const [formAmount, setFormAmount] = useState("");
   const [formCategory, setFormCategory] = useState<CostCategory>("other");
-  const [formPaidBy, setFormPaidBy] = useState<string>(CONTRIBUTORS[0].id);
+  const [formPaidBy, setFormPaidBy] = useState<string>(COST_PAYERS[0].id);
   const [formDate, setFormDate] = useState(new Date().toISOString().slice(0, 10));
   const [formNotes, setFormNotes] = useState("");
 
@@ -134,7 +138,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
 
   const perPerson = useMemo(() => {
     const map: Record<string, number> = {};
-    for (const p of PARTNERS) map[p.id] = 0;
+    for (const p of COST_PAYERS) map[p.id] = 0;
     for (const c of costs) {
       map[c.paid_by] = (map[c.paid_by] ?? 0) + Number(c.amount);
     }
@@ -175,7 +179,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
     setFormDesc("");
     setFormAmount("");
     setFormCategory("other");
-    setFormPaidBy(CONTRIBUTORS[0].id);
+    setFormPaidBy(COST_PAYERS[0].id);
     setFormDate(new Date().toISOString().slice(0, 10));
     setFormNotes("");
     setReceiptUrl(null);
@@ -351,7 +355,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {CONTRIBUTORS.map((p) => (
+                      {COST_PAYERS.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
                           {p.name}
                         </SelectItem>
@@ -453,28 +457,22 @@ export default function CostsContent({ costs }: CostsContentProps) {
           </CardContent>
         </Card>
 
-        {CONTRIBUTORS.map((p) => {
-          const isActive = paidByFilter === p.id;
+        {COST_PAYERS.map((p) => {
+          const payerCosts = costs.filter((c) => c.paid_by === p.id);
           return (
             <Card
               key={p.id}
               role="button"
               tabIndex={0}
-              onClick={() =>
-                setPaidByFilter((curr) => (curr === p.id ? "all" : p.id))
-              }
+              onClick={() => setDrilldownPayerId(p.id)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  setPaidByFilter((curr) => (curr === p.id ? "all" : p.id));
+                  setDrilldownPayerId(p.id);
                 }
               }}
-              className={cn(
-                "gap-0 py-0 cursor-pointer transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                isActive && "ring-2 ring-primary bg-primary/5"
-              )}
-              aria-pressed={isActive}
-              aria-label={`Filtrar custos de ${p.name}`}
+              className="gap-0 py-0 cursor-pointer transition-all hover:shadow-md hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              aria-label={`Ver investimentos de ${p.name}`}
             >
               <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -490,8 +488,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                   {formatCurrency(perPerson[p.id] ?? 0)}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {costs.filter((c) => c.paid_by === p.id).length} pagamentos
-                  {isActive && " · filtrado"}
+                  {payerCosts.length} pagamentos · ver detalhes →
                 </p>
               </CardContent>
             </Card>
@@ -516,7 +513,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>
-            {PARTNERS.map((p) => (
+            {COST_PAYERS.map((p) => (
               <SelectItem key={p.id} value={p.id}>
                 {p.name}
               </SelectItem>
@@ -568,7 +565,9 @@ export default function CostsContent({ costs }: CostsContentProps) {
                   const catConfig =
                     COST_CATEGORY_CONFIG[cost.category as CostCategory] ??
                     COST_CATEGORY_CONFIG.other;
-                  const partner = PARTNERS.find((p) => p.id === cost.paid_by);
+                  const partner =
+                    COST_PAYERS.find((p) => p.id === cost.paid_by) ??
+                    PARTNERS.find((p) => p.id === cost.paid_by);
 
                   return (
                     <TableRow key={cost.id}>
@@ -647,6 +646,176 @@ export default function CostsContent({ costs }: CostsContentProps) {
           </div>
         </Card>
       )}
+
+      {/* Drill-down: detalhes de um pagador */}
+      <Sheet
+        open={drilldownPayerId !== null}
+        onOpenChange={(open) => {
+          if (!open) setDrilldownPayerId(null);
+        }}
+      >
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-6">
+          {(() => {
+            if (!drilldownPayerId) return null;
+            const payer = COST_PAYERS.find((p) => p.id === drilldownPayerId);
+            if (!payer) return null;
+            const payerCosts = costs.filter((c) => c.paid_by === payer.id);
+            const total = payerCosts.reduce(
+              (sum, c) => sum + Number(c.amount),
+              0
+            );
+            const byCategory = payerCosts.reduce<Record<string, number>>(
+              (acc, c) => {
+                acc[c.category] = (acc[c.category] ?? 0) + Number(c.amount);
+                return acc;
+              },
+              {}
+            );
+            const categoryEntries = Object.entries(byCategory).sort(
+              (a, b) => b[1] - a[1]
+            );
+            const sortedCosts = [...payerCosts].sort((a, b) =>
+              b.date.localeCompare(a.date)
+            );
+
+            return (
+              <>
+                <SheetHeader className="px-0">
+                  <SheetTitle>{payer.name}</SheetTitle>
+                  <SheetDescription>
+                    {payer.role} · todos os investimentos registrados
+                  </SheetDescription>
+                </SheetHeader>
+
+                {/* Totais */}
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <Card className="gap-0 py-0">
+                    <CardContent className="py-4 px-4">
+                      <p className="text-xs text-muted-foreground">
+                        Total investido
+                      </p>
+                      <p className="text-2xl font-bold mt-1">
+                        {formatCurrency(total)}
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="gap-0 py-0">
+                    <CardContent className="py-4 px-4">
+                      <p className="text-xs text-muted-foreground">
+                        Pagamentos
+                      </p>
+                      <p className="text-2xl font-bold mt-1">
+                        {payerCosts.length}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Breakdown por categoria */}
+                {categoryEntries.length > 0 && (
+                  <div className="mt-6">
+                    <p className="text-sm font-medium mb-3">Por categoria</p>
+                    <div className="space-y-2">
+                      {categoryEntries.map(([cat, amt]) => {
+                        const catConfig =
+                          COST_CATEGORY_CONFIG[cat as CostCategory] ??
+                          COST_CATEGORY_CONFIG.other;
+                        const pct = total > 0 ? (amt / total) * 100 : 0;
+                        return (
+                          <div
+                            key={cat}
+                            className="flex items-center justify-between gap-3 text-sm"
+                          >
+                            <Badge
+                              variant="secondary"
+                              className={cn("text-[10px]", catConfig.color)}
+                            >
+                              {catConfig.label}
+                            </Badge>
+                            <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-primary"
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                            <span className="font-medium tabular-nums whitespace-nowrap">
+                              {formatCurrency(amt)}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Lista de investimentos */}
+                <div className="mt-6">
+                  <p className="text-sm font-medium mb-3">
+                    Investimentos ({payerCosts.length})
+                  </p>
+                  {sortedCosts.length === 0 ? (
+                    <div className="rounded-lg border border-dashed py-8 text-center text-sm text-muted-foreground">
+                      Nenhum investimento registrado por {payer.name}.
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {sortedCosts.map((c) => {
+                        const catConfig =
+                          COST_CATEGORY_CONFIG[c.category as CostCategory] ??
+                          COST_CATEGORY_CONFIG.other;
+                        return (
+                          <div
+                            key={c.id}
+                            className="rounded-lg border p-3 hover:bg-muted/40 transition-colors"
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium text-sm truncate">
+                                  {c.description}
+                                </p>
+                                {c.notes && (
+                                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                                    {c.notes}
+                                  </p>
+                                )}
+                                <div className="flex items-center gap-2 mt-2">
+                                  <Badge
+                                    variant="secondary"
+                                    className={cn("text-[10px]", catConfig.color)}
+                                  >
+                                    {catConfig.label}
+                                  </Badge>
+                                  <span className="text-xs text-muted-foreground">
+                                    {formatDate(c.date)}
+                                  </span>
+                                  {c.receipt_url && (
+                                    <a
+                                      href={c.receipt_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                                    >
+                                      <Paperclip className="h-3 w-3" />
+                                      comprovante
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                              <p className="font-semibold tabular-nums whitespace-nowrap">
+                                {formatCurrency(Number(c.amount))}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </>
+            );
+          })()}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
