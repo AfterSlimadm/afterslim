@@ -87,11 +87,17 @@ export default function CostsContent({ costs }: CostsContentProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
+  // Apenas sócios contribuintes (Fernando + Henrique) registram aportes/custos no AfterSlim
+  const CONTRIBUTORS = useMemo(
+    () => PARTNERS.filter((p) => p.contributes),
+    []
+  );
+
   // Form state
   const [formDesc, setFormDesc] = useState("");
   const [formAmount, setFormAmount] = useState("");
   const [formCategory, setFormCategory] = useState<CostCategory>("other");
-  const [formPaidBy, setFormPaidBy] = useState<string>(PARTNERS[0].id);
+  const [formPaidBy, setFormPaidBy] = useState<string>(CONTRIBUTORS[0].id);
   const [formDate, setFormDate] = useState(new Date().toISOString().slice(0, 10));
   const [formNotes, setFormNotes] = useState("");
 
@@ -157,7 +163,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
         setReceiptName(data.name);
       }
     } catch {
-      toast.error("Erro de conexão ao fazer upload");
+      toast.error("Erro de conexao ao fazer upload");
     } finally {
       setIsUploading(false);
     }
@@ -169,7 +175,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
     setFormDesc("");
     setFormAmount("");
     setFormCategory("other");
-    setFormPaidBy(PARTNERS[0].id);
+    setFormPaidBy(CONTRIBUTORS[0].id);
     setFormDate(new Date().toISOString().slice(0, 10));
     setFormNotes("");
     setReceiptUrl(null);
@@ -196,7 +202,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
 
   async function handleSave() {
     if (!formDesc.trim()) {
-      toast.error("Insira uma descrição");
+      toast.error("Insira uma descricao");
       return;
     }
     const amount = parseFloat(formAmount);
@@ -228,6 +234,15 @@ export default function CostsContent({ costs }: CostsContentProps) {
 
       if (!res.ok) {
         const data = await res.json();
+        const fieldErrors = data.details?.fieldErrors as
+          | Record<string, string[]>
+          | undefined;
+        if (fieldErrors) {
+          const issues = Object.entries(fieldErrors)
+            .map(([f, msgs]) => `${f}: ${msgs.join(", ")}`)
+            .join(" | ");
+          throw new Error(`${data.error ?? "Dados invalidos"} — ${issues}`);
+        }
         throw new Error(data.error ?? "Erro ao salvar");
       }
 
@@ -297,10 +312,10 @@ export default function CostsContent({ costs }: CostsContentProps) {
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="cost-desc">Descrição</Label>
+                <Label htmlFor="cost-desc">Descricao</Label>
                 <Input
                   id="cost-desc"
-                  placeholder="Ex: Estoque 500un AfterSlim"
+                  placeholder="Ex: Estoque 500un berberina"
                   value={formDesc}
                   onChange={(e) => setFormDesc(e.target.value)}
                 />
@@ -336,7 +351,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {PARTNERS.map((p) => (
+                      {CONTRIBUTORS.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
                           {p.name}
                         </SelectItem>
@@ -364,7 +379,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="cost-notes">Observações (opcional)</Label>
+                <Label htmlFor="cost-notes">Observacoes (opcional)</Label>
                 <Textarea
                   id="cost-notes"
                   placeholder="Detalhes adicionais..."
@@ -414,7 +429,7 @@ export default function CostsContent({ costs }: CostsContentProps) {
                 disabled={isSaving}
               >
                 {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
-                {isSaving ? "Salvando..." : editingCost ? "Salvar Alterações" : "Registrar Custo"}
+                {isSaving ? "Salvando..." : editingCost ? "Salvar Alteracoes" : "Registrar Custo"}
               </Button>
             </div>
           </DialogContent>
@@ -438,24 +453,50 @@ export default function CostsContent({ costs }: CostsContentProps) {
           </CardContent>
         </Card>
 
-        {PARTNERS.map((p) => (
-          <Card key={p.id} className="gap-0 py-0">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {p.name}
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="pb-5 px-5">
-              <p className="text-2xl font-bold">
-                {formatCurrency(perPerson[p.id] ?? 0)}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {costs.filter((c) => c.paid_by === p.id).length} pagamentos
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+        {CONTRIBUTORS.map((p) => {
+          const isActive = paidByFilter === p.id;
+          return (
+            <Card
+              key={p.id}
+              role="button"
+              tabIndex={0}
+              onClick={() =>
+                setPaidByFilter((curr) => (curr === p.id ? "all" : p.id))
+              }
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setPaidByFilter((curr) => (curr === p.id ? "all" : p.id));
+                }
+              }}
+              className={cn(
+                "gap-0 py-0 cursor-pointer transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                isActive && "ring-2 ring-primary bg-primary/5"
+              )}
+              aria-pressed={isActive}
+              aria-label={`Filtrar custos de ${p.name}`}
+            >
+              <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5 px-5">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {p.name}{" "}
+                  <span className="text-xs font-normal text-muted-foreground/70">
+                    · {p.role}
+                  </span>
+                </CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="pb-5 px-5">
+                <p className="text-2xl font-bold">
+                  {formatCurrency(perPerson[p.id] ?? 0)}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {costs.filter((c) => c.paid_by === p.id).length} pagamentos
+                  {isActive && " · filtrado"}
+                </p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {/* Filters */}
