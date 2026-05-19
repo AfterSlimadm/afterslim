@@ -585,6 +585,9 @@ ul, ol {
 }
 
 /* Hero With Image (Desktop: full-bleed image banner + text overlaid on left, Seed-style) */
+html { overflow-x: hidden; }
+body { overflow-x: hidden; }
+
 .hero.hero-with-image {
   position: relative;
   padding: 0;
@@ -592,11 +595,11 @@ ul, ol {
   min-height: 720px;
   background: none;
   perspective: 1400px;
-  /* True full-bleed regardless of parent max-width */
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  max-width: 100vw;
+  /* Span full body width without 100vw scrollbar overshoot */
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .hero.hero-with-image::before,
