@@ -449,6 +449,53 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   border-color: #8a2f08;
 }
 
+/* "or" divider + Amazon button (matching the pattern from index.html) */
+.amazon-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 14px 0 4px;
+  color: var(--ink-3);
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-transform: lowercase;
+}
+.amazon-divider::before,
+.amazon-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.btn-amazon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 32px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: 2px solid #111;
+  border-radius: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn-amazon:hover {
+  background: #2a2a2a;
+  border-color: #2a2a2a;
+}
+.btn-amazon .amazon-logo-img {
+  height: 48px;
+  width: auto;
+  vertical-align: middle;
+  margin: -10px 0 -14px -10px;
+}
+
 .hero-perks {
   display: flex;
   flex-direction: column;
@@ -940,8 +987,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         <div class="price-per" id="pricePer">$0.80 per day · 60 capsules · Free shipping</div>
 
         <a href="#" class="btn-primary">
-          Get started
+          Shop Now
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+
+        <div class="amazon-divider">or</div>
+        <a href="#" class="btn-amazon" target="_blank" rel="noopener">
+          Buy on <img src="images/amazon-logo.png" alt="Amazon" class="amazon-logo-img">
         </a>
 
         <div class="hero-perks">
