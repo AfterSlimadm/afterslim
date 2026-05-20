@@ -387,19 +387,22 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
   justify-content: center;
   gap: 12px;
   padding: 20px 32px;
-  background: var(--orange);
+  background: linear-gradient(to right, var(--orange) 0%, var(--orange) 55%, var(--orange-dark) 100%);
   color: #fff;
-  border: 1.6px solid var(--orange);
+  border: 2px solid var(--orange-dark);
   border-radius: 16px;
   font-size: 20px;
   font-weight: 600;
   letter-spacing: normal;
   text-transform: uppercase;
-  transition: background-color 0.12s ease, border-color 0.12s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, filter 0.15s ease;
   width: 100%;
   margin-top: 16px;
 }
-.btn-primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); }
+.btn-primary:hover {
+  background: linear-gradient(to right, var(--orange-dark) 0%, var(--orange-dark) 55%, #8a2f08 100%);
+  border-color: #8a2f08;
+}
 
 .hero-perks {
   display: flex;
