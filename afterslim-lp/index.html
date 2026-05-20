@@ -585,10 +585,18 @@ ul, ol {
 }
 
 /* Hero With Image (Desktop: full-bleed image banner + text overlaid on left, Seed-style) */
-html { overflow-x: hidden; }
-body { overflow-x: hidden; }
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+*, *::before, *::after { box-sizing: border-box; }
 
-/* Custom scrollbar — slim, brand-matched, so the right edge doesn't look like a gap */
+/* Custom scrollbar — slim, brand-matched */
 html {
   scrollbar-width: thin;
   scrollbar-color: rgba(234, 88, 12, 0.45) rgba(28, 25, 23, 0.06);
@@ -605,16 +613,21 @@ html {
 
 .hero.hero-with-image {
   position: relative;
-  padding: 0;
+  padding: 0 !important;
   overflow: hidden;
   min-height: 720px;
   background: none;
   perspective: 1400px;
-  /* Span full body width without 100vw scrollbar overshoot */
-  width: 100%;
-  max-width: 100%;
-  margin-left: 0;
-  margin-right: 0;
+  /* Force full width of the document client area */
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  border: 0;
+  box-sizing: border-box;
 }
 
 .hero.hero-with-image::before,
@@ -8072,6 +8085,30 @@ function updateMobileButtonPrice() {
       btn.textContent = 'COPIED!';
       setTimeout(function() { btn.textContent = 'COPY CSS'; }, 2000);
     });
+  }
+})();
+</script>
+
+<!-- ============ HERO WIDTH ENFORCER (runtime) ============ -->
+<script>
+(function() {
+  function enforce() {
+    var hero = document.querySelector('.hero.hero-with-image');
+    if (!hero) return;
+    var w = document.documentElement.clientWidth;
+    hero.style.setProperty('width', w + 'px', 'important');
+    hero.style.setProperty('max-width', w + 'px', 'important');
+    hero.style.setProperty('margin-left', '0px', 'important');
+    hero.style.setProperty('margin-right', '0px', 'important');
+  }
+  enforce();
+  window.addEventListener('resize', enforce, { passive: true });
+  window.addEventListener('load', enforce);
+  if (document.readyState !== 'loading') {
+    setTimeout(enforce, 100);
+    setTimeout(enforce, 500);
+  } else {
+    document.addEventListener('DOMContentLoaded', enforce);
   }
 })();
 </script>
