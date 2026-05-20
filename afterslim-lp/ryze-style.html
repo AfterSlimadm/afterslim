@@ -822,7 +822,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
       <!-- Left: gallery -->
       <div class="hero-gallery">
         <div class="hero-main-img">
-          <span class="hero-badge-discount">40% Off Today</span>
+          <span class="hero-badge-discount">Up to 49% off</span>
           <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Companion Probiotic" id="heroMain">
         </div>
         <div class="hero-thumbs">
@@ -861,36 +861,36 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
         <div class="variant-block" style="margin-top:18px;">
           <div class="variant-label">Choose your pack</div>
           <div class="bundle-options">
-            <button class="bundle-opt" data-pack="1" data-price="47.99" data-original="57.99" data-per="1.60">
+            <button class="bundle-opt" data-pack="1">
               <div class="bundle-opt-title">1 Bottle</div>
-              <div class="bundle-opt-price">$47.99</div>
-              <div class="bundle-opt-original">$57.99</div>
-              <div class="bundle-opt-save">Save 17%</div>
+              <div class="bundle-opt-price" data-price>$27.99</div>
+              <div class="bundle-opt-original" data-original>$37.99</div>
+              <div class="bundle-opt-save" data-save>Save 26%</div>
             </button>
-            <button class="bundle-opt selected" data-pack="2" data-price="84.99" data-original="115.98" data-per="1.42">
+            <button class="bundle-opt selected" data-pack="2">
               <span class="bundle-opt-badge">Most popular</span>
               <div class="bundle-opt-title">2 Bottles</div>
-              <div class="bundle-opt-price">$84.99</div>
-              <div class="bundle-opt-original">$115.98</div>
-              <div class="bundle-opt-save">Save 27%</div>
+              <div class="bundle-opt-price" data-price>$47.99</div>
+              <div class="bundle-opt-original" data-original>$75.98</div>
+              <div class="bundle-opt-save" data-save>Save 37%</div>
             </button>
-            <button class="bundle-opt" data-pack="3" data-price="119.99" data-original="173.97" data-per="1.33">
+            <button class="bundle-opt" data-pack="3">
               <span class="bundle-opt-badge" style="background:var(--green);">Best value</span>
               <div class="bundle-opt-title">3 Bottles</div>
-              <div class="bundle-opt-price">$119.99</div>
-              <div class="bundle-opt-original">$173.97</div>
-              <div class="bundle-opt-save">Save 31%</div>
+              <div class="bundle-opt-price" data-price>$57.99</div>
+              <div class="bundle-opt-original" data-original>$113.97</div>
+              <div class="bundle-opt-save" data-save>Save 49%</div>
             </button>
           </div>
         </div>
 
         <!-- Price row -->
         <div class="hero-price-row">
-          <span class="price-current" id="priceCurrent">$84.99</span>
-          <span class="price-original" id="priceOriginal">$115.98</span>
-          <span class="price-badge">27% off</span>
+          <span class="price-current" id="priceCurrent">$47.99</span>
+          <span class="price-original" id="priceOriginal">$75.98</span>
+          <span class="price-badge" id="priceBadge">37% off</span>
         </div>
-        <div class="price-per" id="pricePer">$1.42 per day · 60 capsules</div>
+        <div class="price-per" id="pricePer">$0.80 per day · 60 capsules · Free shipping</div>
 
         <a href="#" class="btn-primary">
           Get started
@@ -939,9 +939,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 90-day money-back guarantee</li>
         </ul>
         <div class="bundle-row-price-row">
-          <span class="price-current">$119.99</span>
-          <span class="price-original">$173.97</span>
-          <span class="price-badge">31% off</span>
+          <span class="price-current">$57.99</span>
+          <span class="price-original">$113.97</span>
+          <span class="price-badge">49% off</span>
         </div>
         <a href="#" class="btn-primary">
           Get the Ritual pack
@@ -964,9 +964,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 90-day money-back guarantee</li>
         </ul>
         <div class="bundle-row-price-row">
-          <span class="price-current">$84.99</span>
-          <span class="price-original">$115.98</span>
-          <span class="price-badge">27% off</span>
+          <span class="price-current">$47.99</span>
+          <span class="price-original">$75.98</span>
+          <span class="price-badge">37% off</span>
         </div>
         <a href="#" class="btn-primary">
           Get the Starter pack
@@ -1155,26 +1155,76 @@ document.querySelectorAll('.hero-thumb').forEach(function(t) {
   });
 });
 
-// Plan selector
+// AfterSlim real pricing (from production index.html)
+var pricing = {
+  subscribe: {
+    1: { price: '27.99', original: '37.99', percent: 26, perDay: '0.93', freeShip: false },
+    2: { price: '47.99', original: '75.98', percent: 37, perDay: '0.80', freeShip: true },
+    3: { price: '57.99', original: '113.97', percent: 49, perDay: '0.64', freeShip: true }
+  },
+  onetime: {
+    1: { price: '37.99', original: '37.99', percent: 0,  perDay: '1.27', freeShip: false },
+    2: { price: '57.99', original: '75.98', percent: 24, perDay: '0.97', freeShip: true },
+    3: { price: '67.99', original: '113.97', percent: 40, perDay: '0.76', freeShip: true }
+  }
+};
+var currentPlan = 'subscribe';
+var currentPack = '2';
+
+function renderPrice() {
+  var d = pricing[currentPlan][currentPack];
+  document.getElementById('priceCurrent').textContent = '$' + d.price;
+  var origEl = document.getElementById('priceOriginal');
+  var badgeEl = document.getElementById('priceBadge');
+  if (d.percent > 0) {
+    origEl.textContent = '$' + d.original;
+    origEl.style.display = '';
+    badgeEl.textContent = d.percent + '% off';
+    badgeEl.style.display = '';
+  } else {
+    origEl.style.display = 'none';
+    badgeEl.style.display = 'none';
+  }
+  var capsules = parseInt(currentPack, 10) * 30;
+  var ship = d.freeShip ? ' · Free shipping' : '';
+  document.getElementById('pricePer').textContent = '$' + d.perDay + ' per day · ' + capsules + ' capsules' + ship;
+
+  // Update each bundle button's inline price/original/save based on plan
+  document.querySelectorAll('.bundle-opt').forEach(function(b) {
+    var pack = b.getAttribute('data-pack');
+    var pd = pricing[currentPlan][pack];
+    var priceEl = b.querySelector('[data-price]');
+    var origInlineEl = b.querySelector('[data-original]');
+    var saveEl = b.querySelector('[data-save]');
+    if (priceEl) priceEl.textContent = '$' + pd.price;
+    if (origInlineEl) {
+      origInlineEl.textContent = '$' + pd.original;
+      origInlineEl.style.display = (pd.percent > 0) ? '' : 'none';
+    }
+    if (saveEl) {
+      saveEl.textContent = pd.percent > 0 ? 'Save ' + pd.percent + '%' : '';
+      saveEl.style.display = pd.percent > 0 ? '' : 'none';
+    }
+  });
+}
+
+// Plan selector (Subscribe vs One-time)
 document.querySelectorAll('.variant-opt').forEach(function(o) {
   o.addEventListener('click', function() {
     document.querySelectorAll('.variant-opt').forEach(function(x) { x.classList.remove('selected'); });
     o.classList.add('selected');
+    currentPlan = o.getAttribute('data-plan') || 'subscribe';
+    renderPrice();
   });
 });
 
-// Bundle selector — updates price
+// Bundle selector (1 / 2 / 3 bottles)
 document.querySelectorAll('.bundle-opt').forEach(function(o) {
   o.addEventListener('click', function() {
     document.querySelectorAll('.bundle-opt').forEach(function(x) { x.classList.remove('selected'); });
     o.classList.add('selected');
-    var p = o.getAttribute('data-price');
-    var orig = o.getAttribute('data-original');
-    var per = o.getAttribute('data-per');
-    var pack = o.getAttribute('data-pack');
-    document.getElementById('priceCurrent').textContent = '$' + p;
-    document.getElementById('priceOriginal').textContent = '$' + orig;
-    document.getElementById('pricePer').textContent = '$' + per + ' per day · ' + (parseInt(pack, 10) * 30) + ' capsules';
+    currentPack = o.getAttribute('data-pack');
+    renderPrice();
   });
 });
 
