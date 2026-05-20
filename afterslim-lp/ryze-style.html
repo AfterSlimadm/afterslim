@@ -814,14 +814,15 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .newsletter-card h3 {
   font-size: clamp(32px, 4.2vw, 48px);
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1.15;
   margin-bottom: 10px;
   color: var(--ink);
+  letter-spacing: -0.01em;
 }
 .newsletter-card h3 .brand-accent {
   color: var(--orange);
-  font-weight: 600;
+  font-weight: 800;
 }
 .newsletter-card p {
   font-size: 15px;
@@ -1170,7 +1171,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 <section class="newsletter">
   <div class="container">
     <div class="newsletter-card">
-      <h3>Join the <span class="brand-accent">AfterSlim Club</span></h3>
+      <h3>Join The <span class="brand-accent">AfterSlim Club</span></h3>
       <p>Get exclusive offers, wellness insights, and special giveaways</p>
       <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='SUBSCRIBED ✓';">
         <input type="email" placeholder="Enter Your Email Here*" required>
