@@ -825,35 +825,49 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .newsletter-form {
   display: flex;
-  gap: 10px;
-  background: #fff;
-  padding: 6px;
-  border-radius: 999px;
-  border: 1.5px solid var(--line);
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 .newsletter-form input {
   flex: 1;
-  background: transparent;
-  border: 0;
+  height: 71px;
+  background: #fff3e6;
+  border: 1.5px solid var(--orange);
   outline: 0;
-  padding: 12px 20px;
-  color: var(--ink);
-  font-size: 14.5px;
+  padding: 0 24px;
+  color: var(--orange-dark);
+  font-size: 18px;
+  font-weight: 500;
   font-family: inherit;
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.newsletter-form input::placeholder { color: var(--ink-3); }
+.newsletter-form input:focus {
+  border-color: var(--orange-dark);
+  box-shadow: 0 0 0 3px rgba(234,88,12,0.15);
+}
+.newsletter-form input::placeholder { color: var(--orange-dark); opacity: 0.65; }
 .newsletter-form button {
-  padding: 12px 26px;
+  height: 71px;
+  padding: 0 28px;
   background: var(--orange);
   color: #fff;
-  border-radius: 999px;
-  font-size: 13.5px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  transition: background 0.2s;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
 }
 .newsletter-form button:hover { background: var(--orange-dark); }
+@media (max-width: 540px) {
+  .newsletter-form { flex-direction: column; gap: 12px; }
+  .newsletter-form input, .newsletter-form button { height: 56px; font-size: 16px; }
+}
 
 /* ===== Footer (warm orange) ===== */
 .footer { background: #c2410c; color: #fff; padding: 64px 0 28px; }
@@ -1153,9 +1167,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     <div class="newsletter-card">
       <h3>Join the AfterSlim Club</h3>
       <p>Get exclusive offers, wellness insights, and special giveaways</p>
-      <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
-        <input type="email" placeholder="your@email.com" required>
-        <button type="submit">Subscribe</button>
+      <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='SUBSCRIBED ✓';">
+        <input type="email" placeholder="Enter Your Email Here*" required>
+        <button type="submit">SIGN UP</button>
       </form>
     </div>
   </div>
