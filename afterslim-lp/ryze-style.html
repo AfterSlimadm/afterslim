@@ -294,11 +294,17 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
   position: relative;
   border: 1.5px solid var(--line);
   border-radius: var(--r-md);
-  padding: 16px 14px;
+  padding: 18px 12px 16px;
   background: var(--bg-2);
   cursor: pointer;
   text-align: center;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 78px;
 }
 .bundle-opt:hover { transform: translateY(-2px); }
 .bundle-opt.selected {
@@ -320,25 +326,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
   text-transform: uppercase;
   white-space: nowrap;
 }
-.bundle-opt-title { font-size: 14px; font-weight: 700; }
-.bundle-opt-price {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--orange);
-  margin-top: 4px;
-}
-.bundle-opt-original {
-  font-size: 12px;
-  color: var(--ink-3);
-  text-decoration: line-through;
-}
+.bundle-opt-title { font-size: 17px; font-weight: 700; color: var(--ink); }
 .bundle-opt-save {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--green);
-  margin-top: 2px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange-dark);
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 /* Pricing display */
@@ -863,23 +857,17 @@ html { scrollbar-width: thin; scrollbar-color: rgba(234,88,12,0.5) rgba(26,22,18
           <div class="bundle-options">
             <button class="bundle-opt" data-pack="1">
               <div class="bundle-opt-title">1 Bottle</div>
-              <div class="bundle-opt-price" data-price>$27.99</div>
-              <div class="bundle-opt-original" data-original>$37.99</div>
-              <div class="bundle-opt-save" data-save>Save 26%</div>
+              <div class="bundle-opt-save" data-save>Save $10.00</div>
             </button>
             <button class="bundle-opt selected" data-pack="2">
               <span class="bundle-opt-badge">Most popular</span>
               <div class="bundle-opt-title">2 Bottles</div>
-              <div class="bundle-opt-price" data-price>$47.99</div>
-              <div class="bundle-opt-original" data-original>$75.98</div>
-              <div class="bundle-opt-save" data-save>Save 37%</div>
+              <div class="bundle-opt-save" data-save>Save $27.99</div>
             </button>
             <button class="bundle-opt" data-pack="3">
               <span class="bundle-opt-badge" style="background:var(--green);">Best value</span>
               <div class="bundle-opt-title">3 Bottles</div>
-              <div class="bundle-opt-price" data-price>$57.99</div>
-              <div class="bundle-opt-original" data-original>$113.97</div>
-              <div class="bundle-opt-save" data-save>Save 49%</div>
+              <div class="bundle-opt-save" data-save>Save $55.98</div>
             </button>
           </div>
         </div>
@@ -1158,14 +1146,14 @@ document.querySelectorAll('.hero-thumb').forEach(function(t) {
 // AfterSlim real pricing (from production index.html)
 var pricing = {
   subscribe: {
-    1: { price: '27.99', original: '37.99', percent: 26, perDay: '0.93', freeShip: false },
-    2: { price: '47.99', original: '75.98', percent: 37, perDay: '0.80', freeShip: true },
-    3: { price: '57.99', original: '113.97', percent: 49, perDay: '0.64', freeShip: true }
+    1: { price: '27.99', original: '37.99', percent: 26, perDay: '0.93', freeShip: false, saveAbs: '10.00' },
+    2: { price: '47.99', original: '75.98', percent: 37, perDay: '0.80', freeShip: true,  saveAbs: '27.99' },
+    3: { price: '57.99', original: '113.97', percent: 49, perDay: '0.64', freeShip: true,  saveAbs: '55.98' }
   },
   onetime: {
-    1: { price: '37.99', original: '37.99', percent: 0,  perDay: '1.27', freeShip: false },
-    2: { price: '57.99', original: '75.98', percent: 24, perDay: '0.97', freeShip: true },
-    3: { price: '67.99', original: '113.97', percent: 40, perDay: '0.76', freeShip: true }
+    1: { price: '37.99', original: '37.99', percent: 0,  perDay: '1.27', freeShip: false, saveAbs: '0' },
+    2: { price: '57.99', original: '75.98', percent: 24, perDay: '0.97', freeShip: true,  saveAbs: '17.99' },
+    3: { price: '67.99', original: '113.97', percent: 40, perDay: '0.76', freeShip: true,  saveAbs: '45.98' }
   }
 };
 var currentPlan = 'subscribe';
@@ -1189,21 +1177,19 @@ function renderPrice() {
   var ship = d.freeShip ? ' · Free shipping' : '';
   document.getElementById('pricePer').textContent = '$' + d.perDay + ' per day · ' + capsules + ' capsules' + ship;
 
-  // Update each bundle button's inline price/original/save based on plan
+  // Update each bundle button's inline save based on plan
   document.querySelectorAll('.bundle-opt').forEach(function(b) {
     var pack = b.getAttribute('data-pack');
     var pd = pricing[currentPlan][pack];
-    var priceEl = b.querySelector('[data-price]');
-    var origInlineEl = b.querySelector('[data-original]');
     var saveEl = b.querySelector('[data-save]');
-    if (priceEl) priceEl.textContent = '$' + pd.price;
-    if (origInlineEl) {
-      origInlineEl.textContent = '$' + pd.original;
-      origInlineEl.style.display = (pd.percent > 0) ? '' : 'none';
-    }
     if (saveEl) {
-      saveEl.textContent = pd.percent > 0 ? 'Save ' + pd.percent + '%' : '';
-      saveEl.style.display = pd.percent > 0 ? '' : 'none';
+      if (pd.percent > 0) {
+        saveEl.textContent = 'Save $' + pd.saveAbs;
+        saveEl.style.display = '';
+      } else {
+        saveEl.textContent = '';
+        saveEl.style.display = 'none';
+      }
     }
   });
 }
