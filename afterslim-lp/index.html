@@ -588,6 +588,21 @@ ul, ol {
 html { overflow-x: hidden; }
 body { overflow-x: hidden; }
 
+/* Custom scrollbar — slim, brand-matched, so the right edge doesn't look like a gap */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(234, 88, 12, 0.45) rgba(28, 25, 23, 0.06);
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: rgba(28, 25, 23, 0.06); }
+::-webkit-scrollbar-thumb {
+  background: rgba(234, 88, 12, 0.45);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(234, 88, 12, 0.72); background-clip: content-box; border: 2px solid transparent; }
+
 .hero.hero-with-image {
   position: relative;
   padding: 0;
