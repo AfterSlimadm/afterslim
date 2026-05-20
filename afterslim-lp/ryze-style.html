@@ -400,10 +400,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .bundle-opt-save {
   font-size: 13px;
   font-weight: 600;
-  color: var(--orange-dark);
   letter-spacing: 0;
   text-transform: none;
 }
+/* Per-pack savings text color (matches each card's accent) */
+.bundle-opt:nth-child(1) .bundle-opt-save { color: #1c1917; } /* black */
+.bundle-opt:nth-child(2) .bundle-opt-save { color: #ea580c; } /* orange */
+.bundle-opt:nth-child(3) .bundle-opt-save { color: #b91c1c; } /* red */
 
 /* Pricing display */
 .hero-price-row {
