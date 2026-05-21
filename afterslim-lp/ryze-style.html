@@ -1137,7 +1137,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           <span class="price-badge" id="priceBadge">37% OFF TODAY</span>
         </div>
 
-        <a href="#" class="btn-primary">
+        <a href="#" class="btn-primary hero-checkout-btn">
           Shop Now
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -1193,7 +1193,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           <span class="price-original">$113.97</span>
           <span class="price-badge">49% off</span>
         </div>
-        <a href="#" class="btn-primary">
+        <a href="#" class="btn-primary bundle-checkout-btn" data-qty="3" data-subscribe="true">
           Get the Ritual pack
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -1218,7 +1218,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           <span class="price-original">$75.98</span>
           <span class="price-badge">37% off</span>
         </div>
-        <a href="#" class="btn-primary">
+        <a href="#" class="btn-primary bundle-checkout-btn" data-qty="2" data-subscribe="true">
           Get the Starter pack
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -1235,7 +1235,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <div class="guarantee-text">
         <h3>Try it for 90 days. Risk-free.</h3>
         <p>If AfterSlim doesn't make a noticeable difference, send the bottle back (even empty) and get a full refund. No questions, no return shipping fee.</p>
-        <a href="#" class="btn-primary">
+        <a href="#" class="btn-primary hero-checkout-btn">
           Try AfterSlim today
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -1348,6 +1348,32 @@ function toggleSideMenu() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && document.getElementById('sideMenu').classList.contains('open')) {
     toggleSideMenu();
+  }
+});
+
+// Checkout redirects — mirrors production index.html behavior
+// (/checkout?qty=N[&subscribe=true])
+document.addEventListener('click', function(e) {
+  // Hero CTA / Guarantee CTA — use current plan + pack selectors
+  var heroBtn = e.target.closest('.hero-checkout-btn');
+  if (heroBtn) {
+    e.preventDefault();
+    var url = '/checkout?qty=' + currentPack;
+    if (currentPlan === 'subscribe') url += '&subscribe=true';
+    window.location.href = url;
+    return;
+  }
+
+  // Bundle row CTAs — qty + subscribe encoded in data attrs
+  var bundleBtn = e.target.closest('.bundle-checkout-btn');
+  if (bundleBtn) {
+    e.preventDefault();
+    var qty = bundleBtn.getAttribute('data-qty') || '2';
+    var sub = bundleBtn.getAttribute('data-subscribe') === 'true';
+    var url = '/checkout?qty=' + qty;
+    if (sub) url += '&subscribe=true';
+    window.location.href = url;
+    return;
   }
 });
 
