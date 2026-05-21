@@ -206,7 +206,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   position: relative;
   background: var(--bg-2);
   border-radius: var(--r-lg);
-  padding: 32px;
+  padding: 12px;
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
@@ -225,8 +225,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .hero-main-img img {
   position: relative;
-  max-height: 100%;
-  width: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.18));
 }
 .hero-badge-discount {
@@ -975,10 +976,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <div class="hero-gallery">
         <div class="hero-main-img">
           <span class="hero-badge-discount">Up to 49% off</span>
-          <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Companion Probiotic" id="heroMain">
+          <img src="images/afterslim-bottle-tight.png" alt="AfterSlim GLP-1 Companion Probiotic" id="heroMain">
         </div>
         <div class="hero-thumbs">
-          <button class="hero-thumb active" data-src="images/afterslim-bottle-nobg.png"><img src="images/afterslim-bottle-nobg.png" alt=""></button>
+          <button class="hero-thumb active" data-src="images/afterslim-bottle-tight.png"><img src="images/afterslim-bottle-tight.png" alt=""></button>
           <button class="hero-thumb" data-src="images/bundle-benefits.png"><img src="images/bundle-benefits.png" alt=""></button>
           <button class="hero-thumb" data-src="images/ingredients-proven.png"><img src="images/ingredients-proven.png" alt=""></button>
           <button class="hero-thumb" data-src="images/quintaimagembundle.png"><img src="images/quintaimagembundle.png" alt=""></button>
