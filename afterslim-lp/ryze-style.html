@@ -1032,7 +1032,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           <span class="price-original" id="priceOriginal">$75.98</span>
           <span class="price-badge" id="priceBadge">37% off</span>
         </div>
-        <div class="price-per" id="pricePer">$0.80 per day · 60 capsules · Free shipping</div>
 
         <a href="#" class="btn-primary">
           Shop Now
@@ -1273,9 +1272,6 @@ function renderPrice() {
     origEl.style.display = 'none';
     badgeEl.style.display = 'none';
   }
-  var capsules = parseInt(currentPack, 10) * 30;
-  var ship = d.freeShip ? ' · Free shipping' : '';
-  document.getElementById('pricePer').textContent = '$' + d.perDay + ' per day · ' + capsules + ' capsules' + ship;
 
   // Update each bundle button's inline save based on plan
   document.querySelectorAll('.bundle-opt').forEach(function(b) {
