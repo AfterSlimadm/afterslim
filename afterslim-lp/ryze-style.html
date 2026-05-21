@@ -411,34 +411,43 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .bundle-opt:nth-child(3) .bundle-opt-save { color: #b91c1c; } /* red */
 
 /* Pricing display */
+.hero-eyebrow {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+  margin-top: 12px;
+}
 .hero-price-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 14px;
-  margin-top: 12px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+  margin-top: 4px;
 }
 .price-current {
-  font-size: 36px;
+  font-size: 44px;
   font-weight: 800;
   color: var(--ink);
   letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 .price-original {
-  font-size: 18px;
+  font-size: 32px;
   color: var(--ink-3);
   text-decoration: line-through;
   font-weight: 500;
+  line-height: 1.1;
 }
 .price-badge {
-  padding: 5px 12px;
+  padding: 6px 12px;
   background: var(--orange);
   color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-  border-radius: 999px;
-  letter-spacing: 0.5px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
 }
 .price-per {
@@ -1027,10 +1036,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
 
         <!-- Price row -->
+        <div class="hero-eyebrow">GLP-1 Companion</div>
         <div class="hero-price-row">
           <span class="price-current" id="priceCurrent">$47.99</span>
           <span class="price-original" id="priceOriginal">$75.98</span>
-          <span class="price-badge" id="priceBadge">37% off</span>
+          <span class="price-badge" id="priceBadge">37% OFF TODAY</span>
         </div>
 
         <a href="#" class="btn-primary">
@@ -1266,7 +1276,7 @@ function renderPrice() {
   if (d.percent > 0) {
     origEl.textContent = '$' + d.original;
     origEl.style.display = '';
-    badgeEl.textContent = d.percent + '% off';
+    badgeEl.textContent = d.percent + '% OFF TODAY';
     badgeEl.style.display = '';
   } else {
     origEl.style.display = 'none';
