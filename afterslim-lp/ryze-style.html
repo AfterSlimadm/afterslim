@@ -306,6 +306,30 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .hero-main-img.show-img video.hero-main-video { display: none; }
 .hero-main-img:not(.show-img) img#heroMain { display: none; }
+.hero-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.hero-nav-arrow:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.06);
+}
+.hero-nav-prev { left: 16px; }
+.hero-nav-next { right: 16px; }
 .hero-badge-discount {
   position: absolute;
   top: 20px;
@@ -1090,6 +1114,12 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
             <source src="videos/hero-bottle.mp4" type="video/mp4">
           </video>
           <img src="images/afterslim-bottle-water.png" alt="AfterSlim GLP-1 Companion Probiotic" id="heroMain">
+          <button class="hero-nav-arrow hero-nav-prev" id="heroPrev" type="button" aria-label="Previous image">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="hero-nav-arrow hero-nav-next" id="heroNext" type="button" aria-label="Next image">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
         </div>
         <div class="hero-thumbs">
           <button class="hero-thumb active" data-video="1"><img src="images/hero-video-thumb.jpg" alt=""></button>
@@ -1386,25 +1416,37 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Hero thumbnail switcher — toggles between hero video and static images
+// Hero gallery — thumbs + prev/next arrows cycle through media
+function activateHeroThumb(t) {
+  if (!t) return;
+  document.querySelectorAll('.hero-thumb').forEach(function(x) { x.classList.remove('active'); });
+  t.classList.add('active');
+  var box = document.getElementById('heroMainBox');
+  var video = box.querySelector('.hero-main-video');
+  var img = document.getElementById('heroMain');
+  if (t.hasAttribute('data-video')) {
+    box.classList.remove('show-img');
+    try { video.play(); } catch (e) {}
+  } else {
+    var src = t.getAttribute('data-src');
+    if (src) img.src = src;
+    box.classList.add('show-img');
+    try { video.pause(); } catch (e) {}
+  }
+}
 document.querySelectorAll('.hero-thumb').forEach(function(t) {
-  t.addEventListener('click', function() {
-    document.querySelectorAll('.hero-thumb').forEach(function(x) { x.classList.remove('active'); });
-    t.classList.add('active');
-    var box = document.getElementById('heroMainBox');
-    var video = box.querySelector('.hero-main-video');
-    var img = document.getElementById('heroMain');
-    if (t.hasAttribute('data-video')) {
-      box.classList.remove('show-img');
-      try { video.play(); } catch (e) {}
-    } else {
-      var src = t.getAttribute('data-src');
-      if (src) img.src = src;
-      box.classList.add('show-img');
-      try { video.pause(); } catch (e) {}
-    }
-  });
+  t.addEventListener('click', function() { activateHeroThumb(t); });
 });
+function stepHero(delta) {
+  var thumbs = Array.from(document.querySelectorAll('.hero-thumb'));
+  if (!thumbs.length) return;
+  var i = thumbs.findIndex(function(t) { return t.classList.contains('active'); });
+  if (i < 0) i = 0;
+  var next = (i + delta + thumbs.length) % thumbs.length;
+  activateHeroThumb(thumbs[next]);
+}
+document.getElementById('heroPrev')?.addEventListener('click', function() { stepHero(-1); });
+document.getElementById('heroNext')?.addEventListener('click', function() { stepHero(1); });
 
 // AfterSlim real pricing (from production index.html)
 var pricing = {
