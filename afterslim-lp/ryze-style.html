@@ -1490,6 +1490,14 @@ document.getElementById('heroPrev')?.addEventListener('click', function() { step
 document.getElementById('heroNext')?.addEventListener('click', function() { stepHero(1); });
 window.addEventListener('resize', applyThumbsWindow);
 
+// Arrow keys also navigate the hero gallery (skip when typing in form fields)
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  var tag = (e.target && e.target.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+  stepHero(e.key === 'ArrowRight' ? 1 : -1);
+});
+
 // AfterSlim real pricing (from production index.html)
 var pricing = {
   subscribe: {
