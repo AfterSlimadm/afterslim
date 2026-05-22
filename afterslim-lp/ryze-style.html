@@ -924,6 +924,103 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .howto-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ===== FAQ ===== */
+.faq-section { background: var(--bg); padding: 96px 0; }
+.faq-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 60px;
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.faq-sidebar { position: sticky; top: 24px; }
+.faq-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--orange);
+  margin: 0;
+  line-height: 1.2;
+}
+.faq-title-script {
+  font-size: 38px;
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: var(--orange);
+  font-weight: 400;
+  margin: 0 0 28px;
+}
+.faq-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.faq-tab {
+  padding: 12px 32px;
+  border: 2px solid var(--orange);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  background: transparent;
+  color: var(--orange);
+  text-align: center;
+}
+.faq-tab:hover { background: rgba(234,88,12,0.1); }
+.faq-tab.active { background: var(--orange); color: #fff; }
+.faq-category { display: none; }
+.faq-category.active { display: block; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid var(--line); overflow: hidden; }
+.faq-item:first-child { border-top: 1px solid var(--line); }
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+.faq-question:hover { color: var(--orange); }
+.faq-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  color: var(--ink);
+}
+.faq-item.open .faq-icon { transform: rotate(180deg); color: var(--orange); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-answer-inner {
+  padding: 0 0 22px;
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+@media (max-width: 900px) {
+  .faq-section { padding: 56px 0; }
+  .faq-container { grid-template-columns: 1fr; gap: 32px; }
+  .faq-sidebar { position: static; text-align: center; }
+  .faq-title, .faq-title-script { text-align: center; }
+  .faq-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
+
 /* ===== Newsletter ===== */
 .newsletter {
   padding: 80px 0;
@@ -1332,6 +1429,163 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   </div>
 </section>
 
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-container">
+      <div class="faq-sidebar">
+        <h2 class="faq-title">Frequently Asked</h2>
+        <p class="faq-title-script">Questions</p>
+        <div class="faq-tabs">
+          <button class="faq-tab active" type="button" data-category="product">Product</button>
+          <button class="faq-tab" type="button" data-category="shipping">Shipping</button>
+          <button class="faq-tab" type="button" data-category="other">Other</button>
+        </div>
+      </div>
+      <div class="faq-content">
+        <div class="faq-category active" data-category="product">
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                What is AfterSlim and who is it for?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">AfterSlim GLP-1 Balance is a prebiotic and probiotic supplement designed specifically for people taking GLP-1 medications like Mounjaro (tirzepatide), Ozempic, or Wegovy (semaglutide). It contains targeted strains including Akkermansia muciniphila to support your gut microbiome during treatment.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                Can I take AfterSlim with my GLP-1 medication?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">AfterSlim is a dietary supplement and is generally well-tolerated alongside GLP-1 medications. However, we always recommend consulting with your healthcare provider before starting any new supplement, especially if you're on prescription medication.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                What makes Akkermansia muciniphila special?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Akkermansia muciniphila is a next-generation probiotic strain that plays a critical role in maintaining the gut lining. Research has shown it supports metabolic health, reduces inflammation, and strengthens the intestinal barrier. Companies like Pendulum charge $150/month for Akkermansia alone. AfterSlim includes it alongside complementary prebiotics and probiotics.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                How soon will I notice results?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Many users report improvements in digestive comfort within 1 to 2 weeks. For the full benefits of microbiome restoration, we recommend consistent daily use for at least 60 to 90 days. This is why our 2-bottle and 3-bottle packs offer the best value.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                How is AfterSlim different from a regular probiotic?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Most probiotics use generic Lactobacillus and Bifidobacterium strains not targeted for GLP-1 users. AfterSlim was formulated specifically for the gut challenges created by GLP-1 medications. It includes Akkermansia muciniphila (a next-gen strain), Clostridium butyricum (a butyrate producer), and targeted prebiotics that feed these beneficial bacteria.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                How do I take AfterSlim capsules?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Take 2 capsules daily with water, preferably with a meal. For best results, take consistently at the same time each day. Store in a cool, dry place away from direct sunlight.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="faq-category" data-category="shipping">
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                How long does shipping take?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Orders are processed within 1-2 business days. Standard shipping within the US takes 3-5 business days. Express shipping options are available at checkout for faster delivery.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                Do you offer free shipping?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Yes! We offer free standard shipping on all orders of 2 or more bottles within the continental United States. Single bottle orders have a flat shipping rate of $4.99.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                Do you ship internationally?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Currently, we only ship within the United States. We're working on expanding our shipping to Canada and other countries soon. Sign up for our newsletter to be notified when international shipping becomes available.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                How can I track my order?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Once your order ships, you'll receive an email with tracking information. You can also log into your account to view order status and tracking details at any time.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="faq-category" data-category="other">
+          <div class="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                What is your refund policy?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">We offer a 90-day money-back guarantee. If you're not satisfied with AfterSlim for any reason, simply contact our support team within 90 days of your purchase for a full refund. No questions asked.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                How do I cancel my subscription?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">You can cancel your subscription anytime by logging into your account or contacting our support team. There are no cancellation fees or long-term commitments. Changes must be made at least 48 hours before your next billing date.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                How do I contact customer support?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">Our customer support team is available Monday through Friday, 9am-5pm EST. You can reach us via email at support@afterslim.com or through our contact form. We typically respond within 24 hours.</div>
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" type="button" aria-expanded="false">
+                Is AfterSlim FDA approved?
+                <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-inner">AfterSlim is manufactured in an FDA-registered, GMP-certified facility in the USA. As a dietary supplement, it is not required to receive FDA approval. However, we adhere to strict quality control standards and third-party testing to ensure purity and potency.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 8. Newsletter -->
 <section class="newsletter">
   <div class="container">
@@ -1497,6 +1751,52 @@ document.addEventListener('keydown', function(e) {
   var tag = (e.target && e.target.tagName) || '';
   if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
   stepHero(e.key === 'ArrowRight' ? 1 : -1);
+});
+
+// ===== FAQ tabs =====
+document.querySelectorAll('.faq-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    var category = this.getAttribute('data-category');
+    document.querySelectorAll('.faq-tab').forEach(function(t) { t.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.faq-category').forEach(function(cat) { cat.classList.remove('active'); });
+    var active = document.querySelector('.faq-category[data-category="' + category + '"]');
+    if (active) active.classList.add('active');
+    // Close any open items when switching tabs
+    document.querySelectorAll('.faq-item.open').forEach(function(item) {
+      item.classList.remove('open');
+      item.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      item.querySelector('.faq-answer').style.maxHeight = '0';
+    });
+  });
+});
+
+// ===== FAQ accordion =====
+document.querySelectorAll('.faq-question').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = this.closest('.faq-item');
+    var answer = item.querySelector('.faq-answer');
+    var inner = item.querySelector('.faq-answer-inner');
+    var isOpen = item.classList.contains('open');
+    var category = item.closest('.faq-category');
+    // Close siblings in same category
+    category.querySelectorAll('.faq-item.open').forEach(function(other) {
+      if (other !== item) {
+        other.classList.remove('open');
+        other.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        other.querySelector('.faq-answer').style.maxHeight = '0';
+      }
+    });
+    if (isOpen) {
+      item.classList.remove('open');
+      this.setAttribute('aria-expanded', 'false');
+      answer.style.maxHeight = '0';
+    } else {
+      item.classList.add('open');
+      this.setAttribute('aria-expanded', 'true');
+      answer.style.maxHeight = (inner.scrollHeight + 20) + 'px';
+    }
+  });
 });
 
 // AfterSlim real pricing (from production index.html)
