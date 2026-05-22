@@ -345,9 +345,20 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   z-index: 2;
 }
 .hero-thumbs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  --thumbs-visible: 5;
+  --thumbs-gap: 12px;
+  overflow: hidden;
+  width: 100%;
+}
+.hero-thumbs-track {
+  display: flex;
+  gap: var(--thumbs-gap);
+  width: 100%;
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+.hero-thumbs .hero-thumb {
+  flex: 0 0 calc((100% - (var(--thumbs-visible) - 1) * var(--thumbs-gap)) / var(--thumbs-visible));
 }
 .hero-thumb {
   background: var(--bg-2);
@@ -1122,10 +1133,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           </button>
         </div>
         <div class="hero-thumbs">
-          <button class="hero-thumb active" data-video="1"><img src="images/hero-video-thumb.jpg" alt=""></button>
-          <button class="hero-thumb" data-src="images/afterslim-bottle-water.png"><img src="images/afterslim-bottle-water.png" alt=""></button>
-          <button class="hero-thumb" data-src="images/ingredients-proven.png"><img src="images/ingredients-proven.png" alt=""></button>
-          <button class="hero-thumb" data-src="images/ingredients-infographic.png"><img src="images/ingredients-infographic.png" alt=""></button>
+          <div class="hero-thumbs-track" id="heroThumbsTrack">
+            <button class="hero-thumb active" data-video="1"><img src="images/hero-video-thumb.jpg" alt=""></button>
+            <button class="hero-thumb" data-src="images/afterslim-bottle-water.png"><img src="images/afterslim-bottle-water.png" alt=""></button>
+            <button class="hero-thumb" data-src="images/ingredients-proven.png"><img src="images/ingredients-proven.png" alt=""></button>
+            <button class="hero-thumb" data-src="images/ingredients-infographic.png"><img src="images/ingredients-infographic.png" alt=""></button>
+            <button class="hero-thumb" data-src="images/howtotake.png"><img src="images/howtotake.png" alt=""></button>
+          </div>
         </div>
       </div>
 
@@ -1418,9 +1432,34 @@ document.addEventListener('click', function(e) {
 });
 
 // Hero gallery — thumbs + prev/next arrows cycle through media
+// + windowed carousel: shows 5 thumbs at a time, slides on overflow
+var THUMBS_VISIBLE = 5;
+var thumbsStart = 0;
+
+function applyThumbsWindow() {
+  var track = document.getElementById('heroThumbsTrack');
+  if (!track) return;
+  var viewport = track.parentElement;
+  var w = viewport.getBoundingClientRect().width;
+  var gap = 12;
+  var thumbW = (w - (THUMBS_VISIBLE - 1) * gap) / THUMBS_VISIBLE;
+  var step = thumbW + gap;
+  track.style.transform = 'translateX(' + (-thumbsStart * step) + 'px)';
+}
+
+function ensureThumbInWindow(idx, total) {
+  if (idx < thumbsStart) thumbsStart = idx;
+  if (idx >= thumbsStart + THUMBS_VISIBLE) thumbsStart = idx - THUMBS_VISIBLE + 1;
+  var maxStart = Math.max(0, total - THUMBS_VISIBLE);
+  if (thumbsStart > maxStart) thumbsStart = maxStart;
+  if (thumbsStart < 0) thumbsStart = 0;
+  applyThumbsWindow();
+}
+
 function activateHeroThumb(t) {
   if (!t) return;
-  document.querySelectorAll('.hero-thumb').forEach(function(x) { x.classList.remove('active'); });
+  var thumbs = Array.from(document.querySelectorAll('.hero-thumb'));
+  thumbs.forEach(function(x) { x.classList.remove('active'); });
   t.classList.add('active');
   var box = document.getElementById('heroMainBox');
   var video = box.querySelector('.hero-main-video');
@@ -1434,6 +1473,7 @@ function activateHeroThumb(t) {
     box.classList.add('show-img');
     try { video.pause(); } catch (e) {}
   }
+  ensureThumbInWindow(thumbs.indexOf(t), thumbs.length);
 }
 document.querySelectorAll('.hero-thumb').forEach(function(t) {
   t.addEventListener('click', function() { activateHeroThumb(t); });
@@ -1448,6 +1488,7 @@ function stepHero(delta) {
 }
 document.getElementById('heroPrev')?.addEventListener('click', function() { stepHero(-1); });
 document.getElementById('heroNext')?.addEventListener('click', function() { stepHero(1); });
+window.addEventListener('resize', applyThumbsWindow);
 
 // AfterSlim real pricing (from production index.html)
 var pricing = {
