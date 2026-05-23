@@ -1398,7 +1398,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   gap: 24px;
   width: max-content;
   padding: 0 6vw;
-  transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 .problem-scene {
@@ -1519,32 +1519,36 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 
 /* Scene content choreography
-   - Inactive scenes (incl. the peek-next-to-active) have content
-     dimmed to opacity 0.18 + 18px down. Card itself stays fully
-     visible so the peek still reads as "more content here".
-   - Active scene fades each piece in cascade with translate-up.
-     Exit has transition-delay: 0s so the leaving scene snaps
-     back to dim quickly — no PowerPoint feeling. */
+   - Inactive scenes start dimmed + translated DOWN + blurred so
+     content reads as fog lifting rather than a panel cut.
+   - Active scene: pieces fade in + slide up + un-blur in a wide
+     cascade. Long durations + heavy stagger overlap = continuous
+     wave of motion (no discrete pops).
+   - Exit (transition-delay 0) snaps everything back to dim
+     immediately — leaving scene doesn't drag the timing. */
 .problem-scene .problem-scene-content > *,
 .problem-scene .problem-scene-visual {
-  opacity: 0.18;
-  transform: translateY(18px);
+  opacity: 0;
+  transform: translateY(32px) scale(0.97);
+  filter: blur(12px);
   transition:
-    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.15s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1.05s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: 0s; /* default applies on exit */
 }
 .problem-scene.is-active .problem-scene-content > *,
 .problem-scene.is-active .problem-scene-visual {
   opacity: 1;
   transform: none;
+  filter: blur(0);
 }
-.problem-scene.is-active .problem-scene-num    { transition-delay: 0.08s; }
-.problem-scene.is-active .problem-scene-visual { transition-delay: 0.14s; }
-.problem-scene.is-active .problem-scene-title  { transition-delay: 0.20s; }
-.problem-scene.is-active .problem-scene-why    { transition-delay: 0.30s; }
-.problem-scene.is-active .problem-scene-body   { transition-delay: 0.40s; }
-.problem-scene.is-active .problem-scene-stat   { transition-delay: 0.50s; }
+.problem-scene.is-active .problem-scene-num    { transition-delay: 0.15s; }
+.problem-scene.is-active .problem-scene-visual { transition-delay: 0.30s; }
+.problem-scene.is-active .problem-scene-title  { transition-delay: 0.45s; }
+.problem-scene.is-active .problem-scene-why    { transition-delay: 0.70s; }
+.problem-scene.is-active .problem-scene-body   { transition-delay: 0.95s; }
+.problem-scene.is-active .problem-scene-stat   { transition-delay: 1.20s; }
 .problem-scene-num {
   font-size: 14px;
   font-weight: 700;
