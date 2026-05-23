@@ -1383,46 +1383,77 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problems-badges { gap: 16px; }
 }
 
-/* Timeline between header and carousel — visual cue of horizontal journey */
+/* Timeline between header and carousel — full-width journey strip
+   with labeled markers (Bonafide / Ristela inspiration). The line
+   stretches edge to edge of the viewport; markers sit a bit inside
+   so the line continues past the first and last (visual cue that
+   the journey continues). */
 .problems-timeline {
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1100px;
-  margin: 48px auto 0;
-  padding: 0 8vw;
-  height: 16px;
+  width: 100%;
+  padding: 56px 0 24px;
 }
-.problems-timeline::before {
-  content: '';
+.problems-timeline-line {
   position: absolute;
-  left: 8vw;
-  right: 8vw;
-  top: 50%;
+  top: 61px; /* aligns with dot center */
+  left: 0;
+  right: 0;
   height: 1px;
   background: var(--orange);
   opacity: 0.28;
-  transform: translateY(-50%);
+  z-index: 0;
+  pointer-events: none;
 }
-.problems-timeline-tick {
+.problems-timeline-markers {
   position: relative;
   z-index: 1;
-  width: 8px;
-  height: 8px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 6vw;
+}
+.problems-timeline-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-family: inherit;
+}
+.problems-timeline-marker-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: rgba(234,88,12,0.30);
   transition: background 0.5s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.problems-timeline-tick.is-visited {
+.problems-timeline-marker.is-visited .problems-timeline-marker-dot {
   background: var(--orange);
 }
-.problems-timeline-tick.is-active {
+.problems-timeline-marker.is-active .problems-timeline-marker-dot {
   background: var(--orange);
-  transform: scale(1.6);
-  box-shadow: 0 0 0 4px rgba(234,88,12,0.18);
+  transform: scale(1.7);
+  box-shadow: 0 0 0 5px rgba(234,88,12,0.18);
+}
+.problems-timeline-marker-label {
+  margin-top: 18px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: rgba(31,20,16,0.40);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.problems-timeline-marker.is-visited .problems-timeline-marker-label,
+.problems-timeline-marker.is-active .problems-timeline-marker-label {
+  color: var(--orange);
+}
+.problems-timeline-marker:hover .problems-timeline-marker-label {
+  color: var(--orange);
 }
 
 /* 6-scene horizontal carousel — single continuous canvas */
@@ -2283,15 +2314,36 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </span>
       </div>
     </div>
+  </div>
 
-    <!-- Timeline cue: 6 ticks across, current highlighted -->
-    <div class="problems-timeline" id="problemsTimeline" aria-hidden="true">
-      <span class="problems-timeline-tick is-active"></span>
-      <span class="problems-timeline-tick"></span>
-      <span class="problems-timeline-tick"></span>
-      <span class="problems-timeline-tick"></span>
-      <span class="problems-timeline-tick"></span>
-      <span class="problems-timeline-tick"></span>
+  <!-- Timeline strip: 6 labeled markers, line spans full viewport width -->
+  <div class="problems-timeline" id="problemsTimeline" aria-hidden="true">
+    <span class="problems-timeline-line"></span>
+    <div class="problems-timeline-markers">
+      <button class="problems-timeline-marker is-active" data-step="0" type="button" aria-label="Go to Nausea and Bloating">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">01 / Gut</span>
+      </button>
+      <button class="problems-timeline-marker" data-step="1" type="button" aria-label="Go to Constipation and Cramps">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">02 / Gut</span>
+      </button>
+      <button class="problems-timeline-marker" data-step="2" type="button" aria-label="Go to Hair Loss and Brittle Nails">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">03 / Visible</span>
+      </button>
+      <button class="problems-timeline-marker" data-step="3" type="button" aria-label="Go to Fatigue and Low Energy">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">04 / Energy</span>
+      </button>
+      <button class="problems-timeline-marker" data-step="4" type="button" aria-label="Go to Sugar Cravings and Hunger Spikes">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">05 / Metabolic</span>
+      </button>
+      <button class="problems-timeline-marker" data-step="5" type="button" aria-label="Go to Muscle Loss">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">06 / Body</span>
+      </button>
     </div>
   </div>
 
@@ -3081,7 +3133,7 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
 
   var scenes = Array.from(track.querySelectorAll('.problem-scene'));
   var dots = Array.from(document.querySelectorAll('.problems-progress-dot'));
-  var ticks = Array.from(document.querySelectorAll('.problems-timeline-tick'));
+  var markers = Array.from(document.querySelectorAll('.problems-timeline-marker'));
   var labelNum = document.getElementById('problemsProgressNum');
   var labelName = document.getElementById('problemsProgressName');
   var prevBtn = document.getElementById('problemsPrev');
@@ -3102,9 +3154,9 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
-    ticks.forEach(function(t, i) {
-      t.classList.toggle('is-active', i === current);
-      t.classList.toggle('is-visited', i < current);
+    markers.forEach(function(m, i) {
+      m.classList.toggle('is-active', i === current);
+      m.classList.toggle('is-visited', i < current);
     });
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
@@ -3128,6 +3180,12 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   if (prevBtn) prevBtn.addEventListener('click', function() { go(-1); });
   if (nextBtn) nextBtn.addEventListener('click', function() { go(1); });
   dots.forEach(function(d, i) { d.addEventListener('click', function() { goTo(i); }); d.style.cursor = 'pointer'; });
+  markers.forEach(function(m) {
+    m.addEventListener('click', function() {
+      var step = parseInt(m.getAttribute('data-step'), 10);
+      if (!isNaN(step)) goTo(step);
+    });
+  });
 
   // Keyboard arrows when section is in viewport
   document.addEventListener('keydown', function(e) {
