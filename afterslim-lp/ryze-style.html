@@ -1600,12 +1600,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
    instead of liquid-glass cards). Top-align so the title and the
    adjacent eyebrow start at the same Y. */
 .problem-scene[data-scene="0"],
-.problem-scene[data-scene="1"] {
+.problem-scene[data-scene="1"],
+.problem-scene[data-scene="2"] {
   align-items: start;
   padding-top: 64px;
 }
 .problem-scene[data-scene="0"] .problem-scene-content,
-.problem-scene[data-scene="1"] .problem-scene-content {
+.problem-scene[data-scene="1"] .problem-scene-content,
+.problem-scene[data-scene="2"] .problem-scene-content {
   padding: 0;
   background: transparent;
   backdrop-filter: none;
@@ -2714,12 +2716,44 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <article class="problem-scene" data-scene="2" data-label="Hair Loss &amp; Brittle Nails">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Hair Loss &amp; Brittle Nails</h3>
-          <p class="problem-scene-why"><em>Why this happens:</em> Rapid caloric restriction triggers telogen effluvium — your body pauses hair growth to conserve protein.</p>
-          <p class="problem-scene-body">When you suddenly eat 30–40% less, your body deprioritizes "optional" systems first. Hair follicles and nail beds don't get the amino acids and biotin they need. The shedding usually shows up 2–3 months after starting the medication — exactly when you're celebrating the weight loss.</p>
-          <p class="problem-scene-stat">Reported by 3–7% in trials. Real-world reports run 3–4× higher.</p>
+          <p class="problem-scene-why"><em>Why this happens:</em> Rapid caloric restriction puts hair growth on pause. Your body keeps the protein for vital organs first.</p>
+          <p class="problem-scene-body">When you suddenly eat 30–40% less, your body deprioritizes "optional" systems first. Hair follicles and nail beds don't get the amino acids and biotin they need. The shedding usually shows up 2–3 months after starting the medication, right when you're celebrating the weight loss.</p>
+          <!-- Incidence callout. Trials report 3–7% but real-world rates
+               run 3–4× higher — landing on ~20% (1 in 5) for the editorial
+               headline, with the caption explaining the trial vs reality gap. -->
+          <div class="problem-scene-graph-card stat-callout" aria-hidden="true">
+            <p class="stat-callout-eyebrow">How common this is</p>
+            <div class="stat-callout-number"><b>20</b><i>%</i></div>
+            <div class="stat-callout-pictogram">
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+            </div>
+            <p class="stat-callout-caption">Trials say 3–7%. Real-world reports run <b>3–4× higher</b>, closer to 1 in 5.</p>
+          </div>
         </div>
-        <div class="problem-scene-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M9 2v6"/><path d="M9 8c-3 0-5 2-5 5s2 5 5 5"/><path d="M9 18v4"/><path d="M15 2v6"/><path d="M15 8c3 0 5 2 5 5s-2 5-5 5"/><path d="M15 18v4"/></svg>
+        <div class="problem-scene-visual problem-scene-visual--stat" aria-hidden="true">
+          <p class="stat-compare-eyebrow">Hair lost per day</p>
+          <div class="stat-compare">
+            <div class="stat-compare-row">
+              <span class="stat-compare-label">Normal</span>
+              <span class="stat-compare-number"><b>100</b><i>hairs</i></span>
+              <span class="stat-compare-bar" style="--w:33%"></span>
+            </div>
+            <div class="stat-compare-row stat-compare-row--peak">
+              <span class="stat-compare-label">During shedding</span>
+              <span class="stat-compare-number"><b>300+</b><i>hairs</i></span>
+              <span class="stat-compare-bar" style="--w:100%"></span>
+            </div>
+          </div>
+          <p class="stat-compare-delta"><span class="stat-compare-delta-multiplier">3&times;</span> the normal shedding rate</p>
         </div>
       </article>
 
