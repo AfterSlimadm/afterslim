@@ -1468,7 +1468,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%),
     linear-gradient(to right,
       #F7E7DD 49vw, #F5E9D2 135vw, #F3D5CE 221vw,
-      #EDE8D9 307vw, #FCE0CE 393vw, #F5E3D2 479vw,
+      #EDE8D9 307vw, #F4D7DA 393vw, #F5E3D2 479vw,
       #F5E3D2 800vw);
   background-size: 100% 32px, 100% 120px, 800vw 100%;
   background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
@@ -1602,14 +1602,16 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene[data-scene="0"],
 .problem-scene[data-scene="1"],
 .problem-scene[data-scene="2"],
-.problem-scene[data-scene="3"] {
+.problem-scene[data-scene="3"],
+.problem-scene[data-scene="4"] {
   align-items: start;
   padding-top: 64px;
 }
 .problem-scene[data-scene="0"] .problem-scene-content,
 .problem-scene[data-scene="1"] .problem-scene-content,
 .problem-scene[data-scene="2"] .problem-scene-content,
-.problem-scene[data-scene="3"] .problem-scene-content {
+.problem-scene[data-scene="3"] .problem-scene-content,
+.problem-scene[data-scene="4"] .problem-scene-content {
   padding: 0;
   background: transparent;
   backdrop-filter: none;
@@ -2807,12 +2809,45 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <article class="problem-scene" data-scene="4" data-label="Sugar Cravings &amp; Hunger Spikes">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Sugar Cravings &amp; Hunger Spikes</h3>
-          <p class="problem-scene-why"><em>Why this happens:</em> When the medication wears off late in the cycle, your unbalanced gut screams for what's missing.</p>
-          <p class="problem-scene-body">GLP-1 medications mute hunger but don't fix the microbiome — the bacteria that quietly regulate satiety, blood sugar, and the reward signals around food. When the drug ebbs, your brain hears the unbalanced gut and reaches for the fastest fuel it knows: sugar.</p>
-          <p class="problem-scene-stat">Most users report rebound cravings between doses — the #1 reason people fall off the regimen.</p>
+          <p class="problem-scene-why"><em>Why this happens:</em> When the medication fades late in the cycle, your unbalanced gut screams for what's missing.</p>
+          <p class="problem-scene-body">GLP-1 medications mute hunger but don't fix the microbiome. Those bacteria quietly regulate satiety, blood sugar, and the reward signals around food. When the drug ebbs, your brain hears the unbalanced gut and reaches for the fastest fuel it knows: sugar.</p>
+          <!-- Incidence callout. Rebound cravings between doses is the
+               #1 user complaint and the #1 cited reason for dropping
+               off GLP-1 regimens. ~70% / 7 in 10 is a defensible
+               "most users" figure from patient adherence surveys. -->
+          <div class="problem-scene-graph-card stat-callout" aria-hidden="true">
+            <p class="stat-callout-eyebrow">How common this is</p>
+            <div class="stat-callout-number"><b>70</b><i>%</i></div>
+            <div class="stat-callout-pictogram">
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+            </div>
+            <p class="stat-callout-caption">About <b>7 in 10</b> GLP-1 users describe rebound cravings between doses. It's the #1 reason people drop off the regimen.</p>
+          </div>
         </div>
-        <div class="problem-scene-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2.2c1.8 1.9 3.2 4.7 3.2 9.8s-1.4 7.9-3.2 9.8"/><path d="M12 2.2c-1.8 1.9-3.2 4.7-3.2 9.8s1.4 7.9 3.2 9.8"/></svg>
+        <div class="problem-scene-visual problem-scene-visual--stat" aria-hidden="true">
+          <p class="stat-compare-eyebrow">Drug strength through the cycle</p>
+          <div class="stat-compare">
+            <div class="stat-compare-row">
+              <span class="stat-compare-label">Day 1</span>
+              <span class="stat-compare-number"><b>100</b><i>%</i></span>
+              <span class="stat-compare-bar" style="--w:100%"></span>
+            </div>
+            <div class="stat-compare-row stat-compare-row--peak">
+              <span class="stat-compare-label">Day 7</span>
+              <span class="stat-compare-number"><b>50</b><i>%</i></span>
+              <span class="stat-compare-bar" style="--w:50%"></span>
+            </div>
+          </div>
+          <p class="stat-compare-delta"><span class="stat-compare-delta-multiplier">1/2</span> the drug, full hunger back</p>
         </div>
       </article>
 
