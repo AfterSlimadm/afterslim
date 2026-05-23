@@ -1614,50 +1614,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   box-shadow: none;
 }
 
-/* Progress UI (bottom-center) */
-.problems-progress {
-  position: absolute;
-  bottom: 48px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  z-index: 2;
-}
-.problems-progress-dots {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.problems-progress-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(31,20,16,0.18);
-  transition: width 0.35s ease, background 0.35s ease;
-}
-.problems-progress-dot.is-active {
-  width: 28px;
-  border-radius: 4px;
-  background: var(--orange);
-}
-.problems-progress-label {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--ink);
-  text-transform: uppercase;
-  margin: 0;
-  white-space: nowrap;
-}
-.problems-progress-label span {
-  color: var(--orange);
-}
 /* Carousel arrows */
 .problems-arrow {
   position: absolute;
-  top: calc(50% - 60px); /* offset slightly because of dots below */
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 10;
   width: 56px;
   height: 56px;
@@ -2057,7 +2018,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problem-scene-why { font-size: 17px; }
   .problem-scene-why em { font-size: 19px; }
   .problem-scene-body { font-size: 15.5px; }
-  .problems-arrow, .problems-progress, .problems-timeline { display: none; }
+  .problems-arrow, .problems-timeline { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .problems-track { transition: none; }
@@ -2892,17 +2853,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
       </div>
 
-      <div class="problems-progress" aria-hidden="true">
-        <div class="problems-progress-dots">
-          <span class="problems-progress-dot is-active"></span>
-          <span class="problems-progress-dot"></span>
-          <span class="problems-progress-dot"></span>
-          <span class="problems-progress-dot"></span>
-          <span class="problems-progress-dot"></span>
-          <span class="problems-progress-dot"></span>
-        </div>
-        <p class="problems-progress-label" id="problemsProgressLabel"><span id="problemsProgressNum">01</span> / 06 &middot; <span id="problemsProgressName">Nausea &amp; Bloating</span></p>
-      </div>
 
       <button class="problems-arrow problems-arrow-prev" type="button" id="problemsPrev" aria-label="Previous symptom" disabled>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18 9 12l6-6"/></svg>
@@ -3600,11 +3550,8 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   if (!stage || !track || !pin) return;
 
   var scenes = Array.from(track.querySelectorAll('.problem-scene'));
-  var dots = Array.from(document.querySelectorAll('.problems-progress-dot'));
   var timeline = document.getElementById('problemsTimeline');
   var timelineTrack = document.getElementById('problemsTimelineTrack');
-  var labelNum = document.getElementById('problemsProgressNum');
-  var labelName = document.getElementById('problemsProgressName');
   var prevBtn = document.getElementById('problemsPrev');
   var nextBtn = document.getElementById('problemsNext');
   var current = 0;
@@ -3622,7 +3569,6 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     track.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
-    dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
     if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     if (timeline) {
       // Scene 0 left edge / Scene 6 right edge stop at the text card
@@ -3631,8 +3577,6 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
       timeline.style.setProperty('--line-left', current === 0 ? inset : '0px');
       timeline.style.setProperty('--line-right', current === max ? inset : '0px');
     }
-    if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
-    if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
     if (prevBtn) prevBtn.disabled = current <= 0;
     if (nextBtn) nextBtn.disabled = current >= max;
   }
