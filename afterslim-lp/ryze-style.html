@@ -1467,9 +1467,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 100%),
     linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%),
     linear-gradient(to right,
-      #F7E7DD 49vw, #FBDCC2 135vw, #FDC9A0 221vw,
-      #FCB47B 307vw, #FA9F58 393vw, #F68A38 479vw,
-      #F68A38 800vw);
+      #F7E7DD 49vw, #F9E2D5 135vw, #FBE0CC 221vw,
+      #F8E5D3 307vw, #FCE0CE 393vw, #F5E3D2 479vw,
+      #F5E3D2 800vw);
   background-size: 100% 32px, 100% 120px, 800vw 100%;
   background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
   background-repeat: no-repeat;
@@ -1500,38 +1500,17 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene.is-reversed .problem-scene-content { order: 2; }
 .problem-scene.is-reversed .problem-scene-visual { order: 1; }
 
-/* Bar chart — sits inline below the stat callout inside scene 0's
-   text column. Pure data viz; no card chrome, no overlay state. */
+/* Supporting evidence chart on scene 0 — same .stat-compare component
+   as the right column, but in a compact "mini" variant so it sits
+   below the body copy as supporting evidence rather than a focal
+   point. */
 .problem-scene-graph-card {
-  margin-top: 28px;
-}
-.problem-scene-graph-chart {
+  margin-top: 32px;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  max-width: 360px;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 460px;
 }
-.problem-scene-graph-chart svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-/* Bar chart — 2-bar comparison placebo vs semaglutide. Bars grow
-   from zero when scene 0 becomes the active scene. */
-.graph-bar {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  transform: scaleY(0);
-  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.graph-value {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.problem-scene.is-active .graph-bar-placebo { transform: scaleY(1); transition-delay: 0.80s; }
-.problem-scene.is-active .graph-value-placebo { opacity: 1; transition-delay: 1.55s; }
-.problem-scene.is-active .graph-bar-sema { transform: scaleY(1); transition-delay: 1.10s; }
-.problem-scene.is-active .graph-value-sema { opacity: 1; transition-delay: 1.85s; }
 
 /* Liquid Glass card around the text content — same formula as the
    visual card so both sides of the scene read as paired glass
@@ -1552,6 +1531,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 /* Scene 0 hosts a photographic image + an inline bar chart, so the
    glass treatment around its text clashes — strip it. The other
    scenes (line-icon visuals) keep their paired-glass look. */
+.problem-scene[data-scene="0"] {
+  align-items: start;
+  padding-top: 64px;
+}
 .problem-scene[data-scene="0"] .problem-scene-content {
   padding: 0;
   background: transparent;
@@ -1943,11 +1926,24 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   letter-spacing: 0;
   opacity: 1;
 }
+/* Compact variant — used inline below body copy where the comparison
+   is supporting evidence, not a focal point. */
+.stat-compare--mini .stat-compare-number b {
+  font-size: clamp(40px, 4.6vw, 56px);
+}
+.stat-compare--mini .stat-compare-row--peak .stat-compare-number b {
+  font-size: clamp(48px, 5.5vw, 68px);
+}
+.stat-compare--mini .stat-compare-number i { font-size: 14px; }
+.stat-compare--mini .stat-compare-eyebrow { margin-bottom: 4px; }
+.stat-compare--mini .stat-compare-delta { margin-top: 4px; }
 @media (max-width: 900px) {
   .problem-scene-visual--stat { padding: 8px 0; gap: 20px; }
   .stat-compare { gap: 20px; }
   .stat-compare-number b { font-size: clamp(48px, 14vw, 72px); }
   .stat-compare-row--peak .stat-compare-number b { font-size: clamp(60px, 18vw, 92px); }
+  .stat-compare--mini .stat-compare-number b { font-size: clamp(36px, 11vw, 52px); }
+  .stat-compare--mini .stat-compare-row--peak .stat-compare-number b { font-size: clamp(44px, 13vw, 60px); }
 }
 .problems-closer {
   text-align: center;
@@ -1999,7 +1995,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problem-scene-content,
   .problem-scene-visual { opacity: 1; transform: none; filter: none; }
   .problem-scene-visual { max-width: 360px; margin: 0 auto; }
-  .problem-scene-graph-chart { margin: 0 auto; }
   .problem-scene-visual svg { width: 110px; height: 110px; }
   .problem-scene-title { font-size: 28px; }
   .problem-scene-why { font-size: 17px; }
@@ -2572,37 +2567,23 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <article class="problem-scene is-active" data-scene="0" data-label="Nausea &amp; Bloating">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Nausea &amp; Bloating</h3>
-          <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 slows gastric emptying — food sits in your stomach for hours longer than normal.</p>
+          <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 puts the brakes on your stomach — food sits there for hours longer than your body expects.</p>
           <p class="problem-scene-body">Your stomach was designed to empty in about 90 minutes. On Ozempic, Mounjaro, or Wegovy, that can stretch past 4 hours. The food fermenting in there is what creates the fullness that won't quit, the queasiness, and the gas.</p>
-          <p class="problem-scene-stat">~44% of users on semaglutide report nausea in clinical trials.</p>
-          <!-- Bar chart: data viz for the 44% stat. Lives inline below
-               the stat callout so it reads as supporting evidence — no
-               longer an overlay state. -->
-          <div class="problem-scene-graph-card" aria-hidden="true">
-            <div class="problem-scene-graph-chart">
-              <svg viewBox="0 0 320 220" class="graph-bars" font-family="inherit">
-                <!-- Y-axis labels -->
-                <text x="24" y="26" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">100%</text>
-                <text x="24" y="100" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">50%</text>
-                <text x="24" y="174" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">0</text>
-                <!-- Y-axis -->
-                <line x1="30" y1="20" x2="30" y2="170" stroke="rgba(31,20,16,0.15)" stroke-width="1"/>
-                <!-- Subtle 50% gridline -->
-                <line x1="30" y1="95" x2="300" y2="95" stroke="rgba(31,20,16,0.08)" stroke-width="1" stroke-dasharray="3 4"/>
-                <!-- X-axis -->
-                <line x1="30" y1="170" x2="300" y2="170" stroke="rgba(31,20,16,0.20)" stroke-width="1"/>
-                <!-- Placebo bar (20% of 150px = 30px) -->
-                <rect x="80" y="140" width="50" height="30" rx="4" fill="rgba(234,88,12,0.42)" class="graph-bar graph-bar-placebo"/>
-                <text x="105" y="131" font-size="13" font-weight="700" text-anchor="middle" fill="rgba(31,20,16,0.70)" class="graph-value graph-value-placebo">20%</text>
-                <text x="105" y="190" font-size="10" font-weight="700" letter-spacing="1.4" text-anchor="middle" fill="rgba(31,20,16,0.55)">PLACEBO</text>
-                <!-- Semaglutide bar (44% of 150 = 66px) -->
-                <rect x="210" y="104" width="50" height="66" rx="4" fill="var(--orange)" class="graph-bar graph-bar-sema"/>
-                <text x="235" y="93" font-size="18" font-weight="800" text-anchor="middle" fill="var(--orange)" class="graph-value graph-value-sema">44%</text>
-                <text x="235" y="190" font-size="10" font-weight="700" letter-spacing="1.4" text-anchor="middle" fill="var(--orange)">SEMAGLUTIDE</text>
-                <!-- Axis title -->
-                <text x="165" y="210" font-size="9" font-weight="700" letter-spacing="1.6" text-anchor="middle" fill="rgba(31,20,16,0.40)">REPORTED NAUSEA</text>
-              </svg>
+          <!-- Supporting evidence: how many users actually report this
+               in trials. Same editorial vocabulary as the right column. -->
+          <div class="problem-scene-graph-card stat-compare stat-compare--mini" aria-hidden="true">
+            <p class="stat-compare-eyebrow">How many users report it</p>
+            <div class="stat-compare-row">
+              <span class="stat-compare-label">Placebo</span>
+              <span class="stat-compare-number"><b>20</b><i>%</i></span>
+              <span class="stat-compare-bar" style="--w:20%"></span>
             </div>
+            <div class="stat-compare-row stat-compare-row--peak">
+              <span class="stat-compare-label">On Ozempic</span>
+              <span class="stat-compare-number"><b>44</b><i>%</i></span>
+              <span class="stat-compare-bar" style="--w:44%"></span>
+            </div>
+            <p class="stat-compare-delta"><span class="stat-compare-delta-multiplier">2.2&times;</span> more than placebo</p>
           </div>
         </div>
         <div class="problem-scene-visual problem-scene-visual--stat" aria-hidden="true">
