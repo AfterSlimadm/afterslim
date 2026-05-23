@@ -1405,12 +1405,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   opacity: 0.30;
   z-index: 0;
   pointer-events: none;
-  transform-origin: center;
-  transform: scaleX(0);
-  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.problems-timeline.is-line-visible .problems-timeline-line {
-  transform: scaleX(1);
 }
 .problems-timeline-track {
   position: relative;
@@ -3184,7 +3178,6 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
     if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
-    if (timeline) timeline.classList.toggle('is-line-visible', current > 0);
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
     if (prevBtn) prevBtn.disabled = current <= 0;
