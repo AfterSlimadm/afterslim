@@ -1411,7 +1411,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   transform-origin: left center;
   transition: left 0.85s cubic-bezier(0.22, 1, 0.36, 1),
               right 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+              transform 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
 }
 .problems.has-entered .problems-timeline-line {
   transform: scaleX(1);
@@ -1468,6 +1468,19 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     inset 0 1.5px 0 rgba(255, 255, 255, 0.75),
     inset 0 -1.5px 0 rgba(234, 88, 12, 0.30),
     0 0 0 8px rgba(234, 88, 12, 0.14);
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Dot appears at ~1.2s — when the line (2.4s total, 0.2s delay) has
+   crossed ~40% of its growth, i.e. reaches the dot's position at
+   marker 0's center. Slight overshoot on the scale for a "pop". */
+.problems.has-entered .problems-timeline-marker-dot {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 1.2s;
 }
 .problems-timeline-marker-label {
   margin-top: 16px;
@@ -1583,10 +1596,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene.is-active .stat-callout-figure.is-active {
   fill: var(--orange);
 }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(1) { transition-delay: 0.60s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(2) { transition-delay: 0.78s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(3) { transition-delay: 0.96s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(4) { transition-delay: 1.14s; }
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(1) { transition-delay: 1.20s; }
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(2) { transition-delay: 1.40s; }
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(3) { transition-delay: 1.60s; }
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(4) { transition-delay: 1.80s; }
 .stat-callout-caption {
   margin: 8px 0 0;
   font-size: 14px;
@@ -1695,9 +1708,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   transform: translateY(28px) scale(0.97);
   filter: blur(10px);
   transition:
-    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problem-scene.is-active .problem-scene-content > *,
 .problem-scene.is-active .problem-scene-visual {
@@ -1706,22 +1719,23 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   filter: blur(0);
 }
 /* Exit cascade (scene losing .is-active) — REVERSE order so the
-   bottom of the scene starts unbuilding first. Same window as
-   entry so both happen simultaneously when user clicks next. */
+   bottom of the scene starts unbuilding first. Faster than entry
+   so click-to-next feels snappy. */
 .problem-scene .problem-scene-stat   { transition-delay: 0.00s; }
 .problem-scene .problem-scene-body   { transition-delay: 0.08s; }
 .problem-scene .problem-scene-why    { transition-delay: 0.16s; }
 .problem-scene .problem-scene-title  { transition-delay: 0.24s; }
 .problem-scene .problem-scene-visual { transition-delay: 0.32s; }
 .problem-scene .problem-scene-num    { transition-delay: 0.40s; }
-/* Entry cascade (scene gaining .is-active) — FORWARD order, top
-   of the scene builds first. */
-.problem-scene.is-active .problem-scene-num    { transition-delay: 0.00s; }
-.problem-scene.is-active .problem-scene-visual { transition-delay: 0.08s; }
-.problem-scene.is-active .problem-scene-title  { transition-delay: 0.16s; }
-.problem-scene.is-active .problem-scene-why    { transition-delay: 0.24s; }
-.problem-scene.is-active .problem-scene-body   { transition-delay: 0.32s; }
-.problem-scene.is-active .problem-scene-stat   { transition-delay: 0.40s; }
+/* Entry cascade — FORWARD order, top first. Long delays so the
+   reveal arrives AFTER the timeline line has had time to start
+   drawing itself (line at scaleX 0 → 1 over 2.4s + 0.2s delay). */
+.problem-scene.is-active .problem-scene-num    { transition-delay: 0.40s; }
+.problem-scene.is-active .problem-scene-visual { transition-delay: 0.50s; }
+.problem-scene.is-active .problem-scene-title  { transition-delay: 0.65s; }
+.problem-scene.is-active .problem-scene-why    { transition-delay: 0.80s; }
+.problem-scene.is-active .problem-scene-body   { transition-delay: 0.95s; }
+.problem-scene.is-active .problem-scene-stat   { transition-delay: 1.10s; }
 
 .problem-scene-num {
   font-size: 14px;
@@ -1946,11 +1960,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   border-radius: 999px;
   transform-origin: left center;
   transform: scaleX(0);
-  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
+  transition: transform 2.0s cubic-bezier(0.22, 1, 0.36, 1) 1.4s;
 }
 .stat-compare-row--peak .stat-compare-bar::after {
   background: var(--orange);
-  transition-delay: 1.0s;
+  transition-delay: 1.9s;
 }
 .problem-scene.is-active .stat-compare-bar::after {
   transform: scaleX(1);
