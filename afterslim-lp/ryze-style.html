@@ -1854,10 +1854,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-/* Photographic/illustrated visual — fills the liquid-glass card
-   edge-to-edge so the rounded card frame becomes the photo frame.
-   The image is opaque, so it sits on top of the ::before glow and
-   the translucent card background. */
+/* Photographic/illustrated visual — fills the card edge-to-edge.
+   When the visual card contains an image (instead of the abstract
+   line-art SVG icons used by the other scenes), the liquid-glass
+   chrome around it clashes with the image itself — strip it. The
+   image gets only the rounded crop. */
 .problem-scene-visual img {
   position: absolute;
   inset: 0;
@@ -1868,6 +1869,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   display: block;
   z-index: 1;
 }
+.problem-scene-visual:has(img) {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 0;
+  box-shadow: none;
+}
+.problem-scene-visual:has(img)::before { display: none; }
 .problems-closer {
   text-align: center;
   margin-top: 120px;
