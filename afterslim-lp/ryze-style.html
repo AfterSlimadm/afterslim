@@ -1467,9 +1467,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 100%),
     linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%),
     linear-gradient(to right,
-      #F7E7DD 49vw, #F7E7DD 135vw, #FFE9D5 221vw,
-      #FAD8BC 307vw, #FFE3BD 393vw, #F4C9A0 479vw,
-      #E8B58A 565vw, #E8B58A 800vw);
+      #F7E7DD 49vw, #FFE9D5 135vw, #FAD8BC 221vw,
+      #FFE3BD 307vw, #F4C9A0 393vw, #E8B58A 479vw,
+      #E8B58A 800vw);
   background-size: 100% 32px, 100% 120px, 800vw 100%;
   background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
   background-repeat: no-repeat;
@@ -1495,16 +1495,47 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   background: transparent;
   border: 0;
   border-radius: 0;
+  position: relative;
 }
 .problem-scene.is-reversed .problem-scene-content { order: 2; }
 .problem-scene.is-reversed .problem-scene-visual { order: 1; }
 
-/* Graph step — intermediate scene with a data-viz chart instead of body copy */
-.problem-scene-graph-content {
+/* Graph card — overlay state inside scene 0. Default: sitting in the
+   right-hand grid cell, translated off-screen + invisible. When
+   .show-graph is set on the scene, the text-card fades out, the
+   visual slides LEFT into the text-card slot, and this card slides
+   in from the right. Image element stays mounted the whole time, so
+   it animates as a shared element instead of disappearing/reappearing. */
+.problem-scene-graph-card {
+  /* position: absolute + grid placement sizes the box to col 2 row 1
+     WITHOUT taking the cell out of normal auto-flow — so the visual
+     can still occupy the same cell underneath. inset: 0 fills the
+     grid area (col 2 row 1 is the containing block for abspos here). */
+  position: absolute;
+  grid-column: 2;
+  grid-row: 1;
+  inset: 0;
+  padding: 36px 40px;
+  background: rgba(255, 255, 255, 0.30);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 32px;
+  box-shadow:
+    0 18px 48px rgba(31, 20, 16, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.18);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding: 32px 40px;
+  gap: 24px;
+  opacity: 0;
+  transform: translateX(calc(100% + 80px));
+  pointer-events: none;
+  z-index: 2;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problem-scene-graph-stat {
   background: rgba(234, 88, 12, 0.14);
@@ -1526,11 +1557,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .problem-scene-graph-chart svg {
   width: 100%;
-  max-width: 300px;
+  max-width: 320px;
   height: auto;
   display: block;
 }
-/* Bar chart inside the graph step — 2-bar comparison placebo vs semaglutide */
+/* Bar chart — 2-bar comparison placebo vs semaglutide */
 .graph-bar {
   transform-box: fill-box;
   transform-origin: 50% 100%;
@@ -1541,10 +1572,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   opacity: 0;
   transition: opacity 0.5s ease;
 }
-.problem-scene-graph.is-active .graph-bar-placebo { transform: scaleY(1); transition-delay: 0.40s; }
-.problem-scene-graph.is-active .graph-value-placebo { opacity: 1; transition-delay: 1.20s; }
-.problem-scene-graph.is-active .graph-bar-sema { transform: scaleY(1); transition-delay: 0.70s; }
-.problem-scene-graph.is-active .graph-value-sema { opacity: 1; transition-delay: 1.50s; }
+.problem-scene.show-graph .graph-bar-placebo { transform: scaleY(1); transition-delay: 0.55s; }
+.problem-scene.show-graph .graph-value-placebo { opacity: 1; transition-delay: 1.30s; }
+.problem-scene.show-graph .graph-bar-sema { transform: scaleY(1); transition-delay: 0.85s; }
+.problem-scene.show-graph .graph-value-sema { opacity: 1; transition-delay: 1.60s; }
 
 /* Liquid Glass card around the text content — same formula as the
    visual card so both sides of the scene read as paired glass
@@ -1684,6 +1715,38 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene.is-active .problem-scene-why    { transition-delay: 0.24s; }
 .problem-scene.is-active .problem-scene-body   { transition-delay: 0.32s; }
 .problem-scene.is-active .problem-scene-stat   { transition-delay: 0.40s; }
+
+/* show-graph state — overlay applied to the active scene when the
+   user pages into the data viz before moving to the next symptom.
+   Text-card fades out, visual slides into the text-card slot, graph
+   card slides in from off-screen right. The visual is a shared
+   element; never unmounted. */
+.problem-scene.show-graph .problem-scene-content > * {
+  opacity: 0;
+  transform: translateY(0) scale(1);
+  filter: blur(6px);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: 0s;
+}
+.problem-scene.show-graph .problem-scene-content {
+  pointer-events: none;
+}
+.problem-scene.show-graph .problem-scene-visual {
+  transform: translateX(calc(-100% - 80px));
+  transition:
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s ease,
+    filter 0.5s ease;
+  transition-delay: 0.05s;
+}
+.problem-scene.show-graph .problem-scene-graph-card {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+  transition-delay: 0.15s;
+}
 .problem-scene-num {
   font-size: 14px;
   font-weight: 700;
@@ -1832,7 +1895,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problem-scene.is-reversed .problem-scene-content,
   .problem-scene.is-reversed .problem-scene-visual { order: initial; }
   .problem-scene-content,
-  .problem-scene-visual { opacity: 1; transform: none; }
+  .problem-scene-visual { opacity: 1; transform: none; filter: none; }
+  /* On mobile the 44% stat is already in scene 0's body callout —
+     drop the graph overlay rather than try to fit it in the stack. */
+  .problem-scene-graph-card { display: none; }
   .problem-scene-visual { max-width: 360px; margin: 0 auto; }
   .problem-scene-visual svg { width: 110px; height: 110px; }
   .problem-scene-title { font-size: 28px; }
@@ -2413,15 +2479,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         <div class="problem-scene-visual" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
         </div>
-      </article>
-
-      <!-- Graph step: data viz for the 44% stat. Sits between scene 1 and 2.
-           Icon copy of scene 1 on the LEFT (where the text was); graph card
-           on the RIGHT (where the icon was). -->
-      <article class="problem-scene problem-scene-graph is-reversed" data-scene="graph-1" data-label="Nausea &amp; Bloating">
-        <div class="problem-scene-content problem-scene-graph-content">
+        <!-- Graph overlay: data viz for the 44% stat. Slides in from the
+             right when .show-graph is added to this scene. The visual
+             above slides left into the text-card slot at the same time —
+             so the icon is a shared element across both states. -->
+        <div class="problem-scene-graph-card" aria-hidden="true">
           <p class="problem-scene-graph-stat">~44% of users on semaglutide report nausea in clinical trials.</p>
-          <div class="problem-scene-graph-chart" aria-hidden="true">
+          <div class="problem-scene-graph-chart">
             <svg viewBox="0 0 320 220" class="graph-bars" font-family="inherit">
               <!-- Y-axis labels -->
               <text x="24" y="26" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">100%</text>
@@ -2445,9 +2509,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
               <text x="165" y="210" font-size="9" font-weight="700" letter-spacing="1.6" text-anchor="middle" fill="rgba(31,20,16,0.40)">REPORTED NAUSEA</text>
             </svg>
           </div>
-        </div>
-        <div class="problem-scene-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
         </div>
       </article>
 
@@ -3230,6 +3291,10 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   var nextBtn = document.getElementById('problemsNext');
   var current = 0;
   var max = scenes.length - 1;
+  // Scene 0 has an overlay "graph state" that sits between scene 0 and
+  // scene 1 in the navigation order. graphShown=true means user has
+  // paged into the graph but not yet onto scene 1.
+  var graphShown = false;
   var mobile = window.matchMedia('(max-width: 900px)');
 
   function render() {
@@ -3237,41 +3302,50 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
       track.style.transform = '';
       pin.style.removeProperty('--scene-offset');
       if (timelineTrack) timelineTrack.style.transform = '';
+      scenes.forEach(function(s) { s.classList.remove('show-graph'); });
       return;
     }
     // Track translates by -86vw per step; pin gradient pans the same.
     track.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
-    scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
-    // Timeline has 6 markers (one per symptom). The graph step at index 1
-    // is treated as part of scene 1 for timeline purposes: it stays on
-    // "01 / Gut" so the user knows the data viz still belongs to scene 1.
-    var timelineIndex = current <= 1 ? 0 : current - 1;
-    dots.forEach(function(d, i) { d.classList.toggle('is-active', i === timelineIndex); });
-    if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-timelineIndex * 86) + 'vw)';
+    scenes.forEach(function(s, i) {
+      s.classList.toggle('is-active', i === current);
+      // Graph overlay only ever applies to scene 0.
+      s.classList.toggle('show-graph', i === 0 && current === 0 && graphShown);
+    });
+    dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
+    if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     if (timeline) {
-      // Scene 1 / graph step left edge / Scene 6 right edge stop at the
-      // text card edge (track padding 6vw + scene padding max(48px, 4vw)).
+      // Scene 0 left edge / Scene 6 right edge stop at the text card
+      // edge (track padding 6vw + scene padding max(48px, 4vw)).
       var inset = 'calc(6vw + max(48px, 4vw))';
-      timeline.style.setProperty('--line-left', timelineIndex === 0 ? inset : '0px');
+      timeline.style.setProperty('--line-left', current === 0 ? inset : '0px');
       timeline.style.setProperty('--line-right', current === max ? inset : '0px');
     }
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
-    if (prevBtn) prevBtn.disabled = current <= 0;
+    if (prevBtn) prevBtn.disabled = current <= 0 && !graphShown;
     if (nextBtn) nextBtn.disabled = current >= max;
   }
 
   function go(delta) {
-    var next = Math.max(0, Math.min(max, current + delta));
-    if (next === current) return;
-    current = next;
-    render();
+    if (delta > 0) {
+      // From scene 0 default → graph state; from graph state → scene 1.
+      if (current === 0 && !graphShown) { graphShown = true; render(); return; }
+      if (current === 0 && graphShown)  { graphShown = false; current = 1; render(); return; }
+      if (current < max) { current += 1; render(); }
+    } else if (delta < 0) {
+      // From scene 1 → graph state of scene 0; from graph state → scene 0 default.
+      if (current === 1) { current = 0; graphShown = true; render(); return; }
+      if (current === 0 && graphShown) { graphShown = false; render(); return; }
+      if (current > 0) { current -= 1; render(); }
+    }
   }
   function goTo(i) {
     var next = Math.max(0, Math.min(max, i));
-    if (next === current) return;
+    if (next === current && !graphShown) return;
     current = next;
+    graphShown = false;
     render();
   }
 
