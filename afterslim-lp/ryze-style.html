@@ -1413,7 +1413,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
               right 0.85s cubic-bezier(0.22, 1, 0.36, 1),
               transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
 }
-.problems-stage.has-entered .problems-timeline-line {
+.problems.has-entered .problems-timeline-line {
   transform: scaleX(1);
 }
 
@@ -1421,18 +1421,19 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
    section into view. .is-active is needed on scene 0 from page load
    so the carousel's positioning math works, but the entrance
    animation (text + visual + bars + pictogram) should wait for the
-   viewer to actually arrive. These selectors win on specificity
-   over the .is-active variants thanks to the extra ancestor class. */
-.problems-stage:not(.has-entered) .problem-scene.is-active .problem-scene-content > *,
-.problems-stage:not(.has-entered) .problem-scene.is-active .problem-scene-visual {
+   viewer to actually arrive. .has-entered lives on the .problems
+   section so it can gate both the timeline (sibling of .problems-stage)
+   and the scene contents (descendants of .problems-stage). */
+.problems:not(.has-entered) .problem-scene.is-active .problem-scene-content > *,
+.problems:not(.has-entered) .problem-scene.is-active .problem-scene-visual {
   opacity: 0;
   transform: translateY(28px) scale(0.97);
   filter: blur(10px);
 }
-.problems-stage:not(.has-entered) .problem-scene.is-active .stat-callout-figure.is-active {
+.problems:not(.has-entered) .problem-scene.is-active .stat-callout-figure.is-active {
   fill: rgba(31, 20, 16, 0.14);
 }
-.problems-stage:not(.has-entered) .problem-scene.is-active .stat-compare-bar::after {
+.problems:not(.has-entered) .problem-scene.is-active .stat-compare-bar::after {
   transform: scaleX(0);
 }
 .problems-timeline-track {
@@ -3633,22 +3634,25 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   render();
 })();
 
-// Problems stage — fires the scene-0 entrance reveal + the timeline
-// line growth when the section scrolls into view. Before .has-entered
-// is set, scene 0's reveal state is held at zero via CSS so the
-// animation doesn't burn off on page load before the user gets there.
+// Problems — fires the scene-0 entrance reveal + the timeline line
+// growth when the carousel scrolls into view. Observer watches the
+// stage (the part that should be visible to trigger the reveal),
+// but the .has-entered class lives on the .problems section so it
+// can gate both the timeline (sibling of .problems-stage) and the
+// scene contents (descendants of .problems-stage).
 (function() {
+  var section = document.querySelector('.problems');
   var stage = document.getElementById('problemsStage');
-  if (!stage) return;
+  if (!section || !stage) return;
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducedMotion || !('IntersectionObserver' in window)) {
-    stage.classList.add('has-entered');
+    section.classList.add('has-entered');
     return;
   }
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
-        stage.classList.add('has-entered');
+        section.classList.add('has-entered');
         observer.disconnect();
       }
     });
