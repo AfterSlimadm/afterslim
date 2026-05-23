@@ -1425,13 +1425,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-/* In graph state the timeline-track shifts left so marker 0 lands in
-   the left gutter — that pulls marker 1 inside the viewport on the
-   right. Hide everything but marker 0 so only "01 / Gut" is visible. */
-.problems-timeline.is-graph-active .problems-timeline-marker:not(:first-child) {
-  opacity: 0;
 }
 .problems-timeline-marker-dot {
   width: 20px;
@@ -1507,68 +1500,24 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene.is-reversed .problem-scene-content { order: 2; }
 .problem-scene.is-reversed .problem-scene-visual { order: 1; }
 
-/* Graph card — overlay state inside scene 0. Default: sitting in the
-   right-hand grid cell, translated off-screen + invisible. When
-   .show-graph is set on the scene, the text-card fades out, the
-   visual slides LEFT into the text-card slot, and this card slides
-   in from the right. Image element stays mounted the whole time, so
-   it animates as a shared element instead of disappearing/reappearing. */
+/* Bar chart — sits inline below the stat callout inside scene 0's
+   text column. Pure data viz; no card chrome, no overlay state. */
 .problem-scene-graph-card {
-  /* position: absolute + grid placement sizes the box to col 2 row 1
-     WITHOUT taking the cell out of normal auto-flow — so the visual
-     can still occupy the same cell underneath. inset: 0 fills the
-     grid area (col 2 row 1 is the containing block for abspos here). */
-  position: absolute;
-  grid-column: 2;
-  grid-row: 1;
-  inset: 0;
-  padding: 36px 40px;
-  background: rgba(255, 255, 255, 0.30);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 32px;
-  box-shadow:
-    0 18px 48px rgba(31, 20, 16, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.18);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  opacity: 0;
-  transform: translateX(calc(100% + 80px));
-  pointer-events: none;
-  z-index: 2;
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.problem-scene-graph-stat {
-  background: rgba(234, 88, 12, 0.14);
-  padding: 16px 20px;
-  border-radius: 14px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--orange-dark);
-  border-left: 3px solid var(--orange);
-  line-height: 1.45;
-  margin: 0;
+  margin-top: 28px;
 }
 .problem-scene-graph-chart {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-height: 240px;
+  justify-content: flex-start;
+  max-width: 360px;
 }
 .problem-scene-graph-chart svg {
   width: 100%;
-  max-width: 320px;
   height: auto;
   display: block;
 }
-/* Bar chart — 2-bar comparison placebo vs semaglutide */
+/* Bar chart — 2-bar comparison placebo vs semaglutide. Bars grow
+   from zero when scene 0 becomes the active scene. */
 .graph-bar {
   transform-box: fill-box;
   transform-origin: 50% 100%;
@@ -1579,16 +1528,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   opacity: 0;
   transition: opacity 0.5s ease;
 }
-.problem-scene.show-graph .graph-bar-placebo { transform: scaleY(1); transition-delay: 0.55s; }
-.problem-scene.show-graph .graph-value-placebo { opacity: 1; transition-delay: 1.30s; }
-.problem-scene.show-graph .graph-bar-sema { transform: scaleY(1); transition-delay: 0.85s; }
-.problem-scene.show-graph .graph-value-sema { opacity: 1; transition-delay: 1.60s; }
+.problem-scene.is-active .graph-bar-placebo { transform: scaleY(1); transition-delay: 0.80s; }
+.problem-scene.is-active .graph-value-placebo { opacity: 1; transition-delay: 1.55s; }
+.problem-scene.is-active .graph-bar-sema { transform: scaleY(1); transition-delay: 1.10s; }
+.problem-scene.is-active .graph-value-sema { opacity: 1; transition-delay: 1.85s; }
 
 /* Liquid Glass card around the text content — same formula as the
    visual card so both sides of the scene read as paired glass
-   panels floating over the canvas gradient. Transition declared
-   here (not on .show-graph) so the card animates BOTH when entering
-   the graph state AND when leaving it back to the default scene. */
+   panels floating over the canvas gradient. */
 .problem-scene-content {
   position: relative;
   padding: 40px 44px;
@@ -1601,9 +1548,17 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     0 18px 48px rgba(31, 20, 16, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.65),
     inset 0 -1px 0 rgba(255, 255, 255, 0.18);
-  transition:
-    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Scene 0 hosts a photographic image + an inline bar chart, so the
+   glass treatment around its text clashes — strip it. The other
+   scenes (line-icon visuals) keep their paired-glass look. */
+.problem-scene[data-scene="0"] .problem-scene-content {
+  padding: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 0;
+  box-shadow: none;
 }
 
 /* Progress UI (bottom-center) */
@@ -1728,32 +1683,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene.is-active .problem-scene-body   { transition-delay: 0.32s; }
 .problem-scene.is-active .problem-scene-stat   { transition-delay: 0.40s; }
 
-/* show-graph state — overlay applied to the active scene when the
-   user pages into the data viz before moving to the next symptom.
-   Text-card slides OUT to the left, visual slides into the text-card
-   slot from the right side of the scene, graph card slides in from
-   off-screen right. The visual is a shared element; never unmounted.
-   Both text-card and visual move together (same direction, same
-   timing) so the user reads it as "the symptom row shifts left while
-   the chart arrives from the right". */
-.problem-scene.show-graph .problem-scene-content {
-  transform: translateX(calc(-100% - 80px));
-  opacity: 0;
-  pointer-events: none;
-}
-.problem-scene.show-graph .problem-scene-visual {
-  transform: translateX(calc(-100% - 80px));
-  transition:
-    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.5s ease,
-    filter 0.5s ease;
-}
-.problem-scene.show-graph .problem-scene-graph-card {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-  transition-delay: 0.1s;
-}
 .problem-scene-num {
   font-size: 14px;
   font-weight: 700;
@@ -1926,10 +1855,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problem-scene.is-reversed .problem-scene-visual { order: initial; }
   .problem-scene-content,
   .problem-scene-visual { opacity: 1; transform: none; filter: none; }
-  /* On mobile the 44% stat is already in scene 0's body callout —
-     drop the graph overlay rather than try to fit it in the stack. */
-  .problem-scene-graph-card { display: none; }
   .problem-scene-visual { max-width: 360px; margin: 0 auto; }
+  .problem-scene-graph-chart { margin: 0 auto; }
   .problem-scene-visual svg { width: 110px; height: 110px; }
   .problem-scene-title { font-size: 28px; }
   .problem-scene-why { font-size: 17px; }
@@ -2505,40 +2432,38 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 slows gastric emptying — food sits in your stomach for hours longer than normal.</p>
           <p class="problem-scene-body">Your stomach was designed to empty in about 90 minutes. On Ozempic, Mounjaro, or Wegovy, that can stretch past 4 hours. The food fermenting in there is what creates the fullness that won't quit, the queasiness, and the gas.</p>
           <p class="problem-scene-stat">~44% of users on semaglutide report nausea in clinical trials.</p>
+          <!-- Bar chart: data viz for the 44% stat. Lives inline below
+               the stat callout so it reads as supporting evidence — no
+               longer an overlay state. -->
+          <div class="problem-scene-graph-card" aria-hidden="true">
+            <div class="problem-scene-graph-chart">
+              <svg viewBox="0 0 320 220" class="graph-bars" font-family="inherit">
+                <!-- Y-axis labels -->
+                <text x="24" y="26" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">100%</text>
+                <text x="24" y="100" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">50%</text>
+                <text x="24" y="174" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">0</text>
+                <!-- Y-axis -->
+                <line x1="30" y1="20" x2="30" y2="170" stroke="rgba(31,20,16,0.15)" stroke-width="1"/>
+                <!-- Subtle 50% gridline -->
+                <line x1="30" y1="95" x2="300" y2="95" stroke="rgba(31,20,16,0.08)" stroke-width="1" stroke-dasharray="3 4"/>
+                <!-- X-axis -->
+                <line x1="30" y1="170" x2="300" y2="170" stroke="rgba(31,20,16,0.20)" stroke-width="1"/>
+                <!-- Placebo bar (20% of 150px = 30px) -->
+                <rect x="80" y="140" width="50" height="30" rx="4" fill="rgba(234,88,12,0.42)" class="graph-bar graph-bar-placebo"/>
+                <text x="105" y="131" font-size="13" font-weight="700" text-anchor="middle" fill="rgba(31,20,16,0.70)" class="graph-value graph-value-placebo">20%</text>
+                <text x="105" y="190" font-size="10" font-weight="700" letter-spacing="1.4" text-anchor="middle" fill="rgba(31,20,16,0.55)">PLACEBO</text>
+                <!-- Semaglutide bar (44% of 150 = 66px) -->
+                <rect x="210" y="104" width="50" height="66" rx="4" fill="var(--orange)" class="graph-bar graph-bar-sema"/>
+                <text x="235" y="93" font-size="18" font-weight="800" text-anchor="middle" fill="var(--orange)" class="graph-value graph-value-sema">44%</text>
+                <text x="235" y="190" font-size="10" font-weight="700" letter-spacing="1.4" text-anchor="middle" fill="var(--orange)">SEMAGLUTIDE</text>
+                <!-- Axis title -->
+                <text x="165" y="210" font-size="9" font-weight="700" letter-spacing="1.6" text-anchor="middle" fill="rgba(31,20,16,0.40)">REPORTED NAUSEA</text>
+              </svg>
+            </div>
+          </div>
         </div>
         <div class="problem-scene-visual" aria-hidden="true">
           <img src="images/symptom-nausea.png" alt="" />
-        </div>
-        <!-- Graph overlay: data viz for the 44% stat. Slides in from the
-             right when .show-graph is added to this scene. The visual
-             above slides left into the text-card slot at the same time —
-             so the icon is a shared element across both states. -->
-        <div class="problem-scene-graph-card" aria-hidden="true">
-          <p class="problem-scene-graph-stat">~44% of users on semaglutide report nausea in clinical trials.</p>
-          <div class="problem-scene-graph-chart">
-            <svg viewBox="0 0 320 220" class="graph-bars" font-family="inherit">
-              <!-- Y-axis labels -->
-              <text x="24" y="26" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">100%</text>
-              <text x="24" y="100" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">50%</text>
-              <text x="24" y="174" font-size="10" font-weight="600" text-anchor="end" fill="rgba(31,20,16,0.45)">0</text>
-              <!-- Y-axis -->
-              <line x1="30" y1="20" x2="30" y2="170" stroke="rgba(31,20,16,0.15)" stroke-width="1"/>
-              <!-- Subtle 50% gridline -->
-              <line x1="30" y1="95" x2="300" y2="95" stroke="rgba(31,20,16,0.08)" stroke-width="1" stroke-dasharray="3 4"/>
-              <!-- X-axis -->
-              <line x1="30" y1="170" x2="300" y2="170" stroke="rgba(31,20,16,0.20)" stroke-width="1"/>
-              <!-- Placebo bar (20% of 150px = 30px) -->
-              <rect x="80" y="140" width="50" height="30" rx="4" fill="rgba(234,88,12,0.42)" class="graph-bar graph-bar-placebo"/>
-              <text x="105" y="131" font-size="13" font-weight="700" text-anchor="middle" fill="rgba(31,20,16,0.70)" class="graph-value graph-value-placebo">20%</text>
-              <text x="105" y="190" font-size="10" font-weight="700" letter-spacing="1.4" text-anchor="middle" fill="rgba(31,20,16,0.55)">PLACEBO</text>
-              <!-- Semaglutide bar (44% of 150 = 66px) -->
-              <rect x="210" y="104" width="50" height="66" rx="4" fill="var(--orange)" class="graph-bar graph-bar-sema"/>
-              <text x="235" y="93" font-size="18" font-weight="800" text-anchor="middle" fill="var(--orange)" class="graph-value graph-value-sema">44%</text>
-              <text x="235" y="190" font-size="10" font-weight="700" letter-spacing="1.4" text-anchor="middle" fill="var(--orange)">SEMAGLUTIDE</text>
-              <!-- Axis title -->
-              <text x="165" y="210" font-size="9" font-weight="700" letter-spacing="1.6" text-anchor="middle" fill="rgba(31,20,16,0.40)">REPORTED NAUSEA</text>
-            </svg>
-          </div>
         </div>
       </article>
 
@@ -3321,10 +3246,6 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   var nextBtn = document.getElementById('problemsNext');
   var current = 0;
   var max = scenes.length - 1;
-  // Scene 0 has an overlay "graph state" that sits between scene 0 and
-  // scene 1 in the navigation order. graphShown=true means user has
-  // paged into the graph but not yet onto scene 1.
-  var graphShown = false;
   var mobile = window.matchMedia('(max-width: 900px)');
 
   function render() {
@@ -3332,63 +3253,37 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
       track.style.transform = '';
       pin.style.removeProperty('--scene-offset');
       if (timelineTrack) timelineTrack.style.transform = '';
-      scenes.forEach(function(s) { s.classList.remove('show-graph'); });
       return;
     }
     // Track translates by -86vw per step; pin gradient pans the same.
     track.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
-    scenes.forEach(function(s, i) {
-      s.classList.toggle('is-active', i === current);
-      // Graph overlay only ever applies to scene 0.
-      s.classList.toggle('show-graph', i === 0 && current === 0 && graphShown);
-    });
+    scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
-    // In graph state the dot shifts left into the gutter between the
-    // viewport edge and the image card (which has slid into col 1).
-    // Marker 0's natural center is at 49vw; we want it at inset/2 so it
-    // sits in the empty space to the LEFT of the image card.
-    var graphActive = (current === 0 && graphShown);
-    if (timelineTrack) {
-      timelineTrack.style.transform = graphActive
-        ? 'translateX(calc((6vw + max(48px, 4vw)) / 2 - 49vw))'
-        : 'translateX(' + (-current * 86) + 'vw)';
-    }
+    if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     if (timeline) {
       // Scene 0 left edge / Scene 6 right edge stop at the text card
       // edge (track padding 6vw + scene padding max(48px, 4vw)).
-      // In graph state the line extends edge-to-edge from x=0 so it
-      // reads as "the journey begins HERE", with the dot floating in
-      // the gutter to the left of the image card.
       var inset = 'calc(6vw + max(48px, 4vw))';
-      timeline.style.setProperty('--line-left', (current === 0 && !graphActive) ? inset : '0px');
+      timeline.style.setProperty('--line-left', current === 0 ? inset : '0px');
       timeline.style.setProperty('--line-right', current === max ? inset : '0px');
-      timeline.classList.toggle('is-graph-active', graphActive);
     }
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
-    if (prevBtn) prevBtn.disabled = current <= 0 && !graphShown;
+    if (prevBtn) prevBtn.disabled = current <= 0;
     if (nextBtn) nextBtn.disabled = current >= max;
   }
 
   function go(delta) {
-    if (delta > 0) {
-      // From scene 0 default → graph state; from graph state → scene 1.
-      if (current === 0 && !graphShown) { graphShown = true; render(); return; }
-      if (current === 0 && graphShown)  { graphShown = false; current = 1; render(); return; }
-      if (current < max) { current += 1; render(); }
-    } else if (delta < 0) {
-      // From scene 1 → graph state of scene 0; from graph state → scene 0 default.
-      if (current === 1) { current = 0; graphShown = true; render(); return; }
-      if (current === 0 && graphShown) { graphShown = false; render(); return; }
-      if (current > 0) { current -= 1; render(); }
-    }
+    var next = Math.max(0, Math.min(max, current + delta));
+    if (next === current) return;
+    current = next;
+    render();
   }
   function goTo(i) {
     var next = Math.max(0, Math.min(max, i));
-    if (next === current && !graphShown) return;
+    if (next === current) return;
     current = next;
-    graphShown = false;
     render();
   }
 
