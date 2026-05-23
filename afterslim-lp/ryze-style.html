@@ -1349,23 +1349,115 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problems-badges { gap: 16px; }
 }
 
-/* 6-scene scroll-revealed explainer */
-.problems-scenes {
+/* 6-scene scroll-pinned horizontal explainer */
+.problems-stage {
+  position: relative;
+  height: calc(100vh * 6);
+  margin-top: 24px;
+}
+.problems-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 120px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding-top: 24px;
+  justify-content: center;
+}
+.problems-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transition: none;
 }
 .problem-scene {
+  width: 100vw;
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: center;
+  padding: 0 max(80px, 8vw);
+  box-sizing: border-box;
 }
 .problem-scene:nth-child(even) .problem-scene-content { order: 2; }
 .problem-scene:nth-child(even) .problem-scene-visual { order: 1; }
+
+/* Progress UI (bottom-center) */
+.problems-progress {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  z-index: 2;
+}
+.problems-progress-dots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.problems-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(31,20,16,0.18);
+  transition: width 0.35s ease, background 0.35s ease;
+}
+.problems-progress-dot.is-active {
+  width: 28px;
+  border-radius: 4px;
+  background: var(--orange);
+}
+.problems-progress-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--ink);
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+}
+.problems-progress-label span {
+  color: var(--orange);
+}
+.problems-hint {
+  position: absolute;
+  bottom: 24px;
+  right: 32px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: rgba(31,20,16,0.45);
+  text-transform: uppercase;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.problems-hint svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Active scene reveal — content fades+slides in slightly when its
+   the centered scene; others stay at 60% opacity to focus the eye */
+.problem-scene-content,
+.problem-scene-visual {
+  opacity: 0.4;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.problem-scene.is-active .problem-scene-content,
+.problem-scene.is-active .problem-scene-visual {
+  opacity: 1;
+  transform: none;
+}
 .problem-scene-num {
   font-size: 14px;
   font-weight: 700;
@@ -1478,18 +1570,40 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   font-weight: 700;
 }
 @media (max-width: 900px) {
-  .problems-scenes { gap: 72px; padding-top: 16px; }
-  .problem-scene { grid-template-columns: 1fr; gap: 32px; }
+  /* Drop the pin on mobile — stack scenes vertically again */
+  .problems-stage { height: auto; margin-top: 16px; }
+  .problems-pin { position: static; height: auto; overflow: visible; }
+  .problems-track {
+    flex-direction: column;
+    width: 100%;
+    gap: 72px;
+    transform: none !important;
+  }
+  .problem-scene {
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 0;
+  }
   .problem-scene:nth-child(even) .problem-scene-content,
   .problem-scene:nth-child(even) .problem-scene-visual { order: initial; }
+  .problem-scene-content,
+  .problem-scene-visual { opacity: 1; transform: none; }
   .problem-scene-visual { max-width: 360px; margin: 0 auto; }
   .problem-scene-visual svg { width: 110px; height: 110px; }
   .problem-scene-title { font-size: 28px; }
   .problem-scene-why { font-size: 17px; }
   .problem-scene-why em { font-size: 19px; }
   .problem-scene-body { font-size: 15.5px; }
-  .problems-closer { margin-top: 64px; }
-  .problems-closer p { font-size: 18px; }
+  .problems-progress, .problems-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .problems-stage { height: auto; }
+  .problems-pin { position: static; height: auto; overflow: visible; }
+  .problems-track { flex-direction: column; width: 100%; gap: 72px; transform: none !important; }
+  .problem-scene { width: 100%; grid-template-columns: 1fr; padding: 0; }
+  .problem-scene-content, .problem-scene-visual { opacity: 1; transform: none; }
+  .problems-progress, .problems-hint { display: none; }
 }
 
 /* ===== FAQ ===== */
@@ -2020,9 +2134,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </span>
       </div>
     </div>
-    <div class="problems-scenes">
+  </div>
 
-      <article class="problem-scene" data-reveal>
+  <!-- Scroll-pinned horizontal stage -->
+  <div class="problems-stage" id="problemsStage">
+    <div class="problems-pin">
+      <div class="problems-track" id="problemsTrack">
+
+      <article class="problem-scene is-active" data-scene="0" data-label="Nausea &amp; Bloating">
         <div class="problem-scene-content">
           <p class="problem-scene-num">01 / Gut</p>
           <h3 class="problem-scene-title">Nausea &amp; Bloating</h3>
@@ -2035,7 +2154,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-reveal>
+      <article class="problem-scene" data-scene="1" data-label="Constipation &amp; Cramps">
         <div class="problem-scene-content">
           <p class="problem-scene-num">02 / Gut</p>
           <h3 class="problem-scene-title">Constipation &amp; Cramps</h3>
@@ -2048,7 +2167,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-reveal>
+      <article class="problem-scene" data-scene="2" data-label="Hair Loss &amp; Brittle Nails">
         <div class="problem-scene-content">
           <p class="problem-scene-num">03 / Visible</p>
           <h3 class="problem-scene-title">Hair Loss &amp; Brittle Nails</h3>
@@ -2061,7 +2180,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-reveal>
+      <article class="problem-scene" data-scene="3" data-label="Fatigue &amp; Low Energy">
         <div class="problem-scene-content">
           <p class="problem-scene-num">04 / Energy</p>
           <h3 class="problem-scene-title">Fatigue &amp; Low Energy</h3>
@@ -2074,7 +2193,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-reveal>
+      <article class="problem-scene" data-scene="4" data-label="Sugar Cravings &amp; Hunger Spikes">
         <div class="problem-scene-content">
           <p class="problem-scene-num">05 / Metabolic</p>
           <h3 class="problem-scene-title">Sugar Cravings &amp; Hunger Spikes</h3>
@@ -2087,7 +2206,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-reveal>
+      <article class="problem-scene" data-scene="5" data-label="Muscle Loss">
         <div class="problem-scene-content">
           <p class="problem-scene-num">06 / Body</p>
           <h3 class="problem-scene-title">Muscle Loss</h3>
@@ -2100,8 +2219,26 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-    </div>
+      </div>
 
+      <div class="problems-progress" aria-hidden="true">
+        <div class="problems-progress-dots">
+          <span class="problems-progress-dot is-active"></span>
+          <span class="problems-progress-dot"></span>
+          <span class="problems-progress-dot"></span>
+          <span class="problems-progress-dot"></span>
+          <span class="problems-progress-dot"></span>
+          <span class="problems-progress-dot"></span>
+        </div>
+        <p class="problems-progress-label" id="problemsProgressLabel"><span id="problemsProgressNum">01</span> / 06 &middot; <span id="problemsProgressName">Nausea &amp; Bloating</span></p>
+      </div>
+
+      <div class="problems-hint" aria-hidden="true">
+        <span>Keep scrolling</span>
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -2772,6 +2909,61 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   }
   tick();
   setInterval(tick, 1000);
+})();
+
+// Problems — scroll-pinned horizontal carousel
+(function() {
+  var stage = document.getElementById('problemsStage');
+  var track = document.getElementById('problemsTrack');
+  if (!stage || !track) return;
+
+  var scenes = track.querySelectorAll('.problem-scene');
+  var dots = document.querySelectorAll('.problems-progress-dot');
+  var labelNum = document.getElementById('problemsProgressNum');
+  var labelName = document.getElementById('problemsProgressName');
+  var lastActive = -1;
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mobile = window.matchMedia('(max-width: 900px)');
+
+  function update() {
+    if (reducedMotion || mobile.matches) {
+      track.style.transform = '';
+      return;
+    }
+    var rect = stage.getBoundingClientRect();
+    var stageH = stage.offsetHeight;
+    var vh = window.innerHeight;
+    var scrollable = stageH - vh;
+    if (scrollable <= 0) return;
+    var scrolled = -rect.top;
+    var progress = Math.max(0, Math.min(1, scrolled / scrollable));
+    var maxIdx = scenes.length - 1;
+    var pos = progress * maxIdx;
+    var tx = -pos * 100; // in vw
+    track.style.transform = 'translate3d(' + tx + 'vw, 0, 0)';
+
+    var idx = Math.round(pos);
+    if (idx !== lastActive) {
+      lastActive = idx;
+      scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === idx); });
+      dots.forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
+      if (labelNum) labelNum.textContent = String(idx + 1).padStart(2, '0');
+      if (labelName && scenes[idx]) labelName.innerHTML = scenes[idx].getAttribute('data-label') || '';
+    }
+  }
+
+  var raf = null;
+  function onScroll() {
+    if (raf) return;
+    raf = requestAnimationFrame(function() {
+      raf = null;
+      update();
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 })();
 
 // Scroll reveal
