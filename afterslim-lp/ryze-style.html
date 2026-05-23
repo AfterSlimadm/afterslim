@@ -926,7 +926,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
 /* ===== Problems (PAS hook) ===== */
 .problems {
-  background: #F7E7DD;
+  background: linear-gradient(
+    to bottom,
+    #fff8f0 0%,
+    #F7E7DD 120px,
+    #F7E7DD calc(100% - 120px),
+    #ffffff 100%
+  );
   padding: 96px 0;
 }
 .problems-header {
@@ -1056,7 +1062,16 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 
 /* ===== FAQ ===== */
-.faq-section { background: #F7E7DD; padding: 96px 0; }
+.faq-section {
+  background: linear-gradient(
+    to bottom,
+    #fff8f0 0%,
+    #F7E7DD 120px,
+    #F7E7DD calc(100% - 120px),
+    #fff8f0 100%
+  );
+  padding: 96px 0;
+}
 .faq-container {
   display: grid;
   grid-template-columns: 300px 1fr;
