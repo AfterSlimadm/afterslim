@@ -1425,6 +1425,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* In graph state the timeline-track shifts left so marker 0 lands in
+   the left gutter — that pulls marker 1 inside the viewport on the
+   right. Hide everything but marker 0 so only "01 / Gut" is visible. */
+.problems-timeline.is-graph-active .problems-timeline-marker:not(:first-child) {
+  opacity: 0;
 }
 .problems-timeline-marker-dot {
   width: 20px;
@@ -3333,6 +3340,7 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
       var inset = 'calc(6vw + max(48px, 4vw))';
       timeline.style.setProperty('--line-left', (current === 0 && !graphActive) ? inset : '0px');
       timeline.style.setProperty('--line-right', current === max ? inset : '0px');
+      timeline.classList.toggle('is-graph-active', graphActive);
     }
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
