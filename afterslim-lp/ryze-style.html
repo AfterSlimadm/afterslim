@@ -1392,14 +1392,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problems-timeline {
   position: relative;
   width: 100%;
-  padding: 56px 0 24px;
+  padding: 20px 0 8px; /* tight against headline above + pin below */
   overflow: hidden;
 }
 .problems-timeline-line {
   position: absolute;
-  /* Dot top = timeline padding-top (56px). Dot is 20px → center at 66px.
-     Line is 1px; center at top + 0.5 → use top: 65.5px (or 65px ≈ same). */
-  top: 65.5px;
+  /* Dot top = timeline padding-top (20px). Dot is 20px → center at 30px.
+     Line is 1px; center at top + 0.5 → use top: 29.5px. */
+  top: 29.5px;
   left: var(--line-left, 0);
   right: var(--line-right, 0);
   height: 1px;
@@ -1461,19 +1461,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problems-pin {
   position: relative;
   overflow: hidden;
-  padding: 64px 0 140px;
-  /* Three-layer background:
-     1. Top vertical fade — peach (section above) -> transparent
-     2. Bottom vertical fade — white (section below) -> transparent
-     3. Horizontal gradient with stops at each scene's CENTER
-        position (49vw, 135vw, 221vw, 307vw, 393vw, 479vw =
-        track padding 6vw + half-scene 43vw + N*86vw). Last stop
-        repeats at 700vw so panning to the right never leaves the
-        gradient zone. Tile is 700vw, no-repeat.
-     The horizontal gradient pans via background-position so every
-     scene's color sits exactly under that scene's content; the
-     top fade always blends peach (section bg above) into whatever
-     color is below at any X position. */
+  padding: 32px 0 120px;
   background-color: transparent;
   background-image:
     linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 100%),
@@ -1481,7 +1469,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     linear-gradient(to right,
       #F7E7DD 49vw, #FFE9D5 135vw, #FAD8BC 221vw,
       #FFE3BD 307vw, #F4C9A0 393vw, #E8B58A 479vw, #E8B58A 700vw);
-  background-size: 100% 64px, 100% 140px, 700vw 100%;
+  background-size: 100% 32px, 100% 120px, 700vw 100%;
   background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
   background-repeat: no-repeat;
   transition: background-position 1.2s cubic-bezier(0.22, 1, 0.36, 1);
