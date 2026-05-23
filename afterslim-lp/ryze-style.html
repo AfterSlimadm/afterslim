@@ -1400,13 +1400,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   /* Dot top = timeline padding-top (56px). Dot is 20px → center at 66px.
      Line is 1px; center at top + 0.5 → use top: 65.5px (or 65px ≈ same). */
   top: 65.5px;
-  left: 0;
+  left: var(--line-left, 0);
   right: 0;
   height: 1px;
   background: var(--orange);
   opacity: 0.30;
   z-index: 0;
   pointer-events: none;
+  transition: left 0.85s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problems-timeline-track {
   position: relative;
@@ -3180,6 +3181,11 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
     if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
+    if (timeline) {
+      // Scene 1: line starts at the text card's left edge (track padding 6vw
+      // + scene padding max(48px, 4vw)). Scenes 2-6: line edge-to-edge.
+      timeline.style.setProperty('--line-left', current === 0 ? 'calc(6vw + max(48px, 4vw))' : '0px');
+    }
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
     if (prevBtn) prevBtn.disabled = current <= 0;
