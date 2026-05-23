@@ -2997,11 +2997,19 @@ document.getElementById('heroPrev')?.addEventListener('click', function() { step
 document.getElementById('heroNext')?.addEventListener('click', function() { stepHero(1); });
 window.addEventListener('resize', applyThumbsWindow);
 
-// Arrow keys also navigate the hero gallery (skip when typing in form fields)
+// Arrow keys navigate the hero gallery ONLY when the hero section is in
+// viewport (otherwise the arrows would double-fire with the Problems
+// carousel's own keyboard handler when the user is scrolled down).
 document.addEventListener('keydown', function(e) {
   if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
   var tag = (e.target && e.target.tagName) || '';
   if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+  var heroBox = document.getElementById('heroMainBox');
+  if (!heroBox) return;
+  var rect = heroBox.getBoundingClientRect();
+  var vh = window.innerHeight;
+  var inView = rect.top < vh * 0.7 && rect.bottom > vh * 0.3;
+  if (!inView) return;
   stepHero(e.key === 'ArrowRight' ? 1 : -1);
 });
 
