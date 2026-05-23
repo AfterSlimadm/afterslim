@@ -1184,6 +1184,12 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   margin: 0 0 20px;
   letter-spacing: -0.02em;
 }
+.problems-title-grad {
+  background: linear-gradient(135deg, var(--ink) 40%, var(--orange) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .problems-title-accent {
   color: var(--orange);
   font-style: italic;
@@ -1191,6 +1197,20 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   font-weight: 700;
   position: relative;
   white-space: nowrap;
+  background: linear-gradient(
+    90deg,
+    var(--orange) 0%,
+    var(--orange) 35%,
+    #ffc59a 50%,
+    var(--orange) 65%,
+    var(--orange) 100%
+  );
+  background-size: 260% 100%;
+  background-position: 200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: problems-accent-shimmer 3.6s ease-in-out infinite;
 }
 .problems-title-accent::after {
   content: '';
@@ -1202,6 +1222,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   background: var(--orange);
   border-radius: 2px;
   opacity: 0.6;
+}
+@keyframes problems-accent-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .problems-title-accent { animation: none; background: none; -webkit-text-fill-color: var(--orange); }
 }
 .problems-subtitle {
   font-size: 19px;
@@ -1956,8 +1983,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 <section class="problems">
   <div class="container">
     <div class="problems-header">
-      <p class="problems-meds"><span>Mounjaro</span><span>Ozempic</span><span>Wegovy</span><span>Zepbound</span></p>
-      <h2 class="problems-title">Did you know all GLP-1 medications can come with <span class="problems-title-accent">these?</span></h2>
+      <h2 class="problems-title"><span class="problems-title-grad">Did you know Mounjaro, Ozempic, Wegovy, Zepbound, and other GLP-1 medications can come with</span> <span class="problems-title-accent">these?</span></h2>
       <p class="problems-subtitle">These medications deliver real results — and a few side effects. AfterSlim is designed to make your GLP-1 journey safer, so you keep the wins without losing yourself.</p>
       <div class="problems-badges">
         <span class="problems-badge">
