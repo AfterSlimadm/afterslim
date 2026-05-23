@@ -1391,15 +1391,30 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problems-pin {
   position: relative;
   overflow: hidden;
-  padding: 64px 0 140px; /* room for vertical bg fades + dots */
-  background-color: var(--current-scene-bg, #F7E7DD);
-  /* Vertical fades blend the dynamic pin bg into surrounding
-     sections (peach above, white below) so there's no hard
-     color edge above or below the carousel. */
+  padding: 64px 0 140px;
+  /* Three-layer background:
+     1. Top vertical fade — peach (section above) -> transparent
+     2. Bottom vertical fade — white (section below) -> transparent
+     3. Horizontal gradient with stops at each scene's CENTER
+        position (49vw, 135vw, 221vw, 307vw, 393vw, 479vw =
+        track padding 6vw + half-scene 43vw + N*86vw). Last stop
+        repeats at 700vw so panning to the right never leaves the
+        gradient zone. Tile is 700vw, no-repeat.
+     The horizontal gradient pans via background-position so every
+     scene's color sits exactly under that scene's content; the
+     top fade always blends peach (section bg above) into whatever
+     color is below at any X position. */
+  background-color: transparent;
   background-image:
-    linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 64px),
-    linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 140px);
-  transition: background-color 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 100%),
+    linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%),
+    linear-gradient(to right,
+      #F7E7DD 49vw, #FFE9D5 135vw, #FAD8BC 221vw,
+      #FFE3BD 307vw, #F4C9A0 393vw, #E8B58A 479vw, #E8B58A 700vw);
+  background-size: 100% 64px, 100% 140px, 700vw 100%;
+  background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
+  background-repeat: no-repeat;
+  transition: background-position 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problems-track {
   display: flex;
@@ -1407,18 +1422,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   padding: 0 6vw;
   transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
-  /* Continuous color canvas across all 6 scenes — same colors as
-     the per-scene --current-scene-bg, so the pin's solid bg
-     transitions in lockstep with the gradient panning. */
-  background: linear-gradient(
-    to right,
-    #F7E7DD 0%,
-    #FFE9D5 20%,
-    #FAD8BC 40%,
-    #FFE3BD 60%,
-    #F4C9A0 80%,
-    #E8B58A 100%
-  );
+  background: none;
 }
 .problem-scene {
   width: 86vw;
@@ -3023,11 +3027,6 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   var pin = stage ? stage.querySelector('.problems-pin') : null;
   if (!stage || !track || !pin) return;
 
-  // Same palette as the track horizontal gradient; pin transitions
-  // through these values so the surrounding bg matches the visible
-  // gradient slice as it pans.
-  var SCENE_COLORS = ['#F7E7DD', '#FFE9D5', '#FAD8BC', '#FFE3BD', '#F4C9A0', '#E8B58A'];
-
   var scenes = Array.from(track.querySelectorAll('.problem-scene'));
   var dots = Array.from(document.querySelectorAll('.problems-progress-dot'));
   var labelNum = document.getElementById('problemsProgressNum');
@@ -3041,12 +3040,13 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   function render() {
     if (mobile.matches) {
       track.style.transform = '';
-      pin.style.removeProperty('--current-scene-bg');
+      pin.style.removeProperty('--scene-offset');
       return;
     }
-    // No gap now between scenes (removed), just translate by 86vw per step.
+    // Track translates by -86vw per step; pin gradient pans by the
+    // same -86vw via --scene-offset so both stay in lockstep.
     track.style.transform = 'translateX(' + (-current * 86) + 'vw)';
-    pin.style.setProperty('--current-scene-bg', SCENE_COLORS[current] || SCENE_COLORS[0]);
+    pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
