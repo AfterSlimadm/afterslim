@@ -939,11 +939,45 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   font-weight: 500;
   letter-spacing: -0.01em;
 }
-.section-bridge p em {
+.bridge-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1);
+  white-space: pre-wrap;
+}
+.bridge-word.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.section-bridge p em.bridge-accent {
   color: var(--orange);
   font-style: italic;
   font-family: Georgia, serif;
   font-weight: 700;
+}
+/* Shimmer kicks in only after the whole sentence has finished
+   revealing (.section-bridge.is-finished). Same animation as
+   .problems-title-accent for visual consistency. */
+.section-bridge.is-finished p em.bridge-accent {
+  background: linear-gradient(
+    90deg,
+    var(--orange) 0%,
+    var(--orange) 35%,
+    #ffc59a 50%,
+    var(--orange) 65%,
+    var(--orange) 100%
+  );
+  background-size: 260% 100%;
+  background-position: 200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: problems-accent-shimmer 3.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bridge-word { opacity: 1; transform: none; transition: none; }
+  .section-bridge.is-finished p em.bridge-accent { animation: none; background: none; -webkit-text-fill-color: var(--orange); }
 }
 @media (max-width: 720px) {
   .section-bridge { padding: 64px 24px; }
@@ -2243,9 +2277,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 </section>
 
 <!-- 3.55 Bridge: Problems -> Science -->
-<section class="section-bridge">
+<section class="section-bridge" id="sectionBridge">
   <div class="container">
-    <p data-reveal>These medications deliver real results. They also come with side effects. AfterSlim is designed to keep your GLP-1 journey <em>safer,</em> so you keep the wins without losing yourself.</p>
+    <p><span class="bridge-word">These</span> <span class="bridge-word">medications</span> <span class="bridge-word">deliver</span> <span class="bridge-word">real</span> <span class="bridge-word">results.</span> <span class="bridge-word">They</span> <span class="bridge-word">also</span> <span class="bridge-word">come</span> <span class="bridge-word">with</span> <span class="bridge-word">side</span> <span class="bridge-word">effects.</span> <span class="bridge-word">AfterSlim</span> <span class="bridge-word">is</span> <span class="bridge-word">designed</span> <span class="bridge-word">to</span> <span class="bridge-word">keep</span> <span class="bridge-word">your</span> <span class="bridge-word">GLP-1</span> <span class="bridge-word">journey</span> <em class="bridge-word bridge-accent">safer,</em> <span class="bridge-word">so</span> <span class="bridge-word">you</span> <span class="bridge-word">keep</span> <span class="bridge-word">the</span> <span class="bridge-word">wins</span> <span class="bridge-word">without</span> <span class="bridge-word">losing</span> <span class="bridge-word">yourself.</span></p>
   </div>
 </section>
 
@@ -2961,6 +2995,41 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     });
   }
 
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+// Bridge — gradual word reveal tied to scroll position
+(function() {
+  var bridge = document.getElementById('sectionBridge');
+  if (!bridge) return;
+  var words = bridge.querySelectorAll('.bridge-word');
+  if (!words.length) return;
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) {
+    words.forEach(function(w) { w.classList.add('is-visible'); });
+    bridge.classList.add('is-finished');
+    return;
+  }
+  var raf = null;
+  function update() {
+    var rect = bridge.getBoundingClientRect();
+    var vh = window.innerHeight;
+    // Trigger zone: section top moves from 85% of viewport down to 30%
+    var start = vh * 0.85;
+    var end = vh * 0.30;
+    var progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
+    var revealCount = Math.round(progress * words.length);
+    words.forEach(function(w, i) {
+      w.classList.toggle('is-visible', i < revealCount);
+    });
+    bridge.classList.toggle('is-finished', progress >= 1);
+  }
+  function onScroll() {
+    if (raf) return;
+    raf = requestAnimationFrame(function() { raf = null; update(); });
+  }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', update);
   update();
