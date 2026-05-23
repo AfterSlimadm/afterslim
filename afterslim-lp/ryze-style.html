@@ -1249,20 +1249,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-/* Word-by-word reveal as the viewer scrolls toward the section.
-   Opacity-only (no inline-block / no translate) so the gradient
-   on .problems-title-grad keeps sweeping continuously across the
-   whole headline as each word fades in. */
-.problems-word {
-  opacity: 0;
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.problems-word.is-visible {
-  opacity: 1;
-}
-@media (prefers-reduced-motion: reduce) {
-  .problems-word { opacity: 1; transition: none; }
-}
 .problems-title-accent {
   color: var(--orange);
   font-style: italic;
@@ -1421,8 +1407,33 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   opacity: 0.30;
   z-index: 0;
   pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
   transition: left 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-              right 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+              right 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+.problems-stage.has-entered .problems-timeline-line {
+  transform: scaleX(1);
+}
+
+/* Hold scene 0's reveal state at zero until the user scrolls the
+   section into view. .is-active is needed on scene 0 from page load
+   so the carousel's positioning math works, but the entrance
+   animation (text + visual + bars + pictogram) should wait for the
+   viewer to actually arrive. These selectors win on specificity
+   over the .is-active variants thanks to the extra ancestor class. */
+.problems-stage:not(.has-entered) .problem-scene.is-active .problem-scene-content > *,
+.problems-stage:not(.has-entered) .problem-scene.is-active .problem-scene-visual {
+  opacity: 0;
+  transform: translateY(28px) scale(0.97);
+  filter: blur(10px);
+}
+.problems-stage:not(.has-entered) .problem-scene.is-active .stat-callout-figure.is-active {
+  fill: rgba(31, 20, 16, 0.14);
+}
+.problems-stage:not(.has-entered) .problem-scene.is-active .stat-compare-bar::after {
+  transform: scaleX(0);
 }
 .problems-timeline-track {
   position: relative;
@@ -2554,7 +2565,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 <section class="problems">
   <div class="container">
     <div class="problems-header">
-      <h2 class="problems-title"><span class="problems-title-grad"><span class="problems-word">Did</span> <span class="problems-word">you</span> <span class="problems-word">know</span> <span class="problems-word">Mounjaro,</span> <span class="problems-word">Ozempic,</span> <span class="problems-word">Wegovy,</span> <span class="problems-word">Zepbound,</span> <span class="problems-word">and</span> <span class="problems-word">other</span> <span class="problems-word">GLP-1</span> <span class="problems-word">medications</span> <span class="problems-word">can</span> <span class="problems-word">come</span> <span class="problems-word">with</span></span> <span class="problems-title-accent problems-word">these?</span></h2>
+      <h2 class="problems-title"><span class="problems-title-grad">Did you know Mounjaro, Ozempic, Wegovy, Zepbound, and other GLP-1 medications can come with</span> <span class="problems-title-accent">these?</span></h2>
     </div>
   </div>
 
@@ -3622,37 +3633,27 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   render();
 })();
 
-// Problems title — gradual word reveal tied to scroll position
+// Problems stage — fires the scene-0 entrance reveal + the timeline
+// line growth when the section scrolls into view. Before .has-entered
+// is set, scene 0's reveal state is held at zero via CSS so the
+// animation doesn't burn off on page load before the user gets there.
 (function() {
-  var title = document.querySelector('.problems .problems-title');
-  if (!title) return;
-  var words = title.querySelectorAll('.problems-word');
-  if (!words.length) return;
+  var stage = document.getElementById('problemsStage');
+  if (!stage) return;
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reducedMotion) {
-    words.forEach(function(w) { w.classList.add('is-visible'); });
+  if (reducedMotion || !('IntersectionObserver' in window)) {
+    stage.classList.add('has-entered');
     return;
   }
-  var raf = null;
-  function update() {
-    var rect = title.getBoundingClientRect();
-    var vh = window.innerHeight;
-    // Trigger zone: title top moves from 85% of viewport down to 35%
-    var start = vh * 0.85;
-    var end = vh * 0.35;
-    var progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
-    var revealCount = Math.round(progress * words.length);
-    words.forEach(function(w, i) {
-      w.classList.toggle('is-visible', i < revealCount);
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        stage.classList.add('has-entered');
+        observer.disconnect();
+      }
     });
-  }
-  function onScroll() {
-    if (raf) return;
-    raf = requestAnimationFrame(function() { raf = null; update(); });
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', update);
-  update();
+  }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+  observer.observe(stage);
 })();
 
 // Bridge — gradual word reveal tied to scroll position
