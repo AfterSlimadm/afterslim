@@ -1596,11 +1596,16 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 /* Scene 0 hosts a photographic image + an inline bar chart, so the
    glass treatment around its text clashes — strip it. The other
    scenes (line-icon visuals) keep their paired-glass look. */
-.problem-scene[data-scene="0"] {
+/* Scenes using the editorial layout (visual--stat + inline stat-callout
+   instead of liquid-glass cards). Top-align so the title and the
+   adjacent eyebrow start at the same Y. */
+.problem-scene[data-scene="0"],
+.problem-scene[data-scene="1"] {
   align-items: start;
   padding-top: 64px;
 }
-.problem-scene[data-scene="0"] .problem-scene-content {
+.problem-scene[data-scene="0"] .problem-scene-content,
+.problem-scene[data-scene="1"] .problem-scene-content {
   padding: 0;
   background: transparent;
   backdrop-filter: none;
@@ -2665,12 +2670,44 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <article class="problem-scene is-reversed" data-scene="1" data-label="Constipation &amp; Cramps">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Constipation &amp; Cramps</h3>
-          <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 doesn't just slow your stomach — it slows your entire digestive tract.</p>
-          <p class="problem-scene-body">Slower transit means harder, drier stool. Combined with eating less, you're also taking in less fiber and less water — the perfect storm for the cramps and the "Ozempic stuck" feeling so many users describe in forums.</p>
-          <p class="problem-scene-stat">20–30% of GLP-1 users experience constipation severe enough to report it.</p>
+          <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 doesn't just slow your stomach. It slows your entire digestive tract.</p>
+          <p class="problem-scene-body">Slower transit means harder, drier stool. And when you're eating less, you're also taking in less fiber and less water. That's the perfect storm for the cramps and the "Ozempic stuck" feeling users describe in forums.</p>
+          <!-- Incidence callout: same .stat-callout pattern as scene 0.
+               20–30% range from trials; 30% (1 in 3) is the upper bound,
+               which is more impactful and accurate-enough for editorial. -->
+          <div class="problem-scene-graph-card stat-callout" aria-hidden="true">
+            <p class="stat-callout-eyebrow">How common this is</p>
+            <div class="stat-callout-number"><b>30</b><i>%</i></div>
+            <div class="stat-callout-pictogram">
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+            </div>
+            <p class="stat-callout-caption">Up to <b>1 in 3</b> GLP-1 users report constipation severe enough to call out.</p>
+          </div>
         </div>
-        <div class="problem-scene-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3 2 6"/><path d="m22 6-3-3"/><path d="M6 19 4 22"/><path d="m20 19 2 3"/></svg>
+        <div class="problem-scene-visual problem-scene-visual--stat" aria-hidden="true">
+          <p class="stat-compare-eyebrow">How long food takes to pass</p>
+          <div class="stat-compare">
+            <div class="stat-compare-row">
+              <span class="stat-compare-label">Normal</span>
+              <span class="stat-compare-number"><b>30</b><i>hrs</i></span>
+              <span class="stat-compare-bar" style="--w:50%"></span>
+            </div>
+            <div class="stat-compare-row stat-compare-row--peak">
+              <span class="stat-compare-label">On GLP-1</span>
+              <span class="stat-compare-number"><b>60+</b><i>hrs</i></span>
+              <span class="stat-compare-bar" style="--w:100%"></span>
+            </div>
+          </div>
+          <p class="stat-compare-delta"><span class="stat-compare-delta-multiplier">2&times;</span> longer than your body designed</p>
         </div>
       </article>
 
