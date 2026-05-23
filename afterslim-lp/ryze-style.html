@@ -1061,6 +1061,149 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problems-badges { gap: 16px; }
 }
 
+/* 6-scene scroll-revealed explainer */
+.problems-scenes {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 24px;
+}
+.problem-scene {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.problem-scene:nth-child(even) .problem-scene-content { order: 2; }
+.problem-scene:nth-child(even) .problem-scene-visual { order: 1; }
+.problem-scene-num {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--orange);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.problem-scene-num::after {
+  content: '';
+  width: 56px;
+  height: 2px;
+  background: var(--orange);
+  border-radius: 2px;
+  opacity: 0.55;
+}
+.problem-scene-title {
+  font-size: clamp(30px, 3.6vw, 44px);
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+}
+.problem-scene-why {
+  font-size: 19px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin: 0 0 16px;
+  font-weight: 600;
+}
+.problem-scene-why em {
+  color: var(--orange);
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-weight: 700;
+  font-size: 21px;
+}
+.problem-scene-body {
+  font-size: 16.5px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  margin: 0 0 22px;
+}
+.problem-scene-stat {
+  display: inline-block;
+  padding: 12px 18px;
+  background: rgba(234,88,12,0.10);
+  border-left: 3px solid var(--orange);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--orange-dark);
+  border-radius: 0 8px 8px 0;
+  margin: 0;
+  line-height: 1.4;
+}
+.problem-scene-visual {
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 24px 56px rgba(31,20,16,0.08);
+  border: 1px solid rgba(234,88,12,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.problem-scene-visual::before {
+  content: '';
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(234,88,12,0.12) 0%, transparent 65%);
+  border-radius: 50%;
+  filter: blur(40px);
+}
+.problem-scene-visual svg {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  stroke: var(--orange);
+  stroke-width: 1.4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.problems-closer {
+  text-align: center;
+  margin-top: 120px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.problems-closer p {
+  font-size: 21px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 600;
+}
+.problems-closer p em {
+  color: var(--orange);
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-weight: 700;
+}
+@media (max-width: 900px) {
+  .problems-scenes { gap: 72px; padding-top: 16px; }
+  .problem-scene { grid-template-columns: 1fr; gap: 32px; }
+  .problem-scene:nth-child(even) .problem-scene-content,
+  .problem-scene:nth-child(even) .problem-scene-visual { order: initial; }
+  .problem-scene-visual { max-width: 360px; margin: 0 auto; }
+  .problem-scene-visual svg { width: 110px; height: 110px; }
+  .problem-scene-title { font-size: 28px; }
+  .problem-scene-why { font-size: 17px; }
+  .problem-scene-why em { font-size: 19px; }
+  .problem-scene-body { font-size: 15.5px; }
+  .problems-closer { margin-top: 64px; }
+  .problems-closer p { font-size: 18px; }
+}
+
 /* ===== FAQ ===== */
 .faq-section {
   background: linear-gradient(
@@ -1482,48 +1625,90 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </span>
       </div>
     </div>
-    <div class="problems-grid">
-      <div class="problems-image">
-        <img src="images/afterslim-bottle-water.png" alt="AfterSlim bottle with glass of water">
-      </div>
-      <div class="problems-content">
-        <p class="problems-eyebrow">AfterSlim targets</p>
-        <ul class="problems-list">
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Hair Loss
-          </li>
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Fatigue &amp; Low Energy
-          </li>
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Brittle Nails
-          </li>
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Constipation &amp; Cramps
-          </li>
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Bloating
-          </li>
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Sugar Cravings
-          </li>
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Nausea
-          </li>
-          <li>
-            <span class="problems-check"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ea580c"/><path d="M7 12.5 10.5 16 17 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            Hunger Spikes
-          </li>
-        </ul>
-        <p class="problems-tagline">Daily GLP-1 companion. One capsule a day.</p>
-      </div>
+    <div class="problems-scenes">
+
+      <article class="problem-scene" data-reveal>
+        <div class="problem-scene-content">
+          <p class="problem-scene-num">01 / Gut</p>
+          <h3 class="problem-scene-title">Nausea &amp; Bloating</h3>
+          <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 slows gastric emptying — food sits in your stomach for hours longer than normal.</p>
+          <p class="problem-scene-body">Your stomach was designed to empty in about 90 minutes. On Ozempic, Mounjaro, or Wegovy, that can stretch past 4 hours. The food fermenting in there is what creates the fullness that won't quit, the queasiness, and the gas.</p>
+          <p class="problem-scene-stat">~44% of users on semaglutide report nausea in clinical trials.</p>
+        </div>
+        <div class="problem-scene-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+        </div>
+      </article>
+
+      <article class="problem-scene" data-reveal>
+        <div class="problem-scene-content">
+          <p class="problem-scene-num">02 / Gut</p>
+          <h3 class="problem-scene-title">Constipation &amp; Cramps</h3>
+          <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 doesn't just slow your stomach — it slows your entire digestive tract.</p>
+          <p class="problem-scene-body">Slower transit means harder, drier stool. Combined with eating less, you're also taking in less fiber and less water — the perfect storm for the cramps and the "Ozempic stuck" feeling so many users describe in forums.</p>
+          <p class="problem-scene-stat">20–30% of GLP-1 users experience constipation severe enough to report it.</p>
+        </div>
+        <div class="problem-scene-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3 2 6"/><path d="m22 6-3-3"/><path d="M6 19 4 22"/><path d="m20 19 2 3"/></svg>
+        </div>
+      </article>
+
+      <article class="problem-scene" data-reveal>
+        <div class="problem-scene-content">
+          <p class="problem-scene-num">03 / Visible</p>
+          <h3 class="problem-scene-title">Hair Loss &amp; Brittle Nails</h3>
+          <p class="problem-scene-why"><em>Why this happens:</em> Rapid caloric restriction triggers telogen effluvium — your body pauses hair growth to conserve protein.</p>
+          <p class="problem-scene-body">When you suddenly eat 30–40% less, your body deprioritizes "optional" systems first. Hair follicles and nail beds don't get the amino acids and biotin they need. The shedding usually shows up 2–3 months after starting the medication — exactly when you're celebrating the weight loss.</p>
+          <p class="problem-scene-stat">Reported by 3–7% in trials. Real-world reports run 3–4× higher.</p>
+        </div>
+        <div class="problem-scene-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M9 2v6"/><path d="M9 8c-3 0-5 2-5 5s2 5 5 5"/><path d="M9 18v4"/><path d="M15 2v6"/><path d="M15 8c3 0 5 2 5 5s-2 5-5 5"/><path d="M15 18v4"/></svg>
+        </div>
+      </article>
+
+      <article class="problem-scene" data-reveal>
+        <div class="problem-scene-content">
+          <p class="problem-scene-num">04 / Energy</p>
+          <h3 class="problem-scene-title">Fatigue &amp; Low Energy</h3>
+          <p class="problem-scene-why"><em>Why this happens:</em> Reduced food intake plus altered gut bacteria equals reduced cellular energy.</p>
+          <p class="problem-scene-body">Your gut microbes don't just digest food — they produce short-chain fatty acids that fuel your colon cells and influence your mitochondria. GLP-1 medications disrupt this ecosystem, and combined with eating less, your body runs on a smaller battery.</p>
+          <p class="problem-scene-stat">~1 in 7 users report persistent fatigue interfering with daily life.</p>
+        </div>
+        <div class="problem-scene-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect width="18" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" x2="22" y1="11" y2="13"/><line x1="6" x2="6" y1="11" y2="13"/></svg>
+        </div>
+      </article>
+
+      <article class="problem-scene" data-reveal>
+        <div class="problem-scene-content">
+          <p class="problem-scene-num">05 / Metabolic</p>
+          <h3 class="problem-scene-title">Sugar Cravings &amp; Hunger Spikes</h3>
+          <p class="problem-scene-why"><em>Why this happens:</em> When the medication wears off late in the cycle, your unbalanced gut screams for what's missing.</p>
+          <p class="problem-scene-body">GLP-1 medications mute hunger but don't fix the microbiome — the bacteria that quietly regulate satiety, blood sugar, and the reward signals around food. When the drug ebbs, your brain hears the unbalanced gut and reaches for the fastest fuel it knows: sugar.</p>
+          <p class="problem-scene-stat">Most users report rebound cravings between doses — the #1 reason people fall off the regimen.</p>
+        </div>
+        <div class="problem-scene-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2.2c1.8 1.9 3.2 4.7 3.2 9.8s-1.4 7.9-3.2 9.8"/><path d="M12 2.2c-1.8 1.9-3.2 4.7-3.2 9.8s1.4 7.9 3.2 9.8"/></svg>
+        </div>
+      </article>
+
+      <article class="problem-scene" data-reveal>
+        <div class="problem-scene-content">
+          <p class="problem-scene-num">06 / Body</p>
+          <h3 class="problem-scene-title">Muscle Loss</h3>
+          <p class="problem-scene-why"><em>Why this happens:</em> Up to 40% of the weight you lose on GLP-1 is lean mass — not fat.</p>
+          <p class="problem-scene-body">Without enough protein, resistance training, and recovery support, your body burns muscle alongside fat. That's why GLP-1 users often look thinner but feel weaker — and gain the weight back faster the moment they stop the medication. The hidden cost no one talks about.</p>
+          <p class="problem-scene-stat">25–40% of weight lost on GLP-1 is lean mass (recent meta-analyses).</p>
+        </div>
+        <div class="problem-scene-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="problems-closer" data-reveal>
+      <p>AfterSlim is the daily companion designed to address every one of them. <em>One capsule a day.</em></p>
     </div>
   </div>
 </section>
