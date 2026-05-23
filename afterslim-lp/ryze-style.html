@@ -1391,8 +1391,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problems-pin {
   position: relative;
   overflow: hidden;
-  padding: 64px 0 140px; /* room for dots underneath */
+  padding: 64px 0 140px; /* room for vertical bg fades + dots */
   background-color: var(--current-scene-bg, #F7E7DD);
+  /* Vertical fades blend the dynamic pin bg into surrounding
+     sections (peach above, white below) so there's no hard
+     color edge above or below the carousel. */
+  background-image:
+    linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 64px),
+    linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 140px);
   transition: background-color 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problems-track {
@@ -1521,13 +1527,12 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene .problem-scene-content > *,
 .problem-scene .problem-scene-visual {
   opacity: 0;
-  transform: translateY(32px) scale(0.97);
-  filter: blur(12px);
+  transform: translateY(28px) scale(0.97);
+  filter: blur(10px);
   transition:
-    opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1.15s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 1.05s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: 0s; /* default applies on exit */
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.95s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problem-scene.is-active .problem-scene-content > *,
 .problem-scene.is-active .problem-scene-visual {
@@ -1535,12 +1540,23 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   transform: none;
   filter: blur(0);
 }
-.problem-scene.is-active .problem-scene-num    { transition-delay: 0.15s; }
-.problem-scene.is-active .problem-scene-visual { transition-delay: 0.30s; }
-.problem-scene.is-active .problem-scene-title  { transition-delay: 0.45s; }
-.problem-scene.is-active .problem-scene-why    { transition-delay: 0.70s; }
-.problem-scene.is-active .problem-scene-body   { transition-delay: 0.95s; }
-.problem-scene.is-active .problem-scene-stat   { transition-delay: 1.20s; }
+/* Exit cascade (scene losing .is-active) — REVERSE order so the
+   bottom of the scene starts unbuilding first. Same window as
+   entry so both happen simultaneously when user clicks next. */
+.problem-scene .problem-scene-stat   { transition-delay: 0.00s; }
+.problem-scene .problem-scene-body   { transition-delay: 0.08s; }
+.problem-scene .problem-scene-why    { transition-delay: 0.16s; }
+.problem-scene .problem-scene-title  { transition-delay: 0.24s; }
+.problem-scene .problem-scene-visual { transition-delay: 0.32s; }
+.problem-scene .problem-scene-num    { transition-delay: 0.40s; }
+/* Entry cascade (scene gaining .is-active) — FORWARD order, top
+   of the scene builds first. */
+.problem-scene.is-active .problem-scene-num    { transition-delay: 0.00s; }
+.problem-scene.is-active .problem-scene-visual { transition-delay: 0.08s; }
+.problem-scene.is-active .problem-scene-title  { transition-delay: 0.16s; }
+.problem-scene.is-active .problem-scene-why    { transition-delay: 0.24s; }
+.problem-scene.is-active .problem-scene-body   { transition-delay: 0.32s; }
+.problem-scene.is-active .problem-scene-stat   { transition-delay: 0.40s; }
 .problem-scene-num {
   font-size: 14px;
   font-weight: 700;
