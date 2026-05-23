@@ -1500,18 +1500,20 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene.is-reversed .problem-scene-content { order: 2; }
 .problem-scene.is-reversed .problem-scene-visual { order: 1; }
 
-/* Supporting evidence chart on scene 0 — vertical bar comparison.
-   Uses a DIFFERENT visual vocabulary than the right column's
-   editorial typography so the two halves of the scene complement
-   instead of mirror each other: chart on left, typography on right. */
-.bar-chart {
+/* Incidence callout on scene 0 — pictogram + big number + caption.
+   Different visual vocabulary than the right column (which uses
+   editorial typography for the timing comparison): here, a literal
+   "how many people" pictogram for incidence rate. Avoids the
+   placebo-vs-Ozempic chart that required statistical methodology
+   to read. */
+.stat-callout {
   margin-top: 32px;
   max-width: 460px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 18px;
 }
-.bar-chart-eyebrow {
+.stat-callout-eyebrow {
   margin: 0;
   font-size: 13px;
   font-weight: 700;
@@ -1519,132 +1521,60 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   text-transform: uppercase;
   color: var(--orange);
 }
-.bar-chart-plot {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: end;
-  gap: 0 16px;
-  height: 220px;
-}
-.bar-chart-col {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  align-items: end;
-  justify-items: center;
-  height: 100%;
-  text-align: center;
-}
-.bar-chart-value {
-  font-size: 32px;
+.stat-callout-number {
+  font-size: clamp(80px, 9.5vw, 120px);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--ink);
+  letter-spacing: -0.04em;
   line-height: 1;
-  margin-bottom: 10px;
+  color: var(--orange);
   font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: baseline;
-  gap: 2px;
-  opacity: 0;
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.6s;
+  gap: 4px;
 }
-.bar-chart-value i {
-  font-style: normal;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--ink-2);
-  opacity: 0.6;
-  margin-left: 1px;
-}
-.bar-chart-col--peak .bar-chart-value {
-  font-size: 48px;
-  color: var(--orange);
-  transition-delay: 2.0s;
-}
-.bar-chart-col--peak .bar-chart-value i {
-  color: var(--orange);
-  opacity: 0.85;
-  font-size: 22px;
-}
-.problem-scene.is-active .bar-chart-value { opacity: 1; }
-.bar-chart-bar {
-  position: relative;
-  width: 100%;
-  max-width: 84px;
-  height: 100%;
-  background: transparent;
-}
-.bar-chart-bar::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--h, 0%);
-  background: rgba(234, 88, 12, 0.28);
-  border-radius: 8px 8px 0 0;
-  transform-origin: bottom;
-  transform: scaleY(0);
-  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
-}
-.bar-chart-col--peak .bar-chart-bar::after {
-  background: var(--orange);
-  transition-delay: 1.0s;
-}
-.problem-scene.is-active .bar-chart-bar::after { transform: scaleY(1); }
-.bar-chart-label {
-  margin-top: 14px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  opacity: 0.6;
-}
-.bar-chart-col--peak .bar-chart-label {
-  color: var(--orange);
-  opacity: 0.9;
-}
-.bar-chart-vs {
-  align-self: center;
-  font-size: 18px;
+.stat-callout-number b {
   font-weight: 800;
-  color: var(--orange);
-  letter-spacing: 0;
-  position: relative;
-  padding: 0 8px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) 2.3s;
 }
-.bar-chart-vs::before,
-.bar-chart-vs::after {
-  content: '';
-  display: block;
-  position: absolute;
-  height: 1px;
-  width: 14px;
-  background: var(--orange);
-  opacity: 0.4;
-  top: 50%;
+.stat-callout-number i {
+  font-style: normal;
+  font-size: 0.5em;
+  opacity: 0.85;
+  font-weight: 700;
 }
-.bar-chart-vs::before { right: 100%; }
-.bar-chart-vs::after { left: 100%; }
-.problem-scene.is-active .bar-chart-vs { opacity: 1; }
-.bar-chart-caption {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.4px;
+.stat-callout-pictogram {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  max-width: 360px;
+  margin-top: 6px;
+}
+.stat-callout-figure {
+  width: 100%;
+  height: auto;
+  fill: rgba(31, 20, 16, 0.14);
+  transition: fill 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.problem-scene.is-active .stat-callout-figure.is-active {
+  fill: var(--orange);
+}
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(1) { transition-delay: 0.60s; }
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(2) { transition-delay: 0.78s; }
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(3) { transition-delay: 0.96s; }
+.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(4) { transition-delay: 1.14s; }
+.stat-callout-caption {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.55;
   color: var(--ink-2);
-  opacity: 0.55;
-  font-style: italic;
+}
+.stat-callout-caption b {
+  font-weight: 800;
+  color: var(--ink);
 }
 @media (max-width: 900px) {
-  .bar-chart-plot { height: 180px; }
-  .bar-chart-value { font-size: 26px; }
-  .bar-chart-col--peak .bar-chart-value { font-size: 40px; }
-  .bar-chart-bar { max-width: 64px; }
+  .stat-callout-number { font-size: clamp(64px, 16vw, 96px); }
+  .stat-callout-pictogram { gap: 6px; max-width: 280px; }
 }
 
 /* Liquid Glass card around the text content — same formula as the
@@ -2690,27 +2620,28 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Nausea &amp; Bloating</h3>
           <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 puts the brakes on your stomach — food sits there for hours longer than your body expects.</p>
-          <p class="problem-scene-body">Your stomach was designed to empty in about 90 minutes. On Ozempic, Mounjaro, or Wegovy, that can stretch past 4 hours. The food fermenting in there is what creates the fullness that won't quit, the queasiness, and the gas.</p>
-          <!-- Supporting evidence chart: vertical bar comparison of
-               nausea incidence (placebo vs Ozempic) in clinical trials.
-               Different visual vocabulary from the right column on
-               purpose: this is a CHART, that is editorial typography. -->
-          <div class="problem-scene-graph-card bar-chart" aria-hidden="true">
-            <p class="bar-chart-eyebrow">How many users report it</p>
-            <div class="bar-chart-plot">
-              <div class="bar-chart-col">
-                <span class="bar-chart-value">20<i>%</i></span>
-                <span class="bar-chart-bar" style="--h:45.5%"></span>
-                <span class="bar-chart-label">Placebo</span>
-              </div>
-              <span class="bar-chart-vs">2.2&times;</span>
-              <div class="bar-chart-col bar-chart-col--peak">
-                <span class="bar-chart-value">44<i>%</i></span>
-                <span class="bar-chart-bar" style="--h:100%"></span>
-                <span class="bar-chart-label">On Ozempic</span>
-              </div>
+          <p class="problem-scene-body">Your stomach was designed to empty in about 90 minutes. On Ozempic, Mounjaro, or Wegovy, that can stretch past 4 hours. That prolonged fullness is what triggers the nausea — and food fermenting while it waits is what creates the gas and bloating.</p>
+          <!-- Incidence callout: a pictogram tells the "how common"
+               story without forcing the reader to parse placebo-
+               controlled-trial methodology. 10 figures with 4 highlighted
+               give the gut sense of "almost half"; the caption lands
+               the actual 44% / "nearly 1 in 2" framing in words. -->
+          <div class="problem-scene-graph-card stat-callout" aria-hidden="true">
+            <p class="stat-callout-eyebrow">How common this is</p>
+            <div class="stat-callout-number"><b>44</b><i>%</i></div>
+            <div class="stat-callout-pictogram">
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
             </div>
-            <p class="bar-chart-caption">Reported nausea in semaglutide clinical trials</p>
+            <p class="stat-callout-caption">Nearly <b>1 in 2</b> GLP-1 users report nausea in clinical trials.</p>
           </div>
         </div>
         <div class="problem-scene-visual problem-scene-visual--stat" aria-hidden="true">
