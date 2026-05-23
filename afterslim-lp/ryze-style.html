@@ -1383,6 +1383,48 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problems-badges { gap: 16px; }
 }
 
+/* Timeline between header and carousel — visual cue of horizontal journey */
+.problems-timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 48px auto 0;
+  padding: 0 8vw;
+  height: 16px;
+}
+.problems-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8vw;
+  right: 8vw;
+  top: 50%;
+  height: 1px;
+  background: var(--orange);
+  opacity: 0.28;
+  transform: translateY(-50%);
+}
+.problems-timeline-tick {
+  position: relative;
+  z-index: 1;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(234,88,12,0.30);
+  transition: background 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.problems-timeline-tick.is-visited {
+  background: var(--orange);
+}
+.problems-timeline-tick.is-active {
+  background: var(--orange);
+  transform: scale(1.6);
+  box-shadow: 0 0 0 4px rgba(234,88,12,0.18);
+}
+
 /* 6-scene horizontal carousel — single continuous canvas */
 .problems-stage {
   position: relative;
@@ -1707,7 +1749,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problem-scene-why { font-size: 17px; }
   .problem-scene-why em { font-size: 19px; }
   .problem-scene-body { font-size: 15.5px; }
-  .problems-arrow, .problems-progress { display: none; }
+  .problems-arrow, .problems-progress, .problems-timeline { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .problems-track { transition: none; }
@@ -2240,6 +2282,16 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           One Capsule a Day
         </span>
       </div>
+    </div>
+
+    <!-- Timeline cue: 6 ticks across, current highlighted -->
+    <div class="problems-timeline" id="problemsTimeline" aria-hidden="true">
+      <span class="problems-timeline-tick is-active"></span>
+      <span class="problems-timeline-tick"></span>
+      <span class="problems-timeline-tick"></span>
+      <span class="problems-timeline-tick"></span>
+      <span class="problems-timeline-tick"></span>
+      <span class="problems-timeline-tick"></span>
     </div>
   </div>
 
@@ -3029,6 +3081,7 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
 
   var scenes = Array.from(track.querySelectorAll('.problem-scene'));
   var dots = Array.from(document.querySelectorAll('.problems-progress-dot'));
+  var ticks = Array.from(document.querySelectorAll('.problems-timeline-tick'));
   var labelNum = document.getElementById('problemsProgressNum');
   var labelName = document.getElementById('problemsProgressName');
   var prevBtn = document.getElementById('problemsPrev');
@@ -3049,6 +3102,10 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
+    ticks.forEach(function(t, i) {
+      t.classList.toggle('is-active', i === current);
+      t.classList.toggle('is-visited', i < current);
+    });
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
     if (prevBtn) prevBtn.disabled = current <= 0;
