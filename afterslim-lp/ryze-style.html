@@ -924,6 +924,215 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .howto-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ===== Science Behind ===== */
+.science {
+  background: var(--bg-2);
+  padding: 120px 0;
+}
+.science-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 72px;
+}
+.science-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.science-eyebrow::before,
+.science-eyebrow::after {
+  content: '';
+  width: 36px;
+  height: 2px;
+  background: var(--orange);
+  border-radius: 2px;
+  opacity: 0.5;
+}
+.science-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+.science-title em {
+  color: var(--orange);
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-weight: 700;
+}
+.science-subtitle {
+  font-size: 19px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0;
+}
+.science-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.science-card {
+  background: var(--bg);
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.science-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(31,20,16,0.08);
+}
+.science-card-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.science-card-img img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+.science-card-tag {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.science-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+  font-style: italic;
+  font-family: Georgia, serif;
+}
+.science-card-body {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0 0 18px;
+  flex: 1;
+}
+.science-card-stat {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange-dark);
+  padding: 10px 14px;
+  background: rgba(234,88,12,0.08);
+  border-left: 3px solid var(--orange);
+  border-radius: 0 8px 8px 0;
+  line-height: 1.4;
+}
+
+.science-vsl {
+  background: linear-gradient(135deg, #1f1410 0%, #4a1804 100%);
+  color: #fff;
+  border-radius: 24px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+.science-vsl:hover { transform: translateY(-4px); }
+.science-vsl-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  background: rgba(234,88,12,0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.science-vsl-thumb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(234,88,12,0.25) 0%, transparent 65%);
+}
+.science-vsl-play {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(234,88,12,0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.science-vsl:hover .science-vsl-play {
+  transform: scale(1.08);
+  box-shadow: 0 12px 32px rgba(234,88,12,0.55);
+}
+.science-vsl-play svg {
+  width: 28px;
+  height: 28px;
+  fill: #fff;
+  margin-left: 4px;
+}
+.science-vsl-eyebrow {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.science-vsl-title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  color: #fff;
+}
+.science-vsl-meta {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.72);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .science { padding: 72px 0; }
+  .science-header { margin-bottom: 48px; }
+  .science-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media (max-width: 560px) {
+  .science-grid { grid-template-columns: 1fr; }
+}
+
 /* ===== Problems (PAS hook) ===== */
 .problems {
   background: linear-gradient(
@@ -1709,6 +1918,72 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
     <div class="problems-closer" data-reveal>
       <p>AfterSlim is the daily companion designed to address every one of them. <em>One capsule a day.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- 3.6 The Science Behind -->
+<section class="science">
+  <div class="container">
+    <div class="science-header" data-reveal>
+      <span class="science-eyebrow">The science behind AfterSlim</span>
+      <h2 class="science-title">Five compounds that rebuild what GLP-1 <em>quietly depletes.</em></h2>
+      <p class="science-subtitle">Three keystone bacteria, two prebiotics that feed them. Every capsule pairs the strain with the fuel.</p>
+    </div>
+
+    <div class="science-grid">
+
+      <article class="science-card" data-reveal>
+        <div class="science-card-img"><img src="images/akkermansia-muciniphila.png" alt="Akkermansia muciniphila"></div>
+        <span class="science-card-tag">Keystone strain</span>
+        <h3 class="science-card-title">Akkermansia muciniphila</h3>
+        <p class="science-card-body">The next-generation strain that maintains the gut lining and signals satiety to your brain. The same bacteria competitors charge $150/month for on its own.</p>
+        <p class="science-card-stat">Linked to lower BMI and better insulin sensitivity in 14+ peer-reviewed studies.</p>
+      </article>
+
+      <article class="science-card" data-reveal>
+        <div class="science-card-img"><img src="images/clostridium-butyricum.png" alt="Clostridium butyricum"></div>
+        <span class="science-card-tag">Butyrate producer</span>
+        <h3 class="science-card-title">Clostridium butyricum</h3>
+        <p class="science-card-body">Produces butyrate — the short-chain fatty acid that fuels your colon cells, reduces inflammation, and keeps the gut barrier intact.</p>
+        <p class="science-card-stat">Butyrate provides up to 70% of the energy your colon cells need.</p>
+      </article>
+
+      <article class="science-card" data-reveal>
+        <div class="science-card-img"><img src="images/bifidobacterium-infantis.png" alt="Bifidobacterium infantis"></div>
+        <span class="science-card-tag">Gut barrier defender</span>
+        <h3 class="science-card-title">Bifidobacterium infantis</h3>
+        <p class="science-card-body">Stabilizes the microbiome and tamps down low-grade inflammation in the gut lining — the inflammation linked to bloating and brain fog.</p>
+        <p class="science-card-stat">One of the most clinically studied probiotics for GI comfort.</p>
+      </article>
+
+      <article class="science-card" data-reveal>
+        <div class="science-card-img"><img src="images/chicory-root-fiber.webp" alt="Chicory root inulin"></div>
+        <span class="science-card-tag">Microbiome fuel</span>
+        <h3 class="science-card-title">Chicory Root Inulin</h3>
+        <p class="science-card-body">A prebiotic fiber that feeds your beneficial bacteria — especially Akkermansia. Adding the strain without feeding it is like planting seeds in dry soil.</p>
+        <p class="science-card-stat">Shown to triple Akkermansia abundance in 8 weeks (Cani et al., 2017).</p>
+      </article>
+
+      <article class="science-card" data-reveal>
+        <div class="science-card-img"><img src="images/resistant-starch.webp" alt="Resistant starch"></div>
+        <span class="science-card-tag">Backup fiber</span>
+        <h3 class="science-card-title">Resistant Starch</h3>
+        <p class="science-card-body">Reaches the colon undigested, where it ferments into butyrate and gently supports satiety between doses.</p>
+        <p class="science-card-stat">Improves insulin sensitivity by up to 33% in published trials.</p>
+      </article>
+
+      <a class="science-vsl" href="#" data-reveal aria-label="Watch the 3-minute breakdown">
+        <div class="science-vsl-thumb">
+          <div class="science-vsl-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <span class="science-vsl-eyebrow">Watch the breakdown</span>
+        <h3 class="science-vsl-title">Why your gut needs this</h3>
+        <p class="science-vsl-meta">3-minute explainer · No sign-up</p>
+      </a>
+
     </div>
   </div>
 </section>
