@@ -1397,7 +1397,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .problems-timeline-line {
   position: absolute;
-  top: 61px;
+  /* Dot top = timeline padding-top (56px). Dot is 20px → center at 66px.
+     Line is 1px; center at top + 0.5 → use top: 65.5px (or 65px ≈ same). */
+  top: 65.5px;
   left: 0;
   right: 0;
   height: 1px;
