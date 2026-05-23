@@ -1383,11 +1383,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problems-badges { gap: 16px; }
 }
 
-/* Timeline between header and carousel — full-width journey strip
-   with labeled markers (Bonafide / Ristela inspiration). The line
-   stretches edge to edge of the viewport; markers sit a bit inside
-   so the line continues past the first and last (visual cue that
-   the journey continues). */
+/* Timeline strip with a single centered marker showing the active
+   scene. On scene 1 the line is collapsed (scaleX 0) so only the
+   dot+label appears — represents "start of the journey, nothing
+   behind yet". From scene 2 on, the line expands outward from
+   center to edge-to-edge. */
 .problems-timeline {
   position: relative;
   width: 100%;
@@ -1395,65 +1395,50 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .problems-timeline-line {
   position: absolute;
-  top: 61px; /* aligns with dot center */
+  top: 61px;
   left: 0;
   right: 0;
   height: 1px;
   background: var(--orange);
-  opacity: 0.28;
+  opacity: 0.30;
   z-index: 0;
   pointer-events: none;
+  transform-origin: center;
+  transform: scaleX(0);
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.problems-timeline.is-line-visible .problems-timeline-line {
+  transform: scaleX(1);
 }
 .problems-timeline-markers {
   position: relative;
   z-index: 1;
   display: flex;
-  justify-content: space-between;
-  padding: 0 6vw;
+  justify-content: center;
 }
 .problems-timeline-marker {
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
   background: transparent;
-  border: 0;
-  padding: 0;
-  font-family: inherit;
 }
 .problems-timeline-marker-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: rgba(234,88,12,0.30);
-  transition: background 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.problems-timeline-marker.is-visited .problems-timeline-marker-dot {
   background: var(--orange);
-}
-.problems-timeline-marker.is-active .problems-timeline-marker-dot {
-  background: var(--orange);
-  transform: scale(1.7);
-  box-shadow: 0 0 0 5px rgba(234,88,12,0.18);
+  box-shadow: 0 0 0 6px rgba(234, 88, 12, 0.16);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problems-timeline-marker-label {
   margin-top: 18px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 1.8px;
-  color: rgba(31,20,16,0.40);
+  color: var(--orange);
   text-transform: uppercase;
   white-space: nowrap;
-  transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.problems-timeline-marker.is-visited .problems-timeline-marker-label,
-.problems-timeline-marker.is-active .problems-timeline-marker-label {
-  color: var(--orange);
-}
-.problems-timeline-marker:hover .problems-timeline-marker-label {
-  color: var(--orange);
+  transition: opacity 0.4s ease;
 }
 
 /* 6-scene horizontal carousel — single continuous canvas */
@@ -2342,34 +2327,15 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     </div>
   </div>
 
-  <!-- Timeline strip: 6 labeled markers, line spans full viewport width -->
+  <!-- Timeline: single centered marker; line collapses on scene 1
+       and expands edge-to-edge from scene 2 onward. -->
   <div class="problems-timeline" id="problemsTimeline" aria-hidden="true">
     <span class="problems-timeline-line"></span>
     <div class="problems-timeline-markers">
-      <button class="problems-timeline-marker is-active" data-step="0" type="button" aria-label="Go to Nausea and Bloating">
+      <span class="problems-timeline-marker">
         <span class="problems-timeline-marker-dot"></span>
-        <span class="problems-timeline-marker-label">01 / Gut</span>
-      </button>
-      <button class="problems-timeline-marker" data-step="1" type="button" aria-label="Go to Constipation and Cramps">
-        <span class="problems-timeline-marker-dot"></span>
-        <span class="problems-timeline-marker-label">02 / Gut</span>
-      </button>
-      <button class="problems-timeline-marker" data-step="2" type="button" aria-label="Go to Hair Loss and Brittle Nails">
-        <span class="problems-timeline-marker-dot"></span>
-        <span class="problems-timeline-marker-label">03 / Visible</span>
-      </button>
-      <button class="problems-timeline-marker" data-step="3" type="button" aria-label="Go to Fatigue and Low Energy">
-        <span class="problems-timeline-marker-dot"></span>
-        <span class="problems-timeline-marker-label">04 / Energy</span>
-      </button>
-      <button class="problems-timeline-marker" data-step="4" type="button" aria-label="Go to Sugar Cravings and Hunger Spikes">
-        <span class="problems-timeline-marker-dot"></span>
-        <span class="problems-timeline-marker-label">05 / Metabolic</span>
-      </button>
-      <button class="problems-timeline-marker" data-step="5" type="button" aria-label="Go to Muscle Loss">
-        <span class="problems-timeline-marker-dot"></span>
-        <span class="problems-timeline-marker-label">06 / Body</span>
-      </button>
+        <span class="problems-timeline-marker-label" id="problemsTimelineLabel">01 / Gut</span>
+      </span>
     </div>
   </div>
 
@@ -3159,7 +3125,9 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
 
   var scenes = Array.from(track.querySelectorAll('.problem-scene'));
   var dots = Array.from(document.querySelectorAll('.problems-progress-dot'));
-  var markers = Array.from(document.querySelectorAll('.problems-timeline-marker'));
+  var timeline = document.getElementById('problemsTimeline');
+  var timelineLabel = document.getElementById('problemsTimelineLabel');
+  var TIMELINE_LABELS = ['01 / Gut', '02 / Gut', '03 / Visible', '04 / Energy', '05 / Metabolic', '06 / Body'];
   var labelNum = document.getElementById('problemsProgressNum');
   var labelName = document.getElementById('problemsProgressName');
   var prevBtn = document.getElementById('problemsPrev');
@@ -3180,10 +3148,8 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
-    markers.forEach(function(m, i) {
-      m.classList.toggle('is-active', i === current);
-      m.classList.toggle('is-visited', i < current);
-    });
+    if (timelineLabel) timelineLabel.textContent = TIMELINE_LABELS[current];
+    if (timeline) timeline.classList.toggle('is-line-visible', current > 0);
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
     if (prevBtn) prevBtn.disabled = current <= 0;
@@ -3206,12 +3172,6 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   if (prevBtn) prevBtn.addEventListener('click', function() { go(-1); });
   if (nextBtn) nextBtn.addEventListener('click', function() { go(1); });
   dots.forEach(function(d, i) { d.addEventListener('click', function() { goTo(i); }); d.style.cursor = 'pointer'; });
-  markers.forEach(function(m) {
-    m.addEventListener('click', function() {
-      var step = parseInt(m.getAttribute('data-step'), 10);
-      if (!isNaN(step)) goTo(step);
-    });
-  });
 
   // Keyboard arrows when section is in viewport
   document.addEventListener('keydown', function(e) {
