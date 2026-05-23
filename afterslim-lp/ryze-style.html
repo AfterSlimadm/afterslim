@@ -1601,13 +1601,15 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
    adjacent eyebrow start at the same Y. */
 .problem-scene[data-scene="0"],
 .problem-scene[data-scene="1"],
-.problem-scene[data-scene="2"] {
+.problem-scene[data-scene="2"],
+.problem-scene[data-scene="3"] {
   align-items: start;
   padding-top: 64px;
 }
 .problem-scene[data-scene="0"] .problem-scene-content,
 .problem-scene[data-scene="1"] .problem-scene-content,
-.problem-scene[data-scene="2"] .problem-scene-content {
+.problem-scene[data-scene="2"] .problem-scene-content,
+.problem-scene[data-scene="3"] .problem-scene-content {
   padding: 0;
   background: transparent;
   backdrop-filter: none;
@@ -2760,12 +2762,45 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <article class="problem-scene is-reversed" data-scene="3" data-label="Fatigue &amp; Low Energy">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Fatigue &amp; Low Energy</h3>
-          <p class="problem-scene-why"><em>Why this happens:</em> Reduced food intake plus altered gut bacteria equals reduced cellular energy.</p>
-          <p class="problem-scene-body">Your gut microbes don't just digest food — they produce short-chain fatty acids that fuel your colon cells and influence your mitochondria. GLP-1 medications disrupt this ecosystem, and combined with eating less, your body runs on a smaller battery.</p>
-          <p class="problem-scene-stat">~1 in 7 users report persistent fatigue interfering with daily life.</p>
+          <p class="problem-scene-why"><em>Why this happens:</em> Less food plus altered gut bacteria means a smaller battery to run on.</p>
+          <p class="problem-scene-body">Your gut microbes don't just digest food. They make short-chain fatty acids, small molecules that feed your colon cells and your mitochondria. GLP-1 medications disrupt that ecosystem, and with less food coming in, your body runs on a smaller battery.</p>
+          <!-- Incidence callout. ~1 in 7 users (≈14%) reporting fatigue
+               that interferes with daily life. Pictogram with 1-of-10
+               (≈10%) is the closest visual approximation; caption lands
+               the "1 in 7" framing for relatability. -->
+          <div class="problem-scene-graph-card stat-callout" aria-hidden="true">
+            <p class="stat-callout-eyebrow">How common this is</p>
+            <div class="stat-callout-number"><b>14</b><i>%</i></div>
+            <div class="stat-callout-pictogram">
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+            </div>
+            <p class="stat-callout-caption">About <b>1 in 7</b> GLP-1 users report fatigue serious enough to interfere with daily life.</p>
+          </div>
         </div>
-        <div class="problem-scene-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><rect width="18" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" x2="22" y1="11" y2="13"/><line x1="6" x2="6" y1="11" y2="13"/></svg>
+        <div class="problem-scene-visual problem-scene-visual--stat" aria-hidden="true">
+          <p class="stat-compare-eyebrow">Daily fuel intake</p>
+          <div class="stat-compare">
+            <div class="stat-compare-row">
+              <span class="stat-compare-label">Normal</span>
+              <span class="stat-compare-number"><b>2,000</b><i>kcal</i></span>
+              <span class="stat-compare-bar" style="--w:100%"></span>
+            </div>
+            <div class="stat-compare-row stat-compare-row--peak">
+              <span class="stat-compare-label">On GLP-1</span>
+              <span class="stat-compare-number"><b>1,300</b><i>kcal</i></span>
+              <span class="stat-compare-bar" style="--w:65%"></span>
+            </div>
+          </div>
+          <p class="stat-compare-delta"><span class="stat-compare-delta-multiplier">1/3</span> less fuel each day</p>
         </div>
       </article>
 
