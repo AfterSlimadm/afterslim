@@ -1806,6 +1806,62 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   box-shadow: none;
 }
 .problem-scene-visual:has(img)::before { display: none; }
+
+/* Numbered mechanism callouts — small pill labels with a numbered
+   circle anchor, floating over the 3D mechanism render to imitate
+   the Pendulum-style educational diagram (1 → 2 → 3 mechanism).
+   Coords are set inline on each callout in percentage of the card. */
+.mechanism-callout {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+/* Variant: label flows to the LEFT of the number circle — used when
+   the anchor sits near the right edge of the card. */
+.mechanism-callout.mechanism-callout--flip {
+  flex-direction: row-reverse;
+  transform: translate(-100%, -50%);
+}
+.mechanism-callout-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid var(--orange);
+  color: var(--orange);
+  font-size: 13px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  box-shadow:
+    0 6px 18px rgba(31, 20, 16, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.mechanism-callout-label {
+  background: rgba(255, 255, 255, 0.96);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--ink);
+  white-space: nowrap;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(31, 20, 16, 0.10);
+}
+@media (max-width: 900px) {
+  .mechanism-callout-num { width: 24px; height: 24px; font-size: 11px; }
+  .mechanism-callout-label { font-size: 10px; padding: 4px 8px; letter-spacing: 0.4px; }
+}
 .problems-closer {
   text-align: center;
   margin-top: 120px;
@@ -2464,6 +2520,22 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
         <div class="problem-scene-visual" aria-hidden="true">
           <img src="images/symptom-nausea.png" alt="" />
+          <!-- Numbered mechanism callouts overlaid on the 3D stomach
+               render — mirrors the Pendulum mechanism-diagram pattern.
+               Numbers anchor at points of interest on the image, the
+               pill labels flow to a readable direction. -->
+          <span class="mechanism-callout" style="top:18%;left:25%">
+            <span class="mechanism-callout-num">1</span>
+            <span class="mechanism-callout-label">Slowed emptying</span>
+          </span>
+          <span class="mechanism-callout" style="top:52%;left:52%">
+            <span class="mechanism-callout-num">2</span>
+            <span class="mechanism-callout-label">Food ferments</span>
+          </span>
+          <span class="mechanism-callout mechanism-callout--flip" style="top:78%;left:62%">
+            <span class="mechanism-callout-num">3</span>
+            <span class="mechanism-callout-label">Gas &amp; nausea</span>
+          </span>
         </div>
       </article>
 
