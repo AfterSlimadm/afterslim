@@ -3587,16 +3587,9 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     current = next;
     render();
   }
-  function goTo(i) {
-    var next = Math.max(0, Math.min(max, i));
-    if (next === current) return;
-    current = next;
-    render();
-  }
 
   if (prevBtn) prevBtn.addEventListener('click', function() { go(-1); });
   if (nextBtn) nextBtn.addEventListener('click', function() { go(1); });
-  dots.forEach(function(d, i) { d.addEventListener('click', function() { goTo(i); }); d.style.cursor = 'pointer'; });
 
   // Keyboard arrows when section is in viewport
   document.addEventListener('keydown', function(e) {
