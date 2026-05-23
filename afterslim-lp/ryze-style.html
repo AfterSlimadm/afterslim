@@ -1467,9 +1467,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 100%),
     linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%),
     linear-gradient(to right,
-      #F7E7DD 49vw, #FFE9D5 135vw, #FAD8BC 221vw,
-      #FFE3BD 307vw, #F4C9A0 393vw, #E8B58A 479vw, #E8B58A 700vw);
-  background-size: 100% 32px, 100% 120px, 700vw 100%;
+      #F7E7DD 49vw, #F7E7DD 135vw, #FFE9D5 221vw,
+      #FAD8BC 307vw, #FFE3BD 393vw, #F4C9A0 479vw,
+      #E8B58A 565vw, #E8B58A 800vw);
+  background-size: 100% 32px, 100% 120px, 800vw 100%;
   background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
   background-repeat: no-repeat;
   transition: background-position 1.2s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1495,8 +1496,49 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   border: 0;
   border-radius: 0;
 }
-.problem-scene:nth-child(even) .problem-scene-content { order: 2; }
-.problem-scene:nth-child(even) .problem-scene-visual { order: 1; }
+.problem-scene.is-reversed .problem-scene-content { order: 2; }
+.problem-scene.is-reversed .problem-scene-visual { order: 1; }
+
+/* Graph step — intermediate scene with a data-viz chart instead of body copy */
+.problem-scene-graph-content {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 32px 40px;
+}
+.problem-scene-graph-stat {
+  background: rgba(234, 88, 12, 0.14);
+  padding: 16px 20px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--orange-dark);
+  border-left: 3px solid var(--orange);
+  line-height: 1.45;
+  margin: 0;
+}
+.problem-scene-graph-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 240px;
+}
+.problem-scene-graph-chart svg {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+}
+.graph-ring-progress {
+  stroke-dasharray: 502.65;
+  stroke-dashoffset: 502.65; /* fully empty */
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: 0.5s;
+}
+.problem-scene-graph.is-active .graph-ring-progress {
+  stroke-dashoffset: 281.48; /* 56% of circumference = 44% filled */
+}
 
 /* Liquid Glass card around the text content — same formula as the
    visual card so both sides of the scene read as paired glass
@@ -1781,8 +1823,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     background: rgba(255,255,255,0.55);
     border: 1px solid rgba(234,88,12,0.08);
   }
-  .problem-scene:nth-child(even) .problem-scene-content,
-  .problem-scene:nth-child(even) .problem-scene-visual { order: initial; }
+  .problem-scene.is-reversed .problem-scene-content,
+  .problem-scene.is-reversed .problem-scene-visual { order: initial; }
   .problem-scene-content,
   .problem-scene-visual { opacity: 1; transform: none; }
   .problem-scene-visual { max-width: 360px; margin: 0 auto; }
@@ -2367,7 +2409,27 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-scene="1" data-label="Constipation &amp; Cramps">
+      <!-- Graph step: data viz for the 44% stat. Sits between scene 1 and 2.
+           Icon copy of scene 1 on the LEFT (where the text was); graph card
+           on the RIGHT (where the icon was). -->
+      <article class="problem-scene problem-scene-graph is-reversed" data-scene="graph-1" data-label="Nausea &amp; Bloating">
+        <div class="problem-scene-content problem-scene-graph-content">
+          <p class="problem-scene-graph-stat">~44% of users on semaglutide report nausea in clinical trials.</p>
+          <div class="problem-scene-graph-chart" aria-hidden="true">
+            <svg viewBox="0 0 200 200" class="graph-ring">
+              <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(234,88,12,0.18)" stroke-width="14"/>
+              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--orange)" stroke-width="14" stroke-linecap="round" stroke-dasharray="502.65" stroke-dashoffset="502.65" transform="rotate(-90 100 100)" class="graph-ring-progress"/>
+              <text x="100" y="98" text-anchor="middle" dominant-baseline="central" font-size="48" font-weight="800" font-family="inherit" fill="#1f1410">44%</text>
+              <text x="100" y="132" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="2" fill="rgba(31,20,16,0.55)">OF USERS</text>
+            </svg>
+          </div>
+        </div>
+        <div class="problem-scene-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+        </div>
+      </article>
+
+      <article class="problem-scene is-reversed" data-scene="1" data-label="Constipation &amp; Cramps">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Constipation &amp; Cramps</h3>
           <p class="problem-scene-why"><em>Why this happens:</em> GLP-1 doesn't just slow your stomach — it slows your entire digestive tract.</p>
@@ -2391,7 +2453,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-scene="3" data-label="Fatigue &amp; Low Energy">
+      <article class="problem-scene is-reversed" data-scene="3" data-label="Fatigue &amp; Low Energy">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Fatigue &amp; Low Energy</h3>
           <p class="problem-scene-why"><em>Why this happens:</em> Reduced food intake plus altered gut bacteria equals reduced cellular energy.</p>
@@ -2415,7 +2477,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
       </article>
 
-      <article class="problem-scene" data-scene="5" data-label="Muscle Loss">
+      <article class="problem-scene is-reversed" data-scene="5" data-label="Muscle Loss">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Muscle Loss</h3>
           <p class="problem-scene-why"><em>Why this happens:</em> Up to 40% of the weight you lose on GLP-1 is lean mass — not fat.</p>
@@ -3155,19 +3217,21 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
       if (timelineTrack) timelineTrack.style.transform = '';
       return;
     }
-    // Track translates by -86vw per step; pin gradient pans by the
-    // same -86vw via --scene-offset so both stay in lockstep.
+    // Track translates by -86vw per step; pin gradient pans the same.
     track.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
-    dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
-    if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
+    // Timeline has 6 markers (one per symptom). The graph step at index 1
+    // is treated as part of scene 1 for timeline purposes: it stays on
+    // "01 / Gut" so the user knows the data viz still belongs to scene 1.
+    var timelineIndex = current <= 1 ? 0 : current - 1;
+    dots.forEach(function(d, i) { d.classList.toggle('is-active', i === timelineIndex); });
+    if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-timelineIndex * 86) + 'vw)';
     if (timeline) {
-      // Scene 1 left edge / Scene 6 right edge stop at the text card edge
-      // (track padding 6vw + scene padding max(48px, 4vw)). Scenes in
-      // between go edge-to-edge on both sides.
+      // Scene 1 / graph step left edge / Scene 6 right edge stop at the
+      // text card edge (track padding 6vw + scene padding max(48px, 4vw)).
       var inset = 'calc(6vw + max(48px, 4vw))';
-      timeline.style.setProperty('--line-left', current === 0 ? inset : '0px');
+      timeline.style.setProperty('--line-left', timelineIndex === 0 ? inset : '0px');
       timeline.style.setProperty('--line-right', current === max ? inset : '0px');
     }
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
