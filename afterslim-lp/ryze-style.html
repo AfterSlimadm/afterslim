@@ -1383,15 +1383,17 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .problems-badges { gap: 16px; }
 }
 
-/* Timeline strip with a single centered marker showing the active
-   scene. On scene 1 the line is collapsed (scaleX 0) so only the
-   dot+label appears — represents "start of the journey, nothing
-   behind yet". From scene 2 on, the line expands outward from
-   center to edge-to-edge. */
+/* Timeline strip with a panning track of 6 markers (same step
+   as the scene carousel). Each marker rides above its scene:
+   when the scene slides left, its dot slides left too; the next
+   scene's dot enters from the right. The line collapses on
+   scene 1 (no journey behind yet) and expands edge-to-edge on
+   scene 2+. */
 .problems-timeline {
   position: relative;
   width: 100%;
   padding: 56px 0 24px;
+  overflow: hidden;
 }
 .problems-timeline-line {
   position: absolute;
@@ -1410,35 +1412,47 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problems-timeline.is-line-visible .problems-timeline-line {
   transform: scaleX(1);
 }
-.problems-timeline-markers {
+.problems-timeline-track {
   position: relative;
   z-index: 1;
   display: flex;
-  justify-content: center;
+  width: max-content;
+  padding: 0 6vw;
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 .problems-timeline-marker {
+  width: 86vw;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: transparent;
 }
 .problems-timeline-marker-dot {
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: var(--orange);
-  box-shadow: 0 0 0 6px rgba(234, 88, 12, 0.16);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Liquid Glass dot — translucent orange + backdrop blur picks up
+     the warm gradient behind. Bright top rim + inner shadow give
+     it the polished iOS 26 lens look. */
+  background: rgba(234, 88, 12, 0.55);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 4px 14px rgba(234, 88, 12, 0.38),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1.5px 0 rgba(234, 88, 12, 0.30),
+    0 0 0 8px rgba(234, 88, 12, 0.14);
 }
 .problems-timeline-marker-label {
-  margin-top: 18px;
+  margin-top: 16px;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 1.8px;
   color: var(--orange);
   text-transform: uppercase;
   white-space: nowrap;
-  transition: opacity 0.4s ease;
 }
 
 /* 6-scene horizontal carousel — single continuous canvas */
@@ -2327,14 +2341,35 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     </div>
   </div>
 
-  <!-- Timeline: single centered marker; line collapses on scene 1
-       and expands edge-to-edge from scene 2 onward. -->
+  <!-- Timeline: 6 markers in a panning track that mirrors the scene
+       carousel. Each marker rides above its scene; line collapses
+       on scene 1 and expands edge-to-edge on scenes 2-6. -->
   <div class="problems-timeline" id="problemsTimeline" aria-hidden="true">
     <span class="problems-timeline-line"></span>
-    <div class="problems-timeline-markers">
+    <div class="problems-timeline-track" id="problemsTimelineTrack">
       <span class="problems-timeline-marker">
         <span class="problems-timeline-marker-dot"></span>
-        <span class="problems-timeline-marker-label" id="problemsTimelineLabel">01 / Gut</span>
+        <span class="problems-timeline-marker-label">01 / Gut</span>
+      </span>
+      <span class="problems-timeline-marker">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">02 / Gut</span>
+      </span>
+      <span class="problems-timeline-marker">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">03 / Visible</span>
+      </span>
+      <span class="problems-timeline-marker">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">04 / Energy</span>
+      </span>
+      <span class="problems-timeline-marker">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">05 / Metabolic</span>
+      </span>
+      <span class="problems-timeline-marker">
+        <span class="problems-timeline-marker-dot"></span>
+        <span class="problems-timeline-marker-label">06 / Body</span>
       </span>
     </div>
   </div>
@@ -3126,8 +3161,7 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
   var scenes = Array.from(track.querySelectorAll('.problem-scene'));
   var dots = Array.from(document.querySelectorAll('.problems-progress-dot'));
   var timeline = document.getElementById('problemsTimeline');
-  var timelineLabel = document.getElementById('problemsTimelineLabel');
-  var TIMELINE_LABELS = ['01 / Gut', '02 / Gut', '03 / Visible', '04 / Energy', '05 / Metabolic', '06 / Body'];
+  var timelineTrack = document.getElementById('problemsTimelineTrack');
   var labelNum = document.getElementById('problemsProgressNum');
   var labelName = document.getElementById('problemsProgressName');
   var prevBtn = document.getElementById('problemsPrev');
@@ -3140,6 +3174,7 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     if (mobile.matches) {
       track.style.transform = '';
       pin.style.removeProperty('--scene-offset');
+      if (timelineTrack) timelineTrack.style.transform = '';
       return;
     }
     // Track translates by -86vw per step; pin gradient pans by the
@@ -3148,7 +3183,7 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
     pin.style.setProperty('--scene-offset', (-current * 86) + 'vw');
     scenes.forEach(function(s, i) { s.classList.toggle('is-active', i === current); });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
-    if (timelineLabel) timelineLabel.textContent = TIMELINE_LABELS[current];
+    if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
     if (timeline) timeline.classList.toggle('is-line-visible', current > 0);
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
     if (labelName && scenes[current]) labelName.innerHTML = scenes[current].getAttribute('data-label') || '';
