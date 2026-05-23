@@ -3312,12 +3312,24 @@ document.querySelectorAll('.bundle-opt').forEach(function(o) {
       s.classList.toggle('show-graph', i === 0 && current === 0 && graphShown);
     });
     dots.forEach(function(d, i) { d.classList.toggle('is-active', i === current); });
-    if (timelineTrack) timelineTrack.style.transform = 'translateX(' + (-current * 86) + 'vw)';
+    // In graph state the dot shifts left into the gutter between the
+    // viewport edge and the image card (which has slid into col 1).
+    // Marker 0's natural center is at 49vw; we want it at inset/2 so it
+    // sits in the empty space to the LEFT of the image card.
+    var graphActive = (current === 0 && graphShown);
+    if (timelineTrack) {
+      timelineTrack.style.transform = graphActive
+        ? 'translateX(calc((6vw + max(48px, 4vw)) / 2 - 49vw))'
+        : 'translateX(' + (-current * 86) + 'vw)';
+    }
     if (timeline) {
       // Scene 0 left edge / Scene 6 right edge stop at the text card
       // edge (track padding 6vw + scene padding max(48px, 4vw)).
+      // In graph state the line extends edge-to-edge from x=0 so it
+      // reads as "the journey begins HERE", with the dot floating in
+      // the gutter to the left of the image card.
       var inset = 'calc(6vw + max(48px, 4vw))';
-      timeline.style.setProperty('--line-left', current === 0 ? inset : '0px');
+      timeline.style.setProperty('--line-left', (current === 0 && !graphActive) ? inset : '0px');
       timeline.style.setProperty('--line-right', current === max ? inset : '0px');
     }
     if (labelNum) labelNum.textContent = String(current + 1).padStart(2, '0');
