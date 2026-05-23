@@ -1854,6 +1854,20 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+/* Photographic/illustrated visual — fills the liquid-glass card
+   edge-to-edge so the rounded card frame becomes the photo frame.
+   The image is opaque, so it sits on top of the ::before glow and
+   the translucent card background. */
+.problem-scene-visual img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  z-index: 1;
+}
 .problems-closer {
   text-align: center;
   margin-top: 120px;
@@ -2484,7 +2498,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           <p class="problem-scene-stat">~44% of users on semaglutide report nausea in clinical trials.</p>
         </div>
         <div class="problem-scene-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+          <img src="images/symptom-nausea.png" alt="" />
         </div>
         <!-- Graph overlay: data viz for the 44% stat. Slides in from the
              right when .show-graph is added to this scene. The visual
