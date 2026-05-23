@@ -1513,6 +1513,23 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .problem-scene:nth-child(even) .problem-scene-content { order: 2; }
 .problem-scene:nth-child(even) .problem-scene-visual { order: 1; }
 
+/* Liquid Glass card around the text content — same formula as the
+   visual card so both sides of the scene read as paired glass
+   panels floating over the canvas gradient. */
+.problem-scene-content {
+  position: relative;
+  padding: 40px 44px;
+  background: rgba(255, 255, 255, 0.30);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 32px;
+  box-shadow:
+    0 18px 48px rgba(31, 20, 16, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.18);
+}
+
 /* Progress UI (bottom-center) */
 .problems-progress {
   position: absolute;
@@ -1696,10 +1713,19 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .problem-scene-visual {
   aspect-ratio: 1 / 1;
-  background: #ffffff;
-  border-radius: 28px;
-  box-shadow: 0 24px 56px rgba(31,20,16,0.08);
-  border: 1px solid rgba(234,88,12,0.10);
+  /* Liquid Glass (iOS 26-inspired): translucent white over the
+     colored gradient, heavy backdrop blur + saturate so the
+     underlying canvas tints through. Inner highlight at top and
+     subtle inner bottom shadow for the "polished glass" depth. */
+  background: rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 32px;
+  box-shadow:
+    0 18px 48px rgba(31, 20, 16, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
