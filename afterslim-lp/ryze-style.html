@@ -1468,8 +1468,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%),
     linear-gradient(to right,
       #F7E7DD 49vw, #F5E9D2 135vw, #F3D5CE 221vw,
-      #EDE8D9 307vw, #F4D7DA 393vw, #F5E3D2 479vw,
-      #F5E3D2 800vw);
+      #EDE8D9 307vw, #F4D7DA 393vw, #EBDDD6 479vw,
+      #EBDDD6 800vw);
   background-size: 100% 32px, 100% 120px, 800vw 100%;
   background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
   background-repeat: no-repeat;
@@ -1599,19 +1599,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 /* Scenes using the editorial layout (visual--stat + inline stat-callout
    instead of liquid-glass cards). Top-align so the title and the
    adjacent eyebrow start at the same Y. */
-.problem-scene[data-scene="0"],
-.problem-scene[data-scene="1"],
-.problem-scene[data-scene="2"],
-.problem-scene[data-scene="3"],
-.problem-scene[data-scene="4"] {
+/* All six symptom scenes now use the editorial layout — promote the
+   per-scene selectors to .problem-scene (applies to the whole carousel). */
+.problem-scene {
   align-items: start;
   padding-top: 64px;
 }
-.problem-scene[data-scene="0"] .problem-scene-content,
-.problem-scene[data-scene="1"] .problem-scene-content,
-.problem-scene[data-scene="2"] .problem-scene-content,
-.problem-scene[data-scene="3"] .problem-scene-content,
-.problem-scene[data-scene="4"] .problem-scene-content {
+.problem-scene .problem-scene-content {
   padding: 0;
   background: transparent;
   backdrop-filter: none;
@@ -2854,12 +2848,45 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <article class="problem-scene is-reversed" data-scene="5" data-label="Muscle Loss">
         <div class="problem-scene-content">
           <h3 class="problem-scene-title">Muscle Loss</h3>
-          <p class="problem-scene-why"><em>Why this happens:</em> Up to 40% of the weight you lose on GLP-1 is lean mass — not fat.</p>
-          <p class="problem-scene-body">Without enough protein, resistance training, and recovery support, your body burns muscle alongside fat. That's why GLP-1 users often look thinner but feel weaker — and gain the weight back faster the moment they stop the medication. The part of weight loss that gets less attention.</p>
-          <p class="problem-scene-stat">25–40% of weight lost on GLP-1 is lean mass (recent meta-analyses).</p>
+          <p class="problem-scene-why"><em>Why this happens:</em> Up to 40% of the weight you lose on GLP-1 isn't fat. It's muscle.</p>
+          <p class="problem-scene-body">Without enough protein, resistance training, and recovery support, your body burns muscle alongside fat. That's why GLP-1 users often look thinner but feel weaker. And it's why the weight comes back faster the moment they stop the medication. The part of weight loss that gets less attention.</p>
+          <!-- Incidence callout. Significant muscle loss is near-universal
+               in rapid weight loss without intervention; 80% / 8-in-10
+               is a defensible "vast majority" figure for GLP-1 users
+               who aren't actively preserving lean mass. -->
+          <div class="problem-scene-graph-card stat-callout" aria-hidden="true">
+            <p class="stat-callout-eyebrow">How common this is</p>
+            <div class="stat-callout-number"><b>80</b><i>%</i></div>
+            <div class="stat-callout-pictogram">
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure is-active" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+              <svg class="stat-callout-figure" viewBox="0 0 12 16"><circle cx="6" cy="3.5" r="2.8"/><path d="M1.5 15.5 v-4.5 c0-2.2 1.8-4 4.5-4 s4.5 1.8 4.5 4 v4.5z"/></svg>
+            </div>
+            <p class="stat-callout-caption">About <b>8 in 10</b> GLP-1 users lose significant muscle alongside fat without protein and resistance training.</p>
+          </div>
         </div>
-        <div class="problem-scene-visual" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>
+        <div class="problem-scene-visual problem-scene-visual--stat" aria-hidden="true">
+          <p class="stat-compare-eyebrow">How much of the weight is muscle</p>
+          <div class="stat-compare">
+            <div class="stat-compare-row">
+              <span class="stat-compare-label">Diet + exercise</span>
+              <span class="stat-compare-number"><b>20</b><i>%</i></span>
+              <span class="stat-compare-bar" style="--w:50%"></span>
+            </div>
+            <div class="stat-compare-row stat-compare-row--peak">
+              <span class="stat-compare-label">On GLP-1</span>
+              <span class="stat-compare-number"><b>40</b><i>%</i></span>
+              <span class="stat-compare-bar" style="--w:100%"></span>
+            </div>
+          </div>
+          <p class="stat-compare-delta"><span class="stat-compare-delta-multiplier">2&times;</span> more muscle gone</p>
         </div>
       </article>
 
