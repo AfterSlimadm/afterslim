@@ -1051,12 +1051,54 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   line-height: 1.55;
   margin: 0;
 }
-.science-grid {
+/* Two named ingredient groups — Seed/Ritual style "cluster" framing.
+   First group: 3 keystone strains. Second group: 2 prebiotics that
+   feed them. Each group has its own label (───── LABEL ─────) above
+   a grid of cards. */
+.science-group {
+  max-width: 1100px;
+  margin: 0 auto 56px;
+}
+.science-group:last-of-type {
+  margin-bottom: 48px;
+}
+.science-group-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.science-group-label span {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: var(--orange);
+  white-space: nowrap;
+}
+.science-group-label::before,
+.science-group-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(234, 88, 12, 0.30);
+}
+.science-group-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  max-width: 1100px;
+}
+/* Two-up grid for the prebiotics group — same card width as the
+   strains row by capping the container at 2/3 of the parent. */
+.science-group-grid--two {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 727px; /* 2 cards + 1 gap at 1100px parent */
   margin: 0 auto;
+}
+/* VSL card sits below both ingredient groups, centered. */
+.science-vsl {
+  max-width: 1100px;
+  margin: 56px auto 0;
 }
 .science-card {
   background: var(--bg);
@@ -1204,10 +1246,13 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 @media (max-width: 900px) {
   .science { padding: 72px 0; }
   .science-header { margin-bottom: 48px; }
-  .science-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .science-group { margin-bottom: 40px; }
+  .science-group-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .science-group-grid--two { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
 }
 @media (max-width: 560px) {
-  .science-grid { grid-template-columns: 1fr; }
+  .science-group-grid { grid-template-columns: 1fr; }
+  .science-group-grid--two { grid-template-columns: 1fr; }
 }
 
 /* ===== Problems (PAS hook) ===== */
@@ -2936,60 +2981,70 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       <p class="science-subtitle">Three keystone bacteria, two prebiotics that feed them. Every capsule pairs the strain with the fuel.</p>
     </div>
 
-    <div class="science-grid">
+    <div class="science-group" data-reveal>
+      <div class="science-group-label">
+        <span>3 Keystone Strains</span>
+      </div>
+      <div class="science-group-grid">
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/akkermansia-muciniphila.png" alt="Akkermansia muciniphila"></div>
+          <span class="science-card-tag">Keystone strain</span>
+          <h3 class="science-card-title">Akkermansia muciniphila</h3>
+          <p class="science-card-body">The next-generation strain that maintains the gut lining and signals satiety to your brain. The same bacteria competitors charge $150/month for on its own.</p>
+          <p class="science-card-stat">Linked to lower BMI and better insulin sensitivity in 14+ peer-reviewed studies.</p>
+        </article>
 
-      <article class="science-card" data-reveal>
-        <div class="science-card-img"><img src="images/akkermansia-muciniphila.png" alt="Akkermansia muciniphila"></div>
-        <span class="science-card-tag">Keystone strain</span>
-        <h3 class="science-card-title">Akkermansia muciniphila</h3>
-        <p class="science-card-body">The next-generation strain that maintains the gut lining and signals satiety to your brain. The same bacteria competitors charge $150/month for on its own.</p>
-        <p class="science-card-stat">Linked to lower BMI and better insulin sensitivity in 14+ peer-reviewed studies.</p>
-      </article>
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/clostridium-butyricum.png" alt="Clostridium butyricum"></div>
+          <span class="science-card-tag">Butyrate producer</span>
+          <h3 class="science-card-title">Clostridium butyricum</h3>
+          <p class="science-card-body">Produces butyrate, the short-chain fatty acid that fuels your colon cells, reduces inflammation, and keeps the gut barrier intact.</p>
+          <p class="science-card-stat">Butyrate provides up to 70% of the energy your colon cells need.</p>
+        </article>
 
-      <article class="science-card" data-reveal>
-        <div class="science-card-img"><img src="images/clostridium-butyricum.png" alt="Clostridium butyricum"></div>
-        <span class="science-card-tag">Butyrate producer</span>
-        <h3 class="science-card-title">Clostridium butyricum</h3>
-        <p class="science-card-body">Produces butyrate — the short-chain fatty acid that fuels your colon cells, reduces inflammation, and keeps the gut barrier intact.</p>
-        <p class="science-card-stat">Butyrate provides up to 70% of the energy your colon cells need.</p>
-      </article>
-
-      <article class="science-card" data-reveal>
-        <div class="science-card-img"><img src="images/bifidobacterium-infantis.png" alt="Bifidobacterium infantis"></div>
-        <span class="science-card-tag">Gut barrier defender</span>
-        <h3 class="science-card-title">Bifidobacterium infantis</h3>
-        <p class="science-card-body">Stabilizes the microbiome and tamps down low-grade inflammation in the gut lining — the inflammation linked to bloating and brain fog.</p>
-        <p class="science-card-stat">One of the most clinically studied probiotics for GI comfort.</p>
-      </article>
-
-      <article class="science-card" data-reveal>
-        <div class="science-card-img"><img src="images/chicory-root-fiber.webp" alt="Chicory root inulin"></div>
-        <span class="science-card-tag">Microbiome fuel</span>
-        <h3 class="science-card-title">Chicory Root Inulin</h3>
-        <p class="science-card-body">A prebiotic fiber that feeds your beneficial bacteria — especially Akkermansia. Adding the strain without feeding it is like planting seeds in dry soil.</p>
-        <p class="science-card-stat">Shown to triple Akkermansia abundance in 8 weeks (Cani et al., 2017).</p>
-      </article>
-
-      <article class="science-card" data-reveal>
-        <div class="science-card-img"><img src="images/resistant-starch.webp" alt="Resistant starch"></div>
-        <span class="science-card-tag">Backup fiber</span>
-        <h3 class="science-card-title">Resistant Starch</h3>
-        <p class="science-card-body">Reaches the colon undigested, where it ferments into butyrate and gently supports satiety between doses.</p>
-        <p class="science-card-stat">Improves insulin sensitivity by up to 33% in published trials.</p>
-      </article>
-
-      <a class="science-vsl" href="#" data-reveal aria-label="Watch the 3-minute breakdown">
-        <div class="science-vsl-thumb">
-          <div class="science-vsl-play" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-        </div>
-        <span class="science-vsl-eyebrow">Watch the breakdown</span>
-        <h3 class="science-vsl-title">Why your gut needs this</h3>
-        <p class="science-vsl-meta">3-minute explainer · No sign-up</p>
-      </a>
-
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/bifidobacterium-infantis.png" alt="Bifidobacterium infantis"></div>
+          <span class="science-card-tag">Gut barrier defender</span>
+          <h3 class="science-card-title">Bifidobacterium infantis</h3>
+          <p class="science-card-body">Stabilizes the microbiome and tamps down low-grade inflammation in the gut lining. The same inflammation linked to bloating and brain fog.</p>
+          <p class="science-card-stat">One of the most clinically studied probiotics for GI comfort.</p>
+        </article>
+      </div>
     </div>
+
+    <div class="science-group" data-reveal>
+      <div class="science-group-label">
+        <span>2 Prebiotics that feed them</span>
+      </div>
+      <div class="science-group-grid science-group-grid--two">
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/chicory-root-fiber.webp" alt="Chicory root inulin"></div>
+          <span class="science-card-tag">Microbiome fuel</span>
+          <h3 class="science-card-title">Chicory Root Inulin</h3>
+          <p class="science-card-body">A prebiotic fiber that feeds your beneficial bacteria, especially Akkermansia. Adding the strain without feeding it is like planting seeds in dry soil.</p>
+          <p class="science-card-stat">Shown to triple Akkermansia abundance in 8 weeks (Cani et al., 2017).</p>
+        </article>
+
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/resistant-starch.webp" alt="Resistant starch"></div>
+          <span class="science-card-tag">Backup fiber</span>
+          <h3 class="science-card-title">Resistant Starch</h3>
+          <p class="science-card-body">Reaches the colon undigested, where it ferments into butyrate and gently supports satiety between doses.</p>
+          <p class="science-card-stat">Improves insulin sensitivity by up to 33% in published trials.</p>
+        </article>
+      </div>
+    </div>
+
+    <a class="science-vsl" href="#" data-reveal aria-label="Watch the 3-minute breakdown">
+      <div class="science-vsl-thumb">
+        <div class="science-vsl-play" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+      <span class="science-vsl-eyebrow">Watch the breakdown</span>
+      <h3 class="science-vsl-title">Why your gut needs this</h3>
+      <p class="science-vsl-meta">3-minute explainer · No sign-up</p>
+    </a>
   </div>
 </section>
 
