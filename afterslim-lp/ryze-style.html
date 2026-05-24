@@ -1216,9 +1216,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     to bottom,
     #fff8f0 0%,
     #F7E7DD 120px,
-    #F7E7DD calc(100% - 48px),
-    #ffffff calc(100% - 24px),
-    #ffffff 100%
+    #F7E7DD 100%
   );
   padding: 96px 0 24px;
 }
@@ -1523,13 +1521,12 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   background-color: transparent;
   background-image:
     linear-gradient(to bottom, #F7E7DD 0%, rgba(247,231,221,0) 100%),
-    linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%),
     linear-gradient(to right,
       #F7E7DD 49vw, #F7DFCA 135vw, #F6D6BE 221vw,
       #F0D2BE 307vw, #F0D9CB 393vw, #FAF6EE 479vw,
       #FAF6EE 800vw);
-  background-size: 100% 32px, 100% 24px, 800vw 100%;
-  background-position: 0 0, 0 100%, var(--scene-offset, 0vw) 0;
+  background-size: 100% 32px, 800vw 100%;
+  background-position: 0 0, var(--scene-offset, 0vw) 0;
   background-repeat: no-repeat;
   transition: background-position 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
