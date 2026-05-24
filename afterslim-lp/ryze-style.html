@@ -926,16 +926,34 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
 /* ===== Bridge (transition between sections) ===== */
 .section-bridge {
-  background: var(--bg-2);
+  background: linear-gradient(135deg, #1f1410 0%, #4a1804 60%, #c2410c 140%);
   padding: 48px 24px 96px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.section-bridge::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 720px;
+  background: radial-gradient(circle, rgba(234,88,12,0.20) 0%, transparent 65%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+.section-bridge .container {
+  position: relative;
+  z-index: 1;
 }
 .section-bridge p {
   max-width: 820px;
   margin: 0 auto;
   font-size: clamp(22px, 2.4vw, 30px);
   line-height: 1.45;
-  color: var(--ink);
+  color: #fff;
   font-weight: 500;
   letter-spacing: -0.01em;
 }
