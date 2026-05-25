@@ -741,11 +741,28 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   border: 1px solid var(--line);
   border-radius: 24px;
   overflow: hidden;
+  position: relative;
+}
+/* Continuous orange gradient spans the AfterSlim column across all
+   rows — single ::before overlay positioned at column 2 of the grid.
+   Grid is 1.4fr 1fr 1fr (total 3.4), so col 2 lives at 41.18% → 70.59%. */
+.comparison-table::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 41.18%;
+  width: 29.41%;
+  background: linear-gradient(165deg, #fb923c 0%, #ea580c 45%, #c2410c 100%);
+  z-index: 0;
+  pointer-events: none;
 }
 .comparison-row {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 .comparison-row + .comparison-row {
   border-top: 1px solid var(--line);
@@ -764,54 +781,75 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   letter-spacing: -0.005em;
 }
 .comparison-cell--ours {
-  background: rgba(234, 88, 12, 0.05);
-  border-left: 1px solid var(--line);
-  border-right: 1px solid var(--line);
+  /* Transparent so the table ::before gradient shows through */
+  background: transparent;
   position: relative;
 }
 .comparison-cell--theirs {
   color: var(--ink-2);
 }
-/* Header row: column labels above the data. AfterSlim label gets the
-   brand orange treatment to anchor the "ours" column visually. */
+/* The thin row borders should NOT cross the gradient column or they
+   chop the gradient with hard lines. Override to a translucent white
+   so it reads as a subtle highlight on the orange instead. */
+.comparison-row + .comparison-row .comparison-cell--ours {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20);
+  border-top: 1px solid transparent;
+  margin-top: -1px;
+}
+/* Header row: column labels. AfterSlim header carries the bottle
+   image, sitting on the same orange gradient as the rest of the
+   column. Stack header keeps the muted gray block. */
 .comparison-row--header .comparison-cell {
-  padding-top: 26px;
-  padding-bottom: 26px;
+  padding-top: 28px;
+  padding-bottom: 28px;
   font-size: 12.5px;
   font-weight: 800;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  background: rgba(31, 20, 16, 0.03);
 }
-.comparison-row--header .comparison-cell--ours {
-  color: var(--orange);
-  background: rgba(234, 88, 12, 0.10);
+.comparison-row--header .comparison-cell--criteria,
+.comparison-row--header .comparison-cell--theirs {
+  background: rgba(31, 20, 16, 0.03);
 }
 .comparison-row--header .comparison-cell--theirs {
   color: var(--ink-2);
   opacity: 0.7;
 }
-/* Indicators */
+.comparison-row--header .comparison-cell--ours-header {
+  padding: 24px 16px 28px;
+}
+.comparison-bottle {
+  display: block;
+  width: auto;
+  height: 92px;
+  max-width: 100%;
+  margin: 0 auto;
+  filter: drop-shadow(0 8px 18px rgba(31, 20, 16, 0.28));
+}
+/* Indicators
+   AfterSlim column sits on orange gradient, so the check becomes a
+   WHITE filled disc with an orange check inside. Reads as "approved by
+   AfterSlim" instead of fighting the bg. Stack column stays neutral. */
 .comparison-check,
 .comparison-cross {
   display: inline-flex;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 .comparison-check {
-  background: var(--orange);
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.30);
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(31, 20, 16, 0.18);
 }
 .comparison-check::after {
   content: '';
-  width: 11px;
+  width: 12px;
   height: 6px;
-  border-left: 2.5px solid #fff;
-  border-bottom: 2.5px solid #fff;
+  border-left: 2.5px solid var(--orange);
+  border-bottom: 2.5px solid var(--orange);
   transform: rotate(-45deg) translate(1px, -1.5px);
 }
 .comparison-cross {
@@ -840,13 +878,18 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 @media (max-width: 720px) {
   .comparison { padding: 72px 0; }
   .comparison-row {
-    grid-template-columns: 1.2fr 0.8fr 0.8fr;
+    grid-template-columns: 1.2fr 0.9fr 0.9fr;
   }
+  /* Gradient column position changes with the new grid ratios:
+     1.2 + 0.9 + 0.9 = 3.0; col 2 = 1.2/3.0 → 1.2/3.0+0.9/3.0 = 40% → 70% */
+  .comparison-table::before { left: 40%; width: 30%; }
   .comparison-cell { padding: 16px 12px; font-size: 13.5px; }
   .comparison-cell--criteria { font-size: 14px; }
   .comparison-row--header .comparison-cell { font-size: 10.5px; letter-spacing: 1.2px; }
+  .comparison-row--header .comparison-cell--ours-header { padding: 18px 8px 20px; }
+  .comparison-bottle { height: 64px; }
   .comparison-cross-text { font-size: 12px; }
-  .comparison-check, .comparison-cross { width: 24px; height: 24px; }
+  .comparison-check, .comparison-cross { width: 26px; height: 26px; }
 }
 
 /* ===== Mid-page CTA (between Science and Guarantee) ===== */
@@ -2975,7 +3018,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     <div class="comparison-table" data-reveal>
       <div class="comparison-row comparison-row--header">
         <div class="comparison-cell comparison-cell--criteria"></div>
-        <div class="comparison-cell comparison-cell--ours">AfterSlim</div>
+        <div class="comparison-cell comparison-cell--ours comparison-cell--ours-header">
+          <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim" class="comparison-bottle">
+        </div>
         <div class="comparison-cell comparison-cell--theirs">9-pill stack</div>
       </div>
 
