@@ -986,6 +986,65 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   flex-shrink: 0;
   margin-top: 2px;
 }
+.midcta-gifts {
+  width: 100%;
+  background: var(--orange-tint);
+  border: 1px solid var(--orange-soft);
+  border-radius: 14px;
+  padding: 18px 20px 16px;
+  margin: 0 0 28px;
+  position: relative;
+}
+.midcta-gifts-badge {
+  display: inline-block;
+  background: var(--orange);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+.midcta-gifts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.midcta-gifts-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.midcta-gifts-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.midcta-sale-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: var(--orange-dark);
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
 .midcta-price {
   display: flex;
   align-items: baseline;
@@ -1017,11 +1076,43 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   border-radius: 999px;
 }
 .midcta-price-perday {
-  margin: 0 0 22px;
+  margin: 0 0 18px;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--ink-2);
   opacity: 0.7;
+}
+.midcta-countdown {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid var(--orange-soft);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 0 0 16px;
+}
+.midcta-countdown-bolt {
+  width: 16px;
+  height: 16px;
+  color: var(--orange);
+  flex-shrink: 0;
+}
+.midcta-countdown-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.2px;
+}
+.midcta-countdown-time {
+  margin-left: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--orange-dark);
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
 }
 .midcta-button {
   width: 100%;
@@ -1033,14 +1124,24 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   gap: 10px;
 }
 .midcta-finehint {
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   font-size: 12.5px;
   font-weight: 600;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.2px;
   color: var(--ink-2);
-  opacity: 0.6;
+  opacity: 0.85;
   text-align: center;
   width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.midcta-finehint svg {
+  width: 14px;
+  height: 14px;
+  color: var(--orange);
+  flex-shrink: 0;
 }
 
 @media (max-width: 860px) {
@@ -1050,9 +1151,14 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
     max-width: 520px;
   }
   .midcta-visual { aspect-ratio: 1 / 1; }
-  .midcta-info { padding: 32px 28px; }
+  .midcta-info { padding: 32px 24px; }
   .midcta-price-current { font-size: 30px; }
   .midcta-price-original { font-size: 17px; }
+  .midcta-gifts { padding: 16px 16px 14px; margin-bottom: 22px; }
+  .midcta-gifts-list li { font-size: 14px; }
+  .midcta-countdown { padding: 9px 12px; }
+  .midcta-countdown-label { font-size: 12.5px; }
+  .midcta-countdown-time { font-size: 14px; }
 }
 
 /* ===== Reviews carousel ===== */
@@ -3173,6 +3279,17 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Made in USA · FDA-registered facility</li>
         </ul>
 
+        <div class="midcta-gifts">
+          <span class="midcta-gifts-badge">FREE GIFTS</span>
+          <ul class="midcta-gifts-list">
+            <li><span class="midcta-gifts-plus">+</span> FREE US Shipping</li>
+            <li><span class="midcta-gifts-plus">+</span> GLP-1 Companion Guide (40-page PDF)</li>
+            <li><span class="midcta-gifts-plus">+</span> Daily Smart Reminders</li>
+            <li><span class="midcta-gifts-plus">+</span> Priority Email Support</li>
+          </ul>
+        </div>
+
+        <p class="midcta-sale-label">LAUNCH PRICE</p>
         <div class="midcta-price">
           <span class="midcta-price-current">$47.99</span>
           <span class="midcta-price-original">$75.98</span>
@@ -3180,11 +3297,20 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         </div>
         <p class="midcta-price-perday">About $1.60 per day</p>
 
+        <div class="midcta-countdown" data-midcta-countdown>
+          <svg class="midcta-countdown-bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
+          <span class="midcta-countdown-label">Offer ends in</span>
+          <span class="midcta-countdown-time"><span data-h>00</span>:<span data-m>00</span>:<span data-s>00</span></span>
+        </div>
+
         <a href="#" class="btn-primary midcta-button hero-checkout-btn">
           Start AfterSlim today
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
-        <p class="midcta-finehint">Cancel anytime</p>
+        <p class="midcta-finehint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          $59.99 refill ships every 30 days · cancel anytime
+        </p>
       </div>
     </div>
   </div>
@@ -3800,6 +3926,31 @@ if ('IntersectionObserver' in window) {
 } else {
   document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('in'); });
 }
+
+/* ===== MidCTA countdown — resets at viewer's local midnight ===== */
+(function(){
+  var nodes = document.querySelectorAll('[data-midcta-countdown]');
+  if (!nodes.length) return;
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick(){
+    var now = new Date();
+    var end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    var diff = Math.max(0, end - now);
+    var h = Math.floor(diff / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    nodes.forEach(function(root){
+      var hEl = root.querySelector('[data-h]');
+      var mEl = root.querySelector('[data-m]');
+      var sEl = root.querySelector('[data-s]');
+      if (hEl) hEl.textContent = pad(h);
+      if (mEl) mEl.textContent = pad(m);
+      if (sEl) sEl.textContent = pad(s);
+    });
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 </script>
 
 </body>
