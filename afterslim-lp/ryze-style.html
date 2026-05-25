@@ -909,24 +909,78 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   background: var(--bg);
   padding: 96px 0;
 }
+.midcta-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 64px;
+}
+.midcta-eyebrow {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  color: var(--orange-dark);
+  text-transform: uppercase;
+  margin: 0 0 18px;
+}
+.midcta-headline {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+.midcta-headline span {
+  color: var(--orange);
+}
+.midcta-tagline {
+  font-size: 17px;
+  color: var(--ink-2);
+  line-height: 1.45;
+  margin: 0 0 26px;
+}
+.midcta-chips {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.midcta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  color: var(--orange-dark);
+  text-transform: uppercase;
+}
+.midcta-chip svg {
+  width: 20px;
+  height: 20px;
+  color: var(--orange);
+  flex-shrink: 0;
+}
 .midcta-card {
-  max-width: 1040px;
+  max-width: 1080px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 0;
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 32px;
-  overflow: hidden;
-  box-shadow: 0 24px 60px rgba(31, 20, 16, 0.06);
+  gap: 56px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
 }
 .midcta-visual {
   position: relative;
-  background: var(--bg-2);
+  background: var(--orange-tint);
   overflow: hidden;
   aspect-ratio: 1 / 1;
+  border-radius: 28px;
 }
 .midcta-hero-img {
   display: block;
@@ -936,7 +990,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   object-position: center;
 }
 .midcta-info {
-  padding: 48px 48px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1148,12 +1202,16 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
 @media (max-width: 860px) {
   .midcta { padding: 72px 0; }
+  .midcta-header { margin-bottom: 48px; }
+  .midcta-eyebrow { font-size: 12px; letter-spacing: 1.8px; }
+  .midcta-chips { gap: 22px; }
   .midcta-card {
     grid-template-columns: 1fr;
     max-width: 520px;
+    gap: 36px;
   }
-  .midcta-visual { aspect-ratio: 1 / 1; }
-  .midcta-info { padding: 32px 24px; }
+  .midcta-visual { aspect-ratio: 1 / 1; border-radius: 22px; }
+  .midcta-info { padding: 0; }
   .midcta-price-current { font-size: 30px; }
   .midcta-price-original { font-size: 17px; }
   .midcta-gifts { padding: 16px 16px 14px; margin-bottom: 22px; }
@@ -3265,6 +3323,22 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 <!-- 4. Mid-page PDP card — Ryze-style product card at peak conviction -->
 <section class="midcta">
   <div class="container">
+    <header class="midcta-header" data-reveal>
+      <p class="midcta-eyebrow">Rebuild your gut</p>
+      <h2 class="midcta-headline">With One Capsule <span>Every Morning</span></h2>
+      <p class="midcta-tagline">Daily probiotic support designed for GLP-1 users.</p>
+      <div class="midcta-chips">
+        <span class="midcta-chip">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 13.6 8.4 20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6L12 2z"/><path d="M19 3v3M17.5 4.5h3M5 17v3M3.5 18.5h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+          Best Value
+        </span>
+        <span class="midcta-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+          Free Gifts
+        </span>
+      </div>
+    </header>
+
     <div class="midcta-card" data-reveal>
       <div class="midcta-visual">
         <img src="images/midcta-hero.jpg" alt="One capsule every morning. Built for GLP-1 users." class="midcta-hero-img">
