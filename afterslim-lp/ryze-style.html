@@ -1096,112 +1096,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   color: var(--orange);
   flex-shrink: 0;
 }
-.midcta-bundles {
+.midcta-amazon {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 0 0 20px;
-}
-.midcta-bundle {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
-  border: 2px solid var(--line);
-  border-radius: 14px;
-  background: var(--bg-2);
-  cursor: pointer;
-  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
-}
-.midcta-bundle:hover {
-  border-color: var(--orange-soft);
-}
-.midcta-bundle input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-  margin: 0;
-}
-.midcta-bundle-radio {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #d4c3ad;
-  border-radius: 50%;
-  flex-shrink: 0;
-  position: relative;
-  transition: border-color 0.18s ease, background 0.18s ease;
-}
-.midcta-bundle:has(input:checked) {
-  border-color: var(--orange);
-  background: #fff;
-  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.08);
-}
-.midcta-bundle:has(input:checked) .midcta-bundle-radio {
-  border-color: var(--orange);
-  background: var(--orange);
-}
-.midcta-bundle:has(input:checked) .midcta-bundle-radio::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #fff;
-}
-.midcta-bundle-tag {
-  position: absolute;
-  top: -10px;
-  left: 18px;
-  background: var(--orange-dark);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.3px;
-  padding: 4px 9px;
-  border-radius: 4px;
-}
-.midcta-bundle-tag--alt {
-  background: var(--ink);
-}
-.midcta-bundle-main {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-.midcta-bundle-qty {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--ink);
-  letter-spacing: -0.005em;
-  line-height: 1.1;
-}
-.midcta-bundle-perday {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--ink-2);
-  opacity: 0.85;
-}
-.midcta-bundle-price {
-  text-align: right;
-}
-.midcta-bundle-price-current {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--ink);
-  letter-spacing: -0.015em;
-  line-height: 1.05;
-}
-.midcta-bundle-price-original {
-  font-size: 13px;
-  color: var(--ink-3);
-  text-decoration: line-through;
-  margin-top: 2px;
 }
 .midcta-countdown {
   width: 100%;
@@ -1256,11 +1152,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   }
   .midcta-visual { aspect-ratio: 1 / 1; border-radius: 22px; }
   .midcta-info { padding: 0; }
-  .midcta-bundle { padding: 14px 14px; gap: 10px; }
-  .midcta-bundle-qty { font-size: 15px; }
-  .midcta-bundle-perday { font-size: 12px; }
-  .midcta-bundle-price-current { font-size: 18px; }
-  .midcta-bundle-price-original { font-size: 12px; }
   .midcta-gifts { margin-bottom: 22px; }
   .midcta-gifts-list li { font-size: 14.5px; }
   .midcta-countdown-label { font-size: 14px; }
@@ -3398,49 +3289,6 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
           </ul>
         </div>
 
-        <div class="midcta-bundles" data-midcta-bundles>
-          <label class="midcta-bundle">
-            <input type="radio" name="midcta-bundle" value="1">
-            <span class="midcta-bundle-radio"></span>
-            <div class="midcta-bundle-main">
-              <div class="midcta-bundle-qty">1 Bottle</div>
-              <div class="midcta-bundle-perday">$1.60 per day</div>
-            </div>
-            <div class="midcta-bundle-price">
-              <div class="midcta-bundle-price-current">$47.99</div>
-              <div class="midcta-bundle-price-original">$75.98</div>
-            </div>
-          </label>
-
-          <label class="midcta-bundle">
-            <input type="radio" name="midcta-bundle" value="2" checked>
-            <span class="midcta-bundle-tag">MOST POPULAR</span>
-            <span class="midcta-bundle-radio"></span>
-            <div class="midcta-bundle-main">
-              <div class="midcta-bundle-qty">2 Bottles</div>
-              <div class="midcta-bundle-perday">$1.50 per day · Free Shipping</div>
-            </div>
-            <div class="midcta-bundle-price">
-              <div class="midcta-bundle-price-current">$89.99</div>
-              <div class="midcta-bundle-price-original">$151.96</div>
-            </div>
-          </label>
-
-          <label class="midcta-bundle">
-            <input type="radio" name="midcta-bundle" value="3">
-            <span class="midcta-bundle-tag midcta-bundle-tag--alt">BEST VALUE</span>
-            <span class="midcta-bundle-radio"></span>
-            <div class="midcta-bundle-main">
-              <div class="midcta-bundle-qty">3 Bottles</div>
-              <div class="midcta-bundle-perday">$1.33 per day · Free Shipping</div>
-            </div>
-            <div class="midcta-bundle-price">
-              <div class="midcta-bundle-price-current">$119.99</div>
-              <div class="midcta-bundle-price-original">$227.94</div>
-            </div>
-          </label>
-        </div>
-
         <div class="midcta-countdown" data-midcta-countdown>
           <svg class="midcta-countdown-bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
           <span class="midcta-countdown-label">Offer ends in</span>
@@ -3450,6 +3298,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
         <a href="#" class="btn-primary midcta-button hero-checkout-btn">
           Start AfterSlim today
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+
+        <div class="amazon-divider">or</div>
+        <a href="#" class="btn-amazon midcta-amazon" target="_blank" rel="noopener">
+          Buy on <img src="images/amazon-logo-tight.png" alt="Amazon" class="amazon-logo-img">
         </a>
       </div>
     </div>
