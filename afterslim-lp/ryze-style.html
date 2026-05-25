@@ -692,6 +692,163 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   color: var(--ink-2);
 }
 
+/* ===== Comparison: AfterSlim vs the 9-supplement stack ===== */
+/* Editorial Slumbr-style comparison table. AfterSlim column gets a
+   subtle highlight + orange checks; "stack" column shows the
+   concrete numbers/X marks of the alternative. */
+.comparison {
+  padding: 96px 0;
+  background: var(--bg);
+}
+.comparison-header {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+.comparison-eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+.comparison-title {
+  font-size: clamp(36px, 4.6vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+.comparison-title em {
+  color: var(--orange);
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-weight: 700;
+}
+.comparison-subtitle {
+  font-size: 16px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0;
+}
+.comparison-table {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  align-items: center;
+}
+.comparison-row + .comparison-row {
+  border-top: 1px solid var(--line);
+}
+.comparison-cell {
+  padding: 22px 24px;
+  font-size: 15.5px;
+  color: var(--ink);
+  text-align: center;
+  position: relative;
+}
+.comparison-cell--criteria {
+  text-align: left;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.comparison-cell--ours {
+  background: rgba(234, 88, 12, 0.05);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  position: relative;
+}
+.comparison-cell--theirs {
+  color: var(--ink-2);
+}
+/* Header row: column labels above the data. AfterSlim label gets the
+   brand orange treatment to anchor the "ours" column visually. */
+.comparison-row--header .comparison-cell {
+  padding-top: 26px;
+  padding-bottom: 26px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  background: rgba(31, 20, 16, 0.03);
+}
+.comparison-row--header .comparison-cell--ours {
+  color: var(--orange);
+  background: rgba(234, 88, 12, 0.10);
+}
+.comparison-row--header .comparison-cell--theirs {
+  color: var(--ink-2);
+  opacity: 0.7;
+}
+/* Indicators */
+.comparison-check,
+.comparison-cross {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.comparison-check {
+  background: var(--orange);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.30);
+}
+.comparison-check::after {
+  content: '';
+  width: 11px;
+  height: 6px;
+  border-left: 2.5px solid #fff;
+  border-bottom: 2.5px solid #fff;
+  transform: rotate(-45deg) translate(1px, -1.5px);
+}
+.comparison-cross {
+  background: rgba(31, 20, 16, 0.08);
+}
+.comparison-cross::before,
+.comparison-cross::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 2px;
+  background: rgba(31, 20, 16, 0.45);
+  border-radius: 1px;
+}
+.comparison-cross::before { transform: rotate(45deg); }
+.comparison-cross::after { transform: rotate(-45deg); }
+.comparison-cross-text {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-2);
+  opacity: 0.78;
+  letter-spacing: -0.005em;
+}
+
+@media (max-width: 720px) {
+  .comparison { padding: 72px 0; }
+  .comparison-row {
+    grid-template-columns: 1.2fr 0.8fr 0.8fr;
+  }
+  .comparison-cell { padding: 16px 12px; font-size: 13.5px; }
+  .comparison-cell--criteria { font-size: 14px; }
+  .comparison-row--header .comparison-cell { font-size: 10.5px; letter-spacing: 1.2px; }
+  .comparison-cross-text { font-size: 12px; }
+  .comparison-check, .comparison-cross { width: 24px; height: 24px; }
+}
+
 /* ===== Mid-page CTA (between Science and Guarantee) ===== */
 /* Compact conversion stop placed at the peak of post-VSL conviction.
    Not a bundle picker — that lives below; just a single big button
@@ -2803,6 +2960,61 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- 3.7 Comparison: AfterSlim vs the 9-supplement post-GLP-1 stack -->
+<section class="comparison">
+  <div class="container">
+    <div class="comparison-header" data-reveal>
+      <span class="comparison-eyebrow">AfterSlim vs the stack</span>
+      <h2 class="comparison-title">One. Not <em>nine.</em></h2>
+      <p class="comparison-subtitle">The typical post-GLP-1 supplement protocol means 9 separate bottles, 10 daily doses, and around $190/month. AfterSlim consolidates the essential.</p>
+    </div>
+
+    <div class="comparison-table" data-reveal>
+      <div class="comparison-row comparison-row--header">
+        <div class="comparison-cell comparison-cell--criteria"></div>
+        <div class="comparison-cell comparison-cell--ours">AfterSlim</div>
+        <div class="comparison-cell comparison-cell--theirs">9-pill stack</div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell comparison-cell--criteria">Under $50 / month</div>
+        <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
+        <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross-text">~$190 / mo</span></div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell comparison-cell--criteria">One capsule a day</div>
+        <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
+        <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross-text">10 daily doses</span></div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell comparison-cell--criteria">Single bottle</div>
+        <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
+        <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross-text">9 bottles</span></div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell comparison-cell--criteria">One time of day</div>
+        <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
+        <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross-text">4 different times</span></div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell comparison-cell--criteria">GLP-1 specific</div>
+        <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
+        <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross"></span></div>
+      </div>
+
+      <div class="comparison-row">
+        <div class="comparison-cell comparison-cell--criteria">90-day money-back</div>
+        <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
+        <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross"></span></div>
+      </div>
+    </div>
   </div>
 </section>
 
