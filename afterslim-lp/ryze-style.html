@@ -3853,21 +3853,27 @@ function renderPrice() {
   });
 }
 
-// Bundle modal open/close — opened by midcta CTA
+// Bundle modal open/close — opened by midcta CTA.
+// Note: the modal HTML lives at end-of-body (after this script), so we
+// look it up inside handlers instead of caching it at IIFE-init time.
 (function() {
-  var modal = document.getElementById('bundleModal');
-  if (!modal) return;
   var lastFocused = null;
 
+  function getModal() { return document.getElementById('bundleModal'); }
+
   function openModal() {
+    var modal = getModal();
+    if (!modal) return;
     lastFocused = document.activeElement;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('bundle-modal-open');
-    var first = modal.querySelector('.bundle-modal-close');
-    if (first) first.focus();
+    var closeBtn = modal.querySelector('.bundle-modal-close');
+    if (closeBtn) closeBtn.focus();
   }
   function closeModal() {
+    var modal = getModal();
+    if (!modal) return;
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('bundle-modal-open');
@@ -3886,7 +3892,8 @@ function renderPrice() {
     }
   });
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    var modal = getModal();
+    if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) closeModal();
   });
 })();
 
