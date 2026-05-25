@@ -3897,24 +3897,27 @@ function renderPrice() {
   });
 })();
 
-// Plan selector (Subscribe vs One-time)
-document.querySelectorAll('.variant-opt').forEach(function(o) {
-  o.addEventListener('click', function() {
+// Plan selector (Subscribe vs One-time) + Bundle selector (1 / 2 / 3 bottles).
+// Delegated so the modal's variants/bundles (rendered after this script)
+// also fire, and so both hero + modal stay in sync.
+document.addEventListener('click', function(e) {
+  var variantOpt = e.target.closest('.variant-opt');
+  if (variantOpt) {
+    var plan = variantOpt.getAttribute('data-plan') || 'subscribe';
     document.querySelectorAll('.variant-opt').forEach(function(x) { x.classList.remove('selected'); });
-    o.classList.add('selected');
-    currentPlan = o.getAttribute('data-plan') || 'subscribe';
+    document.querySelectorAll('.variant-opt[data-plan="' + plan + '"]').forEach(function(x) { x.classList.add('selected'); });
+    currentPlan = plan;
     renderPrice();
-  });
-});
-
-// Bundle selector (1 / 2 / 3 bottles)
-document.querySelectorAll('.bundle-opt').forEach(function(o) {
-  o.addEventListener('click', function() {
+    return;
+  }
+  var bundleOpt = e.target.closest('.bundle-opt');
+  if (bundleOpt) {
+    var pack = bundleOpt.getAttribute('data-pack');
     document.querySelectorAll('.bundle-opt').forEach(function(x) { x.classList.remove('selected'); });
-    o.classList.add('selected');
-    currentPack = o.getAttribute('data-pack');
+    document.querySelectorAll('.bundle-opt[data-pack="' + pack + '"]').forEach(function(x) { x.classList.add('selected'); });
+    currentPack = pack;
     renderPrice();
-  });
+  }
 });
 
 // Urgency timer countdown (days/hrs/min/sec)
