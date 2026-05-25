@@ -899,76 +899,177 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .comparison-check, .comparison-cross { width: 26px; height: 26px; }
 }
 
-/* ===== Mid-page CTA (between Science and Guarantee) ===== */
-/* Compact conversion stop placed at the peak of post-VSL conviction.
-   Not a bundle picker — that lives below; just a single big button
-   for the "convinced now" reader who doesn't want to compare packs. */
+/* ===== Mid-page PDP card (Ryze-style product card at peak conviction) ===== */
+/* Two-column card placed after the Science comparison. Left side =
+   warm-gradient visual with the bottle. Right side = title +
+   feature bullets + price + CTA. This is the "convinced reader's"
+   buy stop — not a pack picker (the hero already handles that),
+   just one clear offer that closes the sale. */
 .midcta {
   background: var(--bg);
   padding: 96px 0;
 }
 .midcta-card {
-  max-width: 720px;
+  max-width: 1040px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(31, 20, 16, 0.06);
 }
-.midcta-eyebrow {
-  font-size: 13px;
+.midcta-visual {
+  position: relative;
+  background: linear-gradient(165deg, #fb923c 0%, #ea580c 45%, #c2410c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 32px;
+  min-height: 420px;
+}
+.midcta-bottle {
+  display: block;
+  width: auto;
+  max-width: 80%;
+  max-height: 320px;
+  filter: drop-shadow(0 24px 48px rgba(31, 20, 16, 0.32));
+}
+.midcta-visual-label {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  color: #ffffff;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 2.4px;
   text-transform: uppercase;
-  color: var(--orange);
+  opacity: 0.85;
+}
+.midcta-info {
+  padding: 48px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .midcta-title {
-  font-size: clamp(32px, 4.6vw, 48px);
+  font-size: clamp(28px, 3.6vw, 40px);
   font-weight: 800;
   letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
+  line-height: 1.05;
+  margin: 0 0 6px;
   color: var(--ink);
 }
+.midcta-title-sub {
+  display: block;
+  color: var(--orange);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.midcta-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  margin: 0 0 24px;
+  opacity: 0.7;
+}
+.midcta-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.midcta-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15.5px;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.midcta-features li svg {
+  width: 18px;
+  height: 18px;
+  color: var(--orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.midcta-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.midcta-price-current {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.midcta-price-original {
+  font-size: 20px;
+  color: var(--ink-2);
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+.midcta-price-badge {
+  background: rgba(234, 88, 12, 0.12);
+  color: var(--orange-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.midcta-price-perday {
+  margin: 0 0 22px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  opacity: 0.7;
+}
 .midcta-button {
-  margin-top: 14px;
-  padding: 20px 40px;
+  width: 100%;
+  padding: 22px 32px;
   font-size: 17px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
-.midcta-trust {
-  list-style: none;
-  padding: 0;
-  margin: 14px 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 28px;
-  font-size: 13px;
+.midcta-finehint {
+  margin: 12px 0 0;
+  font-size: 12.5px;
   font-weight: 600;
-  color: var(--ink-2);
   letter-spacing: 0.4px;
+  color: var(--ink-2);
+  opacity: 0.6;
+  text-align: center;
+  width: 100%;
 }
-.midcta-trust li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.midcta-trust li::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--orange);
-  flex-shrink: 0;
-}
-@media (max-width: 720px) {
+
+@media (max-width: 860px) {
   .midcta { padding: 72px 0; }
-  .midcta-button { width: 100%; padding: 18px 28px; }
-  .midcta-trust { gap: 6px 16px; font-size: 12.5px; }
+  .midcta-card {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+  }
+  .midcta-visual { min-height: 280px; padding: 36px 24px; }
+  .midcta-bottle { max-height: 240px; }
+  .midcta-visual-label { bottom: 18px; left: 18px; font-size: 11px; }
+  .midcta-info { padding: 32px 28px; }
+  .midcta-price-current { font-size: 30px; }
+  .midcta-price-original { font-size: 17px; }
 }
 
 /* ===== Reviews carousel ===== */
@@ -3070,21 +3171,39 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   </div>
 </section>
 
-<!-- 4. Mid-page conversion CTA (peak-conviction moment after Science + VSL) -->
+<!-- 4. Mid-page PDP card — Ryze-style product card at peak conviction -->
 <section class="midcta">
   <div class="container">
     <div class="midcta-card" data-reveal>
-      <span class="midcta-eyebrow">One capsule a day</span>
-      <h2 class="midcta-title">Start your AfterSlim ritual.</h2>
-      <a href="#" class="btn-primary midcta-button hero-checkout-btn">
-        Start AfterSlim today
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </a>
-      <ul class="midcta-trust">
-        <li>90-day money-back</li>
-        <li>Made in USA · FDA-registered</li>
-        <li>Cancel anytime</li>
-      </ul>
+      <div class="midcta-visual">
+        <img src="images/bottlereal-transparent.png" alt="AfterSlim bottle" class="midcta-bottle">
+        <span class="midcta-visual-label">One capsule a day</span>
+      </div>
+
+      <div class="midcta-info">
+        <h2 class="midcta-title">AfterSlim<br><span class="midcta-title-sub">GLP-1 Balance</span></h2>
+        <p class="midcta-subtitle">30 capsules · one month supply</p>
+
+        <ul class="midcta-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 3 keystone gut strains + 2 prebiotics</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Designed for Ozempic, Mounjaro, Wegovy users</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 90-day money-back guarantee</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Made in USA · FDA-registered facility</li>
+        </ul>
+
+        <div class="midcta-price">
+          <span class="midcta-price-current">$47.99</span>
+          <span class="midcta-price-original">$75.98</span>
+          <span class="midcta-price-badge">37% OFF TODAY</span>
+        </div>
+        <p class="midcta-price-perday">About $1.60 per day</p>
+
+        <a href="#" class="btn-primary midcta-button hero-checkout-btn">
+          Start AfterSlim today
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <p class="midcta-finehint">Cancel anytime</p>
+      </div>
     </div>
   </div>
 </section>
