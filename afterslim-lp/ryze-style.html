@@ -1349,24 +1349,30 @@ body.bundle-modal-open {
 }
 .testimonials-carousel-wrapper {
   position: relative;
-  padding: 0 56px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 100px, #000 calc(100% - 100px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 100px, #000 calc(100% - 100px), transparent 100%);
 }
 .testimonials-carousel {
   display: flex;
   gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  width: max-content;
   padding: 10px 0;
+  animation: testimonialsLoop 80s linear infinite;
+  will-change: transform;
 }
-.testimonials-carousel::-webkit-scrollbar { display: none; }
+@keyframes testimonialsLoop {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-carousel { animation: none; }
+}
 .testimonial-card {
   flex: 0 0 320px;
   background: #fff;
   border-radius: 18px;
   padding: 24px;
-  scroll-snap-align: start;
   box-shadow: 0 6px 24px rgba(31, 20, 16, 0.06);
   border: 1px solid var(--line);
 }
@@ -1425,41 +1431,11 @@ body.bundle-modal-open {
   width: 14px;
   height: 14px;
 }
-.testimonials-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  box-shadow: 0 4px 14px rgba(31, 20, 16, 0.1);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-.testimonials-nav:hover {
-  background: var(--orange);
-  border-color: var(--orange);
-}
-.testimonials-nav:hover svg { color: #fff; }
-.testimonials-nav svg {
-  width: 20px;
-  height: 20px;
-  color: var(--ink);
-}
-.testimonials-nav.prev { left: 0; }
-.testimonials-nav.next { right: 0; }
 @media (max-width: 768px) {
   .testimonials-section { padding: 64px 0; }
   .testimonials-title { margin-bottom: 32px; }
-  .testimonials-carousel-wrapper { padding: 0 16px; }
+  .testimonials-carousel { animation-duration: 60s; gap: 14px; }
   .testimonial-card-image { flex-basis: 280px; min-height: 420px; }
-  .testimonials-nav { display: none; }
 }
 
 /* ===== Reviews list (Ryze-style written reviews) ===== */
@@ -3763,13 +3739,6 @@ body.bundle-modal-open {
     <h2 class="testimonials-title">Don't Just Take <span>Our Word</span></h2>
 
     <div class="testimonials-carousel-wrapper">
-      <button class="testimonials-nav prev" onclick="scrollTestimonials(-1)" aria-label="Previous testimonial">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <button class="testimonials-nav next" onclick="scrollTestimonials(1)" aria-label="Next testimonial">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </button>
-
       <div class="testimonials-carousel" id="testimonialsCarousel">
         <div class="testimonial-card testimonial-card-image" style="background-image: url('images/djtow1.png');">
           <div class="testimonial-content-overlay">
@@ -3814,6 +3783,63 @@ body.bundle-modal-open {
         </div>
 
         <div class="testimonial-card testimonial-card-image" style="background-image: url('images/djtow4.png');">
+          <div class="testimonial-content-overlay">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"This is my 3rd bottle and when I say this works I MEAN IT WORKS. No more nausea, no more bloating. I didn't even tell my husband I was taking something and he noticed the difference!"</p>
+            <div class="testimonial-author">
+              <span class="testimonial-name">Megan B.</span>
+              <span class="testimonial-verified">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Verified Purchase
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplicate set for seamless loop (aria-hidden so screen readers don't repeat) -->
+        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow1.png');">
+          <div class="testimonial-content-overlay">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"I've tried a few different probiotics on Ozempic and was ok with the results but this one is AMAZING!! The bloating is completely gone and I feel like a new person."</p>
+            <div class="testimonial-author">
+              <span class="testimonial-name">Jessie M.</span>
+              <span class="testimonial-verified">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Verified Purchase
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow2.png');">
+          <div class="testimonial-content-overlay">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"I used AfterSlim and the results were amazing. I stopped taking it for a month and could IMMEDIATELY tell the difference. Never going without it again!"</p>
+            <div class="testimonial-author">
+              <span class="testimonial-name">Tanya W.</span>
+              <span class="testimonial-verified">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Verified Purchase
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow3.png');">
+          <div class="testimonial-content-overlay">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">"Not gonna lie I thought this was another scam supplement. My wife ordered it for me because she was tired of hearing me complain about Mounjaro side effects. 3 weeks in and I gotta admit... the constipation is gone and I actually have energy again."</p>
+            <div class="testimonial-author">
+              <span class="testimonial-name">Marcus T.</span>
+              <span class="testimonial-verified">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Verified Purchase
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow4.png');">
           <div class="testimonial-content-overlay">
             <div class="testimonial-stars">★★★★★</div>
             <p class="testimonial-text">"This is my 3rd bottle and when I say this works I MEAN IT WORKS. No more nausea, no more bloating. I didn't even tell my husband I was taking something and he noticed the difference!"</p>
@@ -4686,18 +4712,6 @@ if ('IntersectionObserver' in window) {
   setInterval(tick, 1000);
 })();
 
-/* ===== Testimonials carousel scroll (prev/next arrows) ===== */
-function scrollTestimonials(direction) {
-  var carousel = document.getElementById('testimonialsCarousel');
-  if (!carousel) return;
-  var cards = carousel.querySelectorAll('.testimonial-card');
-  if (!cards.length) return;
-  var cardWidth = cards[0].offsetWidth + 20;
-  carousel.scrollTo({
-    left: carousel.scrollLeft + (direction * cardWidth),
-    behavior: 'smooth'
-  });
-}
 </script>
 
 <!-- Bundle picker modal (opened by midcta CTA) -->
