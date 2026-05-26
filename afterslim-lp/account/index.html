@@ -152,57 +152,84 @@
   var user = await window.afterslimAuth.requireAuth();
   var supabase = window.afterslimSupabase;
 
-  // Load profile + counts in parallel for the dashboard greeting + badges.
-  var [profileRes, ordersRes, subsRes, balanceRes, ticketsRes] = await Promise.all([
-    supabase.from('profiles').select('full_name, email').eq('id', user.id).maybeSingle(),
-    supabase.from('orders').select('id', { count: 'exact', head: true }).eq('profile_id', user.id),
-    supabase.from('subscriptions').select('id', { count: 'exact', head: true })
-      .eq('profile_id', user.id).eq('status', 'active'),
-    supabase.from('customer_credit_balance').select('balance_cents').eq('profile_id', user.id).maybeSingle(),
-    supabase.from('support_tickets').select('id', { count: 'exact', head: true })
-      .eq('profile_id', user.id).in('status', ['open', 'pending']),
-  ]);
+  // Show the email immediately so the user never sees "Loading..." stuck.
+  document.getElementById('greetingTitle').textContent = 'Your account';
+  document.getElementById('greetingSub').textContent = user.email || '';
 
-  // Greeting
-  var name = (profileRes && profileRes.data && profileRes.data.full_name) || '';
-  var firstName = name ? name.split(' ')[0] : '';
-  document.getElementById('greetingTitle').textContent = firstName
-    ? 'Hello, ' + firstName
-    : 'Your account';
-  document.getElementById('greetingSub').textContent = user.email;
-
-  // Orders badge
-  var orderCount = (ordersRes && ordersRes.count) || 0;
-  if (orderCount > 0) {
-    var b = document.getElementById('ordersBadge');
-    b.textContent = orderCount + (orderCount === 1 ? ' order' : ' orders');
-    b.style.display = 'inline-flex';
-  }
-
-  // Subscriptions badge
-  var subCount = (subsRes && subsRes.count) || 0;
-  if (subCount > 0) {
-    var b = document.getElementById('subsBadge');
-    b.textContent = subCount + ' active';
-    b.style.display = 'inline-flex';
-  }
-
-  // Store credit badge (always shown)
-  var balanceCents = (balanceRes && balanceRes.data && balanceRes.data.balance_cents) || 0;
-  document.getElementById('creditBadge').textContent = window.formatMoney(balanceCents) + ' balance';
-
-  // Tickets badge
-  var ticketCount = (ticketsRes && ticketsRes.count) || 0;
-  if (ticketCount > 0) {
-    var b = document.getElementById('ticketsBadge');
-    b.textContent = ticketCount + ' open';
-    b.style.display = 'inline-flex';
-  }
-
-  // Sign out
+  // Sign out — wire up first so it always works even if data queries fail.
   document.getElementById('signOutBtn').addEventListener('click', function() {
     window.afterslimAuth.signOut();
   });
+
+  // Each query runs independently. If one table/view has a bad RLS policy
+  // or missing grant, the others still populate (and the failure shows up
+  // in the console for debugging).
+  function safeQuery(label, promise) {
+    return promise.then(function(res) {
+      if (res && res.error) console.warn('[dashboard]', label, 'error:', res.error);
+      return res;
+    }).catch(function(err) {
+      console.warn('[dashboard]', label, 'threw:', err);
+      return { data: null, count: 0, error: err };
+    });
+  }
+
+  // 1) Profile → greeting name
+  safeQuery('profiles', supabase.from('profiles').select('full_name').eq('id', user.id).maybeSingle())
+    .then(function(res) {
+      var name = (res && res.data && res.data.full_name) || '';
+      var firstName = name ? name.split(' ')[0] : '';
+      if (firstName) {
+        document.getElementById('greetingTitle').textContent = 'Hello, ' + firstName;
+      }
+    });
+
+  // 2) Orders count
+  safeQuery('orders', supabase.from('orders')
+      .select('id', { count: 'exact', head: true }).eq('profile_id', user.id))
+    .then(function(res) {
+      var n = (res && res.count) || 0;
+      if (n > 0) {
+        var b = document.getElementById('ordersBadge');
+        b.textContent = n + (n === 1 ? ' order' : ' orders');
+        b.style.display = 'inline-flex';
+      }
+    });
+
+  // 3) Active subscriptions count
+  safeQuery('subscriptions', supabase.from('subscriptions')
+      .select('id', { count: 'exact', head: true })
+      .eq('profile_id', user.id).eq('status', 'active'))
+    .then(function(res) {
+      var n = (res && res.count) || 0;
+      if (n > 0) {
+        var b = document.getElementById('subsBadge');
+        b.textContent = n + ' active';
+        b.style.display = 'inline-flex';
+      }
+    });
+
+  // 4) Store credit balance — always shown
+  safeQuery('credit_balance', supabase.from('customer_credit_balance')
+      .select('balance_cents').eq('profile_id', user.id).maybeSingle())
+    .then(function(res) {
+      var cents = (res && res.data && res.data.balance_cents) || 0;
+      document.getElementById('creditBadge').textContent =
+        window.formatMoney(cents) + ' balance';
+    });
+
+  // 5) Open support tickets count
+  safeQuery('tickets', supabase.from('support_tickets')
+      .select('id', { count: 'exact', head: true })
+      .eq('profile_id', user.id).in('status', ['open', 'pending']))
+    .then(function(res) {
+      var n = (res && res.count) || 0;
+      if (n > 0) {
+        var b = document.getElementById('ticketsBadge');
+        b.textContent = n + ' open';
+        b.style.display = 'inline-flex';
+      }
+    });
 })();
 </script>
 
