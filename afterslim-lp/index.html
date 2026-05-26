@@ -392,12 +392,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .hero-rating-count {
   font-size: 17px;
-  color: var(--ink-2);
-  font-weight: 500;
+  color: var(--ink);
+  font-weight: 600;
 }
 .hero-rating-count strong {
-  color: var(--ink);
-  font-weight: 800;
+  font-weight: 600;
 }
 .hero-rating {
   display: flex;
@@ -681,6 +680,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .hero-grid { grid-template-columns: 1fr; gap: 32px; }
   .hero-main-img { padding: 0; }
   .hero-gallery { position: static; top: auto; }
+  /* On mobile, let the hero image breathe edge-to-edge (close to it).
+     Ryze's reference shows the bottle image filling ~95% of the viewport
+     width. Tightening the .container padding for the hero only so the
+     gallery (image + thumbs) gets ~24px more horizontal space. */
+  .hero .container { padding: 0 12px; }
 }
 
 /* ===== Section heads ===== */
@@ -1031,12 +1035,11 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 .midcta-rating-count {
   font-size: 15.5px;
-  color: var(--ink-2);
-  font-weight: 500;
+  color: var(--ink);
+  font-weight: 600;
 }
 .midcta-rating-count strong {
-  color: var(--ink);
-  font-weight: 800;
+  font-weight: 600;
 }
 .midcta-title {
   font-size: clamp(28px, 3.6vw, 40px);
