@@ -940,6 +940,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   letter-spacing: -0.005em;
 }
 
+/* cell-break: line break inside criteria cells, only on mobile.
+   Default hidden so desktop reads as one line. */
+.cell-break { display: none; }
+
 @media (max-width: 720px) {
   .comparison { padding: 16px 0 24px; }
   /* Header gets its own breathing room — the container is pulled tight
@@ -948,18 +952,20 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .comparison-header { margin: 0 auto 28px; padding: 0 18px; }
   .comparison-title { font-size: 30px; line-height: 1.12; margin-bottom: 12px; }
   .comparison-subtitle { font-size: 14.5px; line-height: 1.5; }
+  .cell-break { display: initial; }
   /* Comparison table goes near-edge-to-edge on mobile.
      Pull the container's 24px gutter back to 8px so the
      table reads as a wide block, not a centered card. */
   .comparison .container { padding: 0 8px; }
+  /* Criteria column narrower (labels wrap to 2 lines) so the AfterSlim
+     column sits visually centered between criteria and 9-pill stack.
+     Total 0.95 + 1 + 1 = 2.95; col 2 = 0.95/2.95 → 1.95/2.95 ≈ 32.2% → 66.1% */
   .comparison-row {
-    grid-template-columns: 1.2fr 0.9fr 0.9fr;
+    grid-template-columns: 0.95fr 1fr 1fr;
   }
-  /* Gradient column position changes with the new grid ratios:
-     1.2 + 0.9 + 0.9 = 3.0; col 2 = 1.2/3.0 → 1.2/3.0+0.9/3.0 = 40% → 70% */
-  .comparison-table::before { left: 40%; width: 30%; }
-  .comparison-cell { padding: 16px 12px; font-size: 13.5px; }
-  .comparison-cell--criteria { font-size: 14px; }
+  .comparison-table::before { left: 32.2%; width: 33.9%; }
+  .comparison-cell { padding: 16px 10px; font-size: 13.5px; }
+  .comparison-cell--criteria { font-size: 14px; line-height: 1.25; }
   .comparison-row--header .comparison-cell { font-size: 10.5px; letter-spacing: 1.2px; }
   .comparison-row--header .comparison-cell--ours-header { padding: 8px 8px; gap: 4px; }
   .comparison-bottle { height: 64px; }
@@ -3893,13 +3899,13 @@ body.bundle-modal-open {
       </div>
 
       <div class="comparison-row">
-        <div class="comparison-cell comparison-cell--criteria">Under $50 / month</div>
+        <div class="comparison-cell comparison-cell--criteria">Under<br class="cell-break"> $50 / month</div>
         <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
         <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross-text">~$190 / mo</span></div>
       </div>
 
       <div class="comparison-row">
-        <div class="comparison-cell comparison-cell--criteria">One capsule a day</div>
+        <div class="comparison-cell comparison-cell--criteria">One capsule<br class="cell-break"> a day</div>
         <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
         <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross-text">10 daily doses</span></div>
       </div>
@@ -3911,7 +3917,7 @@ body.bundle-modal-open {
       </div>
 
       <div class="comparison-row">
-        <div class="comparison-cell comparison-cell--criteria">One time of day</div>
+        <div class="comparison-cell comparison-cell--criteria">One time<br class="cell-break"> of day</div>
         <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
         <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross-text">4 different times</span></div>
       </div>
@@ -3923,7 +3929,7 @@ body.bundle-modal-open {
       </div>
 
       <div class="comparison-row">
-        <div class="comparison-cell comparison-cell--criteria">90-day money-back</div>
+        <div class="comparison-cell comparison-cell--criteria">90-day<br class="cell-break"> Money-back</div>
         <div class="comparison-cell comparison-cell--ours"><span class="comparison-check"></span></div>
         <div class="comparison-cell comparison-cell--theirs"><span class="comparison-cross"></span></div>
       </div>
