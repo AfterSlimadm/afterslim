@@ -4761,17 +4761,25 @@ if ('IntersectionObserver' in window) {
 })();
 
 /* ===== Problem-scene stat number count-up animation =====
-   When a .problem-scene gains .is-active, its <b>NUMBER</b> elements
-   inside .stat-compare-number animate from 0 to their target value,
-   matching the bar fill timing (normal row 0.8s, peak row 1.4s).
-   When the scene loses .is-active, numbers snap back to 0 so the next
-   activation re-runs the animation (mirrors the bar's scaleX behavior). */
+   Animates the big numbers (.stat-compare-number b for the side-by-side
+   bars, .stat-callout-number b for the '44%' pictogram) from 0 to their
+   target value when a scene becomes active.
+
+   Gated behind .has-entered on the .problems section — same trigger that
+   gates the bar fill and pictogram figure colorize, set by the section-
+   entry IntersectionObserver further up in this script. Without this
+   gate the numbers would animate on page load while the user is still
+   way above the section, finishing before they ever scroll into view. */
 (function() {
-  var scenes = document.querySelectorAll('.problem-scene');
+  var section = document.querySelector('.problems');
+  if (!section) return;
+  var scenes = section.querySelectorAll('.problem-scene');
   if (!scenes.length) return;
 
+  var NUM_SELECTOR = '.stat-compare-number b, .stat-callout-number b';
+
   scenes.forEach(function(scene) {
-    scene.querySelectorAll('.stat-compare-number b').forEach(function(el) {
+    scene.querySelectorAll(NUM_SELECTOR).forEach(function(el) {
       var target = el.textContent.trim();
       el.dataset.target = target;
       var hasPlus = target.indexOf('+') !== -1;
@@ -4828,18 +4836,26 @@ if ('IntersectionObserver' in window) {
   }
 
   function activate(scene) {
+    // Side-by-side bar rows (Normal vs On GLP-1) — delays match bar fill
     scene.querySelectorAll('.stat-compare-row').forEach(function(row) {
       var num = row.querySelector('.stat-compare-number b');
       if (!num) return;
       var isPeak = row.classList.contains('stat-compare-row--peak');
       animateNumber(num, isPeak ? 1400 : 800);
     });
+    // Pictogram callout number (44%, 30%, 20%, 14%, 70%, 80%) — count up
+    // alongside the figures filling in (figure delays 1.20s → 1.80s)
+    scene.querySelectorAll('.stat-callout-number b').forEach(function(num) {
+      animateNumber(num, 1000);
+    });
   }
   function deactivate(scene) {
-    scene.querySelectorAll('.stat-compare-number b').forEach(resetNumber);
+    scene.querySelectorAll(NUM_SELECTOR).forEach(resetNumber);
   }
 
-  var mo = new MutationObserver(function(records) {
+  // Watch scene class changes (only act once section has been entered)
+  var sceneMO = new MutationObserver(function(records) {
+    if (!section.classList.contains('has-entered')) return;
     records.forEach(function(rec) {
       if (rec.type !== 'attributes' || rec.attributeName !== 'class') return;
       var scene = rec.target;
@@ -4848,9 +4864,27 @@ if ('IntersectionObserver' in window) {
     });
   });
   scenes.forEach(function(scene) {
-    mo.observe(scene, { attributes: true, attributeFilter: ['class'] });
-    if (scene.classList.contains('is-active')) activate(scene);
+    sceneMO.observe(scene, { attributes: true, attributeFilter: ['class'] });
   });
+
+  // Watch for .has-entered being added to .problems. When it lands, fire
+  // the animation for whichever scene is currently active.
+  function fireInitial() {
+    scenes.forEach(function(scene) {
+      if (scene.classList.contains('is-active')) activate(scene);
+    });
+  }
+  if (section.classList.contains('has-entered')) {
+    fireInitial();
+  } else {
+    var sectionMO = new MutationObserver(function() {
+      if (section.classList.contains('has-entered')) {
+        sectionMO.disconnect();
+        fireInitial();
+      }
+    });
+    sectionMO.observe(section, { attributes: true, attributeFilter: ['class'] });
+  }
 })();
 
 </script>
