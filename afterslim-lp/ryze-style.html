@@ -1018,6 +1018,26 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   flex-direction: column;
   align-items: flex-start;
 }
+.midcta-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.midcta-rating-stars {
+  display: block;
+  height: 22px;
+  width: auto;
+}
+.midcta-rating-count {
+  font-size: 15.5px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.midcta-rating-count strong {
+  color: var(--ink);
+  font-weight: 800;
+}
 .midcta-title {
   font-size: clamp(28px, 3.6vw, 40px);
   font-weight: 800;
@@ -3772,6 +3792,10 @@ body.bundle-modal-open {
       </div>
 
       <div class="midcta-info">
+        <div class="midcta-rating" aria-label="Rated 4.8 stars from 847 reviews">
+          <img class="midcta-rating-stars" src="images/reviews-stars-orange.png" alt="5 stars" aria-hidden="true">
+          <span class="midcta-rating-count"><strong>847</strong> Reviews</span>
+        </div>
         <h2 class="midcta-title">AfterSlim<br><span class="midcta-title-sub">GLP-1 Balance</span></h2>
 
         <ul class="midcta-features">
