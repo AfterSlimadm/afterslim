@@ -154,11 +154,22 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/js/supabase-client.js"></script>
 <script>
+// Failsafe: if the Supabase client didn't initialize (CDN blocked, key
+// invalid, etc.), don't leave the dashboard rendered to an unauthed
+// visitor — bounce them to the login page where they at least see a
+// clean state instead of a half-broken dashboard.
+if (!window.afterslimAuth || !window.afterslimSupabase) {
+  console.error('[account] Supabase client failed to init. Redirecting to login.');
+  window.location.replace('/account/login');
+}
+
 (async function() {
+  if (!window.afterslimAuth) return;
   var user = await window.afterslimAuth.requireAuth();
+  if (!user) return;
   var supabase = window.afterslimSupabase;
 
   // Show the email immediately so the user never sees "Loading..." stuck.
