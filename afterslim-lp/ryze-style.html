@@ -1326,9 +1326,14 @@ body.bundle-modal-open {
   .reviews-grid { grid-template-columns: 1fr; }
 }
 
+/* ===== Dark band wrapping the testimonials carousel + written reviews list ===== */
+.dark-band {
+  background: linear-gradient(180deg, #1f1410 0%, #2d1408 50%, #3a1a08 100%);
+}
+
 /* ===== Testimonials carousel (ported from production index.html) ===== */
 .testimonials-section {
-  background: linear-gradient(135deg, #1f1410 0%, #4a1804 60%, #c2410c 140%);
+  background: transparent;
   padding: 96px 0;
   overflow: hidden;
 }
@@ -1462,10 +1467,10 @@ body.bundle-modal-open {
   .testimonials-nav { display: none; }
 }
 
-/* ===== Reviews list (Ryze-style written reviews) ===== */
+/* ===== Reviews list (Ryze-style written reviews, dark variant) ===== */
 .reviews-list-section {
-  background: var(--bg);
-  padding: 80px 0 96px;
+  background: transparent;
+  padding: 24px 0 96px;
 }
 .reviews-list-section .container { max-width: 980px; }
 
@@ -1473,12 +1478,14 @@ body.bundle-modal-open {
   font-size: clamp(32px, 4vw, 44px);
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--ink);
+  color: #fff;
   margin: 0 0 28px;
+  text-align: center;
 }
 .rl-summary {
   display: flex;
   align-items: baseline;
+  justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 4px;
@@ -1491,7 +1498,7 @@ body.bundle-modal-open {
 .rl-summary-number {
   font-size: 44px;
   font-weight: 800;
-  color: var(--ink);
+  color: #fff;
   letter-spacing: -0.025em;
   line-height: 1;
 }
@@ -1502,7 +1509,7 @@ body.bundle-modal-open {
 }
 .rl-summary-count {
   font-size: 15px;
-  color: var(--ink-2);
+  color: rgba(255, 255, 255, 0.72);
   margin: 0;
 }
 .rl-distribution {
@@ -1510,7 +1517,7 @@ body.bundle-modal-open {
   flex-direction: column;
   gap: 8px;
   max-width: 520px;
-  margin: 18px 0 36px;
+  margin: 18px auto 36px;
 }
 .rl-dist-row {
   display: grid;
@@ -1520,7 +1527,7 @@ body.bundle-modal-open {
 }
 .rl-dist-label {
   font-size: 14px;
-  color: var(--ink-2);
+  color: rgba(255, 255, 255, 0.78);
   font-weight: 600;
   text-align: center;
 }
@@ -1531,7 +1538,7 @@ body.bundle-modal-open {
 }
 .rl-dist-bar {
   height: 8px;
-  background: var(--line);
+  background: rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -1546,16 +1553,16 @@ body.bundle-modal-open {
   align-items: center;
   justify-content: space-between;
   padding: 0 0 24px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   margin-bottom: 32px;
 }
 .reviews-list-count {
   font-size: 17px;
-  color: var(--ink-2);
+  color: rgba(255, 255, 255, 0.78);
   font-weight: 500;
 }
 .reviews-list-count strong {
-  color: var(--ink);
+  color: #fff;
   font-weight: 800;
   margin-right: 6px;
 }
@@ -1564,12 +1571,12 @@ body.bundle-modal-open {
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  background: var(--bg-2);
-  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   font-size: 14.5px;
   font-weight: 700;
-  color: var(--ink);
+  color: #fff;
   cursor: pointer;
   letter-spacing: 0.2px;
 }
@@ -1585,7 +1592,7 @@ body.bundle-modal-open {
   grid-template-columns: 180px 1fr;
   gap: 32px;
   padding: 36px 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .rl-item:last-child { border-bottom: none; }
 
@@ -1613,7 +1620,7 @@ body.bundle-modal-open {
 .rl-name {
   font-size: 15px;
   font-weight: 800;
-  color: var(--ink);
+  color: #fff;
   letter-spacing: -0.005em;
 }
 .rl-verified {
@@ -1622,7 +1629,7 @@ body.bundle-modal-open {
   gap: 5px;
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--orange);
+  color: var(--orange-light);
   letter-spacing: 0.1px;
 }
 .rl-verified svg { flex-shrink: 0; }
@@ -1646,20 +1653,20 @@ body.bundle-modal-open {
 }
 .rl-time {
   font-size: 13px;
-  color: var(--ink-3);
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 500;
 }
 .rl-headline {
   font-size: 17px;
   font-weight: 800;
-  color: var(--ink);
+  color: #fff;
   margin: 0;
   letter-spacing: -0.01em;
 }
 .rl-text {
   font-size: 15px;
   line-height: 1.6;
-  color: var(--ink-2);
+  color: rgba(255, 255, 255, 0.78);
   margin: 0;
 }
 .rl-helpful {
@@ -1670,7 +1677,7 @@ body.bundle-modal-open {
 }
 .rl-helpful-label {
   font-size: 13px;
-  color: var(--ink-3);
+  color: rgba(255, 255, 255, 0.55);
   margin-right: auto;
 }
 .rl-helpful-btn {
@@ -1680,7 +1687,7 @@ body.bundle-modal-open {
   padding: 6px 10px;
   background: transparent;
   border: none;
-  color: var(--ink-3);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -1688,8 +1695,8 @@ body.bundle-modal-open {
   transition: background 0.15s ease, color 0.15s ease;
 }
 .rl-helpful-btn:hover {
-  background: var(--bg-3);
-  color: var(--ink);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 @media (max-width: 700px) {
@@ -3752,6 +3759,9 @@ body.bundle-modal-open {
   </div>
 </section>
 
+<!-- 6 + 6.b — Combined dark band: testimonials carousel + written reviews list -->
+<div class="dark-band">
+
 <!-- 6. Testimonials carousel (ported from production index.html) -->
 <section class="testimonials-section" data-reveal>
   <div class="container">
@@ -4009,6 +4019,8 @@ body.bundle-modal-open {
     </div>
   </div>
 </section>
+
+</div><!-- /.dark-band -->
 
 <!-- FAQ -->
 <section class="faq-section">
