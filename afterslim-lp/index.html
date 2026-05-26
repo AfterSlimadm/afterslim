@@ -1771,6 +1771,9 @@ body.bundle-modal-open {
   position: relative;
   overflow: hidden;
 }
+@media (max-width: 900px) {
+  .section-bridge { padding: 40px 24px; }
+}
 .section-bridge::before {
   content: '';
   position: absolute;
@@ -2194,7 +2197,7 @@ body.bundle-modal-open {
   font-weight: 600;
 }
 @media (max-width: 900px) {
-  .problems { padding: 24px 0 8px; }
+  .problems { padding: 24px 0 0; }
   .problems-header { margin-bottom: 40px; }
   .problems-grid { grid-template-columns: 1fr; gap: 36px; }
   .problems-list { grid-template-columns: 1fr 1fr; gap: 14px 20px; }
@@ -2927,20 +2930,17 @@ body.bundle-modal-open {
     flex-shrink: 0;
     scroll-snap-align: start;
     grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 24px 24px 24px;
+    gap: 4px;
+    padding: 24px 24px 16px;
     border-radius: 0;
     background: transparent;
     border: 0;
   }
-  /* Center the text-side content on mobile so each scene reads as a
-     symmetrical card. Desktop keeps the asymmetric left-align since the
-     text + chart sit side by side. */
-  .problem-scene-content { text-align: center; align-items: center; }
+  /* Center only the symptom title + the stat-callout block (HOW COMMON
+     + 44% + pictogram). Keep the 'Why this happens' / body text
+     left-aligned so it reads as natural prose. */
   .problem-scene-num,
-  .problem-scene-title,
-  .problem-scene-why,
-  .problem-scene-body { text-align: center; }
+  .problem-scene-title { text-align: center; }
   .stat-callout { align-items: center; text-align: center; }
   .stat-callout-eyebrow,
   .stat-callout-number,
@@ -2968,12 +2968,12 @@ body.bundle-modal-open {
     box-shadow: 0 6px 24px rgba(31, 20, 16, 0.05);
   }
   .problem-scene-visual svg { width: 110px; height: 110px; }
-  /* Pagination dots — visible swipe indicator */
+  /* Pagination dots — visible swipe indicator, sits close to the chart */
   .problems-pagination {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-top: 18px;
+    margin-top: 6px;
     padding: 0 24px;
   }
   .problems-pagination-dot {
