@@ -2319,6 +2319,7 @@ body.bundle-modal-open {
   position: relative;
   margin-top: 0;
 }
+.problems-pagination { display: none; }
 .problems-pin {
   position: relative;
   overflow: hidden;
@@ -2943,8 +2944,36 @@ body.bundle-modal-open {
     transform: none;
     filter: none;
   }
-  .problem-scene-visual { max-width: 360px; margin: 0 auto; }
+  .problem-scene-visual {
+    max-width: 360px;
+    margin: 0 auto;
+    background: var(--bg-2);
+    border: 1px solid rgba(234, 88, 12, 0.10);
+    border-radius: 20px;
+    padding: 24px 20px;
+    box-shadow: 0 6px 24px rgba(31, 20, 16, 0.05);
+  }
   .problem-scene-visual svg { width: 110px; height: 110px; }
+  /* Pagination dots — visible swipe indicator */
+  .problems-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 0 24px;
+  }
+  .problems-pagination-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(31, 20, 16, 0.22);
+    transition: background 0.25s ease, transform 0.25s ease, width 0.25s ease;
+  }
+  .problems-pagination-dot.is-active {
+    background: var(--orange);
+    width: 22px;
+    border-radius: 999px;
+  }
   .problem-scene-title { font-size: 28px; }
   .problem-scene-why { font-size: 17px; }
   .problem-scene-why em { font-size: 19px; }
@@ -4764,11 +4793,25 @@ document.addEventListener('click', function(e) {
   // desktop carousel uses (the existing MutationObserver in the next
   // IIFE picks up the class change and re-fires the animations).
   if (mobile.matches && 'IntersectionObserver' in window) {
+    // Build pagination dots (one per scene) as a visual swipe indicator.
+    var pagination = document.createElement('div');
+    pagination.className = 'problems-pagination';
+    pagination.setAttribute('aria-hidden', 'true');
+    scenes.forEach(function(_, i) {
+      var dot = document.createElement('span');
+      dot.className = 'problems-pagination-dot' + (i === 0 ? ' is-active' : '');
+      pagination.appendChild(dot);
+    });
+    pin.parentNode.insertBefore(pagination, pin.nextSibling);
+    var dots = pagination.querySelectorAll('.problems-pagination-dot');
+
     var mobileIO = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+          var idx = scenes.indexOf(entry.target);
           scenes.forEach(function(s) { s.classList.remove('is-active'); });
           entry.target.classList.add('is-active');
+          dots.forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
         }
       });
     }, { root: pin, threshold: [0.5, 0.6, 0.75, 1.0] });
