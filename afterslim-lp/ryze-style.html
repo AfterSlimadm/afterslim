@@ -1468,6 +1468,79 @@ body.bundle-modal-open {
   padding: 80px 0 96px;
 }
 .reviews-list-section .container { max-width: 980px; }
+
+.reviews-list-title {
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 28px;
+}
+.rl-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.rl-summary-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.rl-summary-number {
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+.rl-summary-stars {
+  color: var(--orange);
+  font-size: 26px;
+  letter-spacing: 4px;
+}
+.rl-summary-count {
+  font-size: 15px;
+  color: var(--ink-2);
+  margin: 0;
+}
+.rl-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 520px;
+  margin: 18px 0 36px;
+}
+.rl-dist-row {
+  display: grid;
+  grid-template-columns: 18px 18px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.rl-dist-label {
+  font-size: 14px;
+  color: var(--ink-2);
+  font-weight: 600;
+  text-align: center;
+}
+.rl-dist-star {
+  color: var(--orange);
+  font-size: 14px;
+  line-height: 1;
+}
+.rl-dist-bar {
+  height: 8px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.rl-dist-fill {
+  height: 100%;
+  background: var(--orange);
+  border-radius: 999px;
+}
+
 .reviews-list-header {
   display: flex;
   align-items: center;
@@ -1621,6 +1694,10 @@ body.bundle-modal-open {
 
 @media (max-width: 700px) {
   .reviews-list-section { padding: 56px 0 72px; }
+  .reviews-list-title { margin-bottom: 20px; }
+  .rl-summary-number { font-size: 36px; }
+  .rl-summary-stars { font-size: 22px; letter-spacing: 3px; }
+  .rl-distribution { margin: 14px 0 28px; }
   .reviews-list-header { padding-bottom: 18px; margin-bottom: 24px; }
   .reviews-list-count { font-size: 15px; }
   .reviews-list-sort { padding: 8px 14px; font-size: 13.5px; }
@@ -3753,8 +3830,26 @@ body.bundle-modal-open {
 <!-- 6.b Written reviews list (Ryze-style, ported text from production index.html) -->
 <section class="reviews-list-section" data-reveal>
   <div class="container">
+    <h2 class="reviews-list-title">Customer Reviews</h2>
+
+    <div class="rl-summary">
+      <div class="rl-summary-rating">
+        <span class="rl-summary-number">4.8</span>
+        <div class="rl-summary-stars">★★★★★</div>
+      </div>
+      <p class="rl-summary-count">Based on 847 Reviews</p>
+    </div>
+
+    <div class="rl-distribution">
+      <div class="rl-dist-row"><span class="rl-dist-label">5</span><span class="rl-dist-star">★</span><div class="rl-dist-bar"><div class="rl-dist-fill" style="width: 78%"></div></div></div>
+      <div class="rl-dist-row"><span class="rl-dist-label">4</span><span class="rl-dist-star">★</span><div class="rl-dist-bar"><div class="rl-dist-fill" style="width: 15%"></div></div></div>
+      <div class="rl-dist-row"><span class="rl-dist-label">3</span><span class="rl-dist-star">★</span><div class="rl-dist-bar"><div class="rl-dist-fill" style="width: 4%"></div></div></div>
+      <div class="rl-dist-row"><span class="rl-dist-label">2</span><span class="rl-dist-star">★</span><div class="rl-dist-bar"><div class="rl-dist-fill" style="width: 2%"></div></div></div>
+      <div class="rl-dist-row"><span class="rl-dist-label">1</span><span class="rl-dist-star">★</span><div class="rl-dist-bar"><div class="rl-dist-fill" style="width: 1%"></div></div></div>
+    </div>
+
     <div class="reviews-list-header">
-      <span class="reviews-list-count"><strong>127</strong> Reviews</span>
+      <span class="reviews-list-count"><strong>847</strong> Reviews</span>
       <button class="reviews-list-sort" type="button" disabled>
         Most Recent
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
