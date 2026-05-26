@@ -4821,6 +4821,30 @@ document.addEventListener('click', function(e) {
     pin.parentNode.insertBefore(pagination, pin.nextSibling);
     var dots = pagination.querySelectorAll('.problems-pagination-dot');
 
+    // Custom smooth scroll — the browser's native behavior:'smooth' was
+    // too aggressive/fast. This gives a long ease-in-out over 900ms.
+    var scrollRAF = null;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function gentleScrollTo(targetY) {
+      if (reducedMotion) { window.scrollTo(0, targetY); return; }
+      if (scrollRAF) cancelAnimationFrame(scrollRAF);
+      var startY = window.scrollY;
+      var distance = targetY - startY;
+      if (Math.abs(distance) < 4) return;
+      var duration = 900;
+      var startTime = null;
+      function step(now) {
+        if (startTime === null) startTime = now;
+        var t = Math.min((now - startTime) / duration, 1);
+        // ease-in-out cubic
+        var eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        window.scrollTo(0, startY + distance * eased);
+        if (t < 1) scrollRAF = requestAnimationFrame(step);
+        else scrollRAF = null;
+      }
+      scrollRAF = requestAnimationFrame(step);
+    }
+
     var lastActiveIndex = 0;
     var mobileIO = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
@@ -4837,10 +4861,7 @@ document.addEventListener('click', function(e) {
           // miss the title and only see the chart.
           var rect = pin.getBoundingClientRect();
           if (rect.top < 0) {
-            window.scrollTo({
-              top: rect.top + window.scrollY,
-              behavior: 'smooth'
-            });
+            gentleScrollTo(rect.top + window.scrollY);
           }
           lastActiveIndex = idx;
         }
