@@ -87,6 +87,12 @@ html[data-auth="pending"] body { visibility: hidden; }
   background: var(--ink-2);
 }
 
+.auth-hint {
+  font-size: 12px;
+  color: var(--ink-2);
+  margin: 6px 0 0;
+  line-height: 1.45;
+}
 .auth-meta {
   text-align: center;
   font-size: 13px;

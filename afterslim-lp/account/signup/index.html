@@ -43,6 +43,11 @@
       <div>
         <label for="password">Password</label>
         <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8">
+        <p class="auth-hint">At least 8 characters, with one uppercase letter, one lowercase letter, and one special character.</p>
+      </div>
+      <div>
+        <label for="confirm_password">Confirm password</label>
+        <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required minlength="8">
       </div>
       <button type="submit" id="signupBtn">Create account</button>
     </form>
@@ -75,14 +80,18 @@
     var name = document.getElementById('full_name').value.trim();
     var email = document.getElementById('email').value.trim();
     var password = document.getElementById('password').value;
+    var confirmPw = document.getElementById('confirm_password').value;
 
-    if (password.length < 8) {
-      errBox.textContent = 'Password must be at least 8 characters.';
+    function showErr(msg) {
+      errBox.textContent = msg;
       errBox.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Create account';
-      return;
     }
+
+    var pwError = validatePassword(password);
+    if (pwError) return showErr(pwError);
+    if (password !== confirmPw) return showErr('Passwords do not match.');
 
     var { data, error } = await window.afterslimAuth.signUp(email, password, name);
 
@@ -106,6 +115,14 @@
     }
   });
 })();
+
+function validatePassword(pw) {
+  if (pw.length < 8)        return 'Password must be at least 8 characters.';
+  if (!/[A-Z]/.test(pw))    return 'Password must include at least one uppercase letter (A-Z).';
+  if (!/[a-z]/.test(pw))    return 'Password must include at least one lowercase letter (a-z).';
+  if (!/[^A-Za-z0-9]/.test(pw)) return 'Password must include at least one special character (e.g. ! @ # $ % &).';
+  return null;
+}
 </script>
 
 </body>
