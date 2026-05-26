@@ -2923,8 +2923,16 @@ body.bundle-modal-open {
   }
   .problem-scene.is-reversed .problem-scene-content,
   .problem-scene.is-reversed .problem-scene-visual { order: initial; }
-  .problem-scene-content,
-  .problem-scene-visual { opacity: 1; transform: none; filter: none; }
+  /* Force ALL scene content visible on mobile. Default CSS hides
+     .problem-scene-content > * and .problem-scene-visual at opacity 0
+     so the desktop carousel can fade them in per active scene. On
+     mobile all 6 scenes stack — they must all be visible. */
+  .problem-scene .problem-scene-content > *,
+  .problem-scene .problem-scene-visual {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
   .problem-scene-visual { max-width: 360px; margin: 0 auto; }
   .problem-scene-visual svg { width: 110px; height: 110px; }
   .problem-scene-title { font-size: 28px; }
