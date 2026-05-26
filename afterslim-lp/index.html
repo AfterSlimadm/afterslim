@@ -2927,12 +2927,26 @@ body.bundle-modal-open {
     flex-shrink: 0;
     scroll-snap-align: start;
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 24px 24px 32px;
+    gap: 12px;
+    padding: 24px 24px 24px;
     border-radius: 0;
     background: transparent;
     border: 0;
   }
+  /* Center the text-side content on mobile so each scene reads as a
+     symmetrical card. Desktop keeps the asymmetric left-align since the
+     text + chart sit side by side. */
+  .problem-scene-content { text-align: center; align-items: center; }
+  .problem-scene-num,
+  .problem-scene-title,
+  .problem-scene-why,
+  .problem-scene-body { text-align: center; }
+  .stat-callout { align-items: center; text-align: center; }
+  .stat-callout-eyebrow,
+  .stat-callout-number,
+  .stat-callout-caption { text-align: center; }
+  .stat-callout-number { justify-content: center; }
+  .stat-callout-pictogram { justify-content: center; margin-left: auto; margin-right: auto; }
   .problem-scene.is-reversed .problem-scene-content,
   .problem-scene.is-reversed .problem-scene-visual { order: initial; }
   /* Force ALL scene content visible on mobile (default CSS hides them at
