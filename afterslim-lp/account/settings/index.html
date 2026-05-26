@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login &amp; Security — AfterSlim</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<style>
+.settings-section {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 24px;
+  margin-bottom: 18px;
+}
+.settings-section h2 { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
+.settings-section .help { font-size: 13.5px; color: var(--ink-2); margin: 0 0 18px; line-height: 1.5; }
+.settings-form { display: grid; gap: 12px; max-width: 480px; }
+.settings-form label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px; }
+.settings-form input {
+  width: 100%; font-family: inherit; font-size: 14.5px;
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; outline: 0;
+}
+.settings-form input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.12); }
+.settings-form button {
+  margin-top: 4px;
+  background: var(--orange); color: #fff;
+  font-family: inherit; font-size: 14px; font-weight: 700;
+  letter-spacing: 0.4px; text-transform: uppercase;
+  padding: 12px 22px; border: 0; border-radius: 999px; cursor: pointer;
+  justify-self: start;
+}
+.settings-form button:hover { background: var(--orange-dark); }
+.settings-form button:disabled { opacity: 0.55; cursor: not-allowed; }
+.settings-msg { font-size: 13px; padding: 8px 12px; border-radius: 8px; margin-top: 4px; }
+.settings-msg.ok { background: rgba(22,163,74,0.08); color: #15803d; }
+.settings-msg.err { background: rgba(220,38,38,0.08); color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/account" class="nav-back" aria-label="Back to account">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Account
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="account-page">
+  <a href="/account" class="account-page-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    Back to account
+  </a>
+  <h1>Login &amp; security</h1>
+  <p class="account-page-lede">Update your name, email, and password.</p>
+
+  <section class="settings-section">
+    <h2>Your name</h2>
+    <p class="help">This appears on order confirmations and shipping labels.</p>
+    <form class="settings-form" id="nameForm">
+      <div>
+        <label for="full_name">Full name</label>
+        <input id="full_name" type="text">
+      </div>
+      <div id="nameMsg" style="display: none;"></div>
+      <button type="submit" id="nameBtn">Save name</button>
+    </form>
+  </section>
+
+  <section class="settings-section">
+    <h2>Email address</h2>
+    <p class="help">We send order receipts, shipping notifications, and account messages here. Changing it requires confirming the new address.</p>
+    <form class="settings-form" id="emailForm">
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email">
+      </div>
+      <div id="emailMsg" style="display: none;"></div>
+      <button type="submit" id="emailBtn">Update email</button>
+    </form>
+  </section>
+
+  <section class="settings-section">
+    <h2>Password</h2>
+    <p class="help">Pick a new password. You'll stay signed in on this device after the change.</p>
+    <form class="settings-form" id="pwForm">
+      <div>
+        <label for="new_pw">New password</label>
+        <input id="new_pw" type="password" autocomplete="new-password" minlength="8">
+      </div>
+      <div>
+        <label for="confirm_pw">Confirm new password</label>
+        <input id="confirm_pw" type="password" autocomplete="new-password" minlength="8">
+      </div>
+      <div id="pwMsg" style="display: none;"></div>
+      <button type="submit" id="pwBtn">Update password</button>
+    </form>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(async function() {
+  var user = await window.afterslimAuth.requireAuth();
+  var supabase = window.afterslimSupabase;
+
+  var { data: profile } = await supabase.from('profiles').select('full_name, email').eq('id', user.id).maybeSingle();
+  document.getElementById('full_name').value = (profile && profile.full_name) || '';
+  document.getElementById('email').value = (profile && profile.email) || user.email || '';
+
+  function showMsg(elId, text, type) {
+    var el = document.getElementById(elId);
+    el.textContent = text;
+    el.className = 'settings-msg ' + (type === 'ok' ? 'ok' : 'err');
+    el.style.display = 'block';
+  }
+
+  // Name
+  document.getElementById('nameForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('nameBtn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+    var name = document.getElementById('full_name').value.trim();
+    var { error } = await supabase.from('profiles').update({ full_name: name }).eq('id', user.id);
+    btn.disabled = false; btn.textContent = 'Save name';
+    if (error) showMsg('nameMsg', error.message, 'err');
+    else showMsg('nameMsg', 'Saved.', 'ok');
+  });
+
+  // Email
+  document.getElementById('emailForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('emailBtn');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    var newEmail = document.getElementById('email').value.trim();
+    var { error } = await supabase.auth.updateUser({ email: newEmail });
+    btn.disabled = false; btn.textContent = 'Update email';
+    if (error) showMsg('emailMsg', error.message, 'err');
+    else showMsg('emailMsg', 'Check your inbox to confirm the new email. The change takes effect once you click the link.', 'ok');
+  });
+
+  // Password
+  document.getElementById('pwForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var msgId = 'pwMsg';
+    var pw = document.getElementById('new_pw').value;
+    var confirm = document.getElementById('confirm_pw').value;
+    if (pw.length < 8) return showMsg(msgId, 'Password must be at least 8 characters.', 'err');
+    if (pw !== confirm) return showMsg(msgId, 'Passwords do not match.', 'err');
+    var btn = document.getElementById('pwBtn');
+    btn.disabled = true; btn.textContent = 'Updating...';
+    var { error } = await supabase.auth.updateUser({ password: pw });
+    btn.disabled = false; btn.textContent = 'Update password';
+    if (error) showMsg(msgId, error.message, 'err');
+    else {
+      document.getElementById('new_pw').value = '';
+      document.getElementById('confirm_pw').value = '';
+      showMsg(msgId, 'Password updated.', 'ok');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

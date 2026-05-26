@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket — AfterSlim</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<style>
+.tv-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+}
+.tv-head h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.005em; margin: 0; }
+.tv-meta { font-size: 13px; color: var(--ink-2); margin: 6px 0 0; }
+.tv-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; text-transform: capitalize;
+}
+.tv-status[data-s="open"], .tv-status[data-s="pending"] { background: rgba(234,88,12,0.1); color: var(--orange-dark); }
+.tv-status[data-s="resolved"] { background: rgba(22,163,74,0.1); color: #15803d; }
+.tv-status[data-s="closed"] { background: rgba(31,20,16,0.08); color: var(--ink-2); }
+
+.tv-thread { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.tv-msg {
+  border: 1px solid var(--line); border-radius: 14px;
+  padding: 16px 20px;
+}
+.tv-msg.staff { background: var(--orange-tint); border-color: rgba(234, 88, 12, 0.2); }
+.tv-msg.customer { background: var(--bg-2); }
+.tv-msg-author {
+  font-size: 12.5px; font-weight: 800; letter-spacing: 0.4px;
+  text-transform: uppercase; margin: 0 0 8px;
+}
+.tv-msg.customer .tv-msg-author { color: var(--ink-2); }
+.tv-msg.staff .tv-msg-author { color: var(--orange-dark); }
+.tv-msg-body { font-size: 14.5px; line-height: 1.65; white-space: pre-wrap; margin: 0 0 8px; color: var(--ink); }
+.tv-msg-date { font-size: 11.5px; color: var(--ink-2); margin: 0; }
+
+.tv-reply {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 14px;
+  padding: 22px; display: grid; gap: 12px;
+}
+.tv-reply h3 { font-size: 15px; font-weight: 700; margin: 0; }
+.tv-reply textarea {
+  width: 100%; font-family: inherit; font-size: 14.5px;
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; outline: 0; min-height: 130px; resize: vertical;
+}
+.tv-reply textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.12); }
+.tv-reply button {
+  background: var(--orange); color: #fff;
+  font-family: inherit; font-size: 14px; font-weight: 700;
+  letter-spacing: 0.4px; text-transform: uppercase;
+  padding: 12px 22px; border: 0; border-radius: 999px; cursor: pointer;
+  justify-self: start;
+}
+.tv-reply button:hover { background: var(--orange-dark); }
+.tv-reply button:disabled { opacity: 0.55; cursor: not-allowed; }
+.tv-closed-note {
+  text-align: center; font-size: 13.5px; color: var(--ink-2);
+  background: rgba(31,20,16,0.04); padding: 14px; border-radius: 12px;
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/account/tickets" class="nav-back" aria-label="Back to tickets">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Tickets
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="account-page">
+  <a href="/account/tickets" class="account-page-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    Back to tickets
+  </a>
+
+  <div class="tv-head">
+    <div>
+      <h1 id="tvSubject">Loading ticket...</h1>
+      <p class="tv-meta" id="tvMeta"></p>
+    </div>
+    <span class="tv-status" id="tvStatus" data-s="open">open</span>
+  </div>
+
+  <div class="tv-thread" id="tvThread"></div>
+
+  <div id="replyArea"></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(async function() {
+  var user = await window.afterslimAuth.requireAuth();
+  var supabase = window.afterslimSupabase;
+  var params = new URLSearchParams(window.location.search);
+  var ticketId = params.get('id');
+  if (!ticketId) {
+    document.getElementById('tvSubject').textContent = 'Ticket not found';
+    return;
+  }
+
+  async function refresh() {
+    var [tRes, mRes] = await Promise.all([
+      supabase.from('support_tickets').select('id, ticket_number, subject, status, category, created_at, updated_at')
+        .eq('profile_id', user.id).eq('id', ticketId).maybeSingle(),
+      supabase.from('support_ticket_messages').select('id, author_type, body, created_at')
+        .eq('ticket_id', ticketId).order('created_at', { ascending: true }),
+    ]);
+    var ticket = tRes.data;
+    if (!ticket) {
+      document.getElementById('tvSubject').textContent = 'Ticket not found';
+      return;
+    }
+    document.getElementById('tvSubject').textContent = ticket.subject;
+    document.getElementById('tvMeta').textContent = (ticket.ticket_number || '')
+      + ' · opened ' + new Date(ticket.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    var st = document.getElementById('tvStatus');
+    st.setAttribute('data-s', ticket.status);
+    st.textContent = ticket.status;
+
+    var msgs = mRes.data || [];
+    document.getElementById('tvThread').innerHTML = msgs.map(function(m) {
+      var date = new Date(m.created_at).toLocaleString('en-US', {
+        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+      });
+      var label = m.author_type === 'staff' ? 'AfterSlim support' : 'You';
+      return '<article class="tv-msg ' + m.author_type + '">'
+        + '<p class="tv-msg-author">' + label + '</p>'
+        + '<p class="tv-msg-body">' + escapeHtml(m.body) + '</p>'
+        + '<p class="tv-msg-date">' + date + '</p>'
+      + '</article>';
+    }).join('') || '<p style="color: var(--ink-2);">No messages yet.</p>';
+
+    var replyArea = document.getElementById('replyArea');
+    if (ticket.status === 'closed') {
+      replyArea.innerHTML = '<div class="tv-closed-note">This ticket is closed. Open a new ticket if anything else comes up.</div>';
+    } else {
+      replyArea.innerHTML =
+        '<form class="tv-reply" id="replyForm">'
+          + '<h3>Add a reply</h3>'
+          + '<textarea id="replyBody" placeholder="Type your reply..." required></textarea>'
+          + '<button type="submit" id="replyBtn">Send reply</button>'
+        + '</form>';
+      document.getElementById('replyForm').addEventListener('submit', sendReply);
+    }
+  }
+
+  async function sendReply(e) {
+    e.preventDefault();
+    var body = document.getElementById('replyBody').value.trim();
+    if (!body) return;
+    var btn = document.getElementById('replyBtn');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    var { error } = await supabase.from('support_ticket_messages').insert({
+      ticket_id: ticketId,
+      author_type: 'customer',
+      author_id: user.id,
+      body: body,
+    });
+    if (error) {
+      alert(error.message);
+      btn.disabled = false; btn.textContent = 'Send reply';
+      return;
+    }
+    // Bump ticket back to "open" so staff sees the new reply
+    await supabase.from('support_tickets').update({ status: 'open', updated_at: new Date().toISOString() }).eq('id', ticketId);
+    await refresh();
+  }
+
+  await refresh();
+})();
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+  });
+}
+</script>
+
+</body>
+</html>

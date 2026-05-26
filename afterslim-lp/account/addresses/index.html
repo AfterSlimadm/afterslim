@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Addresses — AfterSlim</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<style>
+.addr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.addr-card {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 20px; position: relative;
+}
+.addr-card.default { border-color: var(--orange); }
+.addr-default-badge {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--orange); color: #fff;
+  font-size: 10.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px;
+}
+.addr-label { font-size: 13px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--orange-dark); margin: 0 0 8px; }
+.addr-body { font-size: 14px; line-height: 1.55; color: var(--ink); margin: 0 0 16px; }
+.addr-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.addr-btn {
+  font-size: 13px; font-weight: 600;
+  padding: 6px 14px; border-radius: 999px;
+  background: #fff; color: var(--ink-2); border: 1px solid var(--line);
+  cursor: pointer; font-family: inherit;
+}
+.addr-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+.addr-add {
+  background: var(--bg-2); border: 2px dashed var(--line);
+  border-radius: 14px; padding: 24px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 14px; font-weight: 600; color: var(--ink-2);
+  min-height: 130px;
+  font-family: inherit;
+}
+.addr-add:hover { border-color: var(--orange); color: var(--orange); }
+
+.addr-form {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 24px;
+  display: grid; gap: 12px;
+  margin-bottom: 24px;
+}
+.addr-form h3 { font-size: 17px; font-weight: 800; margin: 0 0 6px; }
+.addr-form .row-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 540px) { .addr-form .row-two { grid-template-columns: 1fr; } }
+.addr-form label { font-size: 12.5px; font-weight: 600; color: var(--ink); display: block; margin-bottom: 4px; }
+.addr-form input, .addr-form select {
+  width: 100%; font-family: inherit; font-size: 14.5px;
+  background: #fff; border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 12px; outline: 0;
+}
+.addr-form input:focus, .addr-form select:focus {
+  border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
+}
+.addr-form-actions { display: flex; gap: 10px; margin-top: 8px; }
+.addr-form-actions button {
+  font-size: 14px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
+  padding: 12px 22px; border-radius: 999px; border: 0; cursor: pointer; font-family: inherit;
+}
+.addr-form-submit { background: var(--orange); color: #fff; }
+.addr-form-submit:hover { background: var(--orange-dark); }
+.addr-form-cancel { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/account" class="nav-back" aria-label="Back to account">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Account
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="account-page">
+  <a href="/account" class="account-page-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    Back to account
+  </a>
+  <h1>Addresses</h1>
+  <p class="account-page-lede">Manage shipping addresses for orders and subscriptions. The default is used at checkout.</p>
+
+  <div id="addrList" class="addr-grid"></div>
+  <button type="button" class="addr-add" id="newAddrBtn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Add a new address
+  </button>
+
+  <form class="addr-form" id="addrForm" style="display: none; margin-top: 24px;">
+    <h3 id="addrFormTitle">Add address</h3>
+    <input type="hidden" id="addr_id">
+    <div>
+      <label for="addr_label">Label (optional)</label>
+      <input id="addr_label" type="text" placeholder="Home, Work, etc.">
+    </div>
+    <div class="row-two">
+      <div><label for="addr_first">First name</label><input id="addr_first" type="text" required></div>
+      <div><label for="addr_last">Last name</label><input id="addr_last" type="text" required></div>
+    </div>
+    <div><label for="addr_line1">Address line 1</label><input id="addr_line1" type="text" required></div>
+    <div><label for="addr_line2">Address line 2 (optional)</label><input id="addr_line2" type="text"></div>
+    <div class="row-two">
+      <div><label for="addr_city">City</label><input id="addr_city" type="text" required></div>
+      <div><label for="addr_state">State</label><input id="addr_state" type="text" maxlength="2" placeholder="FL" required></div>
+    </div>
+    <div class="row-two">
+      <div><label for="addr_zip">ZIP code</label><input id="addr_zip" type="text" required></div>
+      <div><label for="addr_phone">Phone (optional)</label><input id="addr_phone" type="tel"></div>
+    </div>
+    <label style="display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer;">
+      <input id="addr_default" type="checkbox"> Make this my default shipping address
+    </label>
+    <div class="addr-form-actions">
+      <button type="submit" class="addr-form-submit" id="addrSubmitBtn">Save address</button>
+      <button type="button" class="addr-form-cancel" id="addrCancelBtn">Cancel</button>
+    </div>
+  </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(async function() {
+  var user = await window.afterslimAuth.requireAuth();
+  var supabase = window.afterslimSupabase;
+  var profile = null;
+
+  var form = document.getElementById('addrForm');
+  var listEl = document.getElementById('addrList');
+  var newBtn = document.getElementById('newAddrBtn');
+  var cancelBtn = document.getElementById('addrCancelBtn');
+  var formTitle = document.getElementById('addrFormTitle');
+
+  async function loadAddresses() {
+    var [profRes, addrRes] = await Promise.all([
+      supabase.from('profiles').select('default_address_id').eq('id', user.id).maybeSingle(),
+      supabase.from('addresses').select('*').eq('profile_id', user.id).order('created_at', { ascending: false }),
+    ]);
+    profile = profRes.data || {};
+    var addrs = addrRes.data || [];
+    var defaultId = profile.default_address_id;
+
+    if (addrs.length === 0) {
+      listEl.innerHTML = '';
+      return;
+    }
+    listEl.innerHTML = addrs.map(function(a) {
+      var isDefault = a.id === defaultId;
+      return '<article class="addr-card ' + (isDefault ? 'default' : '') + '" data-id="' + a.id + '">'
+        + (isDefault ? '<span class="addr-default-badge">Default</span>' : '')
+        + (a.label ? '<p class="addr-label">' + escapeHtml(a.label) + '</p>' : '')
+        + '<p class="addr-body">'
+          + escapeHtml((a.first_name || '') + ' ' + (a.last_name || '')).trim() + '<br>'
+          + escapeHtml(a.address_line1) + '<br>'
+          + (a.address_line2 ? escapeHtml(a.address_line2) + '<br>' : '')
+          + escapeHtml(a.city) + ', ' + escapeHtml(a.state) + ' ' + escapeHtml(a.zip_code)
+        + '</p>'
+        + '<div class="addr-actions">'
+          + (isDefault ? '' : '<button class="addr-btn" data-act="default" data-id="' + a.id + '">Make default</button>')
+          + '<button class="addr-btn" data-act="edit" data-id="' + a.id + '">Edit</button>'
+          + '<button class="addr-btn" data-act="delete" data-id="' + a.id + '">Delete</button>'
+        + '</div>'
+      + '</article>';
+    }).join('');
+  }
+
+  function showForm(addr) {
+    form.style.display = 'grid';
+    formTitle.textContent = addr ? 'Edit address' : 'Add address';
+    document.getElementById('addr_id').value = addr ? addr.id : '';
+    document.getElementById('addr_label').value = (addr && addr.label) || '';
+    document.getElementById('addr_first').value = (addr && addr.first_name) || '';
+    document.getElementById('addr_last').value = (addr && addr.last_name) || '';
+    document.getElementById('addr_line1').value = (addr && addr.address_line1) || '';
+    document.getElementById('addr_line2').value = (addr && addr.address_line2) || '';
+    document.getElementById('addr_city').value = (addr && addr.city) || '';
+    document.getElementById('addr_state').value = (addr && addr.state) || '';
+    document.getElementById('addr_zip').value = (addr && addr.zip_code) || '';
+    document.getElementById('addr_phone').value = (addr && addr.phone) || '';
+    document.getElementById('addr_default').checked = !!(addr && addr.is_default);
+    newBtn.style.display = 'none';
+    form.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function hideForm() { form.style.display = 'none'; newBtn.style.display = 'flex'; }
+
+  newBtn.addEventListener('click', function() { showForm(null); });
+  cancelBtn.addEventListener('click', hideForm);
+
+  listEl.addEventListener('click', async function(e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    var act = btn.getAttribute('data-act');
+    var id = btn.getAttribute('data-id');
+
+    if (act === 'edit') {
+      var { data } = await supabase.from('addresses').select('*').eq('id', id).eq('profile_id', user.id).maybeSingle();
+      if (data) showForm(data);
+    } else if (act === 'delete') {
+      if (!confirm('Delete this address?')) return;
+      await supabase.from('addresses').delete().eq('id', id).eq('profile_id', user.id);
+      await loadAddresses();
+    } else if (act === 'default') {
+      await supabase.from('profiles').update({ default_address_id: id }).eq('id', user.id);
+      await loadAddresses();
+    }
+  });
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var id = document.getElementById('addr_id').value;
+    var payload = {
+      profile_id: user.id,
+      label: document.getElementById('addr_label').value.trim() || null,
+      first_name: document.getElementById('addr_first').value.trim(),
+      last_name: document.getElementById('addr_last').value.trim(),
+      address_line1: document.getElementById('addr_line1').value.trim(),
+      address_line2: document.getElementById('addr_line2').value.trim() || null,
+      city: document.getElementById('addr_city').value.trim(),
+      state: document.getElementById('addr_state').value.trim().toUpperCase(),
+      zip_code: document.getElementById('addr_zip').value.trim(),
+      phone: document.getElementById('addr_phone').value.trim() || null,
+      country: 'US',
+      is_default: document.getElementById('addr_default').checked,
+    };
+
+    var saved;
+    if (id) {
+      var { data, error } = await supabase.from('addresses').update(payload).eq('id', id).select().maybeSingle();
+      if (error) { alert(error.message); return; }
+      saved = data;
+    } else {
+      var { data, error } = await supabase.from('addresses').insert(payload).select().maybeSingle();
+      if (error) { alert(error.message); return; }
+      saved = data;
+    }
+
+    if (payload.is_default && saved) {
+      await supabase.from('profiles').update({ default_address_id: saved.id }).eq('id', user.id);
+    }
+
+    hideForm();
+    await loadAddresses();
+  });
+
+  await loadAddresses();
+})();
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+  });
+}
+</script>
+
+</body>
+</html>

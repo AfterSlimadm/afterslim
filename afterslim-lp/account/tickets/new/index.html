@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Ticket — AfterSlim</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<style>
+.t-form {
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: 14px; padding: 28px;
+  display: grid; gap: 14px;
+  max-width: 640px;
+}
+.t-form label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; }
+.t-form input, .t-form select, .t-form textarea {
+  width: 100%; font-family: inherit; font-size: 14.5px;
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; outline: 0;
+}
+.t-form input:focus, .t-form select:focus, .t-form textarea:focus {
+  border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
+}
+.t-form textarea { min-height: 160px; resize: vertical; }
+.t-form button[type="submit"] {
+  margin-top: 6px;
+  background: var(--orange); color: #fff;
+  font-family: inherit; font-size: 14px; font-weight: 700;
+  letter-spacing: 0.4px; text-transform: uppercase;
+  padding: 14px 22px; border: 0; border-radius: 999px; cursor: pointer;
+  justify-self: start;
+}
+.t-form button[type="submit"]:hover { background: var(--orange-dark); }
+.t-form button[type="submit"]:disabled { opacity: 0.55; cursor: not-allowed; }
+.t-error { background: rgba(220,38,38,0.08); color: #b91c1c; font-size: 13.5px; padding: 10px 12px; border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/account/tickets" class="nav-back" aria-label="Back to tickets">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Tickets
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="account-page">
+  <a href="/account/tickets" class="account-page-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    Back to tickets
+  </a>
+  <h1>Open a new ticket</h1>
+  <p class="account-page-lede">Tell us what's going on. Reply within 1 business day, often faster.</p>
+
+  <form class="t-form" id="newTicketForm" novalidate>
+    <div id="formError" class="t-error" style="display: none;"></div>
+
+    <div>
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="">Pick one</option>
+        <option value="order_issue">Order question</option>
+        <option value="subscription">Subscription change</option>
+        <option value="refund">Refund request</option>
+        <option value="product">Product question</option>
+        <option value="partnership">Partnerships</option>
+        <option value="other">Something else</option>
+      </select>
+    </div>
+    <div>
+      <label for="subject">Subject</label>
+      <input id="subject" name="subject" type="text" required maxlength="200">
+    </div>
+    <div>
+      <label for="order_select">Related order (optional)</label>
+      <select id="order_select" name="order_id">
+        <option value="">No related order</option>
+      </select>
+    </div>
+    <div>
+      <label for="message">Your message</label>
+      <textarea id="message" name="message" required></textarea>
+    </div>
+    <button type="submit" id="submitBtn">Open ticket</button>
+  </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(async function() {
+  var user = await window.afterslimAuth.requireAuth();
+  var supabase = window.afterslimSupabase;
+  var params = new URLSearchParams(window.location.search);
+
+  // Pre-fill subject if provided
+  var prefillSubject = params.get('subject');
+  if (prefillSubject) document.getElementById('subject').value = prefillSubject;
+  var prefillOrder = params.get('order');
+
+  // Load orders for the related-order dropdown
+  var { data: orders } = await supabase
+    .from('orders')
+    .select('id, order_number, created_at')
+    .eq('profile_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  var orderSelect = document.getElementById('order_select');
+  (orders || []).forEach(function(o) {
+    var opt = document.createElement('option');
+    opt.value = o.id;
+    opt.textContent = o.order_number + ' · ' + new Date(o.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    orderSelect.appendChild(opt);
+  });
+  if (prefillOrder) orderSelect.value = prefillOrder;
+
+  document.getElementById('newTicketForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var errBox = document.getElementById('formError');
+    var btn = document.getElementById('submitBtn');
+    errBox.style.display = 'none';
+    btn.disabled = true; btn.textContent = 'Opening ticket...';
+
+    var subject = document.getElementById('subject').value.trim();
+    var category = document.getElementById('category').value;
+    var message = document.getElementById('message').value.trim();
+    var orderId = document.getElementById('order_select').value || null;
+
+    if (!subject || !message || !category) {
+      errBox.textContent = 'Please fill in category, subject, and message.';
+      errBox.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Open ticket';
+      return;
+    }
+
+    var { data: ticket, error: tErr } = await supabase
+      .from('support_tickets')
+      .insert({
+        profile_id: user.id,
+        subject: subject,
+        category: category,
+        order_id: orderId,
+      })
+      .select()
+      .maybeSingle();
+
+    if (tErr || !ticket) {
+      errBox.textContent = (tErr && tErr.message) || 'Could not open the ticket. Please try again.';
+      errBox.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Open ticket';
+      return;
+    }
+
+    var { error: mErr } = await supabase
+      .from('support_ticket_messages')
+      .insert({
+        ticket_id: ticket.id,
+        author_type: 'customer',
+        author_id: user.id,
+        body: message,
+      });
+
+    if (mErr) {
+      // Ticket was created but the first message failed — uncommon, but
+      // direct the user to the thread view where they can retry.
+      window.location.href = '/account/tickets/view?id=' + ticket.id;
+      return;
+    }
+
+    window.location.href = '/account/tickets/view?id=' + ticket.id;
+  });
+})();
+</script>
+
+</body>
+</html>

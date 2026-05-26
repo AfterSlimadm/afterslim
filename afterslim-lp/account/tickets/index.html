@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support Tickets — AfterSlim</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<style>
+.tickets-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.tickets-head .new-ticket-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; background: var(--orange); color: #fff;
+  border-radius: 999px; font-weight: 700; font-size: 14px;
+  letter-spacing: 0.4px; text-transform: uppercase;
+  text-decoration: none;
+}
+.tickets-head .new-ticket-btn:hover { background: var(--orange-dark); color: #fff; }
+
+.ticket-row {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 18px;
+  align-items: center;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+.ticket-row:hover { border-color: var(--orange); color: var(--ink); }
+.ticket-subject { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+.ticket-meta { font-size: 12.5px; color: var(--ink-2); margin: 0; }
+.ticket-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 700; text-transform: capitalize;
+}
+.ticket-status[data-s="open"], .ticket-status[data-s="pending"] { background: rgba(234,88,12,0.1); color: var(--orange-dark); }
+.ticket-status[data-s="resolved"] { background: rgba(22,163,74,0.1); color: #15803d; }
+.ticket-status[data-s="closed"] { background: rgba(31,20,16,0.08); color: var(--ink-2); }
+
+.ticket-number { font-size: 12.5px; color: var(--ink-2); font-weight: 600; }
+
+@media (max-width: 600px) {
+  .ticket-row { grid-template-columns: 1fr; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/account" class="nav-back" aria-label="Back to account">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Account
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="account-page">
+  <a href="/account" class="account-page-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    Back to account
+  </a>
+
+  <div class="tickets-head">
+    <div>
+      <h1>Support tickets</h1>
+      <p class="account-page-lede" style="margin: 6px 0 0;">Open tickets get a first reply within one business day.</p>
+    </div>
+    <a class="new-ticket-btn" href="/account/tickets/new">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New ticket
+    </a>
+  </div>
+
+  <div id="ticketsList"></div>
+
+  <div id="emptyState" class="account-empty" style="display: none;">
+    <p>You haven't opened any tickets yet. We're here when you need us.</p>
+    <a class="account-empty-cta" href="/account/tickets/new">Open a ticket
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(async function() {
+  var user = await window.afterslimAuth.requireAuth();
+  var supabase = window.afterslimSupabase;
+
+  var { data: tickets } = await supabase
+    .from('support_tickets')
+    .select('id, ticket_number, subject, status, category, created_at, updated_at')
+    .eq('profile_id', user.id)
+    .order('updated_at', { ascending: false });
+
+  if (!tickets || tickets.length === 0) {
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('ticketsList').innerHTML = tickets.map(function(t) {
+    var date = new Date(t.updated_at || t.created_at).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: 'numeric'
+    });
+    return '<a class="ticket-row" href="/account/tickets/view?id=' + t.id + '">'
+      + '<div>'
+        + '<p class="ticket-subject">' + escapeHtml(t.subject) + '</p>'
+        + '<p class="ticket-meta">Last activity ' + date + (t.category ? ' · ' + escapeHtml(t.category) : '') + '</p>'
+      + '</div>'
+      + '<span class="ticket-number">' + escapeHtml(t.ticket_number || '') + '</span>'
+      + '<span class="ticket-status" data-s="' + t.status + '">' + t.status + '</span>'
+    + '</a>';
+  }).join('');
+})();
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set New Password — AfterSlim</title>
+<meta name="description" content="Set a new password for your AfterSlim account.">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-back" aria-label="Home">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Home
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></div>
+    <h1>Set a new password</h1>
+    <p class="auth-lede" id="lede">Pick a new password. Once you save, you'll be signed in.</p>
+
+    <div id="authError" class="auth-error" style="display: none;"></div>
+    <div id="authSuccess" class="auth-success" style="display: none;"></div>
+
+    <form class="auth-form" id="newPwForm" novalidate>
+      <div>
+        <label for="password">New password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8">
+      </div>
+      <div>
+        <label for="confirm">Confirm new password</label>
+        <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="8">
+      </div>
+      <button type="submit" id="newPwBtn">Save and sign in</button>
+    </form>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(async function() {
+  // Supabase auto-detects the recovery token in the URL hash and sets a
+  // session for the password-update step. If no session is present after
+  // detection, the link is invalid or expired.
+  var form = document.getElementById('newPwForm');
+  var btn = document.getElementById('newPwBtn');
+  var errBox = document.getElementById('authError');
+  var okBox = document.getElementById('authSuccess');
+  var lede = document.getElementById('lede');
+
+  // Wait a tick for detectSessionInUrl to fire
+  await new Promise(function(resolve) { setTimeout(resolve, 200); });
+
+  var session = await window.afterslimAuth.session();
+  if (!session) {
+    form.style.display = 'none';
+    errBox.textContent = "This reset link is invalid or expired. Please request a new one.";
+    errBox.style.display = 'block';
+    lede.innerHTML = '<a href="/account/forgot-password" style="color: var(--orange-dark); font-weight: 600;">Request a new reset link</a>';
+  }
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    okBox.style.display = 'none';
+
+    var pw = document.getElementById('password').value;
+    var confirm = document.getElementById('confirm').value;
+
+    if (pw.length < 8) {
+      errBox.textContent = 'Password must be at least 8 characters.';
+      errBox.style.display = 'block';
+      return;
+    }
+    if (pw !== confirm) {
+      errBox.textContent = 'Passwords do not match.';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    var { error } = await window.afterslimAuth.updatePassword(pw);
+
+    if (error) {
+      errBox.textContent = error.message || 'Could not update password. Try again.';
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Save and sign in';
+      return;
+    }
+
+    okBox.textContent = 'Password updated. Redirecting to your account...';
+    okBox.style.display = 'block';
+    setTimeout(function() { window.location.href = '/account'; }, 1200);
+  });
+})();
+</script>
+
+</body>
+</html>

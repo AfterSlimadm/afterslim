@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reset Password — AfterSlim</title>
+<meta name="description" content="Request a password reset link for your AfterSlim account.">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/account/login" class="nav-back" aria-label="Back to sign in">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Sign in
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></div>
+    <h1>Reset your password</h1>
+    <p class="auth-lede">Enter the email on your account and we'll send you a link to set a new password.</p>
+
+    <div id="authError" class="auth-error" style="display: none;"></div>
+    <div id="authSuccess" class="auth-success" style="display: none;"></div>
+
+    <form class="auth-form" id="resetForm" novalidate>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <button type="submit" id="resetBtn">Send reset link</button>
+    </form>
+
+    <p class="auth-meta">Remembered it? <a href="/account/login">Back to sign in</a></p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(function() {
+  var form = document.getElementById('resetForm');
+  var btn = document.getElementById('resetBtn');
+  var errBox = document.getElementById('authError');
+  var okBox = document.getElementById('authSuccess');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    okBox.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    var email = document.getElementById('email').value.trim();
+
+    var { error } = await window.afterslimAuth.sendPasswordReset(email);
+
+    if (error) {
+      errBox.textContent = error.message || 'Something went wrong. Please try again.';
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Send reset link';
+      return;
+    }
+
+    okBox.textContent = "Check your email for a reset link. If you don't see it within a few minutes, look in your spam folder.";
+    okBox.style.display = 'block';
+    btn.textContent = 'Link sent';
+  });
+})();
+</script>
+
+</body>
+</html>

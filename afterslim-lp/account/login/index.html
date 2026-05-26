@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign In — AfterSlim</title>
+<meta name="description" content="Sign in to your AfterSlim account to manage subscriptions, view orders, and open support tickets.">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-back" aria-label="Back to home">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Home
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></div>
+    <h1>Sign in</h1>
+    <p class="auth-lede">Welcome back. Sign in to manage subscriptions, view orders, and open support tickets.</p>
+
+    <div id="authError" class="auth-error" style="display: none;"></div>
+
+    <form class="auth-form" id="loginForm" novalidate>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" id="loginBtn">Sign in</button>
+    </form>
+
+    <p class="auth-foot-link"><a href="/account/forgot-password">Forgot password?</a></p>
+    <p class="auth-meta">New to AfterSlim? <a href="/account/signup">Create an account</a></p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+(async function() {
+  // If already signed in, bounce to dashboard (or the 'next' URL)
+  await window.afterslimAuth.redirectIfAuthed();
+
+  var form = document.getElementById('loginForm');
+  var btn = document.getElementById('loginBtn');
+  var errBox = document.getElementById('authError');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+
+    var { data, error } = await window.afterslimAuth.signInWithPassword(email, password);
+
+    if (error) {
+      errBox.textContent = error.message || 'Sign in failed. Please try again.';
+      errBox.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
+      return;
+    }
+
+    // Honor ?next= if present
+    var params = new URLSearchParams(window.location.search);
+    var next = params.get('next') || '/account';
+    window.location.href = next;
+  });
+})();
+</script>
+
+</body>
+</html>
