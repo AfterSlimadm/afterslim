@@ -4,72 +4,276 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact Us — AfterSlim</title>
-<meta name="description" content="Get in touch with AfterSlim support. Email us at support@afterslim.com or use the contact form.">
+<meta name="description" content="Welcome! How can we help? Open a support ticket from your account or email us at support@afterslim.com.">
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/styles/policy.css">
 <style>
-.contact-hero { padding: 56px 0 24px; max-width: 760px; margin: 0 auto; text-align: center; }
-.contact-hero h1 { font-size: clamp(36px, 4.4vw, 48px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0 0 14px; }
-.contact-hero p { font-size: 17px; color: var(--ink-2); margin: 0 auto; max-width: 540px; }
-
-.contact-grid { max-width: 920px; margin: 0 auto; padding: 24px 0 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-@media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr; padding: 24px 0 48px; } }
-
-.contact-card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px; padding: 28px; }
-.contact-card h2 { font-size: 19px; font-weight: 700; margin: 0 0 6px; }
-.contact-card p { font-size: 14.5px; color: var(--ink-2); margin: 0 0 18px; line-height: 1.55; }
-.contact-card .contact-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 18px;
-  background: var(--orange); color: #fff;
-  border-radius: 999px; font-weight: 700; font-size: 14.5px;
+/* ===== Hero (dark warm gradient) ===== */
+.contact-hero {
+  background: linear-gradient(180deg, #2a1208 0%, #5a1d0a 55%, #c2410c 130%);
+  color: #fff;
+  padding: 88px 24px 96px;
+  text-align: center;
+}
+.contact-hero h1 {
+  font-size: clamp(40px, 5.6vw, 68px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin: 0 auto;
+  max-width: 720px;
+}
+.contact-hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 30px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
   text-decoration: none;
-  transition: background 0.15s;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  transition: transform 0.15s, background 0.15s, color 0.15s;
 }
-.contact-card .contact-cta:hover { background: var(--orange-dark); color: #fff; }
-.contact-card .contact-link {
-  color: var(--ink); text-decoration: none; font-weight: 600;
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 14.5px;
+.contact-btn--primary { background: var(--orange); color: #fff; }
+.contact-btn--primary:hover { background: #fff; color: var(--orange-dark); transform: translateY(-1px); }
+.contact-btn--secondary {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.55);
 }
-.contact-card .contact-link:hover { color: var(--orange); }
-.contact-meta { font-size: 13px; color: var(--ink-2); margin-top: 16px; }
+.contact-btn--secondary:hover { background: rgba(255,255,255,0.12); color: #fff; }
 
-.contact-form-section { max-width: 720px; margin: 0 auto; padding: 16px 0 96px; }
-.contact-form-section h2 {
-  font-size: 24px; font-weight: 800; letter-spacing: -0.01em;
-  text-align: center; margin: 0 0 8px;
+/* ===== Track Order Block ===== */
+.track-block {
+  background: var(--bg-2);
+  padding: 64px 24px;
+  display: flex;
+  justify-content: center;
 }
-.contact-form-section .form-lede {
-  text-align: center; color: var(--ink-2); font-size: 15px;
-  max-width: 480px; margin: 0 auto 28px;
+.track-block-inner {
+  max-width: 760px;
+  width: 100%;
+  text-align: center;
 }
-.contact-form {
-  background: var(--bg-2); border: 1px solid var(--line);
-  border-radius: 18px; padding: 28px;
-  display: grid; gap: 14px;
+.track-block-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: var(--orange-dark);
+  margin: 0 0 14px;
 }
-.contact-form label { font-size: 13px; font-weight: 600; color: var(--ink); display: block; margin-bottom: 6px; }
-.contact-form input, .contact-form select, .contact-form textarea {
-  width: 100%; font-family: inherit; font-size: 15px; color: var(--ink);
-  background: #fff; border: 1px solid var(--line); border-radius: 10px;
-  padding: 12px 14px; outline: 0;
-  transition: border-color 0.15s, box-shadow 0.15s;
+.track-block h2 {
+  font-size: clamp(28px, 3.4vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: var(--ink);
 }
-.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus {
-  border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
+.track-block p {
+  font-size: 15.5px;
+  color: var(--ink-2);
+  max-width: 520px;
+  margin: 0 auto 28px;
+  line-height: 1.55;
 }
-.contact-form textarea { min-height: 130px; resize: vertical; }
-.contact-form .row-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-@media (max-width: 560px) { .contact-form .row-two { grid-template-columns: 1fr; } }
-.contact-form button {
-  background: var(--orange); color: #fff; font-family: inherit; font-size: 15.5px; font-weight: 700;
+.track-form {
+  display: flex;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.track-form input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  outline: 0;
+  min-width: 0;
+}
+.track-form input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
+}
+.track-form button {
+  background: var(--orange);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
   letter-spacing: 0.4px;
-  padding: 14px 22px; border: 0; border-radius: 999px; cursor: pointer;
+  text-transform: uppercase;
+  padding: 0 22px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.track-form button:hover { background: var(--orange-dark); }
+@media (max-width: 540px) {
+  .track-form { flex-direction: column; }
+  .track-form button { padding: 14px; }
+}
+
+/* ===== FAQ block (two-column layout: side label + accordion) ===== */
+.faq-block { padding: 80px 24px; }
+.faq-block--orange { background: linear-gradient(180deg, var(--orange-dark) 0%, #8a2f0d 100%); color: #fff; }
+.faq-block--cream { background: var(--bg-2); }
+.faq-block-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 1.6fr;
+  gap: 56px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .faq-block-inner { grid-template-columns: 1fr; gap: 32px; }
+}
+.faq-side .faq-side-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  opacity: 0.7;
+}
+.faq-side h2 {
+  font-size: clamp(28px, 3.2vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 18px;
+}
+.faq-side p {
+  font-size: 15px;
+  line-height: 1.55;
+  margin: 0 0 18px;
+  opacity: 0.85;
+}
+.faq-side-img {
+  margin-top: 16px;
+  max-width: 320px;
+  border-radius: 16px;
+  display: block;
+  width: 100%;
+}
+
+.faq-list { list-style: none; padding: 0; margin: 0; }
+.faq-list .faq-item {
+  border-bottom: 1px solid currentColor;
+  border-color: rgba(255,255,255,0.18);
+}
+.faq-block--cream .faq-list .faq-item { border-color: var(--line); }
+.faq-list .faq-item:first-child { border-top: 1px solid currentColor; border-top-color: rgba(255,255,255,0.18); }
+.faq-block--cream .faq-list .faq-item:first-child { border-top-color: var(--line); }
+.faq-question-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  font-family: inherit;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.faq-question-btn:hover { opacity: 0.75; }
+.faq-question-btn svg {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  transition: transform 0.3s ease;
+}
+.faq-item.open .faq-question-btn svg { transform: rotate(180deg); }
+.faq-answer-wrap { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-answer-inner {
+  padding: 0 0 22px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  opacity: 0.85;
+}
+
+/* ===== Newsletter ===== */
+.contact-newsletter {
+  background: var(--bg-2);
+  padding: 72px 24px 88px;
+  text-align: center;
+}
+.contact-newsletter h2 {
+  font-size: clamp(28px, 3.6vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+.contact-newsletter h2 .brand-accent { color: var(--orange); }
+.contact-newsletter p {
+  font-size: 15px;
+  color: var(--ink-2);
+  max-width: 520px;
+  margin: 0 auto 26px;
+  line-height: 1.5;
+}
+.contact-newsletter form {
+  display: flex;
+  gap: 12px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.contact-newsletter input {
+  flex: 1;
+  height: 60px;
+  background: var(--orange-tint);
+  border: 1.5px solid var(--orange);
+  outline: 0;
+  padding: 0 22px;
+  color: var(--orange-dark);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 10px;
+  min-width: 0;
+}
+.contact-newsletter input::placeholder { color: var(--orange-dark); opacity: 0.65; }
+.contact-newsletter button {
+  height: 60px;
+  padding: 0 28px;
+  background: var(--orange);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: pointer;
   transition: background 0.15s;
 }
-.contact-form button:hover { background: var(--orange-dark); }
-.form-fineprint { font-size: 12.5px; color: var(--ink-2); text-align: center; margin-top: 4px; }
+.contact-newsletter button:hover { background: var(--orange-dark); }
+@media (max-width: 540px) {
+  .contact-newsletter form { flex-direction: column; gap: 10px; }
+  .contact-newsletter input, .contact-newsletter button { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -87,79 +291,245 @@
   </div>
 </nav>
 
-<main class="container">
+<main>
 
+<!-- 1. Hero -->
 <section class="contact-hero">
-  <h1>We're here to help</h1>
-  <p>Have a question about AfterSlim, your order, or your subscription? Our customer team replies within one business day, often faster.</p>
-</section>
-
-<section class="contact-grid">
-  <div class="contact-card">
-    <h2>Email us</h2>
-    <p>The fastest way to reach our team. Include your order number if it's an order question.</p>
-    <a class="contact-cta" href="mailto:support@afterslim.com">support@afterslim.com</a>
-    <p class="contact-meta">Monday to Friday, 9 AM to 5 PM ET. Replies within 1 business day.</p>
-  </div>
-  <div class="contact-card">
-    <h2>Self-service</h2>
-    <p>Most questions are answered without waiting on us.</p>
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-      <a class="contact-link" href="/track">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Track your order
-      </a>
-      <a class="contact-link" href="/returns">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 9 12 2 21 9 21 20 14 20 14 14 10 14 10 20 3 20 3 9"/></svg>
-        Returns &amp; refunds
-      </a>
-      <a class="contact-link" href="/shipping">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        Shipping info
-      </a>
-      <a class="contact-link" href="/#faq">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        Frequently asked questions
-      </a>
-    </div>
+  <h1>Welcome! How can we help?</h1>
+  <div class="contact-hero-buttons">
+    <a href="/account" class="contact-btn contact-btn--primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      Open a Ticket
+    </a>
+    <a href="mailto:support@afterslim.com" class="contact-btn contact-btn--secondary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Email Us
+    </a>
   </div>
 </section>
 
-<section class="contact-form-section">
-  <h2>Send us a message</h2>
-  <p class="form-lede">Prefer a form? Fill this out and we'll get back to you at the email you provide.</p>
-  <form class="contact-form" id="contactForm" novalidate>
-    <div class="row-two">
-      <div>
-        <label for="cf-name">Your name</label>
-        <input id="cf-name" name="name" type="text" required>
-      </div>
-      <div>
-        <label for="cf-email">Email</label>
-        <input id="cf-email" name="email" type="email" required>
-      </div>
+<!-- 2. Track Order -->
+<section class="track-block">
+  <div class="track-block-inner">
+    <p class="track-block-eyebrow">Track your order</p>
+    <h2>Waiting on your AfterSlim order?</h2>
+    <p>Enter your order number from the confirmation email and we'll send you the latest tracking details.</p>
+    <form class="track-form" id="trackFormContact" novalidate>
+      <input type="text" id="trackOrderInput" placeholder="Order number (e.g. AS-123456)" required>
+      <button type="submit">Track your package</button>
+    </form>
+  </div>
+</section>
+
+<!-- 3. Reach Us — FAQ -->
+<section class="faq-block faq-block--orange">
+  <div class="faq-block-inner">
+    <div class="faq-side">
+      <p class="faq-side-eyebrow">Reach us</p>
+      <h2>How you can get in touch</h2>
+      <p>For order, subscription, or product questions, opening a ticket from your account is the fastest path. If you're not signed in yet, email us directly and we'll get back to you within one business day.</p>
     </div>
-    <div>
-      <label for="cf-subject">Subject</label>
-      <select id="cf-subject" name="subject">
-        <option>Order question</option>
-        <option>Subscription change</option>
-        <option>Refund request</option>
-        <option>Product question</option>
-        <option>Wholesale or partnerships</option>
-        <option>Something else</option>
-      </select>
+    <ul class="faq-list">
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          What's the fastest way to get help?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Open a ticket from your account. It routes directly to our support team with your order history attached, so you don't need to copy and paste order numbers. If you don't have an account yet, email support@afterslim.com.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          What are your support hours?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Monday through Friday, 9 AM to 5 PM ET. We do not staff support on weekends or US federal holidays. Tickets sent outside those hours are answered the next business day.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          How long do replies take?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">First reply within one business day on average, often faster. Complex cases (lost packages, allergy concerns, subscription disputes) may need an extra back-and-forth.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Do you offer phone support?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Not yet. Right now everything goes through email or your account ticket dashboard so we can keep a clean record of every conversation. Phone support is on the roadmap as we scale.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Where do I sign in to my account?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">From the Open a Ticket button above, or any "My Account" link in the navigation. If you ordered as a guest, use the email you placed the order with to claim the account.</div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4. Subscription -->
+<section class="faq-block faq-block--cream">
+  <div class="faq-block-inner">
+    <div class="faq-side">
+      <p class="faq-side-eyebrow">Your subscription</p>
+      <h2>Managing your AfterSlim subscription</h2>
+      <p>Skip a shipment, change frequency, or cancel anytime. There are no cancellation fees and no hold periods.</p>
+      <img class="faq-side-img" src="/images/midcta-hero.jpg" alt="Daily AfterSlim ritual">
     </div>
-    <div>
-      <label for="cf-order">Order number (if applicable)</label>
-      <input id="cf-order" name="order" type="text" placeholder="AS-123456">
+    <ul class="faq-list">
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          How do subscriptions work?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">When you choose Subscribe &amp; Save at checkout, we ship a fresh bottle on the schedule you picked (every 30 days by default). You save 17% on every order and we email you 3 days before each charge so you can skip, pause, or cancel.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          How do I skip a shipment?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">From your account dashboard, click Subscriptions and hit Skip Next on the bottle you want to pause. The next charge is delayed by one cycle and resumes automatically.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          How do I cancel?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Account dashboard, Subscriptions, Cancel. No fees, no hold periods. Cancellations must be processed at least 48 hours before the next billing date to skip that shipment.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Can I change my shipping frequency?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Yes. You can switch between every 30, 45, or 60 days from your account. The new schedule takes effect at the next charge.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          When am I charged?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">On the day your next bottle ships. We send a reminder email 3 days before so there are no surprises. If your card declines, we'll try again for 7 days and notify you.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Can I update my payment method?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Account dashboard, Payment Methods. Stripe is our processor, so updating a card is encrypted end-to-end.</div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 5. Sourcing & Ingredients -->
+<section class="faq-block faq-block--orange">
+  <div class="faq-block-inner">
+    <div class="faq-side">
+      <p class="faq-side-eyebrow">Sourcing &amp; ingredients</p>
+      <h2>What's in the capsule and where it comes from</h2>
+      <p>Every batch is third-party tested for potency, heavy metals, and microbial safety. Reports ship with every order.</p>
+      <img class="faq-side-img" src="/images/ingredients-proven.png" alt="AfterSlim ingredients">
     </div>
-    <div>
-      <label for="cf-message">Message</label>
-      <textarea id="cf-message" name="message" required></textarea>
+    <ul class="faq-list">
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Where is AfterSlim made?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Manufactured in the USA at an FDA-registered, GMP-certified facility. The strains and prebiotics are sourced from established suppliers we've vetted on potency, identity, and contamination controls.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          What strains and prebiotics are inside?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Three probiotic strains (Akkermansia muciniphila, Clostridium butyricum, Bifidobacterium infantis) paired with two prebiotic fibers that feed them (chicory root inulin and resistant starch). Full label is on the bottle.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Is AfterSlim third-party tested?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Every batch goes through an independent ISO 17025-accredited lab for strain identity, CFU potency, heavy metals, and microbial safety. Reports ship with every order and are available on request.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Is AfterSlim vegan? Gluten-free?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Yes to both. Vegan, gluten-free, soy-free, non-GMO. No fillers, no synthetic sweeteners, no stimulants.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Does AfterSlim need refrigeration?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">No. The strains are encapsulated in moisture-locked, shelf-stable capsules so they survive room-temperature shipping and stomach acid. Just store somewhere cool and dry, away from direct sunlight.</div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6. Taking AfterSlim -->
+<section class="faq-block faq-block--cream">
+  <div class="faq-block-inner">
+    <div class="faq-side">
+      <p class="faq-side-eyebrow">Taking AfterSlim</p>
+      <h2>Using it day-to-day on a GLP-1</h2>
+      <p>One capsule a day. The right time is the one you'll actually remember.</p>
+      <img class="faq-side-img" src="/images/afterslim-bottle-water.png" alt="Capsule with water">
     </div>
-    <button type="submit">Send message</button>
-    <p class="form-fineprint">By submitting, you agree to our <a href="/privacy">Privacy Policy</a>. We never share your email.</p>
+    <ul class="faq-list">
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Can I take AfterSlim with Ozempic, Mounjaro, Wegovy, or Zepbound?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Yes. AfterSlim works locally in the gut and doesn't interact with the GLP-1 pathway, so it won't interfere with how the medication suppresses appetite or affects blood sugar. Check with your prescriber if you have a specific health condition.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          When during the day is best?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Morning is most common because it's easy to remember (with coffee, before breakfast, after brushing your teeth). Consistency matters more than the exact hour.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          What if I miss a day?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Just take it the next day at your usual time. Don't double up. The benefits come from steady daily intake over weeks, not single doses.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          How soon will I notice results?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">Most people feel a difference in digestive comfort within 1 to 2 weeks. The deeper microbiome benefits settle in by 60 to 90 days of consistent daily use.</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-question-btn" type="button" aria-expanded="false">
+          Is AfterSlim safe long-term?
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer-wrap"><div class="faq-answer-inner">The strains and prebiotics in AfterSlim have established safety profiles in clinical literature. As with any supplement, talk to your healthcare provider if you're pregnant, nursing, or managing a medical condition.</div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7. Newsletter -->
+<section class="contact-newsletter">
+  <h2>Stay connected <span class="brand-accent">with us</span></h2>
+  <p>Get sale alerts, restock notifications, and the occasional gut-health read. Unsubscribe anytime.</p>
+  <form onsubmit="event.preventDefault(); this.querySelector('button').textContent='SUBSCRIBED ✓';">
+    <input type="email" placeholder="Enter your email here*" required>
+    <button type="submit">SIGN UP</button>
   </form>
 </section>
 
@@ -196,8 +566,8 @@
         <div class="footer-links">
           <a href="/about">About</a>
           <a href="/medical-advisory">Medical advisory</a>
-          <a href="/press">Press</a>
-          <a href="/affiliate">Affiliate</a>
+          <a href="#">Press</a>
+          <a href="#">Affiliate</a>
         </div>
       </div>
     </div>
@@ -209,20 +579,45 @@
 </footer>
 
 <script>
-// No backend yet — submit opens user's mail client with prefilled body.
-// Replace with a real POST endpoint once the support inbox is wired.
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  var f = e.target;
-  var subject = encodeURIComponent('[' + f.subject.value + '] ' + (f.order.value ? 'Order ' + f.order.value : 'Customer inquiry'));
-  var body = encodeURIComponent(
-    'Name: ' + f.name.value + '\n' +
-    'Email: ' + f.email.value + '\n' +
-    (f.order.value ? 'Order #: ' + f.order.value + '\n' : '') +
-    '\n' + f.message.value
-  );
-  window.location.href = 'mailto:support@afterslim.com?subject=' + subject + '&body=' + body;
+// FAQ accordion (one open at a time per block)
+document.querySelectorAll('.faq-block .faq-question-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var wrap = item.querySelector('.faq-answer-wrap');
+    var inner = item.querySelector('.faq-answer-inner');
+    var isOpen = item.classList.contains('open');
+    // Close siblings inside the same block
+    var block = btn.closest('.faq-block');
+    block.querySelectorAll('.faq-item.open').forEach(function(other) {
+      if (other !== item) {
+        other.classList.remove('open');
+        other.querySelector('.faq-question-btn').setAttribute('aria-expanded', 'false');
+        other.querySelector('.faq-answer-wrap').style.maxHeight = '0';
+      }
+    });
+    if (isOpen) {
+      item.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      wrap.style.maxHeight = '0';
+    } else {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      wrap.style.maxHeight = inner.scrollHeight + 'px';
+    }
+  });
 });
+
+// Track form — submit currently mailto's support (until order DB is wired)
+var trackForm = document.getElementById('trackFormContact');
+if (trackForm) {
+  trackForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var order = document.getElementById('trackOrderInput').value.trim();
+    var subject = encodeURIComponent('Track my order — ' + order);
+    var body = encodeURIComponent('Order number: ' + order + '\n\nPlease send me the latest tracking details. Thanks!');
+    window.location.href = 'mailto:support@afterslim.com?subject=' + subject + '&body=' + body;
+  });
+}
 </script>
 
 </body>
