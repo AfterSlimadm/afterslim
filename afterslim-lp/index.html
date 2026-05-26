@@ -5108,39 +5108,78 @@ if ('IntersectionObserver' in window) {
   // when it crosses ~35% into the viewport. This way, on mobile, if a
   // user is looking at the pictogram but the chart isn't on-screen yet,
   // only the pictogram animates — and vice versa.
-  if ('IntersectionObserver' in window) {
-    var revealIO = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        if (el.dataset.revealed === '1') return;
-        el.dataset.revealed = '1';
-        el.classList.add('is-revealed');
-        if (el.classList.contains('stat-callout')) {
-          var n = el.querySelector('.stat-callout-number b');
-          if (n) animateNumber(n, 80);
-        } else if (el.classList.contains('problem-scene-visual--stat')) {
-          el.querySelectorAll('.stat-compare-row').forEach(function(row) {
-            var num = row.querySelector('.stat-compare-number b');
-            if (!num) return;
-            var isPeak = row.classList.contains('stat-compare-row--peak');
-            animateNumber(num, isPeak ? 900 : 300);
-          });
-        }
-        revealIO.unobserve(el);
-      });
-    }, { threshold: 0.35, rootMargin: '0px 0px -10% 0px' });
-
-    section.querySelectorAll('.stat-callout, .problem-scene-visual--stat')
-      .forEach(function(el) { revealIO.observe(el); });
-  } else {
-    // No IO support — just fire everything once on load
+  //
+  // Activation rules:
+  // - Scene 0 (active on page load): observed immediately, fires when
+  //   user scrolls down to it.
+  // - Other scenes: observed only AFTER they become active (via swipe
+  //   on mobile, or prev/next button on desktop), with a delay on
+  //   mobile so the auto-scroll-up finishes BEFORE animations fire.
+  //   This way, on a swipe, the page scrolls up first, and the
+  //   animations only kick in once the screen has settled near them.
+  if (!('IntersectionObserver' in window)) {
     section.querySelectorAll('.stat-callout, .problem-scene-visual--stat')
       .forEach(function(el) {
         el.classList.add('is-revealed');
         el.querySelectorAll(NUM_SELECTOR).forEach(function(n) { animateNumber(n, 0); });
       });
+    return;
   }
+
+  var mobileMQ = window.matchMedia('(max-width: 900px)');
+  var SCROLL_SETTLE_MS = 950; // gentleScrollTo duration + a tick
+
+  var revealIO = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      if (el.dataset.revealed === '1') return;
+      el.dataset.revealed = '1';
+      el.classList.add('is-revealed');
+      if (el.classList.contains('stat-callout')) {
+        var n = el.querySelector('.stat-callout-number b');
+        if (n) animateNumber(n, 80);
+      } else if (el.classList.contains('problem-scene-visual--stat')) {
+        el.querySelectorAll('.stat-compare-row').forEach(function(row) {
+          var num = row.querySelector('.stat-compare-number b');
+          if (!num) return;
+          var isPeak = row.classList.contains('stat-compare-row--peak');
+          animateNumber(num, isPeak ? 900 : 300);
+        });
+      }
+      revealIO.unobserve(el);
+    });
+  }, { threshold: 0.35, rootMargin: '0px 0px -10% 0px' });
+
+  function observeScene(scene) {
+    scene.querySelectorAll('.stat-callout, .problem-scene-visual--stat').forEach(function(el) {
+      if (el.dataset.revealed === '1') return;
+      revealIO.observe(el);
+    });
+  }
+
+  // Observe scene 0 immediately — it's the one user scrolls into from above.
+  if (scenes[0]) observeScene(scenes[0]);
+
+  // Other scenes: observe only after they become active. On mobile, wait
+  // for the carousel's gentleScrollTo to finish so the screen has moved
+  // BEFORE animations start. On desktop (button/arrow navigation), fire
+  // immediately since there's no auto-scroll.
+  var activationMO = new MutationObserver(function(records) {
+    records.forEach(function(rec) {
+      if (rec.attributeName !== 'class') return;
+      var scene = rec.target;
+      if (!scene.classList.contains('is-active')) return;
+      if (scene.dataset.revealQueued === '1') return;
+      scene.dataset.revealQueued = '1';
+      var delay = mobileMQ.matches ? SCROLL_SETTLE_MS : 0;
+      setTimeout(function() { observeScene(scene); }, delay);
+    });
+  });
+  scenes.forEach(function(scene, idx) {
+    if (idx === 0) scene.dataset.revealQueued = '1';
+    activationMO.observe(scene, { attributes: true, attributeFilter: ['class'] });
+  });
 })();
 
 /* ===== Comparison table — checks pop in as the user scrolls them into view */
