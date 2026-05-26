@@ -1462,6 +1462,28 @@ body.bundle-modal-open {
   .testimonials-nav { display: none; }
 }
 
+/* Long fade band between warm-dark testimonials bg and cream reviews-list bg */
+.fade-band {
+  height: 320px;
+  background: linear-gradient(
+    180deg,
+    #4a1804 0%,
+    #5e2a10 10%,
+    #7a3e1c 22%,
+    #9c5530 34%,
+    #c07a55 46%,
+    #d99e7a 58%,
+    #ebc5a3 70%,
+    #f5dfc6 82%,
+    #fbeede 92%,
+    var(--bg) 100%
+  );
+}
+
+@media (max-width: 768px) {
+  .fade-band { height: 220px; }
+}
+
 /* ===== Reviews list (Ryze-style written reviews) ===== */
 .reviews-list-section {
   background: var(--bg);
@@ -3828,6 +3850,9 @@ body.bundle-modal-open {
 
   </div>
 </section>
+
+<!-- Long fade transition: warm-dark testimonials bg → cream reviews-list bg -->
+<div class="fade-band" aria-hidden="true"></div>
 
 <!-- 6.b Written reviews list (Ryze-style, ported text from production index.html) -->
 <section class="reviews-list-section" data-reveal>
