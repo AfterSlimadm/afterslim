@@ -1328,7 +1328,7 @@ body.bundle-modal-open {
 
 /* ===== Testimonials carousel (ported from production index.html) ===== */
 .testimonials-section {
-  background: var(--bg);
+  background: linear-gradient(135deg, #1f1410 0%, #4a1804 60%, #c2410c 140%);
   padding: 96px 0;
   overflow: hidden;
 }
@@ -1341,7 +1341,7 @@ body.bundle-modal-open {
   font-weight: 800;
   letter-spacing: -0.02em;
   text-align: center;
-  color: var(--ink);
+  color: #fff;
   margin: 0 0 48px;
 }
 .testimonials-title span {
@@ -1454,26 +1454,12 @@ body.bundle-modal-open {
 }
 .testimonials-nav.prev { left: 0; }
 .testimonials-nav.next { right: 0; }
-.testimonials-cta {
-  display: flex;
-  justify-content: center;
-  margin-top: 48px;
-}
-.testimonials-cta .btn-primary {
-  padding: 18px 36px;
-  font-size: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
 @media (max-width: 768px) {
   .testimonials-section { padding: 64px 0; }
   .testimonials-title { margin-bottom: 32px; }
   .testimonials-carousel-wrapper { padding: 0 16px; }
   .testimonial-card-image { flex-basis: 280px; min-height: 420px; }
   .testimonials-nav { display: none; }
-  .testimonials-cta { margin-top: 32px; }
 }
 
 /* ===== Bridge (transition between sections) ===== */
@@ -3581,12 +3567,6 @@ body.bundle-modal-open {
       </div>
     </div>
 
-    <div class="testimonials-cta">
-      <a href="#" class="btn-primary" data-bundle-modal-open>
-        Order now
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </a>
-    </div>
   </div>
 </section>
 
