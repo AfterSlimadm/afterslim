@@ -696,6 +696,12 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
      stars (~18-20px). Our 24px was reading too chunky. */
   .hero-rating-stars { height: 18px; }
   .hero-rating-count { font-size: 15px; }
+  /* Price row sizing — desktop $44 / $32 / 16px badge was too big at
+     narrow widths, forcing the badge to wrap below the price. Match
+     Ryze's proportions: medium price, smaller original, prominent badge. */
+  .price-current { font-size: 34px; }
+  .price-original { font-size: 22px; }
+  .price-badge { padding: 8px 12px; font-size: 14px; }
 }
 
 /* ===== Section heads ===== */
