@@ -2016,8 +2016,50 @@ body.bundle-modal-open {
   .science-group-grid--two { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
 }
 @media (max-width: 560px) {
-  .science-group-grid { grid-template-columns: 1fr; }
-  .science-group-grid--two { grid-template-columns: 1fr; }
+  /* Convert each group's grid into a horizontal swipe carousel.
+     Cards take 82vw so the next card peeks ~18vw — gives the user
+     a visual hint that there's more to the side. JS adds pagination
+     dots below each group. */
+  .science-group-grid,
+  .science-group-grid--two {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 14px;
+    padding: 4px 24px;
+    margin: 0 -24px;
+    scroll-padding-left: 24px;
+    max-width: none;
+  }
+  .science-group-grid::-webkit-scrollbar,
+  .science-group-grid--two::-webkit-scrollbar { display: none; }
+  .science-group-grid .science-card,
+  .science-group-grid--two .science-card {
+    flex: 0 0 82vw;
+    scroll-snap-align: start;
+  }
+  /* Pagination dots (one per card, injected by JS) */
+  .science-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .science-pagination-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(31, 20, 16, 0.22);
+    transition: background 0.25s ease, width 0.25s ease, transform 0.25s ease;
+  }
+  .science-pagination-dot.is-active {
+    background: var(--orange);
+    width: 22px;
+    border-radius: 999px;
+  }
 }
 
 /* ===== Problems (PAS hook) ===== */
@@ -5096,6 +5138,42 @@ if ('IntersectionObserver' in window) {
     });
     sectionMO.observe(section, { attributes: true, attributeFilter: ['class'] });
   }
+})();
+
+/* ===== Mobile: Science section ingredient carousels (per group) =====
+   On narrow viewports each .science-group-grid renders as a horizontal
+   scroll-snap carousel (CSS). We insert pagination dots below each grid
+   and update the active dot via IntersectionObserver on the cards. */
+(function() {
+  var mobile = window.matchMedia('(max-width: 560px)');
+  if (!mobile.matches || !('IntersectionObserver' in window)) return;
+  var grids = document.querySelectorAll('.science-group-grid');
+  grids.forEach(function(grid) {
+    var cards = Array.from(grid.querySelectorAll('.science-card'));
+    if (cards.length < 2) return;
+    var pagination = document.createElement('div');
+    pagination.className = 'science-pagination';
+    pagination.setAttribute('aria-hidden', 'true');
+    cards.forEach(function(_, i) {
+      var dot = document.createElement('span');
+      dot.className = 'science-pagination-dot' + (i === 0 ? ' is-active' : '');
+      pagination.appendChild(dot);
+    });
+    grid.parentNode.insertBefore(pagination, grid.nextSibling);
+    var dots = pagination.querySelectorAll('.science-pagination-dot');
+    var lastIdx = 0;
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+          var idx = cards.indexOf(entry.target);
+          if (idx === lastIdx) return;
+          dots.forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
+          lastIdx = idx;
+        }
+      });
+    }, { root: grid, threshold: [0.5, 0.6, 0.75, 1.0] });
+    cards.forEach(function(c) { io.observe(c); });
+  });
 })();
 
 </script>
