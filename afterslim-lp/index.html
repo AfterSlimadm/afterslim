@@ -930,6 +930,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
 @media (max-width: 720px) {
   .comparison { padding: 32px 0 72px; }
+  /* Comparison table goes near-edge-to-edge on mobile.
+     Pull the container's 24px gutter back to 8px so the
+     table reads as a wide block, not a centered card. */
+  .comparison .container { padding: 0 8px; }
   .comparison-row {
     grid-template-columns: 1.2fr 0.9fr 0.9fr;
   }
