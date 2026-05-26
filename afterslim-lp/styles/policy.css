@@ -37,7 +37,7 @@ a:hover { color: var(--orange); }
   align-items: center;
   justify-content: space-between;
 }
-.nav-logo img { height: 28px; display: block; }
+.nav-logo img { height: 56px; width: auto; display: block; }
 .nav-back {
   font-size: 14px;
   color: var(--ink-2);
