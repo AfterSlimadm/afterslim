@@ -382,21 +382,16 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .hero-rating {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: -4px;
 }
 .hero-rating-stars {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-.hero-rating-stars svg {
-  width: 18px;
-  height: 18px;
-  color: var(--orange);
+  display: block;
+  height: 24px;
+  width: auto;
 }
 .hero-rating-count {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ink-2);
   font-weight: 500;
 }
@@ -3226,13 +3221,7 @@ body.bundle-modal-open {
       <!-- Right: info + buy box -->
       <div class="hero-info">
         <div class="hero-rating" aria-label="Rated 4.8 stars from 847 reviews">
-          <span class="hero-rating-stars" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </span>
+          <img class="hero-rating-stars" src="images/reviews-stars-orange.png" alt="5 stars" aria-hidden="true">
           <span class="hero-rating-count"><strong>847</strong> Reviews</span>
         </div>
         <h1 class="hero-title">AfterSlim<br>GLP-1 Balance</h1>
