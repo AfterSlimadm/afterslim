@@ -13,10 +13,11 @@
 
 (function () {
   const SUPABASE_URL = 'https://qutpbtazoxlaegievmew.supabase.co';
-  // TODO: replace this placeholder with the anon (public) key from
-  // Supabase dashboard → Project Settings → API → anon public.
-  // Until this is filled, every /account page will redirect to /account/login.
-  const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY_PLACEHOLDER__';
+  // Supabase "publishable key" (new format, equivalent to the legacy anon
+  // key). Safe to commit because RLS policies on every public table
+  // restrict reads/writes to the row owner — see supabase-migrations.sql
+  // section 19 and supabase-migrations-002.sql section C.
+  const SUPABASE_ANON_KEY = 'sb_publishable_JE-1QqBN36VLorfgIRq5_Q_CZYe0JDG';
 
   if (!window.supabase || typeof window.supabase.createClient !== 'function') {
     console.error('[supabase-client] Supabase SDK not loaded. Add <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> before this file.');
