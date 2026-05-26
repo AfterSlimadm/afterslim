@@ -1320,7 +1320,8 @@ body.bundle-modal-open {
 
 @media (max-width: 860px) {
   .midcta { padding: 32px 0 72px; }
-  .midcta-header { margin-bottom: 48px; }
+  .midcta-header { margin-bottom: 20px; }
+  .midcta-tagline { font-size: 15.5px; margin-top: 10px; }
   .midcta-eyebrow { font-size: 12px; letter-spacing: 1.8px; }
   .midcta-chips { gap: 22px; }
   .midcta-card {
@@ -2316,12 +2317,9 @@ body.bundle-modal-open {
   transform: translateY(28px) scale(0.97);
   filter: blur(10px);
 }
-.problems:not(.has-entered) .problem-scene.is-active .stat-callout-figure.is-active {
-  fill: rgba(31, 20, 16, 0.14);
-}
-.problems:not(.has-entered) .problem-scene.is-active .stat-compare-bar::after {
-  transform: scaleX(0);
-}
+/* Pictogram + bar reveals are now per-element (gated on .is-revealed), so
+   .has-entered no longer needs to hold them — IntersectionObserver fires
+   them when each element actually enters the viewport. */
 .problems-timeline-track {
   position: relative;
   z-index: 1;
@@ -2479,17 +2477,17 @@ body.bundle-modal-open {
   fill: rgba(31, 20, 16, 0.14);
   transition: fill 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.problem-scene.is-active .stat-callout-figure.is-active {
+.stat-callout.is-revealed .stat-callout-figure.is-active {
   fill: var(--orange);
 }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(1) { transition-delay: 1.20s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(2) { transition-delay: 1.36s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(3) { transition-delay: 1.52s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(4) { transition-delay: 1.68s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(5) { transition-delay: 1.84s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(6) { transition-delay: 2.00s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(7) { transition-delay: 2.16s; }
-.problem-scene.is-active .stat-callout-figure.is-active:nth-of-type(8) { transition-delay: 2.32s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(1) { transition-delay: 0.10s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(2) { transition-delay: 0.22s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(3) { transition-delay: 0.34s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(4) { transition-delay: 0.46s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(5) { transition-delay: 0.58s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(6) { transition-delay: 0.70s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(7) { transition-delay: 0.82s; }
+.stat-callout.is-revealed .stat-callout-figure.is-active:nth-of-type(8) { transition-delay: 0.94s; }
 .stat-callout-caption {
   margin: 8px 0 0;
   font-size: 14px;
@@ -2872,7 +2870,7 @@ body.bundle-modal-open {
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   transition-delay: 1.4s;
 }
-.problem-scene.is-active .stat-compare-bar::after {
+.problem-scene-visual--stat.is-revealed .stat-compare-bar::after {
   transform: scaleX(1);
 }
 
@@ -2897,7 +2895,7 @@ body.bundle-modal-open {
   pointer-events: none;
   border-radius: 999px;
 }
-.problem-scene.is-active .stat-compare-row--peak .stat-compare-bar::before {
+.problem-scene-visual--stat.is-revealed .stat-compare-row--peak .stat-compare-bar::before {
   animation: statBarShimmer 2.6s ease-in-out 2.6s infinite;
 }
 @keyframes statBarShimmer {
@@ -5105,55 +5103,43 @@ if ('IntersectionObserver' in window) {
     }
   }
 
-  function activate(scene) {
-    // Side-by-side bar rows (Normal vs On GLP-1) — delays match bar fill
-    scene.querySelectorAll('.stat-compare-row').forEach(function(row) {
-      var num = row.querySelector('.stat-compare-number b');
-      if (!num) return;
-      var isPeak = row.classList.contains('stat-compare-row--peak');
-      animateNumber(num, isPeak ? 1400 : 800);
-    });
-    // Pictogram callout number (44%, 30%, 20%, 14%, 70%, 80%) — count up
-    // alongside the figures filling in (figure delays 1.20s → 1.80s)
-    scene.querySelectorAll('.stat-callout-number b').forEach(function(num) {
-      animateNumber(num, 1000);
-    });
-  }
-  function deactivate(scene) {
-    scene.querySelectorAll(NUM_SELECTOR).forEach(resetNumber);
-  }
+  // Per-element viewport-triggered reveals. Each .stat-callout (pictogram)
+  // and .problem-scene-visual--stat (bar chart) fires its own animation
+  // when it crosses ~35% into the viewport. This way, on mobile, if a
+  // user is looking at the pictogram but the chart isn't on-screen yet,
+  // only the pictogram animates — and vice versa.
+  if ('IntersectionObserver' in window) {
+    var revealIO = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        if (el.dataset.revealed === '1') return;
+        el.dataset.revealed = '1';
+        el.classList.add('is-revealed');
+        if (el.classList.contains('stat-callout')) {
+          var n = el.querySelector('.stat-callout-number b');
+          if (n) animateNumber(n, 80);
+        } else if (el.classList.contains('problem-scene-visual--stat')) {
+          el.querySelectorAll('.stat-compare-row').forEach(function(row) {
+            var num = row.querySelector('.stat-compare-number b');
+            if (!num) return;
+            var isPeak = row.classList.contains('stat-compare-row--peak');
+            animateNumber(num, isPeak ? 900 : 300);
+          });
+        }
+        revealIO.unobserve(el);
+      });
+    }, { threshold: 0.35, rootMargin: '0px 0px -10% 0px' });
 
-  // Watch scene class changes (only act once section has been entered)
-  var sceneMO = new MutationObserver(function(records) {
-    if (!section.classList.contains('has-entered')) return;
-    records.forEach(function(rec) {
-      if (rec.type !== 'attributes' || rec.attributeName !== 'class') return;
-      var scene = rec.target;
-      if (scene.classList.contains('is-active')) activate(scene);
-      else deactivate(scene);
-    });
-  });
-  scenes.forEach(function(scene) {
-    sceneMO.observe(scene, { attributes: true, attributeFilter: ['class'] });
-  });
-
-  // Watch for .has-entered being added to .problems. When it lands, fire
-  // the animation for whichever scene is currently active.
-  function fireInitial() {
-    scenes.forEach(function(scene) {
-      if (scene.classList.contains('is-active')) activate(scene);
-    });
-  }
-  if (section.classList.contains('has-entered')) {
-    fireInitial();
+    section.querySelectorAll('.stat-callout, .problem-scene-visual--stat')
+      .forEach(function(el) { revealIO.observe(el); });
   } else {
-    var sectionMO = new MutationObserver(function() {
-      if (section.classList.contains('has-entered')) {
-        sectionMO.disconnect();
-        fireInitial();
-      }
-    });
-    sectionMO.observe(section, { attributes: true, attributeFilter: ['class'] });
+    // No IO support — just fire everything once on load
+    section.querySelectorAll('.stat-callout, .problem-scene-visual--stat')
+      .forEach(function(el) {
+        el.classList.add('is-revealed');
+        el.querySelectorAll(NUM_SELECTOR).forEach(function(n) { animateNumber(n, 0); });
+      });
   }
 })();
 
