@@ -776,7 +776,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   max-width: 760px;
   margin: 0 auto;
   background: var(--bg-2);
-  border: 1px solid var(--line);
+  border: 3px solid var(--ink);
   border-radius: 24px;
   overflow: hidden;
   position: relative;
@@ -896,6 +896,15 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .comparison-check {
   background: #ffffff;
   box-shadow: 0 4px 14px rgba(31, 20, 16, 0.18);
+  opacity: 0;
+  transform: scale(0.35) rotate(-80deg);
+  transition:
+    opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.comparison-check.is-revealed {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
 }
 .comparison-check::after {
   content: '';
@@ -904,6 +913,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   border-left: 2.5px solid var(--orange);
   border-bottom: 2.5px solid var(--orange);
   transform: rotate(-45deg) translate(1px, -1.5px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .comparison-check { opacity: 1; transform: none; transition: none; }
 }
 .comparison-cross {
   background: rgba(31, 20, 16, 0.08);
@@ -5142,6 +5154,27 @@ if ('IntersectionObserver' in window) {
     });
     sectionMO.observe(section, { attributes: true, attributeFilter: ['class'] });
   }
+})();
+
+/* ===== Comparison table — checks pop in as the user scrolls them into view */
+(function() {
+  if (!('IntersectionObserver' in window)) return;
+  var checks = document.querySelectorAll('.comparison-check');
+  if (!checks.length) return;
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        // Tiny stagger based on the row index so checks land in a wave
+        // rather than all at once even when the table is fully visible.
+        var idx = Array.prototype.indexOf.call(checks, entry.target);
+        setTimeout(function() {
+          entry.target.classList.add('is-revealed');
+        }, idx * 90);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5, rootMargin: '0px 0px -8% 0px' });
+  checks.forEach(function(c) { io.observe(c); });
 })();
 
 /* ===== Mobile: Science section ingredient carousels (per group) =====
