@@ -2897,36 +2897,46 @@ body.bundle-modal-open {
   font-weight: 700;
 }
 @media (max-width: 900px) {
-  /* Drop the carousel on mobile — stack scenes vertically again */
+  /* Mobile carousel: native horizontal scroll + scroll-snap so the user
+     can swipe between scenes. JS attaches an IntersectionObserver to set
+     .is-active on whichever scene is most in view, which triggers the
+     same bar/number/figure animations the desktop carousel uses. */
   .problems-stage { margin-top: 16px; }
   .problems-pin {
     padding: 0;
-    overflow: visible;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     background-color: transparent;
+    background-image: none;
   }
+  .problems-pin::-webkit-scrollbar { display: none; }
   .problems-track {
-    flex-direction: column;
-    width: 100%;
-    gap: 32px;
+    flex-direction: row;
+    width: max-content;
+    gap: 0;
     padding: 0;
     transform: none !important;
     background: none;
   }
   .problem-scene {
-    width: 100%;
+    width: 100vw;
+    flex-shrink: 0;
+    scroll-snap-align: start;
     grid-template-columns: 1fr;
-    gap: 32px;
-    padding: 24px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.55);
-    border: 1px solid rgba(234,88,12,0.08);
+    gap: 24px;
+    padding: 24px 24px 32px;
+    border-radius: 0;
+    background: transparent;
+    border: 0;
   }
   .problem-scene.is-reversed .problem-scene-content,
   .problem-scene.is-reversed .problem-scene-visual { order: initial; }
-  /* Force ALL scene content visible on mobile. Default CSS hides
-     .problem-scene-content > * and .problem-scene-visual at opacity 0
-     so the desktop carousel can fade them in per active scene. On
-     mobile all 6 scenes stack — they must all be visible. */
+  /* Force ALL scene content visible on mobile (default CSS hides them at
+     opacity 0 for the desktop fade-in cascade). Specificity must match
+     the hide rule (.problem-scene .problem-scene-content > *) or it loses. */
   .problem-scene .problem-scene-content > *,
   .problem-scene .problem-scene-visual {
     opacity: 1;
@@ -4746,6 +4756,24 @@ document.addEventListener('click', function(e) {
 
   window.addEventListener('resize', render);
   render();
+
+  // Mobile: native horizontal scroll + scroll-snap. IntersectionObserver
+  // watches each scene relative to the pin's scrollable viewport and
+  // marks whichever scene crosses 60% in-view as .is-active. That triggers
+  // the same bar fill + number count-up + figure colorize animations the
+  // desktop carousel uses (the existing MutationObserver in the next
+  // IIFE picks up the class change and re-fires the animations).
+  if (mobile.matches && 'IntersectionObserver' in window) {
+    var mobileIO = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+          scenes.forEach(function(s) { s.classList.remove('is-active'); });
+          entry.target.classList.add('is-active');
+        }
+      });
+    }, { root: pin, threshold: [0.5, 0.6, 0.75, 1.0] });
+    scenes.forEach(function(s) { mobileIO.observe(s); });
+  }
 })();
 
 // Problems — fires the scene-0 entrance reveal + the timeline line
