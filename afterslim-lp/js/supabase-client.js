@@ -59,8 +59,14 @@
       const user = await this.user();
       if (!user) {
         const back = redirectTo || (window.location.pathname + window.location.search);
-        window.location.href = '/account/login?next=' + encodeURIComponent(back);
+        // Use replace() so the unauthed page doesn't sit in browser history.
+        // The page stays hidden via html[data-auth="pending"] until nav.
+        window.location.replace('/account/login?next=' + encodeURIComponent(back));
         return new Promise(() => {});           // never resolves
+      }
+      // Auth confirmed — reveal the page if it was being held hidden.
+      if (document.documentElement.dataset.auth === 'pending') {
+        document.documentElement.dataset.auth = 'ok';
       }
       return user;
     },

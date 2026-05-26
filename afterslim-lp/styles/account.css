@@ -1,6 +1,12 @@
 /* Account chrome: auth forms + dashboard layout.
    Pairs with /styles/policy.css which provides the global nav + footer. */
 
+/* Hide body until auth resolves. Set via inline <script> at the top of
+   the <head> on every authenticated /account/*/index.html. Prevents the
+   "flash of dashboard" before requireAuth() bounces an unauthed
+   visitor. The IIFE clears this flag once a session is confirmed. */
+html[data-auth="pending"] body { visibility: hidden; }
+
 /* ─── Auth form card (login, signup, forgot, reset) ─── */
 .auth-shell {
   max-width: 420px;
