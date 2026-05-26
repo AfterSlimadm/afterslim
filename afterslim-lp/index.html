@@ -1353,16 +1353,43 @@ body.bundle-modal-open {
 }
 
 @media (max-width: 540px) {
-  .bundle-modal { padding: 0; }
+  /* Card-style modal on mobile: sized to content, centered on a dim
+     backdrop. Was full-screen before, which left a huge empty band
+     below the Amazon button. */
+  .bundle-modal { padding: 16px; }
   .bundle-modal-content {
     max-width: none;
-    max-height: 100vh;
-    min-height: 100vh;
-    border-radius: 0;
-    padding: 56px 22px 28px;
+    max-height: calc(100vh - 32px);
+    min-height: 0;
+    border-radius: 18px;
+    padding: 56px 20px 22px;
+    text-align: center;
   }
-  .bundle-modal-title { font-size: 22px; }
-  .bundle-modal-subtitle { font-size: 13.5px; margin-bottom: 18px; }
+  .bundle-modal-title {
+    font-size: 22px;
+    text-align: center;
+    margin: 0 0 6px;
+  }
+  .bundle-modal-subtitle {
+    font-size: 13.5px;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  /* Close button: bigger, with a soft background so it actually reads
+     as a tappable control instead of disappearing into the corner. */
+  .bundle-modal-close {
+    width: 44px;
+    height: 44px;
+    top: 10px;
+    right: 10px;
+    background: rgba(31, 20, 16, 0.08);
+    color: var(--ink);
+  }
+  .bundle-modal-close svg { width: 22px; height: 22px; }
+  /* Inner blocks need to be left-aligned again — only the headline,
+     subtitle, and CTA buttons are centered. */
+  .bundle-modal .variant-block,
+  .bundle-modal .bundle-modal-price-row { text-align: left; }
 }
 
 /* ===== Reviews carousel ===== */
