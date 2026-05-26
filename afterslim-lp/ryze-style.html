@@ -380,6 +380,31 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 /* Hero right — product info + buy box */
 .hero-info { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
 .hero-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: -4px;
+}
+.hero-rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.hero-rating-stars svg {
+  width: 18px;
+  height: 18px;
+  color: var(--orange);
+}
+.hero-rating-count {
+  font-size: 15px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.hero-rating-count strong {
+  color: var(--ink);
+  font-weight: 800;
+}
+.hero-rating {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -3200,6 +3225,16 @@ body.bundle-modal-open {
 
       <!-- Right: info + buy box -->
       <div class="hero-info">
+        <div class="hero-rating" aria-label="Rated 4.8 stars from 847 reviews">
+          <span class="hero-rating-stars" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </span>
+          <span class="hero-rating-count"><strong>847</strong> Reviews</span>
+        </div>
         <h1 class="hero-title">AfterSlim<br>GLP-1 Balance</h1>
         <p class="hero-subtitle">For you who is experiencing <strong>hair loss, fatigue, nausea, and bloating from GLP-1 medications.</strong> You don't have to accept these side effects as normal.</p>
 
