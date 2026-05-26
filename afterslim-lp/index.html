@@ -675,7 +675,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
 @media (max-width: 900px) {
   .hero { padding: 14px 0 40px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 16px; }
   .hero-main-img { padding: 0; }
   .hero-gallery { position: static; top: auto; }
   /* On mobile, let the hero image breathe edge-to-edge (close to it).
@@ -683,6 +683,10 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
      width. Tightening the .container padding for the hero only so the
      gallery (image + thumbs) gets ~24px more horizontal space. */
   .hero .container { padding: 0 12px; }
+  /* Smaller star sprite on mobile — Ryze ref shows roughly text-height
+     stars (~18-20px). Our 24px was reading too chunky. */
+  .hero-rating-stars { height: 18px; }
+  .hero-rating-count { font-size: 15px; }
 }
 
 /* ===== Section heads ===== */
