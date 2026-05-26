@@ -4821,13 +4821,28 @@ document.addEventListener('click', function(e) {
     pin.parentNode.insertBefore(pagination, pin.nextSibling);
     var dots = pagination.querySelectorAll('.problems-pagination-dot');
 
+    var lastActiveIndex = 0;
     var mobileIO = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
           var idx = scenes.indexOf(entry.target);
+          if (idx === lastActiveIndex) return;
           scenes.forEach(function(s) { s.classList.remove('is-active'); });
           entry.target.classList.add('is-active');
           dots.forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
+          // Auto-scroll the page vertically so the new scene's title sits
+          // at the top of the viewport. Without this, swiping from scene
+          // N (where user is at the BOTTOM of the scene reading the chart)
+          // to scene N+1 lands them at the bottom of N+1 too, so they
+          // miss the title and only see the chart.
+          var rect = pin.getBoundingClientRect();
+          if (rect.top < 0) {
+            window.scrollTo({
+              top: rect.top + window.scrollY,
+              behavior: 'smooth'
+            });
+          }
+          lastActiveIndex = idx;
         }
       });
     }, { root: pin, threshold: [0.5, 0.6, 0.75, 1.0] });
