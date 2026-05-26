@@ -941,7 +941,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 
 @media (max-width: 720px) {
-  .comparison { padding: 32px 0 24px; }
+  .comparison { padding: 16px 0 24px; }
+  .comparison-header { margin-bottom: 28px; }
   /* Comparison table goes near-edge-to-edge on mobile.
      Pull the container's 24px gutter back to 8px so the
      table reads as a wide block, not a centered card. */
@@ -2025,9 +2026,9 @@ body.bundle-modal-open {
 }
 
 @media (max-width: 900px) {
-  .science { padding: 72px 0 24px; }
+  .science { padding: 72px 0 8px; }
   .science-header { margin-bottom: 48px; }
-  .science-group { margin-bottom: 40px; }
+  .science-group { margin-bottom: 16px; }
   .science-group-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .science-group-grid--two { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
 }
