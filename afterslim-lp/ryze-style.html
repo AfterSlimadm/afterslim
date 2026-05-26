@@ -2696,33 +2696,81 @@ body.bundle-modal-open {
   color: var(--orange);
   opacity: 0.85;
 }
+/* Thick capsule-style bar with fighting-game-special fill animation.
+   - Bar height bumped from 6px to 20px for the slumbr-app reference look
+   - Inset shadow on the track for subtle depth
+   - Fill uses scale-X transition that runs when .problem-scene becomes active
+   - Peak (orange) bar gets a glow + horizontal shimmer overlay that loops
+     after the fill completes, mimicking a charged-up special meter
+*/
 .stat-compare-bar {
   display: block;
-  height: 6px;
+  height: 20px;
   width: 100%;
-  background: rgba(31, 20, 16, 0.06);
+  background: rgba(31, 20, 16, 0.08);
   border-radius: 999px;
   position: relative;
   overflow: hidden;
-  margin-top: 6px;
+  margin-top: 14px;
+  box-shadow: inset 0 1px 3px rgba(31, 20, 16, 0.12);
 }
 .stat-compare-bar::after {
   content: '';
   position: absolute;
   inset: 0 auto 0 0;
   width: var(--w, 0%);
-  background: rgba(31, 20, 16, 0.35);
+  background: linear-gradient(90deg, rgba(31, 20, 16, 0.42) 0%, rgba(31, 20, 16, 0.56) 100%);
   border-radius: 999px;
   transform-origin: left center;
   transform: scaleX(0);
-  transition: transform 2.0s cubic-bezier(0.22, 1, 0.36, 1) 1.4s;
+  transition: transform 1.4s cubic-bezier(0.34, 1.18, 0.64, 1) 0.8s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  z-index: 1;
 }
 .stat-compare-row--peak .stat-compare-bar::after {
-  background: var(--orange);
-  transition-delay: 1.9s;
+  background: linear-gradient(90deg, #fb923c 0%, var(--orange) 50%, var(--orange-dark) 100%);
+  box-shadow:
+    0 0 18px rgba(234, 88, 12, 0.5),
+    0 0 6px rgba(234, 88, 12, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition-delay: 1.4s;
 }
 .problem-scene.is-active .stat-compare-bar::after {
   transform: scaleX(1);
+}
+
+/* Special-bar shimmer — a moving highlight that sweeps across the bar
+   after it fills. Only enabled on the peak/orange row so the effect
+   feels like the GLP-1 bar is "charged". */
+.stat-compare-row--peak .stat-compare-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 35%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  transform: translateX(-120%);
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 999px;
+}
+.problem-scene.is-active .stat-compare-row--peak .stat-compare-bar::before {
+  animation: statBarShimmer 2.6s ease-in-out 2.6s infinite;
+}
+@keyframes statBarShimmer {
+  0%   { transform: translateX(-120%); }
+  60%  { transform: translateX(320%); }
+  100% { transform: translateX(320%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stat-compare-bar::after { transition: none; transform: scaleX(1); }
+  .stat-compare-row--peak .stat-compare-bar::before { animation: none; }
 }
 .stat-compare-delta {
   margin: 0;
@@ -4710,6 +4758,99 @@ if ('IntersectionObserver' in window) {
   }
   tick();
   setInterval(tick, 1000);
+})();
+
+/* ===== Problem-scene stat number count-up animation =====
+   When a .problem-scene gains .is-active, its <b>NUMBER</b> elements
+   inside .stat-compare-number animate from 0 to their target value,
+   matching the bar fill timing (normal row 0.8s, peak row 1.4s).
+   When the scene loses .is-active, numbers snap back to 0 so the next
+   activation re-runs the animation (mirrors the bar's scaleX behavior). */
+(function() {
+  var scenes = document.querySelectorAll('.problem-scene');
+  if (!scenes.length) return;
+
+  scenes.forEach(function(scene) {
+    scene.querySelectorAll('.stat-compare-number b').forEach(function(el) {
+      var target = el.textContent.trim();
+      el.dataset.target = target;
+      var hasPlus = target.indexOf('+') !== -1;
+      el.textContent = '0' + (hasPlus ? '+' : '');
+    });
+  });
+
+  function animateNumber(el, delay) {
+    var target = el.dataset.target;
+    if (!target) return;
+    var hasPlus = target.indexOf('+') !== -1;
+    var hasComma = target.indexOf(',') !== -1;
+    var num = parseInt(target.replace(/[^\d]/g, ''), 10);
+    if (isNaN(num)) return;
+    var duration = 1400;
+    var startTime = null;
+
+    if (el._rafId) cancelAnimationFrame(el._rafId);
+    if (el._timeoutId) clearTimeout(el._timeoutId);
+
+    function fmt(n) {
+      return (hasComma ? n.toLocaleString('en-US') : String(n)) + (hasPlus ? '+' : '');
+    }
+    function tick(now) {
+      if (startTime === null) startTime = now;
+      var elapsed = now - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = fmt(Math.floor(eased * num));
+      if (progress < 1) {
+        el._rafId = requestAnimationFrame(tick);
+      } else {
+        el.textContent = target;
+        el._rafId = null;
+      }
+    }
+
+    el._timeoutId = setTimeout(function() {
+      el._timeoutId = null;
+      el._rafId = requestAnimationFrame(tick);
+    }, delay);
+  }
+
+  function resetNumber(el) {
+    if (el._rafId) cancelAnimationFrame(el._rafId);
+    if (el._timeoutId) clearTimeout(el._timeoutId);
+    el._rafId = null;
+    el._timeoutId = null;
+    var target = el.dataset.target;
+    if (target) {
+      var hasPlus = target.indexOf('+') !== -1;
+      el.textContent = '0' + (hasPlus ? '+' : '');
+    }
+  }
+
+  function activate(scene) {
+    scene.querySelectorAll('.stat-compare-row').forEach(function(row) {
+      var num = row.querySelector('.stat-compare-number b');
+      if (!num) return;
+      var isPeak = row.classList.contains('stat-compare-row--peak');
+      animateNumber(num, isPeak ? 1400 : 800);
+    });
+  }
+  function deactivate(scene) {
+    scene.querySelectorAll('.stat-compare-number b').forEach(resetNumber);
+  }
+
+  var mo = new MutationObserver(function(records) {
+    records.forEach(function(rec) {
+      if (rec.type !== 'attributes' || rec.attributeName !== 'class') return;
+      var scene = rec.target;
+      if (scene.classList.contains('is-active')) activate(scene);
+      else deactivate(scene);
+    });
+  });
+  scenes.forEach(function(scene) {
+    mo.observe(scene, { attributes: true, attributeFilter: ['class'] });
+    if (scene.classList.contains('is-active')) activate(scene);
+  });
 })();
 
 </script>
