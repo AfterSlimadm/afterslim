@@ -942,7 +942,12 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 
 @media (max-width: 720px) {
   .comparison { padding: 16px 0 24px; }
-  .comparison-header { margin-bottom: 28px; }
+  /* Header gets its own breathing room — the container is pulled tight
+     for the edge-to-edge table, but the title + subtitle still need
+     comfortable side padding so they don't feel crammed. */
+  .comparison-header { margin: 0 auto 28px; padding: 0 18px; }
+  .comparison-title { font-size: 30px; line-height: 1.12; margin-bottom: 12px; }
+  .comparison-subtitle { font-size: 14.5px; line-height: 1.5; }
   /* Comparison table goes near-edge-to-edge on mobile.
      Pull the container's 24px gutter back to 8px so the
      table reads as a wide block, not a centered card. */
