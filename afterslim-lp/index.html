@@ -1449,23 +1449,15 @@ body.bundle-modal-open {
 .testimonials-carousel-wrapper {
   position: relative;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 100px, #000 calc(100% - 100px), transparent 100%);
-          mask-image: linear-gradient(90deg, transparent 0, #000 100px, #000 calc(100% - 100px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
 }
 .testimonials-carousel {
   display: flex;
   gap: 20px;
   width: max-content;
   padding: 10px 0;
-  animation: testimonialsLoop 80s linear infinite;
   will-change: transform;
-}
-@keyframes testimonialsLoop {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .testimonials-carousel { animation: none; }
 }
 .testimonial-card {
   flex: 0 0 320px;
@@ -1533,8 +1525,12 @@ body.bundle-modal-open {
 @media (max-width: 768px) {
   .testimonials-section { padding: 36px 0 48px; }
   .testimonials-title { margin-bottom: 32px; }
-  .testimonials-carousel { animation-duration: 60s; gap: 14px; }
+  .testimonials-carousel { gap: 14px; }
   .testimonial-card-image { flex-basis: 280px; min-height: 420px; }
+  .testimonials-carousel-wrapper {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 28px), transparent 100%);
+  }
 }
 
 /* ===== Reviews list (Ryze-style written reviews) ===== */
@@ -5226,6 +5222,84 @@ if ('IntersectionObserver' in window) {
     });
   }, { threshold: 0.5, rootMargin: '0px 0px -8% 0px' });
   checks.forEach(function(c) { io.observe(c); });
+})();
+
+/* ===== Testimonials marquee — JS-driven RAF loop.
+   CSS keyframes with `translate3d(-50%, 0, 0)` can fail to start on iOS
+   Safari when the carousel's max-content width is recalculated after
+   background-images load. Driving the transform from JS sidesteps that
+   timing race entirely. */
+(function() {
+  var carousel = document.getElementById('testimonialsCarousel');
+  if (!carousel) return;
+  var wrapper = carousel.parentNode;
+  if (!wrapper) return;
+
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) return;
+
+  var pxPerSecond = window.matchMedia('(max-width: 768px)').matches ? 22 : 32;
+  var offset = 0;
+  var lastTime = null;
+  var rafId = null;
+  var halfWidth = 0;
+
+  function measure() {
+    // Each card set is duplicated for a seamless loop, so the carousel's
+    // full scrollWidth is 2 * one-set-width. We loop back when offset
+    // reaches the one-set boundary.
+    halfWidth = carousel.scrollWidth / 2;
+  }
+  measure();
+  window.addEventListener('resize', measure);
+  // Re-measure once images have loaded — they affect card heights and any
+  // intrinsic sizing of the row.
+  window.addEventListener('load', measure);
+
+  function frame(now) {
+    if (lastTime === null) lastTime = now;
+    var dt = (now - lastTime) / 1000;
+    lastTime = now;
+    if (halfWidth > 0) {
+      offset += pxPerSecond * dt;
+      if (offset >= halfWidth) offset -= halfWidth;
+      carousel.style.transform = 'translate3d(' + (-offset) + 'px, 0, 0)';
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  // Pause when the section is off-screen (saves CPU + makes wake-up
+  // motion feel fresh when user scrolls back into it).
+  var running = false;
+  function start() {
+    if (running) return;
+    running = true;
+    lastTime = null;
+    rafId = requestAnimationFrame(frame);
+  }
+  function stop() {
+    if (!running) return;
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) start();
+        else stop();
+      });
+    }, { threshold: 0 });
+    io.observe(wrapper);
+  } else {
+    start();
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) stop();
+    else if (wrapper.getBoundingClientRect().top < window.innerHeight && wrapper.getBoundingClientRect().bottom > 0) start();
+  });
 })();
 
 /* ===== Mobile: Science section ingredient carousels (per group) =====
