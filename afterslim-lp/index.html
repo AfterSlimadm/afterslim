@@ -2598,9 +2598,9 @@ body.bundle-modal-open {
   transform: translateY(28px) scale(0.97);
   filter: blur(10px);
   transition:
-    opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1.5s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .problem-scene.is-active .problem-scene-content > *,
 .problem-scene.is-active .problem-scene-visual {
@@ -2621,13 +2621,13 @@ body.bundle-modal-open {
 /* Entry cascade — FORWARD order, top first. Long delays so the
    reveal arrives AFTER the timeline line has had time to start
    drawing itself (line at scaleX 0 → 1 over 2.4s + 0.2s delay). */
-.problem-scene.is-active .problem-scene-num    { transition-delay: 0.40s; }
-.problem-scene.is-active .problem-scene-visual { transition-delay: 0.50s; }
-.problem-scene.is-active .problem-scene-title  { transition-delay: 0.65s; }
-.problem-scene.is-active .problem-scene-why    { transition-delay: 0.80s; }
-.problem-scene.is-active .problem-scene-body   { transition-delay: 0.95s; }
-.problem-scene.is-active .problem-scene-stat   { transition-delay: 1.10s; }
-.problem-scene.is-active .stat-callout         { transition-delay: 1.10s; }
+.problem-scene.is-active .problem-scene-num    { transition-delay: 0.05s; }
+.problem-scene.is-active .problem-scene-visual { transition-delay: 0.15s; }
+.problem-scene.is-active .problem-scene-title  { transition-delay: 0.10s; }
+.problem-scene.is-active .problem-scene-why    { transition-delay: 0.20s; }
+.problem-scene.is-active .problem-scene-body   { transition-delay: 0.30s; }
+.problem-scene.is-active .problem-scene-stat   { transition-delay: 0.40s; }
+.problem-scene.is-active .stat-callout         { transition-delay: 0.40s; }
 
 .problem-scene-num {
   font-size: 14px;
