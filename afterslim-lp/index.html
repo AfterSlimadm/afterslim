@@ -3210,7 +3210,7 @@ body.bundle-modal-open {
   color: var(--ink);
 }
 @media (max-width: 900px) {
-  .newsletter { padding: 16px 0 16px; }
+  .newsletter { padding: 16px 0 56px; }
 }
 .newsletter-card {
   max-width: 620px;
@@ -3284,14 +3284,22 @@ body.bundle-modal-open {
 .newsletter-form button:hover { background: var(--orange-dark); }
 @media (max-width: 540px) {
   .newsletter-form { flex-direction: column; gap: 12px; }
-  .newsletter-form input, .newsletter-form button { height: 76px; font-size: 20px; }
+  /* flex: 1 from the base rule collapses the input's height in a
+     flex-column (flex-basis: 0% wins over `height`). Reset flex so the
+     explicit height takes effect. */
+  .newsletter-form input,
+  .newsletter-form button {
+    flex: 0 0 auto;
+    height: 72px;
+    font-size: 20px;
+  }
   .newsletter-form input { padding: 0 22px; }
 }
 
 /* ===== Footer (warm orange) ===== */
 .footer { background: #c2410c; color: #fff; padding: 64px 0 28px; }
 @media (max-width: 900px) {
-  .footer { padding: 28px 0 24px; }
+  .footer { padding: 48px 0 24px; }
 }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
 .footer-brand img { height: 34px; filter: brightness(0) invert(1); margin-bottom: 16px; }
