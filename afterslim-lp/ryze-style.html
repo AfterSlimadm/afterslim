@@ -1800,8 +1800,8 @@ body.bundle-modal-open {
 
 /* ===== Science Behind ===== */
 .science {
-  background: #1a0f08;
-  padding: 120px 0 96px;
+  background: var(--bg-2);
+  padding: 120px 0;
   overflow: hidden;
 }
 .science-header {
@@ -1832,7 +1832,7 @@ body.bundle-modal-open {
 .science-title {
   font-size: clamp(36px, 5vw, 56px);
   font-weight: 800;
-  color: #fff;
+  color: var(--ink);
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0 0 20px;
@@ -1845,28 +1845,28 @@ body.bundle-modal-open {
 }
 .science-subtitle {
   font-size: 19px;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--ink-2);
   line-height: 1.55;
   margin: 0;
 }
 
-/* AG1-style auto-scrolling ingredient loop */
+/* AG1-style auto-scrolling ingredient loop.
+   No hover pause — Allan reported the marquee felt static at 100%,
+   which was the cursor sitting on the loop and triggering :hover. */
 .science-loop {
   width: 100%;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
-          mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+  margin-bottom: 64px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 100px, #000 calc(100% - 100px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 100px, #000 calc(100% - 100px), transparent 100%);
 }
 .science-loop-track {
   display: flex;
   gap: 22px;
   width: max-content;
-  padding: 0 11px;
-  animation: scienceLoop 55s linear infinite;
+  padding: 8px 11px;
+  animation: scienceLoop 32s linear infinite;
   will-change: transform;
-}
-.science-loop:hover .science-loop-track {
-  animation-play-state: paused;
 }
 @keyframes scienceLoop {
   from { transform: translate3d(0, 0, 0); }
@@ -3744,6 +3744,63 @@ body.bundle-modal-open {
         <span class="ing-card-name">RESISTANT STARCH</span>
         <span class="ing-card-tag">Backup fiber</span>
       </article>
+    </div>
+  </div>
+
+  <!-- Detailed ingredient cards (restored under the loop so the science is still explained) -->
+  <div class="container">
+    <div class="science-group" data-reveal>
+      <div class="science-group-label">
+        <span>3 Keystone Strains</span>
+      </div>
+      <div class="science-group-grid">
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/akkermansia-muciniphila.png" alt="Akkermansia muciniphila"></div>
+          <span class="science-card-tag">Keystone strain</span>
+          <h3 class="science-card-title">Akkermansia muciniphila</h3>
+          <p class="science-card-body">The next-generation strain that maintains the gut lining and signals satiety to your brain. The same bacteria competitors charge $150/month for on its own.</p>
+          <p class="science-card-stat">Linked to lower BMI and better insulin sensitivity in 14+ peer-reviewed studies.</p>
+        </article>
+
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/clostridium-butyricum.png" alt="Clostridium butyricum"></div>
+          <span class="science-card-tag">Butyrate producer</span>
+          <h3 class="science-card-title">Clostridium butyricum</h3>
+          <p class="science-card-body">Produces butyrate, the short-chain fatty acid that fuels your colon cells, reduces inflammation, and keeps the gut barrier intact.</p>
+          <p class="science-card-stat">Butyrate provides up to 70% of the energy your colon cells need.</p>
+        </article>
+
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/bifidobacterium-infantis.png" alt="Bifidobacterium infantis"></div>
+          <span class="science-card-tag">Gut barrier defender</span>
+          <h3 class="science-card-title">Bifidobacterium infantis</h3>
+          <p class="science-card-body">Stabilizes the microbiome and tamps down low-grade inflammation in the gut lining. The same inflammation linked to bloating and brain fog.</p>
+          <p class="science-card-stat">One of the most clinically studied probiotics for GI comfort.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="science-group" data-reveal>
+      <div class="science-group-label">
+        <span>2 Prebiotics that feed them</span>
+      </div>
+      <div class="science-group-grid science-group-grid--two">
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/chicory-root-fiber.webp" alt="Chicory root inulin"></div>
+          <span class="science-card-tag">Microbiome fuel</span>
+          <h3 class="science-card-title">Chicory Root Inulin</h3>
+          <p class="science-card-body">A prebiotic fiber that feeds your beneficial bacteria, especially Akkermansia. Adding the strain without feeding it is like planting seeds in dry soil.</p>
+          <p class="science-card-stat">Shown to triple Akkermansia abundance in 8 weeks (Cani et al., 2017).</p>
+        </article>
+
+        <article class="science-card">
+          <div class="science-card-img"><img src="images/resistant-starch.webp" alt="Resistant starch"></div>
+          <span class="science-card-tag">Backup fiber</span>
+          <h3 class="science-card-title">Resistant Starch</h3>
+          <p class="science-card-body">Reaches the colon undigested, where it ferments into butyrate and gently supports satiety between doses.</p>
+          <p class="science-card-stat">Improves insulin sensitivity by up to 33% in published trials.</p>
+        </article>
+      </div>
     </div>
   </div>
 </section>
