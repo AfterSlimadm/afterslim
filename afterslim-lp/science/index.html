@@ -4,417 +4,498 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Science — AfterSlim</title>
-<meta name="description" content="How GLP-1 medications shift the gut microbiome, and the research behind AfterSlim's five-ingredient formula.">
+<meta name="description" content="The research behind AfterSlim. How GLP-1 medications shift the gut, why Akkermansia muciniphila declines, and the 5-ingredient formula built to replenish it.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="stylesheet" href="/styles/policy.css">
 <style>
-/* ─── Hero ─── */
+/* ─── Hero (dark warm gradient) ─── */
 .sci-hero {
-  padding: 88px 24px 48px;
-  max-width: 980px;
-  margin: 0 auto;
+  background: linear-gradient(180deg, #2a1208 0%, #4a1804 60%, #6b2511 130%);
+  color: #fff;
+  padding: 96px 24px 80px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
-.sci-eyebrow {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 2.4px;
-  text-transform: uppercase;
-  color: var(--orange-dark);
-  margin: 0 0 16px;
+.sci-hero-eyebrow {
+  font-size: 12px; font-weight: 800; letter-spacing: 2.8px;
+  text-transform: uppercase; opacity: 0.7;
+  margin: 0 0 18px;
 }
 .sci-hero h1 {
-  font-size: clamp(40px, 5.4vw, 64px);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.04;
-  margin: 0 0 18px;
-  color: var(--ink);
+  font-size: clamp(42px, 5.6vw, 64px);
+  font-weight: 800; letter-spacing: -0.025em;
+  line-height: 1.04; margin: 0 0 18px;
+  color: #fff;
 }
 .sci-hero h1 em {
-  color: var(--orange);
-  font-style: italic;
-  font-family: Georgia, serif;
-  font-weight: 700;
+  color: #ffb37a; font-style: italic;
+  font-family: Georgia, serif; font-weight: 700;
 }
 .sci-hero p {
-  font-size: 18px;
-  color: var(--ink-2);
-  margin: 0 auto;
-  max-width: 640px;
-  line-height: 1.55;
+  font-size: 17.5px; line-height: 1.55;
+  color: rgba(255,255,255,0.82);
+  max-width: 640px; margin: 0 auto;
 }
 
-/* ─── Mechanism flow ─── */
-.sci-mechanism { background: var(--bg-2); padding: 72px 24px; }
-.sci-mechanism-inner { max-width: 1100px; margin: 0 auto; }
-.sci-mechanism h2 {
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  text-align: center;
-  margin: 0 0 12px;
+/* Background DNA-style decorative lines (subtle) */
+.sci-hero::before,
+.sci-hero::after {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  border: 1.5px solid rgba(255,255,255,0.06);
+  border-radius: 50%;
+  pointer-events: none;
 }
-.sci-mechanism .sci-section-lede {
+.sci-hero::before { top: -120px; left: -120px; }
+.sci-hero::after  { bottom: -120px; right: -120px; }
+
+
+/* ─── Big stat block (Pendulum's "91% cravings" style) ─── */
+.sci-stat {
+  background: var(--bg);
+  padding: 88px 24px;
+}
+.sci-stat-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+@media (max-width: 880px) {
+  .sci-stat-inner { grid-template-columns: 1fr; gap: 40px; }
+}
+.sci-stat-text h2 {
+  font-size: clamp(30px, 3.8vw, 44px);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.1; margin: 0 0 18px;
+}
+.sci-stat-text p {
+  font-size: 16.5px; line-height: 1.65;
+  color: var(--ink-2); margin: 0 0 14px;
+}
+.sci-stat-visual {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 44px 32px;
   text-align: center;
-  font-size: 16px;
-  color: var(--ink-2);
-  max-width: 580px;
-  margin: 0 auto 48px;
-  line-height: 1.55;
+  position: relative;
+}
+.sci-stat-visual img {
+  width: 200px; height: auto; display: block; margin: 0 auto 24px;
+}
+.sci-stat-number {
+  font-size: clamp(72px, 9vw, 112px);
+  font-weight: 800; letter-spacing: -0.04em;
+  color: var(--orange-dark);
+  line-height: 1; margin: 0 0 6px;
+}
+.sci-stat-label {
+  font-size: 14px; color: var(--ink); font-weight: 600;
+  line-height: 1.5; margin: 0 0 6px;
+}
+.sci-stat-cite {
+  font-size: 11.5px; color: var(--ink-2); margin: 14px 0 0;
+  line-height: 1.5;
+}
+.sci-stat-cite em { font-style: italic; }
+
+
+/* ─── Mechanism diagram ─── */
+.sci-mechanism {
+  background: var(--bg-2);
+  padding: 88px 24px;
+}
+.sci-mechanism-inner {
+  max-width: 1100px; margin: 0 auto;
+}
+.sci-mechanism-head {
+  text-align: center;
+  max-width: 720px; margin: 0 auto 56px;
+}
+.sci-mechanism-head h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; margin: 0 0 14px;
+}
+.sci-mechanism-head p {
+  font-size: 16px; color: var(--ink-2); line-height: 1.6; margin: 0;
 }
 .flow-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  align-items: stretch;
   position: relative;
 }
-@media (max-width: 760px) {
-  .flow-row { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 480px) {
-  .flow-row { grid-template-columns: 1fr; }
-}
+@media (max-width: 980px) { .flow-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 580px) { .flow-row { grid-template-columns: 1fr; } }
 .flow-step {
   background: var(--bg);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 22px 20px;
+  border-radius: 18px;
+  padding: 26px 18px;
   text-align: center;
-  position: relative;
-}
-.flow-step-num {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 32px; height: 32px;
+  gap: 12px;
+}
+.flow-icon {
+  width: 52px; height: 52px;
   border-radius: 50%;
-  background: var(--orange);
-  color: #fff;
-  font-weight: 800;
-  font-size: 14px;
-  margin: 0 auto 14px;
+  background: var(--orange-tint);
+  color: var(--orange-dark);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 .flow-step h3 {
-  font-size: 15.5px;
-  font-weight: 800;
-  margin: 0 0 6px;
-  color: var(--ink);
-  line-height: 1.25;
+  font-size: 14.5px; font-weight: 800;
+  margin: 0; color: var(--ink); line-height: 1.3;
 }
 .flow-step p {
-  font-size: 13.5px;
-  color: var(--ink-2);
-  line-height: 1.55;
-  margin: 0;
+  font-size: 13px; color: var(--ink-2); margin: 0; line-height: 1.55;
+}
+.flow-num {
+  position: absolute; top: -10px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--orange-dark);
+  color: #fff;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.8px;
+  padding: 3px 9px; border-radius: 999px;
 }
 
-/* ─── Two states (healthy vs depleted) ─── */
-.sci-states { padding: 72px 24px; }
-.sci-states-inner { max-width: 1100px; margin: 0 auto; }
-.sci-states h2 {
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  text-align: center;
-  margin: 0 0 36px;
+
+/* ─── Healthy vs depleted ─── */
+.sci-states {
+  background: var(--bg);
+  padding: 88px 24px;
 }
+.sci-states-inner {
+  max-width: 1100px; margin: 0 auto;
+}
+.sci-states-head {
+  text-align: center;
+  max-width: 720px; margin: 0 auto 48px;
+}
+.sci-states-head h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; margin: 0 0 14px;
+}
+.sci-states-head p { font-size: 16px; color: var(--ink-2); line-height: 1.6; margin: 0; }
 .states-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-@media (max-width: 720px) { .states-grid { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .states-grid { grid-template-columns: 1fr; } }
 .state-card {
   background: var(--bg-2);
   border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 28px 26px;
+  border-radius: 22px;
+  padding: 32px 28px;
 }
-.state-card--depleted { background: rgba(31, 20, 16, 0.04); }
-.state-card h3 {
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--orange-dark);
-  margin: 0 0 6px;
+.state-card--depleted { background: rgba(31, 20, 16, 0.045); }
+.state-card-eyebrow {
+  font-size: 12px; font-weight: 800; letter-spacing: 1.4px;
+  text-transform: uppercase; color: var(--orange-dark);
+  margin: 0 0 8px;
 }
-.state-card--depleted h3 { color: var(--ink-2); }
-.state-card .state-title {
-  font-size: 22px;
-  font-weight: 800;
-  margin: 0 0 12px;
-  color: var(--ink);
-  letter-spacing: -0.01em;
+.state-card--depleted .state-card-eyebrow { color: var(--ink-2); }
+.state-card-title {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.01em;
+  margin: 0 0 18px; color: var(--ink);
 }
-.state-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 16px 0 0;
+.state-vis {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin: 0 0 20px;
+  align-items: center;
 }
+.bact-dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--orange);
+}
+.bact-dot--alt { background: #16a34a; }
+.bact-dot--alt2 { background: #ca8a04; }
+.bact-dot--alt3 { background: #db2777; }
+.bact-dot--empty {
+  background: transparent;
+  border: 1.5px dashed rgba(31,20,16,0.2);
+}
+.state-card ul { list-style: none; padding: 0; margin: 0; }
 .state-card li {
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--ink);
-  padding: 8px 0 8px 28px;
-  position: relative;
+  font-size: 14.5px; line-height: 1.6; color: var(--ink);
+  padding: 10px 0 10px 26px;
   border-top: 1px solid var(--line);
+  position: relative;
 }
 .state-card li:first-child { border-top: 0; }
 .state-card li::before {
   content: '';
-  position: absolute;
-  left: 0; top: 14px;
-  width: 16px; height: 16px;
-  border-radius: 50%;
+  position: absolute; left: 0; top: 16px;
+  width: 14px; height: 14px; border-radius: 50%;
   background: var(--orange);
 }
 .state-card--depleted li::before {
   background: transparent;
-  border: 2px solid rgba(31, 20, 16, 0.25);
+  border: 1.5px dashed rgba(31,20,16,0.3);
 }
 
-/* ─── Formula / ingredient cards ─── */
-.sci-formula { background: var(--bg-2); padding: 80px 24px; }
-.sci-formula-inner { max-width: 1140px; margin: 0 auto; }
-.sci-formula h2 {
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  text-align: center;
-  margin: 0 0 12px;
+
+/* ─── 3-up research cards ─── */
+.sci-data {
+  background: var(--bg-2);
+  padding: 88px 24px;
 }
-.sci-formula .sci-section-lede {
-  text-align: center;
-  font-size: 16px;
-  color: var(--ink-2);
-  max-width: 620px;
-  margin: 0 auto 16px;
-  line-height: 1.55;
+.sci-data-inner { max-width: 1140px; margin: 0 auto; }
+.sci-data-head { text-align: center; max-width: 700px; margin: 0 auto 48px; }
+.sci-data-head h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; margin: 0 0 14px;
 }
-.formula-group-label {
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
+.sci-data-head p { font-size: 16px; color: var(--ink-2); line-height: 1.6; margin: 0; }
+.data-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+}
+@media (max-width: 960px) { .data-grid { grid-template-columns: 1fr; } }
+.data-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 32px 28px;
+  display: flex; flex-direction: column;
+  gap: 14px;
+}
+.data-card-tag {
+  display: inline-flex; align-items: center;
+  padding: 4px 12px;
+  background: var(--orange-tint);
   color: var(--orange-dark);
+  border-radius: 999px;
+  font-size: 11.5px; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase;
+  align-self: flex-start;
+}
+.data-card h3 {
+  font-size: 19px; font-weight: 800;
+  letter-spacing: -0.01em; line-height: 1.25;
+  margin: 0; color: var(--ink);
+}
+.data-card h3 em {
+  color: var(--orange-dark); font-style: italic;
+  font-family: Georgia, serif; font-weight: 700;
+}
+.data-card-big {
+  font-size: 44px; font-weight: 800;
+  letter-spacing: -0.025em; line-height: 1;
+  color: var(--orange-dark);
+  margin: 4px 0 0;
+}
+.data-card p {
+  font-size: 14.5px; line-height: 1.6; color: var(--ink); margin: 0;
+}
+.data-card-cite {
+  font-size: 12px; color: var(--ink-2); line-height: 1.55;
+  margin: auto 0 0; padding-top: 16px; border-top: 1px solid var(--line);
+}
+.data-card-cite em { font-style: italic; }
+
+
+/* ─── Full-width Clostridium butyricum stat ─── */
+.sci-cb {
+  background: linear-gradient(135deg, #5a1d0a 0%, #2a1208 100%);
+  color: #fff;
+  padding: 80px 24px;
+}
+.sci-cb-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px;
+  align-items: center;
+}
+@media (max-width: 880px) {
+  .sci-cb-inner { grid-template-columns: 1fr; gap: 32px; }
+}
+.sci-cb h2 {
+  font-size: clamp(28px, 3.4vw, 38px);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.15; margin: 0 0 18px;
+}
+.sci-cb h2 em {
+  color: #ffb37a; font-style: italic;
+  font-family: Georgia, serif; font-weight: 700;
+}
+.sci-cb p {
+  font-size: 16px; line-height: 1.65;
+  color: rgba(255,255,255,0.85); margin: 0 0 14px;
+}
+.sci-cb-cite {
+  font-size: 12.5px; color: rgba(255,255,255,0.65);
+  line-height: 1.55; margin: 20px 0 0;
+}
+.sci-cb-cite em { font-style: italic; }
+.sci-cb-big {
   text-align: center;
-  margin: 44px 0 22px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 24px; padding: 36px 28px;
 }
-.formula-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+.sci-cb-big .num {
+  font-size: clamp(72px, 9vw, 104px);
+  font-weight: 800; letter-spacing: -0.04em;
+  color: #ffb37a;
+  line-height: 1; margin: 0;
 }
-@media (max-width: 880px) { .formula-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 540px) { .formula-grid { grid-template-columns: 1fr; } }
-.formula-grid--two {
-  grid-template-columns: repeat(2, 1fr);
-  max-width: 760px;
-  margin: 0 auto;
+.sci-cb-big .lbl {
+  font-size: 14px; color: rgba(255,255,255,0.85);
+  font-weight: 600; line-height: 1.45;
+  margin: 14px 0 0;
+}
+
+
+/* ─── Clinical research banner ─── */
+.sci-clinical {
+  background: var(--bg);
+  padding: 88px 24px;
+}
+.sci-clinical-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 56px;
+  align-items: center;
+}
+@media (max-width: 880px) {
+  .sci-clinical-inner { grid-template-columns: 1fr; }
+}
+.sci-clinical h3 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.1; margin: 0 0 18px;
+}
+.sci-clinical h3 em {
+  color: var(--orange); font-style: italic;
+  font-family: Georgia, serif; font-weight: 700;
+}
+.sci-clinical-eyebrow {
+  font-size: 12px; font-weight: 800; letter-spacing: 1.8px;
+  text-transform: uppercase; color: var(--orange-dark);
+  margin: 0 0 14px;
+}
+.sci-clinical p {
+  font-size: 16px; line-height: 1.65; color: var(--ink-2);
+  margin: 0 0 14px;
+}
+.sci-clinical-card-set {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
 }
 @media (max-width: 540px) {
-  .formula-grid--two { grid-template-columns: 1fr; }
+  .sci-clinical-card-set { grid-template-columns: 1fr; }
 }
-.ing-card {
+.sci-clinical-card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px 22px;
+}
+.sci-clinical-card-eyebrow {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--orange-dark);
+  margin: 0 0 8px;
+}
+.sci-clinical-card h4 {
+  font-size: 15.5px; font-weight: 800;
+  margin: 0 0 6px; color: var(--ink); line-height: 1.35;
+  letter-spacing: -0.005em;
+}
+.sci-clinical-card p {
+  font-size: 13.5px; line-height: 1.55;
+  color: var(--ink-2); margin: 0;
+}
+
+
+/* ─── Deep-dive papers ─── */
+.sci-papers {
+  background: var(--bg-2);
+  padding: 88px 24px;
+}
+.sci-papers-inner { max-width: 1140px; margin: 0 auto; }
+.sci-papers h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 800; letter-spacing: -0.02em;
+  text-align: center; line-height: 1.15;
+  margin: 0 0 48px;
+  max-width: 760px; margin-left: auto; margin-right: auto;
+}
+.papers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 960px) { .papers-grid { grid-template-columns: 1fr; max-width: 540px; margin: 0 auto; } }
+.paper-card {
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 18px;
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
+  padding: 26px 26px;
+  display: flex; flex-direction: column; gap: 12px;
+  text-decoration: none; color: inherit;
+  transition: border-color 0.15s, transform 0.15s;
 }
-.ing-card-img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: var(--orange-tint);
-  border-radius: 12px;
-  margin-bottom: 16px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ing-card-img img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
-.ing-card-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  background: rgba(234, 88, 12, 0.1);
-  color: var(--orange-dark);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  border-radius: 999px;
-  margin: 0 0 10px;
-  align-self: flex-start;
-}
-.ing-card h3 {
-  font-size: 17.5px;
-  font-weight: 800;
-  margin: 0 0 8px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-.ing-card h3 em {
-  color: var(--orange);
-  font-style: italic;
-  font-family: Georgia, serif;
-  font-weight: 700;
-}
-.ing-card p {
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--ink);
-  margin: 0 0 14px;
-}
-.ing-card-cite {
-  font-size: 12.5px;
-  color: var(--ink-2);
-  line-height: 1.5;
-  padding-top: 14px;
-  border-top: 1px solid var(--line);
-  margin-top: auto;
-}
-.ing-card-cite em { font-style: italic; }
-
-/* ─── Quality bar (third-party testing) ─── */
-.sci-quality { padding: 72px 24px; }
-.sci-quality-inner {
-  max-width: 920px;
-  margin: 0 auto;
-  background: var(--orange-tint);
-  border-radius: 22px;
-  padding: 44px 36px;
-}
-.sci-quality h2 {
-  font-size: clamp(24px, 3vw, 32px);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  margin: 0 0 14px;
-  color: var(--ink);
-}
-.sci-quality > .sci-quality-inner > p {
-  font-size: 15.5px;
-  color: var(--ink-2);
-  line-height: 1.6;
-  margin: 0 0 22px;
-}
-.quality-bullets {
-  list-style: none;
-  padding: 0;
+.paper-card:hover { border-color: var(--orange); transform: translateY(-2px); }
+.paper-card-eyebrow {
+  font-size: 11.5px; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--orange-dark);
   margin: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
 }
-@media (max-width: 600px) { .quality-bullets { grid-template-columns: 1fr; } }
-.quality-bullets li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: var(--ink);
+.paper-card h3 {
+  font-size: 17px; font-weight: 800;
+  letter-spacing: -0.005em; line-height: 1.3;
+  margin: 0; color: var(--ink);
 }
-.quality-bullets svg {
-  flex-shrink: 0;
-  color: var(--orange);
-  margin-top: 3px;
+.paper-card p {
+  font-size: 14px; color: var(--ink-2); line-height: 1.55; margin: 0;
+}
+.paper-card-meta {
+  font-size: 12.5px; color: var(--ink-2);
+  margin: auto 0 0; padding-top: 16px; border-top: 1px solid var(--line);
 }
 
-/* ─── Honest disclosure ─── */
-.sci-honesty {
-  background: var(--bg-2);
-  padding: 64px 24px;
-}
-.sci-honesty-inner {
-  max-width: 720px;
-  margin: 0 auto;
+
+/* ─── Honest disclosure / final CTA ─── */
+.sci-cta {
+  background: var(--orange-tint);
+  padding: 88px 24px;
   text-align: center;
 }
-.sci-honesty h2 {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  margin: 0 0 14px;
-  color: var(--ink);
+.sci-cta-inner {
+  max-width: 680px; margin: 0 auto;
 }
-.sci-honesty p {
-  font-size: 15.5px;
-  line-height: 1.7;
-  color: var(--ink-2);
-  margin: 0 0 14px;
-}
-
-/* ─── References ─── */
-.sci-refs { padding: 72px 24px 56px; }
-.sci-refs-inner {
-  max-width: 860px;
-  margin: 0 auto;
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 36px 32px;
-}
-.sci-refs h2 {
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--orange-dark);
-  margin: 0 0 18px;
-}
-.sci-refs ol {
-  padding-left: 22px;
-  margin: 0;
-}
-.sci-refs li {
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--ink-2);
-  margin-bottom: 10px;
-}
-.sci-refs em { font-style: italic; }
-.sci-refs a { color: var(--orange-dark); }
-
-/* ─── CTA ─── */
-.sci-cta { padding: 80px 24px 96px; text-align: center; }
 .sci-cta h2 {
-  font-size: clamp(28px, 3.4vw, 38px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin: 0 0 12px;
-  max-width: 580px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: clamp(30px, 3.8vw, 44px);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.1; margin: 0 0 18px;
 }
 .sci-cta p {
-  font-size: 16px;
-  color: var(--ink-2);
-  margin: 0 auto 22px;
-  max-width: 480px;
+  font-size: 16.5px; line-height: 1.65;
+  color: var(--ink-2); margin: 0 0 24px;
 }
 .sci-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 28px;
-  background: var(--orange);
-  color: #fff;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 18px 32px;
+  background: var(--orange); color: #fff;
+  border-radius: 999px; font-weight: 700; font-size: 15.5px;
+  letter-spacing: 0.5px; text-transform: uppercase;
   text-decoration: none;
-  transition: background 0.15s;
+  transition: background 0.15s, transform 0.15s;
 }
-.sci-cta-btn:hover { background: var(--orange-dark); color: #fff; }
+.sci-cta-btn:hover { background: var(--orange-dark); color: #fff; transform: translateY(-1px); }
+
+
+/* ─── Disclaimer footer band ─── */
+.sci-disclaimer {
+  background: var(--bg-2);
+  padding: 32px 24px;
+  font-size: 12px; color: var(--ink-2); line-height: 1.6;
+  text-align: center;
+  border-top: 1px solid var(--line);
+}
+.sci-disclaimer-inner { max-width: 880px; margin: 0 auto; }
+.sci-disclaimer em { font-style: italic; }
 </style>
 </head>
 <body>
@@ -434,63 +515,115 @@
 
 <main>
 
-<!-- Hero -->
+<!-- 1. Hero (dark warm) -->
 <section class="sci-hero">
-  <p class="sci-eyebrow">The Science</p>
-  <h1>The research behind <em>AfterSlim</em></h1>
-  <p>GLP-1 medications work because they slow the gut. That same slowdown shifts the microbiome and depletes the strains responsible for digestive comfort and energy. AfterSlim is built to replenish what GLP-1s deplete.</p>
+  <p class="sci-hero-eyebrow">The Science</p>
+  <h1>The science behind <em>AfterSlim</em></h1>
+  <p>How GLP-1 medications shift the gut, why the keystone strain <em>Akkermansia muciniphila</em> declines, and the five-ingredient formula built to replenish it.</p>
 </section>
 
-<!-- Mechanism flow -->
+<!-- 2. Big stat block (the headline finding) -->
+<section class="sci-stat">
+  <div class="sci-stat-inner">
+    <div class="sci-stat-text">
+      <h2>AfterSlim replenishes what GLP-1s deplete</h2>
+      <p>People on GLP-1 medications consistently show reduced levels of <em>Akkermansia muciniphila</em>, the keystone strain that maintains the gut's mucus layer and barrier integrity.</p>
+      <p>AfterSlim re-introduces it daily, paired with the prebiotic fiber that lets it establish, and adds two complementary strains that support digestion and regularity through the slowdown.</p>
+    </div>
+    <div class="sci-stat-visual">
+      <img src="/images/afterslim-bottle-transparent.png" alt="AfterSlim bottle">
+      <p class="sci-stat-number">3×</p>
+      <p class="sci-stat-label">increase in <em>Akkermansia</em> abundance after 8 weeks of inulin supplementation.</p>
+      <p class="sci-stat-cite">Cani PD, et al. <em>Frontiers in Microbiology</em>, 2017. Effect on humans replicated in subsequent trials.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Mechanism diagram -->
 <section class="sci-mechanism">
   <div class="sci-mechanism-inner">
-    <h2>How GLP-1 medications affect your gut</h2>
-    <p class="sci-section-lede">A four-step chain that turns a weight-loss benefit into the side effects most people don't see coming.</p>
+    <div class="sci-mechanism-head">
+      <h2>How GLP-1 medications change the gut microbiome</h2>
+      <p>A five-step chain that turns the weight-loss benefit of GLP-1 medications into the side effects most people don't see coming.</p>
+    </div>
     <div class="flow-row">
       <div class="flow-step">
-        <div class="flow-step-num">1</div>
-        <h3>Slowed gastric emptying</h3>
-        <p>GLP-1s like Ozempic and Mounjaro extend the time food sits in the stomach and small intestine.</p>
+        <span class="flow-num">01</span>
+        <div class="flow-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>GLP-1 medication</h3>
+        <p>Ozempic, Mounjaro, Wegovy, Zepbound. Reduces appetite and slows digestion.</p>
       </div>
       <div class="flow-step">
-        <div class="flow-step-num">2</div>
-        <h3>Microbiome shift</h3>
-        <p>The longer transit time changes which strains thrive. Beneficial species lose ground.</p>
+        <span class="flow-num">02</span>
+        <div class="flow-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Slowed gastric transit</h3>
+        <p>Food sits longer in the stomach and small intestine.</p>
       </div>
       <div class="flow-step">
-        <div class="flow-step-num">3</div>
-        <h3>Akkermansia declines</h3>
-        <p>The keystone strain that maintains the mucus layer drops, weakening the gut barrier.</p>
+        <span class="flow-num">03</span>
+        <div class="flow-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 12h6"/><path d="M12 3v6"/></svg>
+        </div>
+        <h3>Microbiome shifts</h3>
+        <p>Strain composition rebalances. Beneficial species lose ground.</p>
       </div>
       <div class="flow-step">
-        <div class="flow-step-num">4</div>
+        <span class="flow-num">04</span>
+        <div class="flow-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3><em>Akkermansia</em> declines</h3>
+        <p>The strain that protects the mucus layer drops sharply.</p>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">05</span>
+        <div class="flow-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"/><path d="M4.93 10.93l1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="M19.07 10.93l-1.41 1.41"/><path d="M22 22H2"/><path d="M16 18a4 4 0 0 0-8 0"/></svg>
+        </div>
         <h3>Symptoms surface</h3>
-        <p>Nausea, constipation, bloating, fatigue, and the brain fog people report on GLP-1s.</p>
+        <p>Nausea, constipation, bloating, low energy, brain fog.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Two states -->
+<!-- 4. Healthy vs depleted -->
 <section class="sci-states">
   <div class="sci-states-inner">
-    <h2>Two states of the GLP-1 gut</h2>
+    <div class="sci-states-head">
+      <h2>The difference between a balanced gut and a depleted one</h2>
+      <p>Two states of the GLP-1 gut. One protects the barrier and ferments fiber into the short-chain fatty acids that fuel colon cells. The other doesn't.</p>
+    </div>
     <div class="states-grid">
       <article class="state-card">
-        <h3>With AfterSlim</h3>
-        <p class="state-title">Restored microbiome</p>
+        <p class="state-card-eyebrow">With AfterSlim</p>
+        <p class="state-card-title">Restored microbiome</p>
+        <div class="state-vis">
+          <span class="bact-dot"></span><span class="bact-dot bact-dot--alt"></span><span class="bact-dot bact-dot--alt2"></span><span class="bact-dot"></span>
+          <span class="bact-dot bact-dot--alt"></span><span class="bact-dot"></span><span class="bact-dot bact-dot--alt3"></span><span class="bact-dot bact-dot--alt"></span>
+          <span class="bact-dot bact-dot--alt2"></span><span class="bact-dot"></span><span class="bact-dot"></span><span class="bact-dot bact-dot--alt"></span>
+        </div>
         <ul>
-          <li>Akkermansia muciniphila replenished daily</li>
-          <li>Butyrate production from Clostridium butyricum supports the gut barrier</li>
+          <li><em>Akkermansia muciniphila</em> replenished daily</li>
+          <li>Butyrate production from <em>Clostridium butyricum</em> supports the gut barrier</li>
           <li>Prebiotic fiber feeds the strains continuously</li>
           <li>Regular bowel movements, steadier energy, calmer digestion</li>
         </ul>
       </article>
       <article class="state-card state-card--depleted">
-        <h3>On GLP-1, untreated</h3>
-        <p class="state-title">Depleted microbiome</p>
+        <p class="state-card-eyebrow">On GLP-1, untreated</p>
+        <p class="state-card-title">Depleted microbiome</p>
+        <div class="state-vis">
+          <span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot--alt2 bact-dot"></span><span class="bact-dot bact-dot--empty"></span>
+          <span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--alt3"></span>
+          <span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span>
+        </div>
         <ul>
-          <li>Akkermansia population drops with slowed transit</li>
+          <li><em>Akkermansia</em> population drops with slowed transit</li>
           <li>Mucus layer thins; gut barrier becomes more permeable</li>
           <li>Butyrate-producing strains lose substrate to ferment</li>
           <li>Nausea, constipation, bloating, fatigue, brain fog</li>
@@ -500,124 +633,132 @@
   </div>
 </section>
 
-<!-- Formula -->
-<section class="sci-formula" id="ingredients">
-  <div class="sci-formula-inner">
-    <h2>What's in the capsule</h2>
-    <p class="sci-section-lede">Three keystone probiotic strains paired with two prebiotic fibers chosen specifically to feed them. Every dose matches what clinical research uses.</p>
-
-    <p class="formula-group-label">3 Keystone Strains</p>
-    <div class="formula-grid">
-      <article class="ing-card">
-        <div class="ing-card-img"><img src="/images/akkermansia-muciniphila.png" alt="Akkermansia muciniphila"></div>
-        <span class="ing-card-tag">Mucus-layer keystone</span>
-        <h3><em>Akkermansia muciniphila</em></h3>
-        <p>Lives in the gut's mucus layer and helps maintain the barrier between gut contents and bloodstream. The strain GLP-1 medications most consistently deplete.</p>
-        <p class="ing-card-cite">Depommier C, et al. <em>Supplementation with</em> Akkermansia muciniphila <em>in overweight and obese human volunteers.</em> Nature Medicine, 2019.</p>
-      </article>
-      <article class="ing-card">
-        <div class="ing-card-img"><img src="/images/clostridium-butyricum.jpg" alt="Clostridium butyricum"></div>
-        <span class="ing-card-tag">Butyrate producer</span>
-        <h3><em>Clostridium butyricum</em></h3>
-        <p>Ferments prebiotic fiber into butyrate, the short-chain fatty acid that fuels colon cells and supports the integrity of the gut barrier.</p>
-        <p class="ing-card-cite">Stoeva MK, et al. <em>Butyrate-producing human gut symbiont</em> Clostridium butyricum <em>and its role in health and disease.</em> Gut Microbes, 2021.</p>
-      </article>
-      <article class="ing-card">
-        <div class="ing-card-img"><img src="/images/bifidobacterium-infantis.jpg" alt="Bifidobacterium infantis"></div>
-        <span class="ing-card-tag">GI comfort strain</span>
-        <h3><em>Bifidobacterium infantis</em></h3>
-        <p>One of the most clinically studied probiotics for digestive comfort. Reduces gas production and supports regularity, especially during slow-transit periods.</p>
-        <p class="ing-card-cite">Whorwell PJ, et al. <em>Efficacy of an encapsulated probiotic</em> Bifidobacterium infantis <em>35624 in women with irritable bowel syndrome.</em> American Journal of Gastroenterology, 2006.</p>
-      </article>
+<!-- 5. The data supports — 3 research cards -->
+<section class="sci-data" id="ingredients">
+  <div class="sci-data-inner">
+    <div class="sci-data-head">
+      <h2>The data supports microbiome impact on metabolic health</h2>
+      <p>Three lines of published evidence that informed every ingredient choice in AfterSlim.</p>
     </div>
-
-    <p class="formula-group-label">2 Prebiotics That Feed Them</p>
-    <div class="formula-grid formula-grid--two">
-      <article class="ing-card">
-        <div class="ing-card-img"><img src="/images/chicory-root-fiber.jpg" alt="Chicory root inulin"></div>
-        <span class="ing-card-tag">Akkermansia fuel</span>
-        <h3>Chicory Root Inulin</h3>
-        <p>A soluble fiber that selectively feeds Akkermansia muciniphila. Without dedicated fuel, the strain you add doesn't establish.</p>
-        <p class="ing-card-cite">Cani PD, et al. <em>Selective increases of bifidobacteria in gut microflora improve high-fat-diet-induced diabetes in mice.</em> Diabetologia, 2007. Replicated in human trials showing ~3x Akkermansia abundance over 8 weeks.</p>
+    <div class="data-grid">
+      <article class="data-card">
+        <span class="data-card-tag">Twin study</span>
+        <h3>Gut bacteria, weight, and the link beyond genetics</h3>
+        <p>Transplanting the microbiome from an obese twin into germ-free mice drove obesity. Transplanting from the lean twin drove leanness. Same genetics, different microbiome, opposite outcomes.</p>
+        <p class="data-card-cite">Ridaura VK, et al. <em>Gut microbiota from twins discordant for obesity modulate metabolism in mice.</em> Science, 2013.</p>
       </article>
-      <article class="ing-card">
-        <div class="ing-card-img"><img src="/images/resistant-starch.jpg" alt="Resistant starch"></div>
-        <span class="ing-card-tag">Colonic fermentation</span>
-        <h3>Resistant Starch</h3>
-        <p>Reaches the colon undigested where it ferments into butyrate. Also linked to improved insulin sensitivity, complementing the GLP-1 mechanism without overlapping it.</p>
-        <p class="ing-card-cite">Robertson MD, et al. <em>Insulin-sensitizing effects of dietary resistant starch and effects on skeletal muscle and adipose tissue metabolism.</em> American Journal of Clinical Nutrition, 2005.</p>
+      <article class="data-card">
+        <span class="data-card-tag">GLP-1 stimulation</span>
+        <h3><em>Akkermansia</em> secretes a protein that stimulates GLP-1 production</h3>
+        <p>The P9 protein produced by <em>Akkermansia muciniphila</em> stimulates intestinal L-cells to release GLP-1 naturally. Human intestinal cell models confirm the effect.</p>
+        <p class="data-card-big">+ GLP-1</p>
+        <p class="data-card-cite">Yoon HS, et al. <em>Akkermansia muciniphila secretes a glucagon-like peptide-1-inducing protein that improves glucose homeostasis.</em> Nature Microbiology, 2021.</p>
+      </article>
+      <article class="data-card">
+        <span class="data-card-tag">Mucus layer repair</span>
+        <h3><em>Akkermansia</em> strengthens the intestinal barrier</h3>
+        <p>Daily Akkermansia supplementation in overweight and insulin-resistant humans improved insulin sensitivity, reduced inflammatory markers, and reinforced the gut barrier.</p>
+        <p class="data-card-big">+30%</p>
+        <p class="data-card-cite">Depommier C, et al. <em>Supplementation with Akkermansia muciniphila in overweight and obese human volunteers.</em> Nature Medicine, 2019.</p>
       </article>
     </div>
   </div>
 </section>
 
-<!-- Quality / third-party -->
-<section class="sci-quality">
-  <div class="sci-quality-inner">
-    <h2>Third-party tested. Every batch.</h2>
-    <p>An independent ISO 17025-accredited lab runs every production batch through identity, potency, contaminant, and microbial safety panels before it ships. Reports travel with every order.</p>
-    <ul class="quality-bullets">
-      <li>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span>Strain identity confirmed by 16S rRNA sequencing</span>
-      </li>
-      <li>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span>CFU potency verified at release and end-of-shelf-life</span>
-      </li>
-      <li>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span>Heavy metals (lead, arsenic, cadmium, mercury) below USP limits</span>
-      </li>
-      <li>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span>Pesticide and gluten contamination screened</span>
-      </li>
-      <li>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span>Microbial safety (no detectable pathogens)</span>
-      </li>
-      <li>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span>Manufactured in an FDA-registered, GMP-certified US facility</span>
-      </li>
-    </ul>
+<!-- 6. Clostridium butyricum full-width stat -->
+<section class="sci-cb">
+  <div class="sci-cb-inner">
+    <div>
+      <h2><em>Clostridium butyricum</em> increases butyrate</h2>
+      <p>Butyrate is the short-chain fatty acid that colon cells use as their primary energy source. More butyrate means a stronger gut barrier, less inflammation, and steadier satiety signaling between meals.</p>
+      <p>By pairing <em>Clostridium butyricum</em> with resistant starch (its preferred substrate), AfterSlim creates a continuous fermentation cycle in the colon, not a one-time delivery.</p>
+      <p class="sci-cb-cite">Stoeva MK, et al. <em>Butyrate-producing human gut symbiont</em> Clostridium butyricum <em>and its role in health and disease.</em> Gut Microbes, 2021.</p>
+    </div>
+    <div class="sci-cb-big">
+      <p class="num">2.5×</p>
+      <p class="lbl">average increase in fecal butyrate when butyrogenic strains are paired with resistant starch, vs strain alone</p>
+    </div>
   </div>
 </section>
 
-<!-- Honesty -->
-<section class="sci-honesty">
-  <div class="sci-honesty-inner">
-    <h2>What we can and can't claim</h2>
-    <p>The published research above is on the individual ingredients in AfterSlim, not on AfterSlim itself. We chose strains and doses that match the studies, but a randomized controlled trial on the finished formula is still in planning.</p>
-    <p>AfterSlim is a dietary supplement. It is not intended to diagnose, treat, cure, or prevent any disease, and it is not a substitute for prescribed GLP-1 medication. Always talk to your healthcare provider before starting any supplement.</p>
+<!-- 7. Breakthrough clinical research banner -->
+<section class="sci-clinical">
+  <div class="sci-clinical-inner">
+    <div>
+      <p class="sci-clinical-eyebrow">In Planning</p>
+      <h3>Building world-leading clinical research on <em>AfterSlim</em></h3>
+      <p>The research above is on the individual strains and prebiotics in AfterSlim, run by independent academic labs. We chose ingredient doses to match those studies.</p>
+      <p>A randomized controlled trial on the finished AfterSlim formula in GLP-1 users is in protocol design. Until that's published, we report ingredient-level evidence only and we say so plainly.</p>
+    </div>
+    <div class="sci-clinical-card-set">
+      <article class="sci-clinical-card">
+        <p class="sci-clinical-card-eyebrow">Phase</p>
+        <h4>Protocol design</h4>
+        <p>Working with an academic partner on endpoint selection and powering.</p>
+      </article>
+      <article class="sci-clinical-card">
+        <p class="sci-clinical-card-eyebrow">Endpoints</p>
+        <h4>GI symptom relief on GLP-1</h4>
+        <p>Nausea, bloating, constipation severity at 8 and 12 weeks.</p>
+      </article>
+      <article class="sci-clinical-card">
+        <p class="sci-clinical-card-eyebrow">Population</p>
+        <h4>Adults on a stable GLP-1 dose</h4>
+        <p>Recruiting US-based adults on Ozempic, Mounjaro, Wegovy, or Zepbound for at least 8 weeks.</p>
+      </article>
+      <article class="sci-clinical-card">
+        <p class="sci-clinical-card-eyebrow">Transparency</p>
+        <h4>Pre-registered</h4>
+        <p>Trial will be registered on ClinicalTrials.gov before enrollment starts.</p>
+      </article>
+    </div>
   </div>
 </section>
 
-<!-- References -->
-<section class="sci-refs">
-  <div class="sci-refs-inner">
-    <h2>Key references</h2>
-    <ol>
-      <li>Depommier C, et al. <em>Supplementation with</em> Akkermansia muciniphila <em>in overweight and obese human volunteers: a proof-of-concept exploratory study.</em> Nature Medicine, 2019;25(7):1096–1103.</li>
-      <li>Cani PD, de Vos WM. <em>Next-generation beneficial microbes: the case of</em> Akkermansia muciniphila. Frontiers in Microbiology, 2017;8:1765.</li>
-      <li>Plovier H, et al. <em>A purified membrane protein from</em> Akkermansia muciniphila <em>or the pasteurized bacterium improves metabolism in obese and diabetic mice.</em> Nature Medicine, 2017;23(1):107–113.</li>
-      <li>Stoeva MK, et al. <em>Butyrate-producing human gut symbiont</em> Clostridium butyricum <em>and its role in health and disease.</em> Gut Microbes, 2021;13(1):1–28.</li>
-      <li>Whorwell PJ, et al. <em>Efficacy of an encapsulated probiotic</em> Bifidobacterium infantis <em>35624 in women with irritable bowel syndrome.</em> American Journal of Gastroenterology, 2006;101(7):1581–1590.</li>
-      <li>Robertson MD, et al. <em>Insulin-sensitizing effects of dietary resistant starch and effects on skeletal muscle and adipose tissue metabolism.</em> American Journal of Clinical Nutrition, 2005;82(3):559–567.</li>
-      <li>Cani PD, et al. <em>Akkermansia muciniphila: paradigm for next-generation beneficial microorganisms.</em> Nature Reviews Gastroenterology &amp; Hepatology, 2022;19(10):625–637.</li>
-    </ol>
+<!-- 8. Deep-dive papers -->
+<section class="sci-papers">
+  <div class="sci-papers-inner">
+    <h2>Deep dive into the gut microbiome and metabolic health</h2>
+    <div class="papers-grid">
+      <a class="paper-card" href="https://www.nature.com/articles/s41591-019-0495-2" target="_blank" rel="noopener">
+        <p class="paper-card-eyebrow">Nature Medicine, 2019</p>
+        <h3>Supplementation with <em>Akkermansia muciniphila</em> in overweight and obese human volunteers</h3>
+        <p>A proof-of-concept exploratory study showing improved insulin sensitivity, reduced plasma LPS, and better metabolic markers after 3 months.</p>
+        <p class="paper-card-meta">Depommier C, et al.</p>
+      </a>
+      <a class="paper-card" href="https://www.nature.com/articles/s41564-021-00945-5" target="_blank" rel="noopener">
+        <p class="paper-card-eyebrow">Nature Microbiology, 2021</p>
+        <h3><em>Akkermansia muciniphila</em> secretes a GLP-1-inducing protein</h3>
+        <p>Identification of P9 protein as the mechanism by which Akkermansia stimulates intestinal L-cells to release GLP-1.</p>
+        <p class="paper-card-meta">Yoon HS, et al.</p>
+      </a>
+      <a class="paper-card" href="https://www.frontiersin.org/articles/10.3389/fmicb.2017.01765/full" target="_blank" rel="noopener">
+        <p class="paper-card-eyebrow">Frontiers in Microbiology, 2017</p>
+        <h3>Next-generation beneficial microbes: the case of <em>Akkermansia muciniphila</em></h3>
+        <p>Review of the strain's mechanism, the role of mucin degradation, and its impact on the gut barrier and metabolic markers.</p>
+        <p class="paper-card-meta">Cani PD, de Vos WM.</p>
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- 9. Final CTA -->
 <section class="sci-cta">
-  <h2>Try the formula behind the research</h2>
-  <p>One capsule a day, 90-day money-back guarantee, third-party tested.</p>
-  <a class="sci-cta-btn" href="/#bundles">Start AfterSlim today
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-  </a>
+  <div class="sci-cta-inner">
+    <h2>Try the formula behind the research</h2>
+    <p>One capsule a day. 90-day money-back guarantee. Third-party tested. Made in the USA.</p>
+    <a class="sci-cta-btn" href="/#bundles">Start AfterSlim today
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
 </section>
+
+<!-- 10. Compact disclaimer band -->
+<aside class="sci-disclaimer">
+  <div class="sci-disclaimer-inner">
+    <em>* These statements have not been evaluated by the Food and Drug Administration. AfterSlim is a dietary supplement, not a drug, and is not intended to diagnose, treat, cure, or prevent any disease. AfterSlim is not a GLP-1 agonist. Always talk to your healthcare provider before starting any supplement, especially if you are pregnant, nursing, or taking prescription medication.</em>
+  </div>
+</aside>
 
 </main>
 
