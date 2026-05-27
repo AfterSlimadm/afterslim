@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AfterSlim - The GLP-1 Companion Probiotic</title>
+<meta name="description" content="The probiotic made for those on Mounjaro and Ozempic. Built around Akkermansia muciniphila — the keystone gut bacteria GLP-1 medications deplete.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #fafafa;
+  --bg-warm: #fff7ed;
+  --bg-warm-2: #fff1e2;
+  --ink: #0a0a0a;
+  --ink-2: #525252;
+  --ink-3: #a3a3a3;
+  --line: #e5e5e5;
+  --line-soft: #f0f0f0;
+  --line-warm: #fde4cf;
+  --orange: #ea580c;
+  --orange-hover: #c2410c;
+  --orange-light: #fb923c;
+  --orange-soft: #fed7aa;
+  --orange-tint: #ffedd5;
+  --green: #16a34a;
+  --gold: #f59e0b;
+  --yellow-bar: #fef3c7;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 24px 48px rgba(0,0,0,0.10);
+  --shadow-orange: 0 10px 22px rgba(234,88,12,0.30);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --max: 1200px;
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+  font-feature-settings: 'ss01', 'cv11';
+}
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+ul, ol { list-style: none; }
+
+.container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+/* ===== ANNOUNCEMENT BAR ===== */
+.announce {
+  background: var(--ink);
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  padding: 9px 16px;
+  text-align: center;
+  font-weight: 500;
+}
+.announce strong { color: var(--orange-light); font-weight: 700; }
+.announce-dot { display: inline-block; padding: 0 12px; opacity: 0.4; }
+
+/* ===== NAV ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.nav-links a { color: var(--ink); transition: color 0.2s; }
+.nav-links a:hover { color: var(--orange); }
+.nav-logo { justify-self: center; }
+.nav-logo img { height: 36px; width: auto; }
+.nav-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-icon-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.nav-icon-btn:hover { background: var(--bg-soft); }
+.nav-shop {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.nav-shop:hover { background: var(--orange); }
+
+@media (max-width: 860px) {
+  .nav-inner { grid-template-columns: auto 1fr auto; }
+  .nav-links { display: none; }
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 56px 0 80px;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.hero-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-warm-2);
+  border-radius: var(--radius-lg);
+  padding: 56px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+.hero-image::before {
+  content: '';
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(234,88,12,0.10) 0%, transparent 60%);
+  border-radius: 50%;
+  filter: blur(20px);
+}
+.hero-bottle {
+  position: relative;
+  max-height: 100%;
+  width: auto;
+  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.18));
+}
+.hero-thumbs {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+.hero-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid transparent;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+.hero-thumb.active { border-color: var(--orange); }
+.hero-thumb img { max-width: 100%; max-height: 100%; }
+
+.hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 6px 14px;
+  background: var(--orange-tint);
+  color: var(--orange-hover);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+.hero-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.hero-stars {
+  color: var(--gold);
+  letter-spacing: 2px;
+  font-size: 16px;
+}
+.hero h1 {
+  font-size: clamp(34px, 4.2vw, 56px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.hero h1 em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--orange);
+}
+.hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.hero-chip svg { color: var(--orange); flex-shrink: 0; }
+.hero-body {
+  font-size: 16px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  max-width: 520px;
+}
+.hero-price {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 8px;
+}
+.price-current {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.price-original {
+  font-size: 18px;
+  color: var(--ink-3);
+  text-decoration: line-through;
+  font-weight: 500;
+}
+.price-save {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--orange-tint);
+  color: var(--orange-hover);
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+}
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 28px;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: var(--shadow-orange);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.btn-primary:hover {
+  background: var(--orange-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(234,88,12,0.42);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 28px;
+  background: #fff;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-secondary:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.hero-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line-soft);
+}
+.hero-perk {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+.hero-perk svg { color: var(--green); flex-shrink: 0; }
+.hero-perk strong { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .hero { padding: 32px 0 56px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero-image { padding: 40px; }
+  .hero h1 { line-height: 1.05; }
+  .hero-ctas .btn-primary,
+  .hero-ctas .btn-secondary { flex: 1; }
+}
+
+/* ===== PRESS / TRUST STRIP ===== */
+.press {
+  padding: 28px 0;
+  background: #fff;
+  border-bottom: 1px solid var(--line-soft);
+}
+.press-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+  flex-wrap: wrap;
+}
+.press-label {
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.press-logos {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink-2);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.press-logos span { opacity: 0.6; }
+
+/* ===== PILLARS ===== */
+.pillars {
+  padding: 88px 0;
+  background: #fff;
+}
+.section-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 56px;
+}
+.section-eyebrow {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--orange-tint);
+  color: var(--orange-hover);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+.section-head h2 {
+  font-size: clamp(28px, 3.6vw, 44px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin-bottom: 14px;
+}
+.section-head h2 em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--orange);
+}
+.section-head p {
+  font-size: 17px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 32px;
+}
+.pillar {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pillar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--bg-warm-2);
+  color: var(--orange);
+  margin-bottom: 4px;
+}
+.pillar-icon svg { width: 22px; height: 22px; }
+.pillar h3 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.pillar p {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+@media (max-width: 1000px) {
+  .pillars { padding: 64px 0; }
+  .pillars-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+}
+
+/* ===== STATS ===== */
+.stats {
+  padding: 88px 0;
+  background: var(--bg-warm);
+  position: relative;
+  overflow: hidden;
+}
+.stats::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--orange-soft) 0%, transparent 65%);
+  border-radius: 50%;
+  z-index: 0;
+}
+.stats .container { position: relative; z-index: 1; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--line-warm);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.stat-number {
+  display: block;
+  font-size: clamp(56px, 6vw, 84px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+}
+.stat-card p {
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.5;
+  font-weight: 500;
+}
+.stats-disclaimer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 28px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+@media (max-width: 800px) {
+  .stats { padding: 56px 0; }
+  .stats-grid { grid-template-columns: 1fr; gap: 16px; }
+  .stat-card { padding: 32px 24px; }
+}
+
+/* ===== DOCTORS ===== */
+.doctors {
+  padding: 88px 0;
+  background: #fff;
+}
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.doctor-card {
+  padding: 32px 28px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.doctor-quote {
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  font-style: italic;
+  font-weight: 500;
+}
+.doctor-quote::before {
+  content: '“';
+  display: block;
+  font-size: 48px;
+  line-height: 0.6;
+  color: var(--orange);
+  font-style: normal;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.doctor-attr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+.doctor-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange-soft) 0%, var(--orange-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.doctor-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.doctor-meta strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.doctor-meta span {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+@media (max-width: 900px) {
+  .doctors { padding: 64px 0; }
+  .doctors-grid { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* ===== STRAINS ===== */
+.strains {
+  padding: 88px 0;
+  background: var(--bg-soft);
+}
+.strains-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.strain-card {
+  background: #fff;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.strain-card:hover {
+  border-color: var(--orange-soft);
+  transform: translateY(-4px);
+}
+.strain-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: var(--bg-warm-2);
+  padding: 12px;
+}
+.strain-name {
+  font-size: 19px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.strain-dose {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--orange-tint);
+  color: var(--orange-hover);
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+  font-style: normal;
+  width: fit-content;
+}
+.strain-card p {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.strain-card p strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 900px) {
+  .strains { padding: 64px 0; }
+  .strains-grid { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--ink);
+  color: #fff;
+  padding: 64px 0 32px;
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+.footer-brand img {
+  height: 32px;
+  margin-bottom: 16px;
+  filter: brightness(0) invert(1);
+}
+.footer-brand p {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  max-width: 320px;
+}
+.footer-col h4 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  color: rgba(255,255,255,0.85);
+}
+.footer-links a {
+  display: block;
+  font-size: 14px;
+  color: rgba(255,255,255,0.60);
+  padding: 5px 0;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--orange-light); }
+.footer-bottom {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+.footer-disclaimer {
+  margin-top: 20px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.40);
+  line-height: 1.6;
+  max-width: 920px;
+}
+@media (max-width: 800px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 520px) {
+  .footer-inner { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <strong>Free shipping</strong> on 2+ bottles
+  <span class="announce-dot">·</span>
+  <strong>90-day</strong> money-back guarantee
+  <span class="announce-dot">·</span>
+  Subscribe &amp; <strong>save 17%</strong>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <ul class="nav-links">
+      <li><a href="#science">The Science</a></li>
+      <li><a href="#ingredients">Ingredients</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a href="#" class="nav-logo" aria-label="AfterSlim home"><img src="images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <div class="nav-right">
+      <a href="#" class="nav-icon-btn" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a href="#buy" class="nav-icon-btn" aria-label="Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-image">
+        <img src="images/afterslim-bottle-nobg.png" alt="AfterSlim GLP-1 Companion Probiotic" class="hero-bottle">
+        <div class="hero-thumbs" aria-hidden="true">
+          <div class="hero-thumb active"><img src="images/afterslim-bottle-nobg.png" alt=""></div>
+          <div class="hero-thumb"><img src="images/bundle-benefits.png" alt=""></div>
+          <div class="hero-thumb"><img src="images/ingredients-proven.png" alt=""></div>
+          <div class="hero-thumb"><img src="images/quintaimagembundle.png" alt=""></div>
+        </div>
+      </div>
+      <div class="hero-info">
+        <span class="hero-eyebrow">The GLP-1 Companion</span>
+        <div class="hero-rating">
+          <span class="hero-stars" aria-label="4.8 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span><strong style="color: var(--ink);">4.8</strong> · 2,400+ verified reviews</span>
+        </div>
+        <h1>The probiotic made for those on <em>Ozempic</em> &amp; <em>Mounjaro</em></h1>
+        <div class="hero-chips">
+          <span class="hero-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            3-Strain Probiotic
+          </span>
+          <span class="hero-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Doctor Formulated
+          </span>
+          <span class="hero-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Made in USA
+          </span>
+        </div>
+        <p class="hero-body">Restore the gut bacteria <strong style="color: var(--ink); font-weight: 600;">GLP-1 medications quietly deplete.</strong> 30 acid-resistant capsules. Built around Akkermansia muciniphila &mdash; the keystone strain that suffers most.</p>
+        <div class="hero-price">
+          <span class="price-current">$47.99</span>
+          <span class="price-original">$57.99</span>
+          <span class="price-save">Save 17%</span>
+        </div>
+        <div class="hero-ctas">
+          <a href="#buy" class="btn-primary">
+            Add to Cart
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="#science" class="btn-secondary">Learn More</a>
+        </div>
+        <ul class="hero-perks">
+          <li class="hero-perk">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Free shipping</strong> on every 2+ bottle order</span>
+          </li>
+          <li class="hero-perk">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>90-day</strong> money-back guarantee &mdash; love it or refund</span>
+          </li>
+          <li class="hero-perk">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Subscribe &amp; save 17%</strong> &mdash; cancel anytime</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRESS STRIP ========== -->
+<div class="press">
+  <div class="container">
+    <div class="press-inner">
+      <span class="press-label">As seen in</span>
+      <div class="press-logos">
+        <span>Forbes</span>
+        <span>Healthline</span>
+        <span>Well+Good</span>
+        <span>Vogue</span>
+        <span>Women's Health</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TRUST PILLARS ========== -->
+<section class="pillars" id="science">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">Why AfterSlim</span>
+      <h2>The probiotic <em>built</em> for the GLP-1 era</h2>
+      <p>Mounjaro and Ozempic slow your gut &mdash; and slowly collapse the bacteria that keep your energy, mood, and hair in shape. AfterSlim is the only daily formula made to refill exactly what GLP-1 medications drain.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="M2 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="M12 18v4"/><path d="m19.07 19.07-2.83-2.83"/><path d="M22 12h-4"/><path d="m19.07 4.93-2.83 2.83"/><circle cx="12" cy="12" r="4"/></svg>
+        </div>
+        <h3>Doctor formulated</h3>
+        <p>Designed by gastroenterologists for the side effects of Mounjaro and Ozempic.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>Clinically studied strains</h3>
+        <p>3 probiotic strains backed by peer-reviewed gut microbiome research.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <h3>Built around Akkermansia</h3>
+        <p>The keystone gut bacteria that GLP-1 medications quietly deplete first.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.8 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+        </div>
+        <h3>Acid-resistant capsule</h3>
+        <p>Delayed-release HPMC so the probiotics survive your stomach and reach the gut.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M3.77 10.77 2 9l2-4.5 1.5 1.5L8 4l2 2 2-2 2.5 2L17 4.5 19 6l2 4.5-1.77 1.77"/><path d="M4 22V11"/><path d="M20 22V11"/><path d="M8 22v-6h8v6"/></svg>
+        </div>
+        <h3>Made in USA</h3>
+        <p>cGMP-certified facilities. Globally sourced ingredients, third-party tested.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STATS ========== -->
+<section class="stats">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">Results in 30 days</span>
+      <h2>The side effects? <em>Quieter.</em></h2>
+      <p>In a self-reported survey of 487 AfterSlim users on Mounjaro or Ozempic after 8 weeks of daily use:</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number">91%</span>
+        <p>reported reduced bloating and gut discomfort</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">88%</span>
+        <p>reported less fatigue and brain fog</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">76%</span>
+        <p>reported visible improvement in hair shedding</p>
+      </div>
+    </div>
+    <p class="stats-disclaimer">&dagger; Self-reported by 487 verified AfterSlim customers after 8 weeks of daily use. Individual results vary. These statements have not been evaluated by the FDA.</p>
+  </div>
+</section>
+
+<!-- ========== DOCTORS ========== -->
+<section class="doctors">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">Doctor endorsed</span>
+      <h2>Recommended by <em>gut-health experts</em></h2>
+      <p>The clinicians who treat patients on GLP-1 medications &mdash; and see the microbiome collapse first-hand.</p>
+    </div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <p class="doctor-quote">AfterSlim addresses the exact microbiome collapse I see in nearly every patient on a GLP-1. The 3-strain formula is the right starting point.</p>
+        <div class="doctor-attr">
+          <div class="doctor-avatar">SM</div>
+          <div class="doctor-meta">
+            <strong>Dr. Sarah Mitchell, MD</strong>
+            <span>Gastroenterology &middot; Board Certified</span>
+          </div>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <p class="doctor-quote">Akkermansia muciniphila is the keystone strain GLP-1 medications wipe out first. Supplementing it back is one of the highest-leverage things a patient can do.</p>
+        <div class="doctor-attr">
+          <div class="doctor-avatar">JC</div>
+          <div class="doctor-meta">
+            <strong>Dr. James Chen, PhD</strong>
+            <span>Microbiome Research &middot; UCSF-trained</span>
+          </div>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <p class="doctor-quote">Most of the side effects my GLP-1 patients describe &mdash; hair, energy, mood &mdash; trace back to gut. AfterSlim is the cleanest formula I've recommended.</p>
+        <div class="doctor-attr">
+          <div class="doctor-avatar">PS</div>
+          <div class="doctor-meta">
+            <strong>Dr. Priya Sharma, ND</strong>
+            <span>Functional Medicine</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STRAINS ========== -->
+<section class="strains" id="ingredients">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-eyebrow">Inside every capsule</span>
+      <h2>It's what's <em>inside</em> that counts</h2>
+      <p>Three clinically-studied probiotic strains, plus the prebiotic fuel they need to survive and multiply in your gut.</p>
+    </div>
+    <div class="strains-grid">
+      <div class="strain-card">
+        <img src="images/akkermansia-muciniphila.png" alt="Akkermansia muciniphila" class="strain-img">
+        <div class="strain-name"><em>Akkermansia muciniphila</em></div>
+        <span class="strain-dose">Part of 36 mg blend</span>
+        <p><strong>The keystone strain.</strong> Strengthens the gut mucus layer and supports glucose metabolism. The first probiotic to collapse on GLP-1 medication.</p>
+      </div>
+      <div class="strain-card">
+        <img src="images/bifidobacterium-infantis.png" alt="Bifidobacterium infantis" class="strain-img">
+        <div class="strain-name"><em>Bifidobacterium infantis</em></div>
+        <span class="strain-dose">Part of 36 mg blend</span>
+        <p><strong>For bloating and nausea.</strong> A well-researched strain that supports digestion and reduces the GI discomfort patients describe most.</p>
+      </div>
+      <div class="strain-card">
+        <img src="images/clostridium-butyricum.png" alt="Clostridium butyricum" class="strain-img">
+        <div class="strain-name"><em>Clostridium butyricum</em></div>
+        <span class="strain-dose">Part of 36 mg blend</span>
+        <p><strong>Protects the gut lining.</strong> Produces butyrate, a short-chain fatty acid critical for the intestinal barrier during rapid weight loss.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" aria-label="AfterSlim"><img src="images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+        <p>The GLP-1 companion probiotic. Built around Akkermansia muciniphila &mdash; the keystone strain GLP-1 medications deplete.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <div class="footer-links">
+          <a href="#buy">Buy AfterSlim</a>
+          <a href="#science">The Science</a>
+          <a href="#ingredients">Ingredients</a>
+          <a href="#reviews">Reviews</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <div class="footer-links">
+          <a href="#">Contact us</a>
+          <a href="#">Shipping</a>
+          <a href="#">Returns</a>
+          <a href="#faq">FAQ</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <div class="footer-links">
+          <a href="#">About</a>
+          <a href="#">Medical Advisory</a>
+          <a href="#">Press</a>
+          <a href="#">Refer a friend</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 AfterSlim. All rights reserved.</p>
+      <p>Privacy &middot; Terms &middot; Accessibility</p>
+    </div>
+    <p class="footer-disclaimer">
+      &dagger; These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. AfterSlim is a dietary supplement and not a GLP-1 agonist drug. Always consult your healthcare provider before starting any supplement, especially if you are on GLP-1 medications such as Mounjaro, Ozempic, or Wegovy.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
