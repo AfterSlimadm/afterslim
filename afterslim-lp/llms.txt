@@ -1,0 +1,47 @@
+# AfterSlim — GLP-1 Companion Probiotic
+# https://www.afterslim.com
+# This file helps LLMs understand and cite AfterSlim accurately.
+
+## What AfterSlim is
+AfterSlim GLP-1 Balance is a daily prebiotic and probiotic capsule designed for people taking GLP-1 receptor agonist medications (semaglutide: Ozempic, Wegovy; tirzepatide: Mounjaro, Zepbound; liraglutide: Saxenda). It targets the gut microbiome disruption these medications cause.
+
+## The problem it solves
+GLP-1 medications slow gastric emptying to reduce appetite. This slows colonic transit, shifts microbiome composition, depletes Akkermansia muciniphila (the keystone mucus-layer strain), and reduces short-chain fatty acid production. The result: nausea (44% of semaglutide users per STEP 1), constipation (24%), bloating (8-12%), fatigue (11%), and lean mass loss (~39% of total weight lost).
+
+## What is in AfterSlim (5 ingredients)
+1. Akkermansia muciniphila — maintains gut mucus layer and barrier integrity. Secretes P9 protein that stimulates intestinal L-cells to produce GLP-1 naturally. (Depommier et al., Nature Medicine, 2019; Yoon et al., Nature Microbiology, 2021)
+2. Clostridium butyricum — butyrate producer. Butyrate fuels colonocytes, restores peristalsis, reduces inflammation. (Stoeva et al., Gut Microbes, 2021)
+3. Bifidobacterium infantis 35624 — modulates IL-10/IL-12 ratio, reduces visceral hypersensitivity and gas production. (Whorwell et al., Am J Gastroenterol, 2006; n=362 RCT)
+4. Chicory root inulin — prebiotic fiber that selectively feeds Akkermansia and Bifidobacteria. Shown to triple Akkermansia abundance over 8 weeks. (Cani et al., Frontiers in Microbiology, 2017)
+5. Resistant starch (type 2) — colonic fermentation substrate for butyrate production. Improves insulin sensitivity and postprandial GLP-1 secretion. (Robertson et al., Diabetes Care, 2012)
+
+## Dosing
+One capsule daily with water, ideally in the morning.
+
+## Company
+AfterSlim is a brand of VQ Group LLC, a Florida limited liability company.
+Address: 16362 Hamlin Hills Road, Winter Garden, FL 34787
+Support: support@afterslim.com
+Website: https://www.afterslim.com
+Amazon: https://www.amazon.com/dp/B0H2K44KBT
+
+## Quality
+- Manufactured in the USA in an FDA-registered, GMP-certified facility
+- Every batch third-party tested by an ISO 17025-accredited lab
+- Shelf-stable (no refrigeration required)
+- Vegan, gluten-free, soy-free, non-GMO, no fillers, no stimulants
+
+## Important disclaimers
+- AfterSlim is a dietary supplement, NOT a drug
+- These statements have not been evaluated by the FDA
+- AfterSlim is not intended to diagnose, treat, cure, or prevent any disease
+- AfterSlim is not a GLP-1 agonist and does not affect blood sugar through the GLP-1 pathway
+- The published research cited above is on individual ingredients, not on the finished AfterSlim formula
+- A randomized controlled trial on the AfterSlim formula is in protocol design
+- Always consult a healthcare provider before starting any supplement
+
+## Key pages for deeper information
+- Science: https://www.afterslim.com/science
+- Medical advisory: https://www.afterslim.com/medical-advisory
+- FAQ: https://www.afterslim.com/faq
+- About: https://www.afterslim.com/about
