@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leave a Review — AfterSlim</title>
+<title>Write a Review — AfterSlim</title>
 <meta name="description" content="Share your experience with AfterSlim GLP-1 Balance. Your review helps others on the same journey.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="stylesheet" href="/styles/policy.css">
@@ -339,7 +339,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/js/supabase-client.js"></script>
 <script>
+// Failsafe: if Supabase client didn't init, redirect to login
+if (!window.afterslimAuth || !window.afterslimSupabase) {
+  console.error('[review] Supabase client failed to init. Redirecting to login.');
+  window.location.replace('/account/login?next=/review');
+}
+
 (async function() {
+  if (!window.afterslimAuth) return;
   // Require login — unauthed users get bounced to /account/login?next=/review
   var user = await window.afterslimAuth.requireAuth('/review');
   var supabase = window.afterslimSupabase;
