@@ -7,6 +7,9 @@
 <meta name="description" content="Share your experience with AfterSlim GLP-1 Balance. Your review helps others on the same journey.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<style>html[data-auth=pending] body{visibility:hidden}</style>
+<script>document.documentElement.dataset.auth='pending';</script>
 <style>
 .review-page {
   max-width: 600px;
@@ -36,6 +39,49 @@
   border-radius: 18px;
   padding: 32px 28px;
 }
+
+/* Order selector */
+.order-selector { margin-bottom: 28px; }
+.order-selector label {
+  font-size: 13px; font-weight: 600; color: var(--ink);
+  display: block; margin-bottom: 8px;
+}
+.order-card {
+  background: var(--bg);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+  transition: border-color 0.15s;
+}
+.order-card:hover { border-color: var(--orange); }
+.order-card.selected { border-color: var(--orange); background: var(--orange-tint); }
+.order-card input[type="radio"] { display: none; }
+.order-radio {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s;
+}
+.order-card.selected .order-radio {
+  border-color: var(--orange);
+}
+.order-radio-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--orange);
+  display: none;
+}
+.order-card.selected .order-radio-dot { display: block; }
+.order-card-info { flex: 1; min-width: 0; }
+.order-card-number { font-size: 14.5px; font-weight: 700; color: var(--ink); margin: 0 0 2px; }
+.order-card-meta { font-size: 12.5px; color: var(--ink-2); margin: 0; }
 
 /* Star rating selector */
 .star-selector {
@@ -75,23 +121,15 @@
 /* Form fields */
 .review-form { display: grid; gap: 16px; }
 .review-form label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-  display: block;
-  margin-bottom: 6px;
+  font-size: 13px; font-weight: 600; color: var(--ink);
+  display: block; margin-bottom: 6px;
 }
 .review-form input,
 .review-form textarea {
-  width: 100%;
-  font-family: inherit;
-  font-size: 15px;
-  color: var(--ink);
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 14px;
-  outline: 0;
+  width: 100%; font-family: inherit; font-size: 15px;
+  color: var(--ink); background: #fff;
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; outline: 0;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .review-form input:focus,
@@ -99,95 +137,61 @@
   border-color: var(--orange);
   box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
 }
-.review-form textarea {
-  min-height: 140px;
-  resize: vertical;
-}
-.review-form input::placeholder,
-.review-form textarea::placeholder {
-  color: var(--ink-2);
-  opacity: 0.6;
-}
+.review-form textarea { min-height: 140px; resize: vertical; }
 
 .review-submit {
   margin-top: 8px;
-  background: var(--orange);
-  color: #fff;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  padding: 16px 22px;
-  border: 0;
-  border-radius: 999px;
-  cursor: pointer;
-  width: 100%;
+  background: var(--orange); color: #fff;
+  font-family: inherit; font-size: 15px; font-weight: 700;
+  letter-spacing: 0.4px; text-transform: uppercase;
+  padding: 16px 22px; border: 0; border-radius: 999px;
+  cursor: pointer; width: 100%;
   transition: background 0.15s;
 }
 .review-submit:hover { background: var(--orange-dark); }
 .review-submit:disabled { opacity: 0.55; cursor: not-allowed; }
 
 .review-error {
-  background: rgba(220,38,38,0.08);
-  color: #b91c1c;
-  font-size: 13.5px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  display: none;
+  background: rgba(220,38,38,0.08); color: #b91c1c;
+  font-size: 13.5px; padding: 10px 14px;
+  border-radius: 8px; display: none;
 }
 
 /* Success state */
 .review-success {
-  text-align: center;
-  padding: 48px 24px;
-  display: none;
+  text-align: center; padding: 48px 24px; display: none;
 }
 .review-success-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: rgba(22,163,74,0.1);
-  color: #15803d;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(22,163,74,0.1); color: #15803d;
+  display: inline-flex; align-items: center; justify-content: center;
   margin-bottom: 20px;
 }
-.review-success h2 {
-  font-size: 24px;
-  font-weight: 800;
-  margin: 0 0 10px;
-}
-.review-success p {
-  font-size: 15px;
-  color: var(--ink-2);
-  line-height: 1.55;
-  margin: 0 0 24px;
-}
+.review-success h2 { font-size: 24px; font-weight: 800; margin: 0 0 10px; }
+.review-success p { font-size: 15px; color: var(--ink-2); line-height: 1.55; margin: 0 0 24px; }
 .review-success-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 24px;
-  background: var(--orange);
-  color: #fff;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 24px; background: var(--orange); color: #fff;
+  border-radius: 999px; font-weight: 700; font-size: 14px;
+  letter-spacing: 0.4px; text-transform: uppercase; text-decoration: none;
 }
 .review-success-link:hover { background: var(--orange-dark); color: #fff; }
 
 .review-fineprint {
-  font-size: 12px;
-  color: var(--ink-2);
-  text-align: center;
-  margin-top: 14px;
-  line-height: 1.5;
+  font-size: 12px; color: var(--ink-2);
+  text-align: center; margin-top: 14px; line-height: 1.5;
 }
+
+/* No orders state */
+.review-empty { text-align: center; padding: 36px 20px; }
+.review-empty p { font-size: 15px; color: var(--ink-2); line-height: 1.55; margin: 0 0 18px; }
+.review-empty-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 24px; background: var(--orange); color: #fff;
+  border-radius: 999px; font-weight: 700; font-size: 14px;
+  text-transform: uppercase; text-decoration: none;
+}
+.review-empty-cta:hover { background: var(--orange-dark); color: #fff; }
 
 @media (max-width: 540px) {
   .review-page { padding: 32px 16px 64px; }
@@ -221,6 +225,13 @@
   </div>
 
   <div class="review-card" id="reviewFormCard">
+
+    <!-- Order selector (populated by JS) -->
+    <div class="order-selector" id="orderSelector">
+      <label>Which order is this review for?</label>
+      <div id="orderList"></div>
+    </div>
+
     <!-- Star rating -->
     <div class="star-selector" id="starSelector" role="radiogroup" aria-label="Rating">
       <button class="star-btn" type="button" data-value="1" aria-label="1 star">
@@ -245,10 +256,6 @@
       <div id="reviewError" class="review-error"></div>
 
       <div>
-        <label for="reviewName">Your name</label>
-        <input id="reviewName" type="text" placeholder="e.g. Rachel M." required>
-      </div>
-      <div>
         <label for="reviewTitle">Review title</label>
         <input id="reviewTitle" type="text" placeholder="Summarize your experience in a few words" required maxlength="120">
       </div>
@@ -263,7 +270,15 @@
     <p class="review-fineprint">Reviews are moderated before appearing on the site. We never edit your words.</p>
   </div>
 
-  <!-- Success state (shown after submit) -->
+  <!-- No orders state -->
+  <div class="review-card review-empty" id="noOrdersState" style="display: none;">
+    <p>You don't have any orders yet. Place your first order to leave a review.</p>
+    <a class="review-empty-cta" href="/#bundles">Shop AfterSlim
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
+
+  <!-- Success state -->
   <div class="review-success" id="reviewSuccess">
     <div class="review-success-icon">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
@@ -324,7 +339,64 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/js/supabase-client.js"></script>
 <script>
-(function() {
+(async function() {
+  // Require login — unauthed users get bounced to /account/login?next=/review
+  var user = await window.afterslimAuth.requireAuth('/review');
+  var supabase = window.afterslimSupabase;
+
+  // Load profile + orders in parallel
+  var [profileRes, ordersRes] = await Promise.all([
+    supabase.from('profiles').select('full_name, email').eq('id', user.id).maybeSingle(),
+    supabase.from('orders')
+      .select('id, order_number, status, total_cents, created_at, order_items(product_name)')
+      .eq('profile_id', user.id)
+      .order('created_at', { ascending: false }),
+  ]);
+
+  var profile = (profileRes && profileRes.data) || {};
+  var orders = (ordersRes && ordersRes.data) || [];
+
+  // No orders → show empty state
+  if (orders.length === 0) {
+    document.getElementById('reviewFormCard').style.display = 'none';
+    document.getElementById('noOrdersState').style.display = 'block';
+    return;
+  }
+
+  // Build order selector cards
+  var selectedOrderId = null;
+  var orderListEl = document.getElementById('orderList');
+
+  orderListEl.innerHTML = orders.map(function(o, i) {
+    var date = new Date(o.created_at).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: 'numeric'
+    });
+    var items = (o.order_items || []).map(function(it) { return it.product_name; }).join(', ') || 'AfterSlim';
+    var total = window.formatMoney ? window.formatMoney(o.total_cents) : ('$' + (o.total_cents / 100).toFixed(2));
+    return '<label class="order-card' + (i === 0 ? ' selected' : '') + '" data-order-id="' + o.id + '">'
+      + '<input type="radio" name="order" value="' + o.id + '"' + (i === 0 ? ' checked' : '') + '>'
+      + '<span class="order-radio"><span class="order-radio-dot"></span></span>'
+      + '<span class="order-card-info">'
+        + '<p class="order-card-number">' + escapeHtml(o.order_number || 'Order') + '</p>'
+        + '<p class="order-card-meta">' + date + ' · ' + total + ' · ' + escapeHtml(items) + '</p>'
+      + '</span>'
+    + '</label>';
+  }).join('');
+
+  // Default first order selected
+  if (orders.length > 0) selectedOrderId = orders[0].id;
+
+  // Order card click handler
+  orderListEl.addEventListener('click', function(e) {
+    var card = e.target.closest('.order-card');
+    if (!card) return;
+    orderListEl.querySelectorAll('.order-card').forEach(function(c) { c.classList.remove('selected'); });
+    card.classList.add('selected');
+    card.querySelector('input[type="radio"]').checked = true;
+    selectedOrderId = card.getAttribute('data-order-id');
+  });
+
+  // Star rating
   var rating = 0;
   var starBtns = document.querySelectorAll('.star-btn');
   var starLabel = document.getElementById('starLabel');
@@ -354,21 +426,7 @@
     });
   });
 
-  // Pre-fill name if logged in
-  if (window.afterslimAuth && window.afterslimSupabase) {
-    window.afterslimAuth.user().then(function(user) {
-      if (!user) return;
-      window.afterslimSupabase.from('profiles').select('full_name')
-        .eq('id', user.id).maybeSingle()
-        .then(function(res) {
-          if (res && res.data && res.data.full_name) {
-            document.getElementById('reviewName').value = res.data.full_name;
-          }
-        });
-    });
-  }
-
-  // Submit
+  // Submit handler
   var form = document.getElementById('reviewForm');
   var errBox = document.getElementById('reviewError');
   var submitBtn = document.getElementById('reviewSubmit');
@@ -377,17 +435,21 @@
     e.preventDefault();
     errBox.style.display = 'none';
 
-    var name = document.getElementById('reviewName').value.trim();
     var title = document.getElementById('reviewTitle').value.trim();
     var body = document.getElementById('reviewBody').value.trim();
 
+    if (!selectedOrderId) {
+      errBox.textContent = 'Please select which order this review is for.';
+      errBox.style.display = 'block';
+      return;
+    }
     if (rating === 0) {
       errBox.textContent = 'Please select a star rating.';
       errBox.style.display = 'block';
       return;
     }
-    if (!name || !title || !body) {
-      errBox.textContent = 'Please fill in your name, title, and review.';
+    if (!title || !body) {
+      errBox.textContent = 'Please fill in the title and review.';
       errBox.style.display = 'block';
       return;
     }
@@ -396,36 +458,44 @@
     submitBtn.textContent = 'Submitting...';
 
     try {
-      var supabase = window.afterslimSupabase;
-      if (!supabase) throw new Error('Connection failed');
+      // Get product from the selected order's items
+      var selectedOrder = orders.find(function(o) { return o.id === selectedOrderId; });
+      var productId = null;
 
-      // Get the AfterSlim product ID (first product in table)
-      var { data: product } = await supabase
-        .from('products')
-        .select('id')
+      // Try to get product_id from the order's first item
+      var { data: orderItems } = await supabase
+        .from('order_items')
+        .select('product_id')
+        .eq('order_id', selectedOrderId)
         .limit(1)
         .maybeSingle();
 
-      if (!product) throw new Error('Product not found');
+      if (orderItems && orderItems.product_id) {
+        productId = orderItems.product_id;
+      } else {
+        // Fallback: first product in table
+        var { data: product } = await supabase
+          .from('products').select('id').limit(1).maybeSingle();
+        if (product) productId = product.id;
+      }
 
-      // Get user if logged in
-      var user = null;
-      try { user = await window.afterslimAuth.user(); } catch(e) {}
+      if (!productId) throw new Error('Product not found');
+
+      var authorName = (profile.full_name || user.email || '').split('@')[0];
 
       var { error } = await supabase.from('reviews').insert({
-        product_id: product.id,
-        profile_id: user ? user.id : null,
-        author_name: name,
+        product_id: productId,
+        profile_id: user.id,
+        author_name: authorName,
         rating: rating,
         title: title,
         body: body,
-        is_verified_purchase: !!user,
+        is_verified_purchase: true,
         is_approved: false,
       });
 
       if (error) throw error;
 
-      // Show success
       document.getElementById('reviewFormCard').style.display = 'none';
       document.getElementById('reviewSuccess').style.display = 'block';
 
@@ -438,6 +508,12 @@
     }
   });
 })();
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+  });
+}
 </script>
 
 </body>
