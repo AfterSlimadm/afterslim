@@ -19,6 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   posthog.init('phc_M05Y8p9sTGkPpIEjIqsczpA0dVMW4cvYtkMX7BVgLfS', {
     api_host: 'https://us.i.posthog.com',
     person_profiles: 'identified_only',
+    loaded: function(p){ try{ if(localStorage.getItem('posthog_internal_user')==='true') p.opt_out_capturing(); }catch(e){} },
     capture_pageview: 'history_change',
     capture_pageleave: true,
     capture_exceptions: true
