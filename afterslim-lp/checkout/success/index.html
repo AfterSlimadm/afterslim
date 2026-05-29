@@ -8,9 +8,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-WVF2ZGCL');</script>
 <!-- End Google Tag Manager -->
-<!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) - GA4 + Google Ads (for direct conversion fire on /checkout/success) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCTNMWWXWB"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LCTNMWWXWB');</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','G-LCTNMWWXWB');gtag('config','AW-18141752970');</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Confirmed | AfterSlim</title>
@@ -179,6 +179,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           },
           user_data: userData
         });
+
+        // Direct Google Ads conversion fire via gtag. We bypass the GTM
+        // Custom Event trigger here because GTM was firing the conversion
+        // ping with value=0 (couldn't pull ecommerce.value from dataLayer
+        // reliably). gtag('set','user_data',...) enables Enhanced
+        // Conversions on this hit.
+        try {
+          if (typeof window.gtag === 'function') {
+            if (userData.sha256_email_address || userData.sha256_phone_number) {
+              window.gtag('set', 'user_data', userData);
+            }
+            window.gtag('event', 'conversion', {
+              send_to: 'AW-18141752970/9RbMCOGm5rQcEIrd1MpD',
+              value: value,
+              currency: ctx.currency || 'USD',
+              transaction_id: txnId
+            });
+          }
+        } catch (e) {}
 
         try { sessionStorage.removeItem('as_order_ctx'); } catch (e) {}
       }
