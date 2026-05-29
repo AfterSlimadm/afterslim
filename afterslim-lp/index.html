@@ -1259,6 +1259,7 @@ document.addEventListener('click', function(e) {
   var heroBtn = e.target.closest('.hero-checkout-btn');
   if (heroBtn) {
     e.preventDefault();
+    pushEcom('begin_checkout');
     var url = '/checkout?qty=' + currentPack;
     if (currentPlan === 'subscribe') url += '&subscribe=true';
     window.location.href = url;
@@ -1404,6 +1405,41 @@ var pricing = {
 var currentPlan = 'subscribe';
 var currentPack = '2';
 
+// GA4 Enhanced Ecommerce helpers.
+// Pushes funnel events (view_item, select_item, begin_checkout) to dataLayer
+// so GTM forwards them to GA4 and any imported Google Ads conversion actions.
+function getCurrentItems() {
+  var d = pricing[currentPlan][currentPack];
+  return [{
+    item_id: 'AFTERSLIM-GLP1-COMPANION',
+    item_name: 'AfterSlim GLP-1 Companion',
+    item_brand: 'AfterSlim',
+    item_category: 'Supplements',
+    item_variant: currentPlan === 'subscribe' ? 'Subscribe & Save' : 'One-time purchase',
+    price: parseFloat(d.price),
+    quantity: parseInt(currentPack, 10)
+  }];
+}
+function pushEcom(eventName) {
+  var d = pricing[currentPlan][currentPack];
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ ecommerce: null });
+  window.dataLayer.push({
+    event: eventName,
+    ecommerce: {
+      currency: 'USD',
+      value: parseFloat(d.price),
+      items: getCurrentItems()
+    }
+  });
+}
+// Fire view_item once the LP is ready (treats the LP as PDP for the bundle).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() { pushEcom('view_item'); });
+} else {
+  pushEcom('view_item');
+}
+
 function renderPrice() {
   var d = pricing[currentPlan][currentPack];
   // Update both hero and modal price slots (each has its own IDs)
@@ -1496,6 +1532,7 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.variant-opt[data-plan="' + plan + '"]').forEach(function(x) { x.classList.add('selected'); });
     currentPlan = plan;
     renderPrice();
+    pushEcom('select_item');
     return;
   }
   var bundleOpt = e.target.closest('.bundle-opt');
@@ -1505,6 +1542,7 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.bundle-opt[data-pack="' + pack + '"]').forEach(function(x) { x.classList.add('selected'); });
     currentPack = pack;
     renderPrice();
+    pushEcom('select_item');
   }
 });
 

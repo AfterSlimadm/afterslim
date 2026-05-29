@@ -111,10 +111,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script>
     var params = new URLSearchParams(window.location.search);
     var sessionId = params.get('session_id');
-    window.history.replaceState({}, '', '/checkout/success');
     if (sessionId) {
       document.getElementById('order-id').textContent = 'Your order has been confirmed.';
+      // GA4 purchase event. Google Ads Conversion fires separately via GTM tag.
+      // value uses fallback price until backend exposes real cart total from Stripe session.
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ ecommerce: null });
+      window.dataLayer.push({
+        event: 'purchase',
+        ecommerce: {
+          transaction_id: sessionId,
+          value: 27.99,
+          currency: 'USD',
+          items: [{
+            item_id: 'AFTERSLIM-GLP1-COMPANION',
+            item_name: 'AfterSlim GLP-1 Companion',
+            item_brand: 'AfterSlim',
+            item_category: 'Supplements',
+            price: 27.99,
+            quantity: 1
+          }]
+        }
+      });
     }
+    window.history.replaceState({}, '', '/checkout/success');
   </script>
 </body>
 </html>
