@@ -35,6 +35,40 @@
 
   window.afterslimSupabase = client;
 
+  // PostHog identification.
+  // Vincula o distinct_id anônimo do PostHog ao user real do Supabase
+  // assim que a sessão existe (initial load, login, password recovery).
+  // Reset no logout pra o próximo visitante não herdar a identidade.
+  function identifyPostHog(user) {
+    if (!user || !window.posthog || typeof window.posthog.identify !== 'function') return;
+    try {
+      window.posthog.identify(user.id, {
+        email: user.email,
+        supabase_id: user.id,
+        full_name: (user.user_metadata && user.user_metadata.full_name) || null,
+      });
+    } catch (e) { /* swallow */ }
+  }
+  function resetPostHog() {
+    if (!window.posthog || typeof window.posthog.reset !== 'function') return;
+    try { window.posthog.reset(); } catch (e) { /* swallow */ }
+  }
+  // Initial session check (covers reload of an already-logged-in tab).
+  client.auth.getSession().then(function (res) {
+    if (res && res.data && res.data.session && res.data.session.user) {
+      identifyPostHog(res.data.session.user);
+    }
+  });
+  client.auth.onAuthStateChange(function (event, session) {
+    if (event === 'SIGNED_IN' && session && session.user) {
+      identifyPostHog(session.user);
+    } else if (event === 'SIGNED_OUT') {
+      resetPostHog();
+    } else if (event === 'TOKEN_REFRESHED' && session && session.user) {
+      identifyPostHog(session.user);
+    }
+  });
+
   // Auth helpers
   window.afterslimAuth = {
     /** Resolve the current session (or null if unauthenticated). */
