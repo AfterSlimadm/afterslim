@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WVF2ZGCL');</script>
+<!-- End Google Tag Manager -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Support Tickets — AfterSlim</title>
@@ -75,6 +82,10 @@
 <meta name="twitter:description" content="Support Tickets — AfterSlim">
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVF2ZGCL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <nav class="nav">
   <div class="nav-inner">
@@ -139,7 +150,7 @@
     return '<a class="ticket-row" href="/account/tickets/view?id=' + t.id + '">'
       + '<div>'
         + '<p class="ticket-subject">' + escapeHtml(t.subject) + '</p>'
-        + '<p class="ticket-meta">Last activity ' + date + (t.category ? ' · ' + escapeHtml(t.category) : '') + '</p>'
+        + '<p class="ticket-meta">Last activity ' + date + (t.category ? ' Â· ' + escapeHtml(t.category) : '') + '</p>'
       + '</div>'
       + '<span class="ticket-number">' + escapeHtml(t.ticket_number || '') + '</span>'
       + '<span class="ticket-status" data-s="' + t.status + '">' + t.status + '</span>'

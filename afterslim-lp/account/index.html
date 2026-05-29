@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WVF2ZGCL');</script>
+<!-- End Google Tag Manager -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Account — AfterSlim</title>
@@ -26,6 +33,10 @@
 <meta name="twitter:description" content="Your AfterSlim account: orders, subscriptions, store credit, addresses, and support tickets.">
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVF2ZGCL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <nav class="nav">
   <div class="nav-inner">
@@ -164,7 +175,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 VQ Group LLC. All rights reserved. &nbsp;·&nbsp; <a href="/privacy">Privacy</a> &nbsp;·&nbsp; <a href="/terms">Terms</a><br>
+      &copy; 2026 VQ Group LLC. All rights reserved. &nbsp;Â·&nbsp; <a href="/privacy">Privacy</a> &nbsp;Â·&nbsp; <a href="/terms">Terms</a><br>
       &dagger; These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease. AfterSlim is a dietary supplement and not a GLP-1 agonist drug. Always consult your healthcare provider before starting any supplement, especially if you are on GLP-1 medications.
     </div>
   </div>
@@ -210,7 +221,7 @@ if (!window.afterslimAuth || !window.afterslimSupabase) {
     });
   }
 
-  // 1) Profile → greeting name
+  // 1) Profile â†’ greeting name
   safeQuery('profiles', supabase.from('profiles').select('full_name').eq('id', user.id).maybeSingle())
     .then(function(res) {
       var name = (res && res.data && res.data.full_name) || '';
@@ -268,15 +279,17 @@ if (!window.afterslimAuth || !window.afterslimSupabase) {
     });
 
   // 6) Affiliate status — if user has an active row, swap the card to
-  // point at the affiliate dashboard (Vitor's page). Falls back to
-  // "Become an affiliate" → /partner-with-us if the table doesn't exist
+  // point at the affiliate portal on the admin subdomain. Falls back to
+  // "Become an affiliate" â†’ /partner-with-us if the table doesn't exist
   // yet or the user isn't an affiliate.
   safeQuery('affiliates', supabase.from('affiliates')
       .select('status').eq('profile_id', user.id).maybeSingle())
     .then(function(res) {
       if (res && res.data && res.data.status === 'active') {
         var card = document.getElementById('affiliateCard');
-        card.setAttribute('href', '/account/affiliate');
+        card.setAttribute('href', 'https://admin.afterslim.com/affiliate/dashboard');
+        card.setAttribute('target', '_blank');
+        card.setAttribute('rel', 'noopener');
         document.getElementById('affiliateTitle').textContent = 'Affiliate dashboard';
         document.getElementById('affiliateBody').textContent =
           'See your referral link, commissions, payouts, and traffic stats.';
