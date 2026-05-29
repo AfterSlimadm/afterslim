@@ -460,6 +460,64 @@ var CK_ship={address:'',address2:'',city:'',state:'',zip:'',country:'US'};
 var CK_stripe,CK_elements,CK_cardEl,CK_payRequest;
 var CK_discount={code:'',discountCents:0,label:''};
 
+function ckBuildItemList(){
+  return [{
+    item_id: 'afterslim-' + CK_qty + (CK_isSub ? '-sub' : '-otp'),
+    item_name: CK_info.name,
+    item_variant: CK_info.variant,
+    item_brand: 'AfterSlim',
+    item_category: 'Supplement',
+    price: CK_info.price,
+    quantity: CK_qty
+  }];
+}
+
+function ckPushAddPaymentInfo(){
+  try{
+    window.dataLayer = window.dataLayer || [];
+    var ship = document.querySelector('.shipping-option.selected input[type="radio"]');
+    var shipVal = ship ? ship.value : 'standard';
+    var shipCents = shipVal === 'express' ? 499 : 0;
+    var subtotalCents = Math.round(CK_info.price * 100);
+    var discountCents = Math.min(CK_discount.discountCents || 0, subtotalCents);
+    var totalCents = Math.max(50, subtotalCents - discountCents + shipCents);
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: 'add_payment_info',
+      ecommerce: {
+        currency: 'USD',
+        value: totalCents / 100,
+        payment_type: CK_payMethod,
+        coupon: CK_discount.code || undefined,
+        items: ckBuildItemList()
+      }
+    });
+  }catch(e){}
+}
+
+// Persist customer info + cart snapshot to sessionStorage so the success page
+// can fire the purchase event with Enhanced Conversions user_data (email/phone)
+// and the actual cart total. Cleared on /checkout/success after firing.
+function ckPersistOrderContext(email, name, phone){
+  try{
+    var ship = document.querySelector('.shipping-option.selected input[type="radio"]');
+    var shipVal = ship ? ship.value : 'standard';
+    var shipCents = shipVal === 'express' ? 499 : 0;
+    var subtotalCents = Math.round(CK_info.price * 100);
+    var discountCents = Math.min(CK_discount.discountCents || 0, subtotalCents);
+    var totalCents = Math.max(50, subtotalCents - discountCents + shipCents);
+    sessionStorage.setItem('as_order_ctx', JSON.stringify({
+      email: email || '',
+      name: name || '',
+      phone: phone || '',
+      value: totalCents / 100,
+      currency: 'USD',
+      coupon: CK_discount.code || null,
+      items: ckBuildItemList()
+    }));
+  }catch(e){}
+}
+
 function ckInitSidebar(){
   var bottleImages={1:'/images/bottlereal.png',2:'/images/bottlereal2.png',3:'/images/bottlereal3.png'};
   var e;
@@ -594,6 +652,8 @@ async function ckPay(){
     errEl.textContent='Apple Pay is being configured. Please use the Express Checkout button at the top, or choose another method.';
     errEl.style.display='block';return;
   }
+  ckPushAddPaymentInfo();
+  ckPersistOrderContext(CK_cust.email, CK_cust.name, CK_cust.phone);
   procEl.classList.add('active');
   try{
     var payBody={price_id:CK_priceId,customer_email:CK_cust.email,customer_name:CK_cust.name,shipping:CK_ship};
@@ -802,6 +862,7 @@ function ckGooglePay(){
       var shipData={address:(shipAddr.address1||''),city:shipAddr.locality||'',state:shipAddr.administrativeArea||'',zip:shipAddr.postalCode||'',country:'US'};
       var email=paymentData.email||'';
       var name=paymentData.paymentMethodData.info&&paymentData.paymentMethodData.info.billingAddress?paymentData.paymentMethodData.info.billingAddress.name:'';
+      ckPersistOrderContext(email, name, '');
 
       fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:email,customer_name:name,shipping:shipData})}).then(function(r){return r.json();}).then(function(data){
         CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:{token:token.id},billing_details:{name:name,email:email}}}).then(function(result){
@@ -914,6 +975,7 @@ CK_payRequest.on('paymentmethod',function(ev){
   document.getElementById('processing').classList.add('active');
   var shipAddr=ev.shippingAddress||{};
   var shipData={address:shipAddr.addressLine?shipAddr.addressLine[0]:'',city:shipAddr.city||'',state:shipAddr.region||'',zip:shipAddr.postalCode||'',country:shipAddr.country||'US'};
+  ckPersistOrderContext(ev.payerEmail||'', ev.payerName||'', ev.payerPhone||'');
   fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:ev.payerEmail||'',customer_name:ev.payerName||'',shipping:shipData})}).then(function(r){return r.json();}).then(function(data){
     CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:ev.paymentMethod.id}).then(function(result){
       if(result.error){ev.complete('fail');document.getElementById('processing').classList.remove('active');document.getElementById('checkout-error').textContent=result.error.message;document.getElementById('checkout-error').style.display='block';}

@@ -111,32 +111,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="order-id" id="order-id"></div>
   </div>
   <script>
-    var params = new URLSearchParams(window.location.search);
-    var sessionId = params.get('session_id');
-    if (sessionId) {
-      document.getElementById('order-id').textContent = 'Your order has been confirmed.';
-      // GA4 purchase event. Google Ads Conversion fires separately via GTM tag.
-      // value uses fallback price until backend exposes real cart total from Stripe session.
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ ecommerce: null });
-      window.dataLayer.push({
-        event: 'purchase',
-        ecommerce: {
-          transaction_id: sessionId,
-          value: 27.99,
-          currency: 'USD',
-          items: [{
-            item_id: 'AFTERSLIM-GLP1-COMPANION',
-            item_name: 'AfterSlim GLP-1 Companion',
-            item_brand: 'AfterSlim',
-            item_category: 'Supplements',
-            price: 27.99,
-            quantity: 1
-          }]
-        }
-      });
-    }
-    window.history.replaceState({}, '', '/checkout/success');
+    (function(){
+      var params = new URLSearchParams(window.location.search);
+      var txnId = params.get('session_id') || params.get('payment_id') || params.get('payment_intent') || '';
+
+      // Pull customer + cart context persisted by /checkout before redirect.
+      // Used for purchase event value/items AND Enhanced Conversions user_data.
+      var ctx = {};
+      try {
+        var raw = sessionStorage.getItem('as_order_ctx');
+        if (raw) ctx = JSON.parse(raw) || {};
+      } catch (e) {}
+
+      // SHA-256 over a normalized string (trim + lowercase). Used to hash
+      // email/phone for Enhanced Conversions per Google spec.
+      async function sha256Hex(input) {
+        if (!input) return '';
+        var normalized = String(input).trim().toLowerCase();
+        if (!normalized) return '';
+        var buf = new TextEncoder().encode(normalized);
+        var hash = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hash))
+          .map(function(b){return b.toString(16).padStart(2,'0');})
+          .join('');
+      }
+
+      // Normalize phone to E.164 (digits + leading +) before hashing.
+      function normalizePhone(phone) {
+        if (!phone) return '';
+        var digits = String(phone).replace(/[^\d+]/g, '');
+        if (!digits) return '';
+        if (digits.charAt(0) !== '+') digits = '+1' + digits.replace(/^\+/, '');
+        return digits;
+      }
+
+      async function pushPurchase() {
+        if (!txnId && !ctx.value) return;
+        document.getElementById('order-id').textContent = 'Your order has been confirmed.';
+
+        var items = (ctx.items && ctx.items.length) ? ctx.items : [{
+          item_id: 'AFTERSLIM-GLP1-COMPANION',
+          item_name: 'AfterSlim GLP-1 Companion',
+          item_brand: 'AfterSlim',
+          item_category: 'Supplements',
+          price: 27.99,
+          quantity: 1
+        }];
+        var value = (typeof ctx.value === 'number' && ctx.value > 0) ? ctx.value : 27.99;
+
+        var userData = {};
+        try {
+          if (ctx.email) userData.sha256_email_address = await sha256Hex(ctx.email);
+          var phoneN = normalizePhone(ctx.phone);
+          if (phoneN) userData.sha256_phone_number = await sha256Hex(phoneN);
+        } catch (e) {}
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: 'purchase',
+          ecommerce: {
+            transaction_id: txnId,
+            value: value,
+            currency: ctx.currency || 'USD',
+            coupon: ctx.coupon || undefined,
+            items: items
+          },
+          user_data: userData
+        });
+
+        try { sessionStorage.removeItem('as_order_ctx'); } catch (e) {}
+      }
+
+      pushPurchase();
+      window.history.replaceState({}, '', '/checkout/success');
+    })();
   </script>
 </body>
 </html>
