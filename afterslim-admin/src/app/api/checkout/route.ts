@@ -83,12 +83,20 @@ export async function POST(request: Request) {
     const stripe = getStripe();
     const isSubscription = priceId in SUBSCRIPTION_PRICE_IDS;
 
+    // TikTok attribution captured by the LP pixel and forwarded in the body.
+    // Stored on the PaymentIntent so the webhook can include them in the
+    // server-side CompletePayment (Events API) for accurate ad attribution.
+    const ttclid: string = typeof body.ttclid === "string" ? body.ttclid.slice(0, 256) : "";
+    const ttp: string = typeof body.ttp === "string" ? body.ttp.slice(0, 256) : "";
+
     const baseMetadata: Record<string, string> = {
       price_id: priceId,
       ...(productId ? { product_id: productId } : {}),
       quantity: String(lineQuantity),
       is_subscription: String(isSubscription),
       ...(lineInterval ? { interval: lineInterval } : {}),
+      ...(ttclid ? { ttclid } : {}),
+      ...(ttp ? { ttp } : {}),
     };
 
     if (isSubscription) {

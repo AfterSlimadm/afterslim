@@ -3,6 +3,7 @@ import { getStripe } from "@/lib/stripe";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { postBuyerLead, postAbandonLead } from "@/lib/listflex";
 import { submitOrder } from "@/lib/cartrover";
+import { trackTikTokPurchase } from "@/lib/tiktok";
 import type Stripe from "stripe";
 
 /**
@@ -846,6 +847,31 @@ async function handlePaymentIntentSucceeded(pi: Stripe.PaymentIntent) {
     offer: "https://afterslim.com",
     comments: `Order ${orderNumber} - $${totalDollars} - qty ${qty}${isSubscription ? " (subscription)" : ""}`,
   }).catch((err) => console.error("[listflex] buyer post failed:", err));
+
+  // TikTok Events API — server-side CompletePayment. event_id is keyed on the
+  // PaymentIntent id, which the LP success page also sees (return_url /
+  // ?payment_id=), so TikTok deduplicates this against the browser pixel event.
+  // Fires for one-time AND first subscription payment (this handler's scope).
+  // Renewals (invoice.paid) intentionally do NOT fire — they are recurring
+  // revenue, not ad-driven conversions, and would pollute campaign optimization.
+  trackTikTokPurchase({
+    stripeId: pi.id,
+    value: totalDollars,
+    currency: "USD",
+    email,
+    phone,
+    ttclid: meta.ttclid ?? null,
+    ttp: meta.ttp ?? null,
+    contents: [
+      {
+        content_id: product?.sku ?? productId ?? "AFTERSLIM-GLP1-COMPANION",
+        content_type: "product",
+        content_name: product?.name ?? "AfterSlim GLP-1 Companion",
+        quantity: qty,
+        price: qty > 0 ? Math.round((totalCents / qty)) / 100 : totalDollars,
+      },
+    ],
+  }).catch((err) => console.error("[tiktok] purchase post failed:", err));
 
   // CartRover
   if (shippingAddr && email && product) {
