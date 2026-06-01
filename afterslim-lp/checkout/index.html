@@ -434,6 +434,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </button>
           </div>
           <div id="discount-feedback" style="display:none;font-size:12px;margin-bottom:10px"></div>
+          <div id="credit-row" style="display:none;margin:0 0 10px;padding:12px 14px;border:1px solid #fde8d6;background:#fff7ed;border-radius:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+              <div style="min-width:0">
+                <div style="font-size:13px;font-weight:700;color:#9a3412">Use store credit</div>
+                <div style="font-size:12px;color:#7c2d12;margin-top:2px" id="credit-balance-label">Available: $0.00</div>
+              </div>
+              <button type="button" id="credit-apply-btn" onclick="ckToggleCredit()" style="padding:8px 14px;border:1px solid #ea580c;background:#fff;color:#ea580c;border-radius:6px;font-weight:700;cursor:pointer;font-size:13px;flex-shrink:0">Apply</button>
+            </div>
+          </div>
           <div class="sidebar-row">
             <span>Subtotal</span>
             <span id="sidebar-subtotal">$37.99</span>
@@ -441,6 +450,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="sidebar-row" id="sidebar-discount-row" style="display:none">
             <span id="sidebar-discount-label" style="color:#16a34a">Discount</span>
             <span id="sidebar-discount" style="color:#16a34a">-$0.00</span>
+          </div>
+          <div class="sidebar-row" id="sidebar-credit-row" style="display:none">
+            <span style="color:#16a34a">Store credit</span>
+            <span id="sidebar-credit" style="color:#16a34a">-$0.00</span>
           </div>
           <div class="sidebar-row">
             <span>Shipping</span>
@@ -463,6 +476,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <script src="https://pay.google.com/gp/p/js/pay.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/supabase-client.js"></script>
   <script>
 var CK_PK='pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
 var CK_API='/api/checkout';
@@ -480,6 +495,14 @@ var CK_cust={name:'',email:'',phone:''};
 var CK_ship={address:'',address2:'',city:'',state:'',zip:'',country:'US'};
 var CK_stripe,CK_elements,CK_cardEl,CK_payRequest;
 var CK_discount={code:'',discountCents:0,label:''};
+// Loyalty / store credit redemption (Phase 2).
+// Populated by ckInitCredit() once the Supabase session resolves.
+// balanceCents = live balance from the customer_credit_balance view.
+// appliedCents = how much of it the user toggled into this checkout.
+// accessToken  = JWT we forward to /api/checkout so the server can verify
+//                identity and re-cap the amount against the live balance
+//                (client-side numbers are advisory, server is source of truth).
+var CK_credit={profileId:'',accessToken:'',balanceCents:0,appliedCents:0};
 
 // TikTok: InitiateCheckout fires when the checkout page loads, with the
 // selected bundle's real price and quantity.
@@ -530,7 +553,10 @@ function ckPersistOrderContext(email, name, phone){
     var shipCents = shipVal === 'express' ? 499 : 0;
     var subtotalCents = Math.round(CK_info.price * 100);
     var discountCents = Math.min(CK_discount.discountCents || 0, subtotalCents);
-    var totalCents = Math.max(50, subtotalCents - discountCents + shipCents);
+    var afterCoupon = subtotalCents - discountCents;
+    var creditCap = Math.max(0, afterCoupon - 50);
+    var creditApplied = Math.min(CK_credit.appliedCents || 0, creditCap);
+    var totalCents = Math.max(50, afterCoupon - creditApplied + shipCents);
     sessionStorage.setItem('as_order_ctx', JSON.stringify({
       email: email || '',
       name: name || '',
@@ -684,6 +710,13 @@ async function ckPay(){
     var payBody={price_id:CK_priceId,customer_email:CK_cust.email,customer_name:CK_cust.name,shipping:CK_ship,...(window.asTikTokAttr?window.asTikTokAttr():{})};
     if(CK_payMethod==='afterpay') payBody.payment_method_type='afterpay_clearpay';
     if(CK_discount.code) payBody.promotion_code=CK_discount.code;
+    // Loyalty redemption: only forward when a logged-in customer actually
+    // toggled credit into this checkout. Server re-validates the JWT and
+    // re-caps the amount against the live balance before reducing the PI.
+    if(CK_credit.appliedCents>0&&CK_credit.accessToken){
+      payBody.customer_access_token=CK_credit.accessToken;
+      payBody.applied_credit_cents=CK_credit.appliedCents;
+    }
     var res=await fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payBody)});
     if(!res.ok){var ed=await res.json().catch(function(){return{};});throw new Error(ed.error||'Failed to create payment');}
     var data=await res.json();
@@ -742,19 +775,30 @@ if(zipInput){zipInput.addEventListener('input',function(){
   }
 });}
 
-// Compute and apply sidebar totals (subtotal, discount, shipping, total)
+// Compute and apply sidebar totals (subtotal, discount, store credit,
+// shipping, total). Order of application: coupon discount first, then store
+// credit. Both can't push the cart below the $0.50 Stripe minimum, which is
+// enforced again server-side in /api/checkout.
 function ckUpdateSidebarTotals(){
   var ship=document.querySelector('.shipping-option.selected input[type="radio"]');
   var shipVal=ship?ship.value:'standard';
   var shipCents=shipVal==='express'?499:0;
   var subtotalCents=Math.round(CK_info.price*100);
   var discountCents=Math.min(CK_discount.discountCents||0,subtotalCents);
-  var totalCents=Math.max(50,subtotalCents-discountCents+shipCents);
+  // Cap credit so post-coupon amount can still clear Stripe's $0.50 minimum
+  // (50 cents). Re-checked + re-capped server-side against the live balance.
+  var afterCoupon=subtotalCents-discountCents;
+  var creditCap=Math.max(0,afterCoupon-50);
+  var creditApplied=Math.min(CK_credit.appliedCents||0,creditCap);
+  CK_credit.appliedCents=creditApplied;
+  var totalCents=Math.max(50,afterCoupon-creditApplied+shipCents);
   function fmt(c){return '$'+(c/100).toFixed(2);}
   var subEl=document.getElementById('sidebar-subtotal');
   var discRow=document.getElementById('sidebar-discount-row');
   var discEl=document.getElementById('sidebar-discount');
   var discLabel=document.getElementById('sidebar-discount-label');
+  var creditRow=document.getElementById('sidebar-credit-row');
+  var creditEl=document.getElementById('sidebar-credit');
   var shipEl=document.getElementById('sidebar-shipping');
   var totalEl=document.getElementById('sidebar-total');
   var totalMobEl=document.getElementById('sidebar-total-mobile');
@@ -764,6 +808,8 @@ function ckUpdateSidebarTotals(){
     if(discEl)discEl.textContent='-'+fmt(discountCents);
     if(discLabel)discLabel.textContent='Discount ('+(CK_discount.code||CK_discount.label||'')+')';
   }
+  if(creditRow)creditRow.style.display=creditApplied>0?'flex':'none';
+  if(creditApplied>0&&creditEl)creditEl.textContent='-'+fmt(creditApplied);
   if(shipEl){
     if(shipCents===0){shipEl.textContent='Free';shipEl.style.color='#16a34a';shipEl.classList.add('sidebar-free');}
     else{shipEl.textContent=fmt(shipCents);shipEl.style.color='#1a1a1a';shipEl.classList.remove('sidebar-free');}
@@ -1011,6 +1057,44 @@ CK_payRequest.on('paymentmethod',function(ev){
 
 ckInitSidebar();
 ckShowStep(1);
+
+// Loyalty / store credit redemption (Phase 2). Only signed-in customers
+// can apply a balance against the order. We grab the Supabase session
+// quietly: if the customer is a guest, the credit-row stays hidden.
+async function ckInitCredit(){
+  try{
+    if(!window.afterslimAuth||!window.afterslimSupabase)return;
+    var session=await window.afterslimAuth.session();
+    if(!session||!session.user||!session.access_token)return;
+    var sb=window.afterslimSupabase;
+    var res=await sb.from('customer_credit_balance').select('balance_cents').eq('profile_id',session.user.id).maybeSingle();
+    var bal=(res&&res.data&&res.data.balance_cents)||0;
+    if(bal<=0)return;
+    CK_credit.profileId=session.user.id;
+    CK_credit.accessToken=session.access_token;
+    CK_credit.balanceCents=bal;
+    var row=document.getElementById('credit-row');
+    var lbl=document.getElementById('credit-balance-label');
+    if(lbl)lbl.textContent='Available: $'+(bal/100).toFixed(2);
+    if(row)row.style.display='block';
+  }catch(e){/* swallow: redemption is best-effort and never blocks checkout */}
+}
+
+function ckToggleCredit(){
+  var btn=document.getElementById('credit-apply-btn');
+  if(CK_credit.appliedCents>0){
+    CK_credit.appliedCents=0;
+    if(btn){btn.textContent='Apply';btn.style.background='#fff';btn.style.color='#ea580c';}
+  }else{
+    // Apply the full balance, capped by ckUpdateSidebarTotals against the
+    // post-coupon amount and Stripe's $0.50 minimum.
+    CK_credit.appliedCents=CK_credit.balanceCents;
+    if(btn){btn.textContent='Remove';btn.style.background='#ea580c';btn.style.color='#fff';}
+  }
+  ckUpdateSidebarTotals();
+}
+
+ckInitCredit();
   </script>
 </body>
 </html>
