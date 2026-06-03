@@ -35,5 +35,27 @@
       "source": "/api/checkout",
       "destination": "https://admin.afterslim.com/api/checkout"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/shop/:slug*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/shop",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/science",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug*",
+      "destination": "/science",
+      "permanent": true
+    }
   ]
 }
