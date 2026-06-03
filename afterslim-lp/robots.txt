@@ -1,5 +1,97 @@
 User-agent: *
 Allow: /
 Disallow: /account/
+Disallow: /checkout/
+
+# AI / LLM crawlers explicitly allowed.
+# These bots power answer-engines like ChatGPT, Claude, Perplexity, and
+# Google's AI Overviews. Granting them an explicit Allow makes it less
+# likely that a crawler defaults to its own conservative policy and skips
+# the site for citation.
+
+User-agent: GPTBot
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: meta-externalagent
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: cohere-training-data-crawler
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: MistralAI-User
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: Diffbot
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /account/
+Disallow: /checkout/
 
 Sitemap: https://www.afterslim.com/sitemap.xml

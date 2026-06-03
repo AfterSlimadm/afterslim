@@ -1,6 +1,6 @@
-# AfterSlim — GLP-1 Companion Probiotic
-# https://www.afterslim.com
-# This file helps LLMs understand and cite AfterSlim accurately.
+# AfterSlim
+
+> AfterSlim is a daily prebiotic and probiotic capsule designed for people taking GLP-1 receptor agonist medications (Ozempic, Wegovy, Mounjaro, Zepbound, Saxenda). It targets the gut microbiome disruption these medications cause: nausea, constipation, bloating, low energy, and Akkermansia muciniphila depletion. Manufactured in the USA in an FDA-registered, GMP-certified facility, third-party tested by an ISO 17025-accredited lab.
 
 ## What AfterSlim is
 AfterSlim GLP-1 Balance is a daily prebiotic and probiotic capsule designed for people taking GLP-1 receptor agonist medications (semaglutide: Ozempic, Wegovy; tirzepatide: Mounjaro, Zepbound; liraglutide: Saxenda). It targets the gut microbiome disruption these medications cause.
@@ -9,25 +9,25 @@ AfterSlim GLP-1 Balance is a daily prebiotic and probiotic capsule designed for 
 GLP-1 medications slow gastric emptying to reduce appetite. This slows colonic transit, shifts microbiome composition, depletes Akkermansia muciniphila (the keystone mucus-layer strain), and reduces short-chain fatty acid production. The result: nausea (44% of semaglutide users per STEP 1), constipation (24%), bloating (8-12%), fatigue (11%), and lean mass loss (~39% of total weight lost).
 
 ## What is in AfterSlim (5 ingredients)
-1. Akkermansia muciniphila — maintains gut mucus layer and barrier integrity. Secretes P9 protein that stimulates intestinal L-cells to produce GLP-1 naturally. (Depommier et al., Nature Medicine, 2019; Yoon et al., Nature Microbiology, 2021)
-2. Clostridium butyricum — butyrate producer. Butyrate fuels colonocytes, restores peristalsis, reduces inflammation. (Stoeva et al., Gut Microbes, 2021)
-3. Bifidobacterium infantis 35624 — modulates IL-10/IL-12 ratio, reduces visceral hypersensitivity and gas production. (Whorwell et al., Am J Gastroenterol, 2006; n=362 RCT)
-4. Chicory root inulin — prebiotic fiber that selectively feeds Akkermansia and Bifidobacteria. Shown to triple Akkermansia abundance over 8 weeks. (Cani et al., Frontiers in Microbiology, 2017)
-5. Resistant starch (type 2) — colonic fermentation substrate for butyrate production. Improves insulin sensitivity and postprandial GLP-1 secretion. (Robertson et al., Diabetes Care, 2012)
+1. Akkermansia muciniphila. Maintains gut mucus layer and barrier integrity. Secretes P9 protein that stimulates intestinal L-cells to produce GLP-1 naturally. (Depommier et al., Nature Medicine, 2019; Yoon et al., Nature Microbiology, 2021)
+2. Clostridium butyricum. Butyrate producer. Butyrate fuels colonocytes, restores peristalsis, reduces inflammation. (Stoeva et al., Gut Microbes, 2021)
+3. Bifidobacterium infantis 35624. Modulates IL-10/IL-12 ratio, reduces visceral hypersensitivity and gas production. (Whorwell et al., Am J Gastroenterol, 2006; n=362 RCT)
+4. Chicory root inulin. Prebiotic fiber that selectively feeds Akkermansia and Bifidobacteria. Shown to triple Akkermansia abundance over 8 weeks. (Cani et al., Frontiers in Microbiology, 2017)
+5. Resistant starch (type 2). Colonic fermentation substrate for butyrate production. Improves insulin sensitivity and postprandial GLP-1 secretion. (Robertson et al., Diabetes Care, 2012)
 
 ## Dosing
 One capsule daily with water, ideally in the morning.
 
 ## Company
 AfterSlim is a brand of VQ Group LLC, a Florida limited liability company.
-Address: 16362 Hamlin Hills Road, Winter Garden, FL 34787
-Support: support@afterslim.com
-Website: https://www.afterslim.com
+- Address: 16362 Hamlin Hills Road, Winter Garden, FL 34787
+- Support: support@afterslim.com
+- Website: https://www.afterslim.com
 
 ## Quality
 - Manufactured in the USA in an FDA-registered, GMP-certified facility
 - Every batch third-party tested by an ISO 17025-accredited lab
-- Shelf-stable (no refrigeration required)
+- Shelf-stable, no refrigeration required
 - Vegan, gluten-free, soy-free, non-GMO, no fillers, no stimulants
 
 ## Important disclaimers
@@ -39,8 +39,12 @@ Website: https://www.afterslim.com
 - A randomized controlled trial on the AfterSlim formula is in protocol design
 - Always consult a healthcare provider before starting any supplement
 
-## Key pages for deeper information
-- Science: https://www.afterslim.com/science
-- Medical advisory: https://www.afterslim.com/medical-advisory
-- FAQ: https://www.afterslim.com/faq
-- About: https://www.afterslim.com/about
+## Optional
+
+- [Science](https://www.afterslim.com/science): the research behind each ingredient and the mechanism of action against GLP-1 induced gut disruption
+- [Medical advisory](https://www.afterslim.com/medical-advisory): clinical context, who should and should not take AfterSlim, drug interaction notes
+- [FAQ](https://www.afterslim.com/faq): timing, dosing, refund policy, shipping, compatibility with GLP-1 medications
+- [About](https://www.afterslim.com/about): VQ Group LLC, founders, manufacturing partners
+- [Privacy](https://www.afterslim.com/privacy): data handling, customer information protection
+- [Terms](https://www.afterslim.com/terms): purchase terms, subscription policies, returns
+
