@@ -74,15 +74,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h1>Reset your password</h1>
     <p class="auth-lede">Enter the email on your account and we'll send you a link to set a new password.</p>
 
-    <div id="authError" class="auth-error" style="display: none;"></div>
-    <div id="authSuccess" class="auth-success" style="display: none;"></div>
-
     <form class="auth-form" id="resetForm" novalidate>
       <div>
         <label for="email">Email</label>
         <input id="email" name="email" type="email" autocomplete="email" required>
       </div>
       <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" data-language="en" style="margin: 6px 0;"></div>
+      <div id="authError" class="auth-error" style="display: none;"></div>
+      <div id="authSuccess" class="auth-success" style="display: none;"></div>
       <button type="submit" id="resetBtn">Send reset link</button>
     </form>
 

@@ -114,11 +114,35 @@ html[data-auth="pending"] body { visibility: hidden; }
   font-size: 13.5px;
   border-radius: 8px;
   padding: 10px 12px;
-  margin-bottom: 6px;
+  margin-top: 6px;
   line-height: 1.4;
 }
 .auth-error { background: rgba(220, 38, 38, 0.08); color: #b91c1c; }
 .auth-success { background: rgba(22, 163, 74, 0.08); color: #15803d; }
+
+/* Password input with show/hide eye toggle on the right edge. */
+.auth-password-wrap { position: relative; }
+.auth-password-wrap input { padding-right: 44px; }
+.auth-password-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.auth-password-toggle:hover { color: var(--orange); background: rgba(234, 88, 12, 0.06); }
+.auth-password-toggle svg { display: block; }
+.auth-password-toggle .eye-off { display: none; }
+.auth-password-wrap input[type="text"] + .auth-password-toggle .eye { display: none; }
+.auth-password-wrap input[type="text"] + .auth-password-toggle .eye-off { display: block; }
 
 
 /* ─── Authenticated dashboard ─── */
