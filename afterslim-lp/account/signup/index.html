@@ -79,10 +79,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <form class="auth-form" id="signupForm" novalidate>
       <div>
-        <label for="full_name">Your name</label>
-        <input id="full_name" name="full_name" type="text" autocomplete="name" required>
-      </div>
-      <div>
         <label for="email">Email</label>
         <input id="email" name="email" type="email" autocomplete="email" required>
       </div>
@@ -95,7 +91,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <label for="confirm_password">Confirm password</label>
         <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required minlength="8">
       </div>
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" data-language="en" data-size="compact" style="margin: 6px 0;"></div>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" data-language="en" style="margin: 6px 0;"></div>
       <button type="submit" id="signupBtn">Create account</button>
     </form>
 
@@ -132,7 +128,6 @@ window.onTurnstileError   = function() { window._captchaToken = ''; };
     btn.disabled = true;
     btn.textContent = 'Creating account...';
 
-    var name = document.getElementById('full_name').value.trim();
     var email = document.getElementById('email').value.trim();
     var password = document.getElementById('password').value;
     var confirmPw = document.getElementById('confirm_password').value;
@@ -150,7 +145,7 @@ window.onTurnstileError   = function() { window._captchaToken = ''; };
     if (!window._captchaToken) return showErr('Please complete the captcha.');
 
     var token = window._captchaToken;
-    var { data, error } = await window.afterslimAuth.signUp(email, password, name, token);
+    var { data, error } = await window.afterslimAuth.signUp(email, password, '', token);
     window._captchaToken = '';
     if (window.turnstile && typeof window.turnstile.reset === 'function') {
       try { window.turnstile.reset(); } catch (e) {}
