@@ -95,6 +95,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <label for="confirm_password">Confirm password</label>
         <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required minlength="8">
       </div>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" style="margin: 6px 0;"></div>
       <button type="submit" id="signupBtn">Create account</button>
     </form>
 
@@ -107,7 +108,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/js/supabase-client.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
+// Supabase Auth has Cloudflare Turnstile bot protection enabled at the
+// project level. The widget below provides a one-time token that gets
+// forwarded into client.auth.signUp({ options: { captchaToken } }).
+// Without it, every auth call returns "captcha protection: request
+// disallowed (no captcha_token found)".
+window._captchaToken = '';
+window.onTurnstileSuccess = function(t) { window._captchaToken = t; };
+window.onTurnstileExpired = function() { window._captchaToken = ''; };
+window.onTurnstileError   = function() { window._captchaToken = ''; };
 (async function() {
   await window.afterslimAuth.redirectIfAuthed();
 
@@ -138,8 +149,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var pwError = validatePassword(password);
     if (pwError) return showErr(pwError);
     if (password !== confirmPw) return showErr('Passwords do not match.');
+    if (!window._captchaToken) return showErr('Please complete the captcha.');
 
-    var { data, error } = await window.afterslimAuth.signUp(email, password, name);
+    var token = window._captchaToken;
+    var { data, error } = await window.afterslimAuth.signUp(email, password, name, token);
+    // Turnstile tokens are one-shot; reset for any retry.
+    window._captchaToken = '';
+    if (window.turnstile && typeof window.turnstile.reset === 'function') {
+      try { window.turnstile.reset(); } catch (e) {}
+    }
 
     if (error) {
       errBox.textContent = error.message || 'Sign up failed. Please try again.';
