@@ -117,35 +117,24 @@
       return false;
     },
 
-    // Captcha-aware variants. Supabase Auth has Cloudflare Turnstile bot
-    // protection enabled at the project level; without a token every auth
-    // call returns "captcha protection: request disallowed". Each auth page
-    // renders the Turnstile widget and passes the resulting token through
-    // these helpers.
-    async signInWithPassword(email, password, captchaToken) {
-      return client.auth.signInWithPassword({
-        email,
-        password,
-        options: captchaToken ? { captchaToken } : undefined,
-      });
+    async signInWithPassword(email, password) {
+      return client.auth.signInWithPassword({ email, password });
     },
 
-    async signUp(email, password, fullName, captchaToken) {
+    async signUp(email, password, fullName) {
       return client.auth.signUp({
         email,
         password,
         options: {
           data: { full_name: fullName || '' },
           emailRedirectTo: window.location.origin + '/account/confirmed',
-          ...(captchaToken ? { captchaToken } : {}),
         },
       });
     },
 
-    async sendPasswordReset(email, captchaToken) {
+    async sendPasswordReset(email) {
       return client.auth.resetPasswordForEmail(email, {
         redirectTo: window.location.origin + '/account/reset-password',
-        ...(captchaToken ? { captchaToken } : {}),
       });
     },
 

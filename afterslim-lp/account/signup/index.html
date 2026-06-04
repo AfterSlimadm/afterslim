@@ -100,7 +100,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </button>
         </div>
       </div>
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" data-language="en" style="margin: 6px 0;"></div>
       <div id="authError" class="auth-error" style="display: none;"></div>
       <div id="authSuccess" class="auth-success" style="display: none;"></div>
       <button type="submit" id="signupBtn">Create account</button>
@@ -115,16 +114,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/js/supabase-client.js"></script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
-// Supabase Auth has Cloudflare Turnstile bot protection enabled at the
-// project level. The widget provides a one-time token forwarded into
-// client.auth.signUp({ options: { captchaToken } }).
-window._captchaToken = '';
-window.onTurnstileSuccess = function(t) { window._captchaToken = t; };
-window.onTurnstileExpired = function() { window._captchaToken = ''; };
-window.onTurnstileError   = function() { window._captchaToken = ''; };
-
 // Show/hide password toggle. CSS swaps the eye/eye-off icons based on
 // the input's type attribute, so JS only needs to flip the type.
 document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {
@@ -166,14 +156,8 @@ document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {
     var pwError = validatePassword(password);
     if (pwError) return showErr(pwError);
     if (password !== confirmPw) return showErr('Passwords do not match.');
-    if (!window._captchaToken) return showErr('Please complete the captcha.');
 
-    var token = window._captchaToken;
-    var { data, error } = await window.afterslimAuth.signUp(email, password, '', token);
-    window._captchaToken = '';
-    if (window.turnstile && typeof window.turnstile.reset === 'function') {
-      try { window.turnstile.reset(); } catch (e) {}
-    }
+    var { data, error } = await window.afterslimAuth.signUp(email, password, '');
 
     if (error) {
       errBox.textContent = error.message || 'Sign up failed. Please try again.';
@@ -189,14 +173,6 @@ document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {
       okBox.textContent = 'Account created! Check your email for a confirmation link, then sign in.';
       okBox.style.display = 'block';
       btn.textContent = 'Check your email';
-      // Account already created. Hide the captcha widget so the user
-      // doesn't get a fresh "Verify you are human" prompt that would
-      // suggest they still need to do something.
-      var widget = document.querySelector('.cf-turnstile');
-      if (widget) widget.style.display = 'none';
-      // Same for the inputs and helper text. We want the success
-      // message + "Check your email" button to be the only thing
-      // visible in the card.
       var emailRow = document.getElementById('email').closest('div');
       var pwRow = document.getElementById('password').closest('div').parentElement;
       var confirmRow = document.getElementById('confirm_password').closest('div').parentElement;

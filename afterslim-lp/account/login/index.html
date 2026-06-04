@@ -89,7 +89,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </button>
         </div>
       </div>
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" data-language="en" style="margin: 6px 0;"></div>
       <div id="authError" class="auth-error" style="display: none;"></div>
       <button type="submit" id="loginBtn">Sign in</button>
     </form>
@@ -101,14 +100,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/js/supabase-client.js"></script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
-// Supabase Auth requires a Turnstile captchaToken on every call.
-window._captchaToken = '';
-window.onTurnstileSuccess = function(t) { window._captchaToken = t; };
-window.onTurnstileExpired = function() { window._captchaToken = ''; };
-window.onTurnstileError   = function() { window._captchaToken = ''; };
-
 // Show/hide password toggle. CSS swaps the eye/eye-off icons based on
 // the input's type attribute, so JS only needs to flip the type.
 document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {
@@ -138,19 +130,7 @@ document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {
     var email = document.getElementById('email').value.trim();
     var password = document.getElementById('password').value;
 
-    if (!window._captchaToken) {
-      errBox.textContent = 'Please complete the captcha.';
-      errBox.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Sign in';
-      return;
-    }
-    var token = window._captchaToken;
-    var { data, error } = await window.afterslimAuth.signInWithPassword(email, password, token);
-    window._captchaToken = '';
-    if (window.turnstile && typeof window.turnstile.reset === 'function') {
-      try { window.turnstile.reset(); } catch (e) {}
-    }
+    var { data, error } = await window.afterslimAuth.signInWithPassword(email, password);
 
     if (error) {
       errBox.textContent = error.message || 'Sign in failed. Please try again.';
