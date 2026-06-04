@@ -117,29 +117,13 @@
       return false;
     },
 
-    async signInWithPassword(email, password) {
-      return client.auth.signInWithPassword({ email, password });
-    },
-
-    async signUp(email, password, fullName) {
-      return client.auth.signUp({
-        email,
-        password,
+    async signInWithGoogle(redirectTo) {
+      return client.auth.signInWithOAuth({
+        provider: 'google',
         options: {
-          data: { full_name: fullName || '' },
-          emailRedirectTo: window.location.origin + '/account/confirmed',
+          redirectTo: redirectTo || (window.location.origin + '/account'),
         },
       });
-    },
-
-    async sendPasswordReset(email) {
-      return client.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/account/reset-password',
-      });
-    },
-
-    async updatePassword(newPassword) {
-      return client.auth.updateUser({ password: newPassword });
     },
 
     async signOut() {

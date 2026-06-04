@@ -120,29 +120,45 @@ html[data-auth="pending"] body { visibility: hidden; }
 .auth-error { background: rgba(220, 38, 38, 0.08); color: #b91c1c; }
 .auth-success { background: rgba(22, 163, 74, 0.08); color: #15803d; }
 
-/* Password input with show/hide eye toggle on the right edge. */
-.auth-password-wrap { position: relative; }
-.auth-password-wrap input { padding-right: 44px; }
-.auth-password-toggle {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  padding: 6px;
-  color: var(--ink-2);
+/* Google sign-in button. White card with Google brand mark, full width. */
+.google-btn {
   display: flex;
   align-items: center;
-  border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f1410;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 13px 22px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
-.auth-password-toggle:hover { color: var(--orange); background: rgba(234, 88, 12, 0.06); }
-.auth-password-toggle svg { display: block; }
-.auth-password-toggle .eye-off { display: none; }
-.auth-password-wrap input[type="text"] + .auth-password-toggle .eye { display: none; }
-.auth-password-wrap input[type="text"] + .auth-password-toggle .eye-off { display: block; }
+.google-btn:hover {
+  border-color: var(--orange);
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.1);
+}
+.google-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--bg-2);
+}
+.google-btn svg { flex-shrink: 0; }
+.google-btn.is-loading span::after {
+  content: '...';
+  display: inline-block;
+  margin-left: 4px;
+  animation: dots 1.2s infinite;
+}
+@keyframes dots {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 
 /* ─── Authenticated dashboard ─── */
