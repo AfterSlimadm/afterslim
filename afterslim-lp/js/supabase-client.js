@@ -136,7 +136,7 @@
         password,
         options: {
           data: { full_name: fullName || '' },
-          emailRedirectTo: window.location.origin + '/account/login',
+          emailRedirectTo: window.location.origin + '/account/confirmed',
           ...(captchaToken ? { captchaToken } : {}),
         },
       });
