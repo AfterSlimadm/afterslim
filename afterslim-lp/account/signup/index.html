@@ -95,7 +95,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <label for="confirm_password">Confirm password</label>
         <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required minlength="8">
       </div>
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" data-language="en" style="margin: 6px 0;"></div>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAADGYIwoLnd-F1XmA" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError" data-language="en" data-size="compact" style="margin: 6px 0;"></div>
       <button type="submit" id="signupBtn">Create account</button>
     </form>
 
@@ -111,10 +111,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
 // Supabase Auth has Cloudflare Turnstile bot protection enabled at the
-// project level. The widget below provides a one-time token that gets
-// forwarded into client.auth.signUp({ options: { captchaToken } }).
-// Without it, every auth call returns "captcha protection: request
-// disallowed (no captcha_token found)".
+// project level. The widget provides a one-time token forwarded into
+// client.auth.signUp({ options: { captchaToken } }).
 window._captchaToken = '';
 window.onTurnstileSuccess = function(t) { window._captchaToken = t; };
 window.onTurnstileExpired = function() { window._captchaToken = ''; };
@@ -153,7 +151,6 @@ window.onTurnstileError   = function() { window._captchaToken = ''; };
 
     var token = window._captchaToken;
     var { data, error } = await window.afterslimAuth.signUp(email, password, name, token);
-    // Turnstile tokens are one-shot; reset for any retry.
     window._captchaToken = '';
     if (window.turnstile && typeof window.turnstile.reset === 'function') {
       try { window.turnstile.reset(); } catch (e) {}
@@ -167,9 +164,6 @@ window.onTurnstileError   = function() { window._captchaToken = ''; };
       return;
     }
 
-    // If email confirmation is required by Supabase project settings,
-    // the user needs to click a link before they can sign in. Otherwise
-    // they're signed in immediately.
     if (data.session) {
       window.location.href = '/account';
     } else {
