@@ -189,6 +189,20 @@ document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {
       okBox.textContent = 'Account created! Check your email for a confirmation link, then sign in.';
       okBox.style.display = 'block';
       btn.textContent = 'Check your email';
+      // Account already created. Hide the captcha widget so the user
+      // doesn't get a fresh "Verify you are human" prompt that would
+      // suggest they still need to do something.
+      var widget = document.querySelector('.cf-turnstile');
+      if (widget) widget.style.display = 'none';
+      // Same for the inputs and helper text. We want the success
+      // message + "Check your email" button to be the only thing
+      // visible in the card.
+      var emailRow = document.getElementById('email').closest('div');
+      var pwRow = document.getElementById('password').closest('div').parentElement;
+      var confirmRow = document.getElementById('confirm_password').closest('div').parentElement;
+      if (emailRow) emailRow.style.display = 'none';
+      if (pwRow) pwRow.style.display = 'none';
+      if (confirmRow) confirmRow.style.display = 'none';
     }
   });
 })();
