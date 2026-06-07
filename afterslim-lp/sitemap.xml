@@ -7,6 +7,8 @@
   <url><loc>https://www.afterslim.com/contact</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://www.afterslim.com/medical-advisory</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://www.afterslim.com/partner-with-us</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.afterslim.com/partner-with-us/ambassadors</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.afterslim.com/partner-with-us/resellers</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://www.afterslim.com/review</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://www.afterslim.com/shipping</loc><priority>0.4</priority><changefreq>yearly</changefreq></url>
   <url><loc>https://www.afterslim.com/returns</loc><priority>0.4</priority><changefreq>yearly</changefreq></url>

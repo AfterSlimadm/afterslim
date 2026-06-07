@@ -17,22 +17,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }(window, document, 'ttq');
 </script>
 <!-- End TikTok Pixel Code -->
-<!-- TikTok attribution capture: persist ttclid, expose asTikTokAttr() for checkout -->
-<script>
-(function(){
-  try{var c=new URLSearchParams(location.search).get('ttclid');if(c)localStorage.setItem('as_ttclid',c);}catch(e){}
-  window.asTikTokAttr=function(){
-    var ttclid='';try{ttclid=localStorage.getItem('as_ttclid')||'';}catch(e){}
-    var ttp='';try{var m=document.cookie.match(/(?:^|; )_ttp=([^;]+)/);if(m)ttp=decodeURIComponent(m[1]);}catch(e){}
-    return {ttclid:ttclid,ttp:ttp};
-  };
-})();
-</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Partner with AfterSlim — Affiliate Program for US Creators</title>
-<meta name="description" content="Earn recurring commission promoting a supplement built specifically for people on Ozempic, Mounjaro, Wegovy, and Zepbound. US-based creators only.">
+<title>Partner with AfterSlim — Ambassadors and Resellers</title>
+<meta name="description" content="Two ways to partner with AfterSlim: become an Ambassador and earn 40% commission, or refer friends as a Reseller and earn 15% store credit on every paid order.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCTNMWWXWB"></script>
@@ -40,157 +29,186 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],u.toString=function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e},u.people.toString=function(){return u.toString(1)+'.people (stub)'},o='init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_M05Y8p9sTGkPpIEjIqsczpA0dVMW4cvYtkMX7BVgLfS',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',session_recording:{maskAllInputs:true,maskTextSelector:'[data-private], .ph-no-capture'},loaded:function(p){try{if(localStorage.getItem('posthog_internal_user')==='true')p.opt_out_capturing();if(/^\/checkout(\/|$)/.test(location.pathname))p.stopSessionRecording();}catch(e){}}});</script>
 <link rel="stylesheet" href="/styles/policy.css">
 <style>
-/* Partner with Us — editorial layout, no twin-card grids,
-   no side-stripe accents. */
-
-.pw-hero { padding: 88px 24px 32px; max-width: 820px; margin: 0 auto; text-align: center; }
-.pw-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--orange-dark); margin: 0 0 18px; }
-.pw-hero h1 { font-size: clamp(44px, 6vw, 68px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.02; margin: 0 0 22px; }
-.pw-hero h1 em { color: var(--orange); font-style: normal; font-weight: 800; }
-.pw-hero p { font-size: 18.5px; color: var(--ink-2); margin: 0 auto 32px; max-width: 600px; line-height: 1.55; }
-
-.pw-hero-cta {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 17px 32px;
-  background: var(--orange); color: #fff;
-  border-radius: 999px; font-weight: 700; font-size: 14px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.15s, transform 0.15s;
+.hub-hero {
+  padding: 88px 24px 16px;
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
 }
-.pw-hero-cta:hover { background: var(--orange-dark); color: #fff; transform: translateY(-1px); }
-
-/* Editorial stat strip — single row, no card boxes */
-.pw-stats {
-  max-width: 920px;
-  margin: 48px auto 16px;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px 32px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.pw-stats > div { padding: 28px 0; text-align: center; }
-.pw-stats > div + div { border-left: 1px solid var(--line); }
-@media (max-width: 720px) {
-  .pw-stats { grid-template-columns: 1fr; }
-  .pw-stats > div + div { border-left: 0; border-top: 1px solid var(--line); }
-}
-.pw-stat-value { font-size: 28px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; margin: 0 0 6px; }
-.pw-stat-label { font-size: 13px; color: var(--ink-2); margin: 0; line-height: 1.45; }
-
-.pw-section { max-width: 720px; margin: 0 auto; padding: 64px 24px 16px; }
-.pw-section h2 { font-size: clamp(28px, 3vw, 34px); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 22px; line-height: 1.15; }
-.pw-section p { font-size: 17px; line-height: 1.7; color: var(--ink); margin: 0 0 18px; }
-.pw-section strong { font-weight: 700; }
-
-/* Numbered timeline. Numbers float left as a hairline divider. */
-.pw-steps { max-width: 720px; margin: 0 auto; padding: 8px 24px 16px; display: grid; gap: 0; }
-.pw-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 28px 0;
-  border-top: 1px solid var(--line);
-}
-.pw-step:last-child { border-bottom: 1px solid var(--line); }
-.pw-step-num {
-  flex-shrink: 0;
-  width: 48px;
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--orange);
-  letter-spacing: -0.02em;
-  line-height: 1;
-  margin-top: 2px;
-}
-.pw-step-body { flex: 1; min-width: 0; }
-.pw-step h3 { font-size: 19px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.01em; }
-.pw-step p { font-size: 15px; color: var(--ink-2); margin: 0; line-height: 1.6; }
-
-/* Good fit — 2-column tight grid on desktop */
-.pw-good-fit { background: var(--orange-tint); padding: 72px 0; margin: 72px 0 0; }
-.pw-good-fit .inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-.pw-good-fit h2 { font-size: clamp(28px, 3vw, 34px); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 32px; text-align: center; }
-.pw-good-fit ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px 32px;
-}
-@media (max-width: 720px) { .pw-good-fit ul { grid-template-columns: 1fr; } }
-.pw-good-fit li { display: flex; gap: 14px; align-items: flex-start; font-size: 15px; line-height: 1.5; color: var(--ink); }
-.pw-good-fit li svg { flex-shrink: 0; color: var(--orange); margin-top: 4px; }
-.pw-good-fit li strong { display: block; font-weight: 700; margin-bottom: 4px; font-size: 15.5px; }
-.pw-good-fit li span > span { display: block; color: var(--ink-2); }
-
-/* Eligibility — full border, no side stripe, modest tint */
-.pw-eligibility {
-  max-width: 720px;
-  margin: 48px auto 24px;
-  padding: 28px 32px;
-  background: var(--orange-tint);
-  border: 1px solid rgba(234, 88, 12, 0.18);
-  border-radius: 16px;
-}
-.pw-eligibility h3 {
+.hub-eyebrow {
   font-size: 11.5px;
   font-weight: 700;
-  margin: 0 0 16px;
-  color: var(--orange-dark);
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  color: var(--orange-dark);
+  margin: 0 0 18px;
 }
-.pw-eligibility p { font-size: 14.5px; line-height: 1.65; color: var(--ink); margin: 0 0 12px; }
-.pw-eligibility p:last-child { margin: 0; }
-.pw-eligibility strong { font-weight: 700; }
+.hub-hero h1 {
+  font-size: clamp(44px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  margin: 0 0 20px;
+}
+.hub-hero p {
+  font-size: 18.5px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0 auto;
+  max-width: 600px;
+}
 
-.pw-cta { text-align: center; padding: 80px 24px 96px; max-width: 720px; margin: 0 auto; }
-.pw-cta h2 { font-size: clamp(28px, 3vw, 36px); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 14px; }
-.pw-cta p { font-size: 16.5px; color: var(--ink-2); margin: 0 0 28px; }
-.pw-cta-btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 17px 32px;
-  background: var(--orange); color: #fff;
-  border-radius: 999px; font-weight: 700; font-size: 14px;
-  letter-spacing: 0.08em; text-transform: uppercase;
+.hub-cards {
+  max-width: 1080px;
+  margin: 56px auto 24px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 820px) { .hub-cards { grid-template-columns: 1fr; } }
+
+.hub-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 36px 32px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 24px;
   text-decoration: none;
-  transition: background 0.15s, transform 0.15s;
+  color: var(--ink);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
 }
-.pw-cta-btn:hover { background: var(--orange-dark); color: #fff; transform: translateY(-1px); }
-.pw-cta-sub { display: block; margin-top: 18px; font-size: 13.5px; color: var(--ink-2); }
-.pw-cta-sub a { color: var(--orange-dark); text-decoration: underline; }
+.hub-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(31, 20, 16, 0.08);
+  color: var(--ink);
+}
+.hub-card.is-orange {
+  background: var(--orange);
+  color: #fff;
+  border-color: var(--orange);
+}
+.hub-card.is-orange:hover {
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(234, 88, 12, 0.25);
+}
 
-.pw-docs { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; border-top: 1px solid var(--line); }
-.pw-docs h3 { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--ink-2); margin: 32px 0 18px; }
-.pw-docs ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-.pw-docs a {
-  color: var(--ink); text-decoration: none; font-size: 14.5px;
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 6px 0;
+.hub-card-eyebrow {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: var(--orange-tint);
+  color: var(--orange-dark);
+  border-radius: 999px;
+  margin-bottom: 22px;
 }
-.pw-docs a:hover { color: var(--orange-dark); }
-.pw-docs a svg { color: var(--ink-2); }
+.hub-card.is-orange .hub-card-eyebrow {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.hub-card h2 {
+  font-size: clamp(28px, 3vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 14px;
+}
+.hub-card p.hub-card-lede {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0 0 24px;
+}
+.hub-card.is-orange p.hub-card-lede { color: rgba(255, 255, 255, 0.88); }
+
+.hub-card-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  gap: 12px;
+}
+.hub-card-bullets li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.hub-card.is-orange .hub-card-bullets li { color: rgba(255, 255, 255, 0.94); }
+.hub-card-bullets li svg { color: var(--orange); flex-shrink: 0; margin-top: 3px; }
+.hub-card.is-orange .hub-card-bullets li svg { color: #fff; }
+.hub-card-bullets li strong { font-weight: 700; }
+
+.hub-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 12px 24px;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hub-card.is-orange .hub-card-cta {
+  background: #fff;
+  color: var(--orange-dark);
+}
+
+.hub-foot {
+  max-width: 720px;
+  margin: 24px auto 96px;
+  padding: 32px 24px 0;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.hub-foot p {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0;
+}
+.hub-foot a {
+  color: var(--orange-dark);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 </style>
 <link rel="canonical" href="https://www.afterslim.com/partner-with-us">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.afterslim.com/partner-with-us">
-<meta property="og:title" content="Partner with AfterSlim — Affiliate Program">
-<meta property="og:description" content="Earn recurring commission promoting a supplement built specifically for people on Ozempic, Mounjaro, Wegovy, and Zepbound. US-based creators only.">
+<meta property="og:title" content="Partner with AfterSlim — Ambassadors and Resellers">
+<meta property="og:description" content="Two ways to partner with AfterSlim: become an Ambassador and earn 40% commission, or refer friends as a Reseller and earn store credit.">
 <meta property="og:site_name" content="AfterSlim">
 <meta property="og:image" content="https://www.afterslim.com/images/logo-afterslim-tight.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Partner with AfterSlim">
-<meta name="twitter:description" content="Earn recurring commission promoting a supplement built specifically for people on Ozempic, Mounjaro, Wegovy, and Zepbound. US-based creators only.">
+<meta name="twitter:description" content="Two ways to partner with AfterSlim: Ambassador (40% cash) or Reseller (15% store credit).">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "AfterSlim Affiliate Program",
-  "description": "Earn recurring commission promoting a supplement built specifically for people on Ozempic, Mounjaro, Wegovy, and Zepbound. US-based creators only.",
+  "name": "AfterSlim Partner Program",
+  "description": "Two ways to partner with AfterSlim: become an Ambassador and earn cash commission, or refer friends as a Reseller and earn store credit.",
   "url": "https://www.afterslim.com/partner-with-us",
   "publisher": {
     "@type": "Organization",
@@ -223,140 +241,66 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main>
 
-<section class="pw-hero container">
-  <p class="pw-eyebrow">Affiliate Program</p>
-  <h1>Promote a product <em>built for the moment</em></h1>
-  <p>Tens of millions of Americans are on GLP-1 medications. Most of them are quietly suffering from the gut side effects nobody talks about. AfterSlim is the supplement built specifically for them. If you have an audience in that conversation, we want to work with you.</p>
-  <a class="pw-hero-cta" href="https://admin.afterslim.com/affiliate/login">Apply now
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-  </a>
+<section class="hub-hero">
+  <p class="hub-eyebrow">Partner Program</p>
+  <h1>Two ways to grow with AfterSlim</h1>
+  <p>Whether you have a real audience to reach or a few friends who want what you take, there is a path for you. Pick the one that fits, the rest follows.</p>
 </section>
 
-<section class="pw-stats container">
-  <div class="pw-stat">
-    <p class="pw-stat-value">30 days</p>
-    <p class="pw-stat-label">Cookie window on every referral link</p>
-  </div>
-  <div class="pw-stat">
-    <p class="pw-stat-value">Monthly</p>
-    <p class="pw-stat-label">Commission payouts in USD</p>
-  </div>
-  <div class="pw-stat">
-    <p class="pw-stat-value">$27.99+</p>
-    <p class="pw-stat-label">Subscription orders eligible for commission</p>
-  </div>
-</section>
+<section class="hub-cards">
 
-<section class="pw-section container">
-  <h2>Why creators choose AfterSlim</h2>
-  <p>The GLP-1 wave is the biggest weight-loss shift in a decade, and the supplement space has not caught up. Most probiotics on the market were not designed for the specific gut disruption Ozempic, Mounjaro, Wegovy, and Zepbound cause. AfterSlim was. That gap is what makes your content land.</p>
-  <p>You are not pushing a generic stack. You are talking about a real problem your audience already has, with a solution they can act on the same day.</p>
-</section>
-
-<section class="pw-section container" style="padding-top: 8px;">
-  <h2>How the program works</h2>
-</section>
-
-<section class="pw-steps container">
-  <div class="pw-step">
-    <div class="pw-step-num">1</div>
-    <div class="pw-step-body">
-      <h3>Apply</h3>
-      <p>Submit a short application with your handles and audience size. Every application is reviewed manually by our team. No automatic approvals.</p>
-    </div>
-  </div>
-  <div class="pw-step">
-    <div class="pw-step-num">2</div>
-    <div class="pw-step-body">
-      <h3>Get your link and coupon</h3>
-      <p>Once approved, you get a unique referral link and a discount code your audience can use at checkout. Both attribute the sale to you.</p>
-    </div>
-  </div>
-  <div class="pw-step">
-    <div class="pw-step-num">3</div>
-    <div class="pw-step-body">
-      <h3>Post on-brand content</h3>
-      <p>Use the approved claims, follow the content guidelines, and disclose your affiliate relationship per FTC rules. We supply assets and copy starters.</p>
-    </div>
-  </div>
-  <div class="pw-step">
-    <div class="pw-step-num">4</div>
-    <div class="pw-step-body">
-      <h3>Get paid monthly</h3>
-      <p>Track sales, refunds, and pending commission in your dashboard. Payouts go out monthly once the order clears our refund window.</p>
-    </div>
-  </div>
-</section>
-
-<section class="pw-good-fit">
-  <div class="inner">
-    <h2>Good fit if you create for</h2>
-    <ul>
+  <a class="hub-card is-orange" href="/partner-with-us/ambassadors">
+    <span class="hub-card-eyebrow">For creators</span>
+    <h2>Ambassador</h2>
+    <p class="hub-card-lede">Promote AfterSlim to your audience and earn cash on every paid order. Manual application, real conversation if it is a fit.</p>
+    <ul class="hub-card-bullets">
       <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>People on GLP-1 medications.</strong> Ozempic, Mounjaro, Wegovy, Zepbound, Saxenda. Their feeds, their Reddit threads, their group chats.</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span><strong>40% commission</strong> for the first 6 months (Founding rate).</span>
       </li>
       <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Weight-loss content.</strong> Before-and-afters, journey diaries, calorie talks, prep cooking. Bonus if you discuss side effects honestly.</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span>Unique link and coupon. 90-day attribution cookie.</span>
       </li>
       <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Gut health and microbiome.</strong> Probiotic education, low-FODMAP cooking, gut-first wellness.</span>
-      </li>
-      <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Women over 35.</strong> The single biggest demographic on GLP-1 in the US. If your audience matches, you have a real opportunity here.</span>
-      </li>
-      <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Nurses, dietitians, telehealth coaches.</strong> Credibility-first audiences who actually research what they take.</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span>Monthly payouts in USD, after the refund window clears.</span>
       </li>
     </ul>
-  </div>
-</section>
-
-<section class="pw-section container">
-  <h2>What you get</h2>
-  <p><strong>Real commission on real orders.</strong> Subscriptions and one-time purchases both count. Discounts and refunds adjust the eligible amount, but the structure is straight DTC, not a complicated tiered scheme.</p>
-  <p><strong>An honest dashboard.</strong> Clicks, conversions, pending and paid commission, refund deductions, and payout history. No black box.</p>
-  <p><strong>Content support.</strong> Approved claims, brand assets, copy starters, and an FTC disclosure guide. If you are unsure about a piece of content, email <a href="mailto:support@afterslim.com">support@afterslim.com</a> with the subject line "Affiliate Content Review" before you post.</p>
-  <p><strong>A product you can stand behind.</strong> Third-party tested, FDA-registered facility, GMP-certified, 90-day money-back guarantee. If your audience asks the hard questions, you will have answers that hold up.</p>
-</section>
-
-<section class="pw-eligibility container">
-  <h3>Eligibility, in plain words</h3>
-  <p><strong>US residents only.</strong> The Program is open to individuals and entities that are US persons for federal tax purposes and have a verifiable US mailing address. A valid SSN or EIN is required and you will submit an IRS Form W-9 before your first payout.</p>
-  <p><strong>You must be at least 18 years old.</strong></p>
-  <p><strong>Not currently open to applicants based in Brazil or whose primary marketing audience is Brazilian.</strong> This is a hard restriction tied to how we operate the Program today.</p>
-  <p><strong>Approval is not automatic.</strong> We review every application by hand and may approve, reject, or revoke an account at our sole discretion.</p>
-</section>
-
-<section class="pw-cta">
-  <h2>Ready to apply?</h2>
-  <p>One short form, manual review, a real conversation if it is a fit.</p>
-  <a class="pw-cta-btn" href="https://admin.afterslim.com/affiliate/login">Apply now
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <span class="hub-card-cta">
+      Apply as Ambassador
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </span>
   </a>
-  <span class="pw-cta-sub">Questions? Email <a href="mailto:support@afterslim.com">support@afterslim.com</a> with subject "Affiliate Inquiry".</span>
+
+  <a class="hub-card" href="/partner-with-us/resellers">
+    <span class="hub-card-eyebrow">For customers</span>
+    <h2>Reseller</h2>
+    <p class="hub-card-lede">Already a customer? Share your link with friends and earn store credit on every paid order they place. No approval, no paperwork.</p>
+    <ul class="hub-card-bullets">
+      <li>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span><strong>15% store credit</strong> on every order placed through your link.</span>
+      </li>
+      <li>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span>Your friend gets <strong>10% off</strong> at checkout.</span>
+      </li>
+      <li>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span>Credit applies automatically on your next purchase.</span>
+      </li>
+    </ul>
+    <span class="hub-card-cta">
+      See how it works
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </span>
+  </a>
+
 </section>
 
-<section class="pw-docs container">
-  <h3>Program documents</h3>
-  <ul>
-    <li>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <a href="/legal/affiliate-program/affiliate-agreement.md">Affiliate Program Agreement</a>
-    </li>
-    <li>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <a href="/legal/affiliate-program/content-guidelines.md">Content Guidelines</a>
-    </li>
-    <li>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <a href="/legal/affiliate-program/ftc-disclosure-guide.md">FTC Disclosure Guide</a>
-    </li>
-  </ul>
+<section class="hub-foot">
+  <p>Already a partner? <a href="https://admin.afterslim.com/affiliate/login">Sign in to your dashboard</a>. Questions? Write to <a href="mailto:partnerships@afterslim.com">partnerships@afterslim.com</a>.</p>
 </section>
 
 </main>
