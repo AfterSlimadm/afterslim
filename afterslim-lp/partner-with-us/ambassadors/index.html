@@ -174,6 +174,95 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 .pw-docs a:hover { color: var(--orange-dark); }
 .pw-docs a svg { color: var(--ink-2); }
+
+/* Apply form section */
+.pw-apply { padding: 80px 24px 96px; }
+.pw-apply-inner { max-width: 720px; margin: 0 auto; }
+.pw-apply h2 { font-size: clamp(28px, 3vw, 36px); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 14px; }
+.pw-apply-lede { font-size: 16.5px; color: var(--ink-2); margin: 0 0 36px; line-height: 1.55; }
+
+.pw-form { display: grid; gap: 22px; }
+.pw-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+@media (max-width: 640px) { .pw-form-grid { grid-template-columns: 1fr; } }
+.pw-form-row label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 8px;
+  letter-spacing: -0.005em;
+}
+.pw-form-row label span[aria-hidden] { color: var(--orange); margin-left: 2px; }
+.pw-form-hint { font-weight: 400; color: var(--ink-2); margin-left: 4px; }
+.pw-form-row input,
+.pw-form-row textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  outline: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+.pw-form-row textarea { resize: vertical; min-height: 92px; line-height: 1.5; }
+.pw-form-row input:focus,
+.pw-form-row textarea:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
+}
+.pw-form-help {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+.pw-form-turnstile { display: flex; justify-content: flex-start; margin-top: 6px; min-height: 65px; }
+.pw-form-error {
+  font-size: 13.5px;
+  background: rgba(220, 38, 38, 0.08);
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 11px 14px;
+  line-height: 1.5;
+}
+.pw-form-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--orange);
+  border: 0;
+  border-radius: 999px;
+  padding: 16px 28px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+.pw-form-submit:hover:not(:disabled) { background: var(--orange-dark); transform: translateY(-1px); }
+.pw-form-submit:disabled { opacity: 0.55; cursor: not-allowed; background: var(--ink-2); }
+.pw-form-foot { font-size: 13px; color: var(--ink-2); margin: 8px 0 0; line-height: 1.6; text-align: center; }
+.pw-form-foot a { color: var(--orange-dark); text-decoration: underline; }
+
+.pw-apply-success {
+  text-align: center;
+  padding: 56px 32px;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  background: rgba(22, 163, 74, 0.05);
+  border-radius: 18px;
+}
+.pw-apply-success svg { color: #15803d; margin: 0 0 18px; }
+.pw-apply-success h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 10px; }
+.pw-apply-success p { font-size: 15.5px; color: var(--ink-2); margin: 0; line-height: 1.6; max-width: 440px; margin-left: auto; margin-right: auto; }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/partner-with-us/ambassadors">
 <meta property="og:type" content="website">
@@ -227,7 +316,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p class="pw-eyebrow">Ambassador Program</p>
   <h1>Promote a product <em>built for the moment</em></h1>
   <p>Tens of millions of Americans are on GLP-1 medications. Most of them are quietly suffering from the gut side effects nobody talks about. AfterSlim is the supplement built specifically for them. If you have an audience in that conversation, we want to work with you.</p>
-  <a class="pw-hero-cta" href="mailto:partnerships@afterslim.com?subject=Ambassador%20Application%20%E2%80%94%20AfterSlim&body=Hi%20AfterSlim%20team%2C%0A%0AI%27d%20like%20to%20apply%20to%20become%20an%20ambassador.%0A%0AHandles%3A%20%0AAudience%20size%3A%20%0APrimary%20platform%3A%20%0AContent%20I%20typically%20cover%3A%20%0A%0AThanks%2C">Apply now
+  <a class="pw-hero-cta" href="#apply">Apply now
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
   </a>
 </section>
@@ -339,13 +428,77 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p><strong>Approval is not automatic.</strong> We review every application by hand and may approve, reject, or revoke an account at our sole discretion.</p>
 </section>
 
-<section class="pw-cta">
-  <h2>Ready to apply?</h2>
-  <p>Send your handles, audience size, and primary platform. Manual review, a real conversation if it is a fit.</p>
-  <a class="pw-cta-btn" href="mailto:partnerships@afterslim.com?subject=Ambassador%20Application%20%E2%80%94%20AfterSlim&body=Hi%20AfterSlim%20team%2C%0A%0AI%27d%20like%20to%20apply%20to%20become%20an%20ambassador.%0A%0AHandles%3A%20%0AAudience%20size%3A%20%0APrimary%20platform%3A%20%0AContent%20I%20typically%20cover%3A%20%0A%0AThanks%2C">Apply now
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-  </a>
-  <span class="pw-cta-sub">Already in? <a href="https://admin.afterslim.com/affiliate/login">Sign in</a> to your dashboard. Questions? Email <a href="mailto:partnerships@afterslim.com">partnerships@afterslim.com</a>.</span>
+<section class="pw-apply" id="apply">
+  <div class="pw-apply-inner">
+    <h2>Apply now</h2>
+    <p class="pw-apply-lede">Manual review, a real reply within a couple of days. We do not auto-approve, we do not ghost.</p>
+
+    <form id="ambassadorForm" class="pw-form" novalidate>
+      <div class="pw-form-row">
+        <label for="full_name">Full name <span aria-hidden="true">*</span></label>
+        <input id="full_name" name="full_name" type="text" required minlength="2" maxlength="200" autocomplete="name">
+      </div>
+
+      <div class="pw-form-row">
+        <label for="email">Email <span aria-hidden="true">*</span></label>
+        <input id="email" name="email" type="email" required autocomplete="email">
+      </div>
+
+      <div class="pw-form-grid">
+        <div class="pw-form-row">
+          <label for="instagram_handle">Instagram</label>
+          <input id="instagram_handle" name="instagram_handle" type="text" placeholder="@yourhandle" autocomplete="off">
+        </div>
+        <div class="pw-form-row">
+          <label for="tiktok_handle">TikTok</label>
+          <input id="tiktok_handle" name="tiktok_handle" type="text" placeholder="@yourhandle" autocomplete="off">
+        </div>
+        <div class="pw-form-row">
+          <label for="youtube_handle">YouTube</label>
+          <input id="youtube_handle" name="youtube_handle" type="text" placeholder="@yourhandle" autocomplete="off">
+        </div>
+        <div class="pw-form-row">
+          <label for="audience_size">Total audience size</label>
+          <input id="audience_size" name="audience_size" type="number" min="0" inputmode="numeric" placeholder="e.g. 25000">
+        </div>
+      </div>
+
+      <div class="pw-form-row">
+        <label for="niche">Primary niche</label>
+        <input id="niche" name="niche" type="text" placeholder="GLP-1, gut health, weight loss, etc." maxlength="200">
+      </div>
+
+      <div class="pw-form-row">
+        <label for="suggested_code">Suggested coupon code <span class="pw-form-hint">(optional)</span></label>
+        <input id="suggested_code" name="suggested_code" type="text" placeholder="e.g. JANE10" maxlength="32" pattern="[A-Za-z0-9_\-]+">
+        <p class="pw-form-help">If approved, this is the code your audience will use at checkout. Letters, numbers, dash, underscore only.</p>
+      </div>
+
+      <div class="pw-form-row">
+        <label for="message">Anything else we should know? <span class="pw-form-hint">(optional)</span></label>
+        <textarea id="message" name="message" rows="4" maxlength="2000" placeholder="Brands you have worked with, content you are proud of, audience demographics, anything that helps us decide."></textarea>
+      </div>
+
+      <div id="turnstile-container" class="pw-form-turnstile"></div>
+
+      <div id="ambassadorError" class="pw-form-error" role="alert" hidden></div>
+
+      <button type="submit" class="pw-form-submit" id="ambassadorSubmit">
+        Submit application
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </button>
+
+      <p class="pw-form-foot">
+        Already in? <a href="https://admin.afterslim.com/affiliate/login">Sign in</a> to your dashboard. Questions? Email <a href="mailto:partnerships@afterslim.com">partnerships@afterslim.com</a>.
+      </p>
+    </form>
+
+    <div id="ambassadorSuccess" class="pw-apply-success" hidden>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+      <h3>Application received</h3>
+      <p>Thanks. We review every application by hand and reply within a couple of days. If it is a fit, the conversation continues from there.</p>
+    </div>
+  </div>
 </section>
 
 <section class="pw-docs container">
@@ -367,6 +520,94 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 </main>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onAmbassadorTurnstileLoad&render=explicit" async defer></script>
+<script>
+(function() {
+  var form = document.getElementById('ambassadorForm');
+  var submit = document.getElementById('ambassadorSubmit');
+  var errorBox = document.getElementById('ambassadorError');
+  var successPanel = document.getElementById('ambassadorSuccess');
+  var turnstileToken = '';
+  var turnstileWidgetId = null;
+
+  window.onAmbassadorTurnstileLoad = function() {
+    if (!window.turnstile) return;
+    turnstileWidgetId = window.turnstile.render('#turnstile-container', {
+      sitekey: '0x4AAAAAADGYIwoLnd-F1XmA',
+      theme: 'light',
+      callback: function(t) { turnstileToken = t || ''; },
+      'expired-callback': function() { turnstileToken = ''; },
+      'error-callback': function() { turnstileToken = ''; }
+    });
+  };
+
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.hidden = false;
+    submit.disabled = false;
+    submit.textContent = 'Submit application';
+  }
+
+  function payload() {
+    var data = {};
+    var fd = new FormData(form);
+    ['full_name', 'email', 'instagram_handle', 'tiktok_handle', 'youtube_handle', 'niche', 'suggested_code', 'message'].forEach(function(k) {
+      var v = (fd.get(k) || '').toString().trim();
+      if (v) data[k] = v;
+    });
+    var audience = (fd.get('audience_size') || '').toString().trim();
+    if (audience) {
+      var n = parseInt(audience, 10);
+      if (!isNaN(n) && n >= 0) data.audience_size = n;
+    }
+    if (turnstileToken) data.turnstile_token = turnstileToken;
+    return data;
+  }
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    errorBox.hidden = true;
+    submit.disabled = true;
+    submit.textContent = 'Submitting...';
+
+    var body = payload();
+
+    if (!body.full_name || body.full_name.length < 2) return showError('Please enter your full name.');
+    if (!body.email || !/.+@.+\..+/.test(body.email)) return showError('Please enter a valid email address.');
+    if (!body.turnstile_token) return showError('Please complete the security check above.');
+
+    try {
+      var res = await fetch('https://admin.afterslim.com/api/affiliate/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (res.status === 201) {
+        form.hidden = true;
+        successPanel.hidden = false;
+        successPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      var json = null;
+      try { json = await res.json(); } catch (e) {}
+      if (res.status === 409) {
+        return showError('You already have an application on file with that email. Hang tight, we will reply soon.');
+      }
+      if (res.status === 400) {
+        return showError((json && json.error) ? json.error : 'Some of the information is invalid. Please check the fields and try again.');
+      }
+      showError('Something went wrong on our side. Please try again in a moment.');
+    } catch (err) {
+      showError('Network error. Please check your connection and try again.');
+    } finally {
+      if (window.turnstile && turnstileWidgetId !== null) {
+        try { window.turnstile.reset(turnstileWidgetId); turnstileToken = ''; } catch (e) {}
+      }
+    }
+  });
+})();
+</script>
 
 <footer class="footer">
   <div class="container">
@@ -409,5 +650,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
+<script src="/js/ref-capture.js"></script>
 </body>
 </html>

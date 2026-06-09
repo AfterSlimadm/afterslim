@@ -273,10 +273,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </span>
   </a>
 
-  <a class="hub-card" href="/partner-with-us/resellers">
+  <a class="hub-card" href="/partner-with-us/resellers" id="resellerCard">
     <span class="hub-card-eyebrow">For customers</span>
     <h2>Reseller</h2>
-    <p class="hub-card-lede">Already a customer? Share your link with friends and earn store credit on every paid order they place. No approval, no paperwork.</p>
+    <p class="hub-card-lede">Already a customer? Share your link with friends and earn store credit on every paid order they place. Quick application, low touch.</p>
     <ul class="hub-card-bullets">
       <li>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
@@ -304,6 +304,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+// If the visitor is signed in, take the reseller card straight to
+// /account where the "Refer a friend" panel lives. Otherwise the link
+// keeps pointing at /partner-with-us/resellers so the unauth visitor
+// reads the pitch first.
+(async function() {
+  try {
+    var session = await window.afterslimAuth.session();
+    if (session && session.user) {
+      var card = document.getElementById('resellerCard');
+      if (card) card.setAttribute('href', '/account');
+    }
+  } catch (e) { /* swallow */ }
+})();
+</script>
 
 <footer class="footer">
   <div class="container">
@@ -346,5 +364,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
+<script src="/js/ref-capture.js"></script>
 </body>
 </html>

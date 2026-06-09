@@ -113,6 +113,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
+  <section class="dash-section dash-refer-section" id="referSection" hidden aria-labelledby="referSectionHead">
+    <h2 class="dash-section-head" id="referSectionHead">Refer a friend</h2>
+    <div id="referContent"></div>
+  </section>
+
   <section class="dash-section" aria-labelledby="settingsSection">
     <h2 class="dash-section-head" id="settingsSection">Settings</h2>
     <div class="dash-list">
@@ -326,7 +331,224 @@ if (!window.afterslimAuth || !window.afterslimSupabase) {
         cta.firstChild.textContent = 'Open ';
       }
     });
+
+  // 7) Refer-a-friend panel. Mounts the section once /api/referrals/me
+  // returns. Four states: none (apply CTA), pending (waiting), rejected,
+  // approved (link, code, balance, recent referrals).
+  mountReferPanel(supabase);
 })();
+
+async function mountReferPanel(supabase) {
+  var section = document.getElementById('referSection');
+  var slot = document.getElementById('referContent');
+  if (!section || !slot) return;
+
+  var sessionRes = await supabase.auth.getSession();
+  var token = sessionRes.data.session && sessionRes.data.session.access_token;
+  if (!token) return; // requireAuth() will bounce; do nothing here.
+
+  var status, payload;
+  try {
+    var res = await fetch('https://admin.afterslim.com/api/referrals/me', {
+      method: 'GET',
+      credentials: 'include',
+      headers: { Authorization: 'Bearer ' + token }
+    });
+    if (!res.ok) {
+      console.warn('[refer]', 'fetch failed', res.status);
+      return;
+    }
+    payload = await res.json();
+    status = payload && payload.status;
+  } catch (err) {
+    console.warn('[refer] fetch threw:', err);
+    return;
+  }
+  if (!status) return;
+
+  section.hidden = false;
+
+  if (status === 'none') {
+    renderReferNone(slot);
+  } else if (status === 'pending') {
+    renderReferPending(slot);
+  } else if (status === 'rejected') {
+    renderReferRejected(slot);
+  } else if (status === 'approved') {
+    renderReferApproved(slot, payload);
+  }
+
+  async function applyToRefer(button) {
+    button.disabled = true;
+    button.textContent = 'Submitting...';
+    try {
+      var session = await supabase.auth.getSession();
+      var tok = session.data.session && session.data.session.access_token;
+      var r = await fetch('https://admin.afterslim.com/api/referrals/apply', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + tok
+        },
+        body: JSON.stringify({})
+      });
+      if (r.status === 201 || r.status === 409) {
+        renderReferPending(slot);
+        return;
+      }
+      button.disabled = false;
+      button.textContent = 'Apply to refer friends';
+      var msg = document.getElementById('referApplyError');
+      if (msg) {
+        msg.textContent = 'Could not submit right now. Please try again in a moment.';
+        msg.hidden = false;
+      }
+    } catch (err) {
+      button.disabled = false;
+      button.textContent = 'Apply to refer friends';
+    }
+  }
+
+  function renderReferNone(slot) {
+    slot.innerHTML =
+      '<div class="dash-refer-card">' +
+        '<p class="dash-refer-lede">Refer AfterSlim to a friend and earn <strong>15% store credit</strong> on every paid order they place. They get <strong>10% off</strong>. Apply once, no paperwork.</p>' +
+        '<button type="button" class="dash-refer-cta" id="referApplyBtn">Apply to refer friends</button>' +
+        '<p class="dash-refer-error" id="referApplyError" hidden></p>' +
+        '<p class="dash-refer-foot">Manual review, usually a couple of days. <a href="/partner-with-us/resellers">How it works</a>.</p>' +
+      '</div>';
+    var btn = document.getElementById('referApplyBtn');
+    btn.addEventListener('click', function() { applyToRefer(btn); });
+  }
+
+  function renderReferPending(slot) {
+    slot.innerHTML =
+      '<div class="dash-refer-card dash-refer-state">' +
+        '<div class="dash-refer-state-icon dash-refer-state-pending">' +
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+        '</div>' +
+        '<div>' +
+          '<h3>Application under review</h3>' +
+          '<p>We are reviewing your application by hand. Most decisions come back within a couple of days. You will see your referral link here as soon as it is approved.</p>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function renderReferRejected(slot) {
+    slot.innerHTML =
+      '<div class="dash-refer-card dash-refer-state">' +
+        '<div class="dash-refer-state-icon dash-refer-state-rejected">' +
+          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+        '</div>' +
+        '<div>' +
+          '<h3>Application not approved at this time</h3>' +
+          '<p>We are unable to bring you into the reseller program right now. If something on your account changes, feel free to write to <a href="mailto:partnerships@afterslim.com">partnerships@afterslim.com</a>.</p>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function renderReferApproved(slot, data) {
+    var link = data.referral_link || ('https://www.afterslim.com/?ref=' + (data.referral_code || ''));
+    var code = data.referral_code || '';
+    var avail = window.formatMoney(data.available_credit_cents || 0);
+    var earned = window.formatMoney(data.total_earned_cents || 0);
+    var monthSoFar = (data.monthly_credit_so_far_cents || 0) / 100;
+    var monthCap = (data.monthly_cap_cents || 10000) / 100;
+    var monthLabel = '$' + monthSoFar.toFixed(2) + ' of $' + monthCap.toFixed(0);
+    var recent = Array.isArray(data.recent_referrals) ? data.recent_referrals : [];
+
+    var html =
+      '<div class="dash-refer-card dash-refer-approved">' +
+        '<p class="dash-refer-lede">Share your link, friends get <strong>10% off</strong>, you get <strong>15% store credit</strong> on every paid order.</p>' +
+
+        '<div class="dash-refer-share">' +
+          '<div class="dash-refer-share-row">' +
+            '<span class="dash-refer-share-label">Your link</span>' +
+            '<div class="dash-refer-share-value">' +
+              '<input id="referLinkInput" readonly value="' + escapeHtml(link) + '">' +
+              '<button type="button" class="dash-refer-copy" data-target="referLinkInput">Copy</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="dash-refer-share-row">' +
+            '<span class="dash-refer-share-label">Coupon code</span>' +
+            '<div class="dash-refer-share-value">' +
+              '<input id="referCodeInput" readonly value="' + escapeHtml(code) + '">' +
+              '<button type="button" class="dash-refer-copy" data-target="referCodeInput">Copy</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="dash-refer-stats">' +
+          '<div class="dash-refer-stat">' +
+            '<span class="dash-refer-stat-label">Available credit</span>' +
+            '<span class="dash-refer-stat-value">' + avail + '</span>' +
+          '</div>' +
+          '<div class="dash-refer-stat">' +
+            '<span class="dash-refer-stat-label">Total earned</span>' +
+            '<span class="dash-refer-stat-value">' + earned + '</span>' +
+          '</div>' +
+          '<div class="dash-refer-stat">' +
+            '<span class="dash-refer-stat-label">This month</span>' +
+            '<span class="dash-refer-stat-value">' + monthLabel + '</span>' +
+          '</div>' +
+        '</div>' +
+
+        (recent.length
+          ? '<div class="dash-refer-recent">' +
+              '<h4>Recent referrals</h4>' +
+              '<ul>' +
+                recent.map(function(r) {
+                  var name = (r.first_name || 'A friend').replace(/[<>]/g, '');
+                  var when = r.used_at ? new Date(r.used_at).toLocaleDateString() : '';
+                  var spent = window.formatMoney(r.total_cents || 0);
+                  var earnedR = window.formatMoney(r.commission_cents || 0);
+                  return '<li><strong>' + escapeHtml(name) + '</strong> &middot; ' + escapeHtml(when) + ' &middot; spent ' + spent + ' &middot; you earned ' + earnedR + '</li>';
+                }).join('') +
+              '</ul>' +
+            '</div>'
+          : '<p class="dash-refer-foot">No referrals yet. Send your link to a friend who would benefit from AfterSlim.</p>') +
+
+      '</div>';
+
+    slot.innerHTML = html;
+
+    Array.prototype.forEach.call(slot.querySelectorAll('.dash-refer-copy'), function(btn) {
+      btn.addEventListener('click', function() {
+        var target = document.getElementById(btn.getAttribute('data-target'));
+        if (!target) return;
+        target.select();
+        target.setSelectionRange(0, 9999);
+        var copied = false;
+        try { copied = document.execCommand('copy'); } catch (e) {}
+        if (!copied && navigator.clipboard) {
+          navigator.clipboard.writeText(target.value).then(function() {
+            flashCopied(btn);
+          }).catch(function() {});
+        } else {
+          flashCopied(btn);
+        }
+      });
+    });
+  }
+
+  function flashCopied(btn) {
+    var orig = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.disabled = true;
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.disabled = false;
+    }, 1500);
+  }
+
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, function(c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+}
 </script>
 
 </body>

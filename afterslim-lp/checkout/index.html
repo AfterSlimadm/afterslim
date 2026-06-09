@@ -451,6 +451,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span id="sidebar-discount-label" style="color:#16a34a">Discount</span>
             <span id="sidebar-discount" style="color:#16a34a">-$0.00</span>
           </div>
+          <div class="sidebar-row" id="sidebar-referral-row" style="display:none">
+            <span style="color:#16a34a" id="sidebar-referral-label">Referral (10% off)</span>
+            <span id="sidebar-referral" style="color:#16a34a">-$0.00</span>
+          </div>
           <div class="sidebar-row" id="sidebar-credit-row" style="display:none">
             <span style="color:#16a34a">Store credit</span>
             <span id="sidebar-credit" style="color:#16a34a">-$0.00</span>
@@ -473,6 +477,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="processing-spinner"></div>
     <div class="processing-text">Processing your payment...</div>
   </div>
+
+  <!-- Referral capture loaded early so ckUpdateSidebarTotals can read the
+       cookie on first render. -->
+  <script src="/js/ref-capture.js"></script>
 
   <script src="https://pay.google.com/gp/p/js/pay.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
@@ -710,6 +718,8 @@ async function ckPay(){
     var payBody={price_id:CK_priceId,customer_email:CK_cust.email,customer_name:CK_cust.name,shipping:CK_ship,...(window.asTikTokAttr?window.asTikTokAttr():{})};
     if(CK_payMethod==='afterpay') payBody.payment_method_type='afterpay_clearpay';
     if(CK_discount.code) payBody.promotion_code=CK_discount.code;
+    var __refCode=window.afterslimReferral&&window.afterslimReferral.code();
+    if(__refCode) payBody.referral_code=__refCode;
     // Loyalty redemption: only forward when a logged-in customer actually
     // toggled credit into this checkout. Server re-validates the JWT and
     // re-caps the amount against the live balance before reducing the PI.
@@ -785,9 +795,19 @@ function ckUpdateSidebarTotals(){
   var shipCents=shipVal==='express'?499:0;
   var subtotalCents=Math.round(CK_info.price*100);
   var discountCents=Math.min(CK_discount.discountCents||0,subtotalCents);
+  // Referral cookie (?ref=CODE captured by /js/ref-capture.js) gives a
+  // visual 10% off here. Server re-validates and re-applies the same
+  // discount inside /api/checkout, so the displayed number matches what
+  // Stripe actually charges. Manual coupon code wins if both are set,
+  // server-side enforces "no double-stacking".
+  var referralCode = window.afterslimReferral && window.afterslimReferral.code();
+  var referralCents = 0;
+  if (referralCode && discountCents === 0) {
+    referralCents = Math.round(subtotalCents * 0.10);
+  }
   // Cap credit so post-coupon amount can still clear Stripe's $0.50 minimum
   // (50 cents). Re-checked + re-capped server-side against the live balance.
-  var afterCoupon=subtotalCents-discountCents;
+  var afterCoupon=subtotalCents-discountCents-referralCents;
   var creditCap=Math.max(0,afterCoupon-50);
   var creditApplied=Math.min(CK_credit.appliedCents||0,creditCap);
   CK_credit.appliedCents=creditApplied;
@@ -797,6 +817,9 @@ function ckUpdateSidebarTotals(){
   var discRow=document.getElementById('sidebar-discount-row');
   var discEl=document.getElementById('sidebar-discount');
   var discLabel=document.getElementById('sidebar-discount-label');
+  var refRow=document.getElementById('sidebar-referral-row');
+  var refEl=document.getElementById('sidebar-referral');
+  var refLabel=document.getElementById('sidebar-referral-label');
   var creditRow=document.getElementById('sidebar-credit-row');
   var creditEl=document.getElementById('sidebar-credit');
   var shipEl=document.getElementById('sidebar-shipping');
@@ -807,6 +830,11 @@ function ckUpdateSidebarTotals(){
   if(discountCents>0){
     if(discEl)discEl.textContent='-'+fmt(discountCents);
     if(discLabel)discLabel.textContent='Discount ('+(CK_discount.code||CK_discount.label||'')+')';
+  }
+  if(refRow)refRow.style.display=referralCents>0?'flex':'none';
+  if(referralCents>0){
+    if(refEl)refEl.textContent='-'+fmt(referralCents);
+    if(refLabel)refLabel.textContent='Referral '+(referralCode?'('+referralCode+')':'')+' (10% off)';
   }
   if(creditRow)creditRow.style.display=creditApplied>0?'flex':'none';
   if(creditApplied>0&&creditEl)creditEl.textContent='-'+fmt(creditApplied);
@@ -935,7 +963,10 @@ function ckGooglePay(){
       var name=paymentData.paymentMethodData.info&&paymentData.paymentMethodData.info.billingAddress?paymentData.paymentMethodData.info.billingAddress.name:'';
       ckPersistOrderContext(email, name, '');
 
-      fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:email,customer_name:name,shipping:shipData,...(window.asTikTokAttr?window.asTikTokAttr():{})})}).then(function(r){return r.json();}).then(function(data){
+      var __gpayBody={price_id:CK_priceId,customer_email:email,customer_name:name,shipping:shipData,...(window.asTikTokAttr?window.asTikTokAttr():{})};
+      var __gpayRef=window.afterslimReferral&&window.afterslimReferral.code();
+      if(__gpayRef) __gpayBody.referral_code=__gpayRef;
+      fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(__gpayBody)}).then(function(r){return r.json();}).then(function(data){
         CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:{card:{token:token.id},billing_details:{name:name,email:email}}}).then(function(result){
           if(result.error){document.getElementById('processing').classList.remove('active');ckShowExpressError(result.error.message);}
           else{window.location.href='/checkout/success?payment_id='+result.paymentIntent.id;}
@@ -1047,7 +1078,10 @@ CK_payRequest.on('paymentmethod',function(ev){
   var shipAddr=ev.shippingAddress||{};
   var shipData={address:shipAddr.addressLine?shipAddr.addressLine[0]:'',city:shipAddr.city||'',state:shipAddr.region||'',zip:shipAddr.postalCode||'',country:shipAddr.country||'US'};
   ckPersistOrderContext(ev.payerEmail||'', ev.payerName||'', ev.payerPhone||'');
-  fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({price_id:CK_priceId,customer_email:ev.payerEmail||'',customer_name:ev.payerName||'',shipping:shipData,...(window.asTikTokAttr?window.asTikTokAttr():{})})}).then(function(r){return r.json();}).then(function(data){
+  var __prBody={price_id:CK_priceId,customer_email:ev.payerEmail||'',customer_name:ev.payerName||'',shipping:shipData,...(window.asTikTokAttr?window.asTikTokAttr():{})};
+  var __prRef=window.afterslimReferral&&window.afterslimReferral.code();
+  if(__prRef) __prBody.referral_code=__prRef;
+  fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(__prBody)}).then(function(r){return r.json();}).then(function(data){
     CK_stripe.confirmCardPayment(data.clientSecret,{payment_method:ev.paymentMethod.id}).then(function(result){
       if(result.error){ev.complete('fail');document.getElementById('processing').classList.remove('active');document.getElementById('checkout-error').textContent=result.error.message;document.getElementById('checkout-error').style.display='block';}
       else{ev.complete('success');window.location.href='/checkout/success?payment_id='+result.paymentIntent.id;}
