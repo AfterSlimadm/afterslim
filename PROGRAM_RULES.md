@@ -130,6 +130,28 @@ When an order is refunded:
   (LP fetch), `/api/checkout` (accept `referral_code`).
 - Stripe Coupon created on Approve.
 
+## Discount stacking
+
+A single discount applies per checkout. A manually entered promo code
+always wins. When the customer pastes one and that code validates,
+the LP stops sending `referral_code` on `/api/checkout`, so the
+backend has no attribution to credit and the ambassador or reseller
+does not earn commission on that order. The referral cookie itself
+stays put for future orders without a manual code.
+
+The 90-day cookie window matches the satisfaction guarantee, and is
+independent of the ambassador's 6-month founding commission window
+(`creators.ambassador_commission_window_ends_at`).
+
+## Future, not built
+
+**Analytics-only attribution.** If we ever want to know which
+ambassador surfaced a customer even when that customer paid with a
+manual promo code (so the ambassador does not earn but we still see
+the credit in reporting), the admin would add a separate
+`orders.referral_attribution_only` field. Today this is not built;
+when a manual code wins, the attribution is dropped entirely.
+
 ## Open questions
 
 None at the time of this writing. Update this section if either chat
