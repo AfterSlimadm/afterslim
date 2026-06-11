@@ -53,25 +53,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Seed Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0a0a0a;
-      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fffdfb;
+      color: #1a1a1a;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 24px 16px;
+    }
+    .brand-logo {
+      height: 36px;
+      margin-bottom: 2rem;
     }
     .success-card {
       text-align: center;
-      max-width: 480px;
-      padding: 3rem 2rem;
+      max-width: 520px;
+      padding: 0 0.5rem;
     }
     .check-circle {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: rgba(76,175,80,0.15);
+      background: #fff3e6;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -80,36 +85,56 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .check-circle svg {
       width: 40px;
       height: 40px;
-      stroke: #4CAF50;
+      stroke: #ea580c;
     }
     h1 {
       font-size: 1.75rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 0.75rem;
+      color: #1a1a1a;
     }
     .desc {
-      color: rgba(255,255,255,0.6);
+      color: #555;
       font-size: 1rem;
       line-height: 1.6;
-      margin-bottom: 2rem;
+      margin-bottom: 1.75rem;
     }
+    .next-steps {
+      text-align: left;
+      background: #fff;
+      border: 1px solid #f3e3d3;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 1.75rem;
+      font-size: 0.9rem;
+      color: #444;
+      line-height: 1.6;
+    }
+    .next-steps strong { color: #1a1a1a; }
+    .next-steps li { margin: 6px 0 6px 18px; }
     .btn {
       display: inline-block;
       padding: 0.875rem 2rem;
-      background: #4CAF50;
+      background: #ea580c;
       color: #fff;
       text-decoration: none;
-      border-radius: 999px;
-      font-weight: 500;
+      border-radius: 8px;
+      font-weight: 700;
       font-size: 0.9375rem;
       transition: background 0.2s;
     }
-    .btn:hover { background: #43A047; }
-    .order-id {
-      margin-top: 1.5rem;
+    .btn:hover { background: #c2410c; }
+    .support-line {
+      margin-top: 1.25rem;
       font-size: 0.8125rem;
-      color: rgba(255,255,255,0.3);
+      color: #888;
+    }
+    .support-line a { color: #ea580c; text-decoration: none; font-weight: 600; }
+    .order-id {
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: #999;
     }
   </style>
 </head>
@@ -119,6 +144,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
   <div class="success-card">
+    <img class="brand-logo" src="/images/logo-afterslim-tight.png" alt="AfterSlim">
     <div class="check-circle">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"/>
@@ -126,9 +152,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <h1>Order Confirmed!</h1>
     <p class="desc">
-      Thank you for your purchase. You'll receive a confirmation email shortly with your order details and tracking information.
+      Thank you for choosing AfterSlim. Your gut will thank you too.
     </p>
+    <div class="next-steps">
+      <strong>What happens next:</strong>
+      <ul>
+        <li>You'll get a <strong>confirmation email</strong> with your order number in the next few minutes.</li>
+        <li>We'll send a <strong>tracking link</strong> as soon as your order ships.</li>
+        <li>Every order is covered by our <strong>90-day money-back guarantee</strong>.</li>
+      </ul>
+    </div>
     <a href="/" class="btn">Back to AfterSlim</a>
+    <div class="support-line">Questions about your order? <a href="mailto:support@afterslim.com">support@afterslim.com</a></div>
     <div class="order-id" id="order-id"></div>
   </div>
   <script>
@@ -168,7 +203,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       async function pushPurchase() {
         if (!txnId && !ctx.value) return;
-        document.getElementById('order-id').textContent = 'Your order has been confirmed.';
+        if (txnId) document.getElementById('order-id').textContent = 'Payment reference: ' + txnId;
 
         var items = (ctx.items && ctx.items.length) ? ctx.items : [{
           item_id: 'AFTERSLIM-GLP1-COMPANION',
