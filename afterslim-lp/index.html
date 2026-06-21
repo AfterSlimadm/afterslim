@@ -102,6 +102,59 @@ try{if(window.ttq){ttq.track('ViewContent',{contents:[{content_id:'afterslim-1-o
   }
 }
 </script>
+<style>
+/* ===== Modern-feel pass (localhost proposal) ===== */
+
+/* 1. Orchestrated hero entrance: one staggered fade-up on first load */
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero-gallery                          { animation: heroRise 0.7s cubic-bezier(0.22,1,0.36,1) 0.05s backwards; }
+.hero-rating                           { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.12s backwards; }
+.hero-title                            { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.20s backwards; }
+.hero-subtitle                         { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.28s backwards; }
+.hero-info .variant-block              { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.36s backwards; }
+.hero-info .variant-block + .variant-block { animation-delay: 0.42s; }
+.hero-eyebrow                          { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.48s backwards; }
+.hero-price-row                        { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.52s backwards; }
+.hero-info .hero-checkout-btn          { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.58s backwards; }
+.hero-perks                            { animation: heroRise 0.6s cubic-bezier(0.22,1,0.36,1) 0.66s backwards; }
+
+/* 2. Buy-box feedback: price pops softly when plan/pack changes */
+.price-current, #modalPriceCurrent { display: inline-block; }
+.price-pop { animation: pricePop 0.32s cubic-bezier(0.22,1,0.36,1); }
+@keyframes pricePop {
+  0%   { transform: scale(0.94); opacity: 0.35; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 3. Primary CTA depth: lift + shadow + arrow nudge on hover */
+.btn-primary {
+  transition: background 0.15s ease, border-color 0.15s ease, filter 0.15s ease,
+              transform 0.2s cubic-bezier(0.22,1,0.36,1), box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(194, 65, 12, 0.32);
+}
+.btn-primary:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(194, 65, 12, 0.25); }
+.btn-primary svg { transition: transform 0.2s cubic-bezier(0.22,1,0.36,1); }
+.btn-primary:hover svg { transform: translateX(4px); }
+
+/* 4. "Best value" badge on the brand palette (was off-palette maroon #b91c1c) */
+.bundle-opt:nth-child(3) .bundle-opt-badge { background: #c2410c !important; }
+.bundle-opt:nth-child(3) .bundle-opt-save  { color: #c2410c; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-gallery, .hero-rating, .hero-title, .hero-subtitle,
+  .hero-info .variant-block, .hero-eyebrow, .hero-price-row,
+  .hero-info .hero-checkout-btn, .hero-perks { animation: none; }
+  .price-pop { animation: none; }
+  .btn-primary, .btn-primary svg { transition: none; }
+  .btn-primary:hover { transform: none; box-shadow: none; }
+}
+</style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -159,17 +212,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="urgency">
   <div class="urgency-inner">
     <div class="urgency-message">
-      <strong class="urgency-title">Launch Sale: Up to 49% Off</strong>
-      <span class="urgency-sub">Limited launch pricing + free shipping on 2+ bottles</span>
+      <strong class="urgency-title">Save 37% off retail</strong>
+      <span class="urgency-sub">Free shipping on 2+ bottles</span>
     </div>
-    <div class="urgency-countdown">
-      <div class="urgency-cell"><span class="cell-num" id="t-d">00</span><span class="cell-lbl">Day</span></div>
+    <div class="urgency-countdown" data-midcta-countdown>
+      <div class="urgency-cell"><span class="cell-num" data-h>00</span><span class="cell-lbl">Hrs</span></div>
       <span class="cell-sep">:</span>
-      <div class="urgency-cell"><span class="cell-num" id="t-h">12</span><span class="cell-lbl">Hrs</span></div>
+      <div class="urgency-cell"><span class="cell-num" data-m>00</span><span class="cell-lbl">Min</span></div>
       <span class="cell-sep">:</span>
-      <div class="urgency-cell"><span class="cell-num" id="t-m">47</span><span class="cell-lbl">Min</span></div>
-      <span class="cell-sep">:</span>
-      <div class="urgency-cell"><span class="cell-num" id="t-s">22</span><span class="cell-lbl">Sec</span></div>
+      <div class="urgency-cell"><span class="cell-num" data-s>00</span><span class="cell-lbl">Sec</span></div>
     </div>
   </div>
 </div>
@@ -257,7 +308,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span class="price-badge" id="priceBadge">37% OFF TODAY</span>
         </div>
 
-        <a href="#" class="btn-primary hero-checkout-btn">
+        <a href="#bundles" class="btn-primary hero-checkout-btn">
           Shop Now
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -790,7 +841,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span class="midcta-countdown-time"><span data-h>00</span>:<span data-m>00</span>:<span data-s>00</span></span>
         </div>
 
-        <a href="#" class="btn-primary midcta-button" data-bundle-modal-open>
+        <a href="#bundles" class="btn-primary midcta-button" data-bundle-modal-open>
           Start AfterSlim today
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -854,46 +905,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
 
-        <!-- Duplicate set for seamless loop (aria-hidden so screen readers don't repeat) -->
-        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow1.webp');">
-          <div class="testimonial-content-overlay">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">"Highly, highly recommend trying this if you're on a GLP-1. It actually targets the gut stuff Ozempic was wrecking, and I can take it any time of day. The bloating is down by maybe 80% and I feel like a real person again."</p>
-            <div class="testimonial-author">
-              <span class="testimonial-name">Rachel M.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow2.webp');">
-          <div class="testimonial-content-overlay">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">"Mom of 2 on Wegovy here. I tried so many things to feel normal again and AfterSlim is the only one that actually made a real dent in the side effects. Tells everyone in my fitness group about it now."</p>
-            <div class="testimonial-author">
-              <span class="testimonial-name">Brenda C.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow3.png');">
-          <div class="testimonial-content-overlay">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">"Started Mounjaro back in February and the constipation was getting unbearable. Added AfterSlim to my morning routine 3 weeks ago and I can finally function again. Wish I'd known about this from day one."</p>
-            <div class="testimonial-author">
-              <span class="testimonial-name">Adam A.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card testimonial-card-image" aria-hidden="true" style="background-image: url('images/djtow4.webp');">
-          <div class="testimonial-content-overlay">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">"4 months in alongside my Ozempic. I switched from Pendulum's Akkermansia capsule (way more expensive) and honestly couldn't tell a difference in how I feel. AfterSlim hits the same notes for less than half the price."</p>
-            <div class="testimonial-author">
-              <span class="testimonial-name">Tonnie M.</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -1587,25 +1598,10 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Urgency timer countdown (days/hrs/min/sec)
-(function() {
-  var endsAt = Date.now() + (2 * 24 * 60 * 60 * 1000) + (12 * 60 * 60 * 1000) + (47 * 60 * 1000) + (22 * 1000);
-  function tick() {
-    var left = Math.max(0, endsAt - Date.now());
-    var d = Math.floor(left / 86400000);
-    var h = Math.floor((left % 86400000) / 3600000);
-    var m = Math.floor((left % 3600000) / 60000);
-    var s = Math.floor((left % 60000) / 1000);
-    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
-    var dEl = document.getElementById('t-d');
-    if (dEl) dEl.textContent = pad(d);
-    document.getElementById('t-h').textContent = pad(h);
-    document.getElementById('t-m').textContent = pad(m);
-    document.getElementById('t-s').textContent = pad(s);
-  }
-  tick();
-  setInterval(tick, 1000);
-})();
+// Urgency banner timer is now driven by the same midcta-countdown loop
+// further down in this script (countdown until viewer's local midnight,
+// hrs/min/sec). The banner picks it up via data-midcta-countdown +
+// [data-h]/[data-m]/[data-s] hooks.
 
 // Problems — manual horizontal carousel (continuous color canvas)
 (function() {
@@ -1867,14 +1863,37 @@ if ('IntersectionObserver' in window) {
 
   var NUM_SELECTOR = '.stat-compare-number b, .stat-callout-number b';
 
+  // If the user prefers reduced motion, or if JS doesn't end up animating
+  // for any reason, fall back to the real number instead of a stuck "0".
+  // The agent specialist flagged "How common this is: 0%" as a broken-
+  // looking state when scroll moves past the section before the
+  // IntersectionObserver fires, especially on mobile.
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   scenes.forEach(function(scene) {
     scene.querySelectorAll(NUM_SELECTOR).forEach(function(el) {
       var target = el.textContent.trim();
       el.dataset.target = target;
+      if (prefersReducedMotion) return; // keep real number, skip count-up
       var hasPlus = target.indexOf('+') !== -1;
       el.textContent = '0' + (hasPlus ? '+' : '');
     });
   });
+
+  // Safety net: 4s after page load, force the target value onto anything
+  // that is still showing "0" / "0+". Triggers if IntersectionObserver
+  // never fired (scroll too fast, observer init failure, etc.).
+  function snapStuckNumbers() {
+    section.querySelectorAll(NUM_SELECTOR).forEach(function(el) {
+      var target = el.dataset.target;
+      if (!target) return;
+      var current = (el.textContent || '').trim();
+      if (current === '0' || current === '0+') {
+        el.textContent = target;
+      }
+    });
+  }
+  setTimeout(snapStuckNumbers, 4000);
 
   function animateNumber(el, delay) {
     var target = el.dataset.target;
@@ -2030,76 +2049,16 @@ if ('IntersectionObserver' in window) {
    background-images load. Driving the transform from JS sidesteps that
    timing race entirely. */
 (function() {
+  // Carousel is now manual horizontal scroll (swipe on mobile, scroll
+  // wheel + drag on desktop), styled via scroll-snap in lp.css. The old
+  // auto-scrolling animation depended on a duplicated card set to loop
+  // seamlessly; that duplication read as fake/repeated reviews to careful
+  // visitors. Removing both the duplicate cards and the JS auto-scroll
+  // resolves the perception problem and leaves the 4 real reviews
+  // navigable manually.
   var carousel = document.getElementById('testimonialsCarousel');
   if (!carousel) return;
-  var wrapper = carousel.parentNode;
-  if (!wrapper) return;
-
-  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reducedMotion) return;
-
-  var pxPerSecond = window.matchMedia('(max-width: 768px)').matches ? 22 : 32;
-  var offset = 0;
-  var lastTime = null;
-  var rafId = null;
-  var halfWidth = 0;
-
-  function measure() {
-    // Each card set is duplicated for a seamless loop, so the carousel's
-    // full scrollWidth is 2 * one-set-width. We loop back when offset
-    // reaches the one-set boundary.
-    halfWidth = carousel.scrollWidth / 2;
-  }
-  measure();
-  window.addEventListener('resize', measure);
-  // Re-measure once images have loaded — they affect card heights and any
-  // intrinsic sizing of the row.
-  window.addEventListener('load', measure);
-
-  function frame(now) {
-    if (lastTime === null) lastTime = now;
-    var dt = (now - lastTime) / 1000;
-    lastTime = now;
-    if (halfWidth > 0) {
-      offset += pxPerSecond * dt;
-      if (offset >= halfWidth) offset -= halfWidth;
-      carousel.style.transform = 'translate3d(' + (-offset) + 'px, 0, 0)';
-    }
-    rafId = requestAnimationFrame(frame);
-  }
-
-  // Pause when the section is off-screen (saves CPU + makes wake-up
-  // motion feel fresh when user scrolls back into it).
-  var running = false;
-  function start() {
-    if (running) return;
-    running = true;
-    lastTime = null;
-    rafId = requestAnimationFrame(frame);
-  }
-  function stop() {
-    if (!running) return;
-    running = false;
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = null;
-  }
-
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) start();
-        else stop();
-      });
-    }, { threshold: 0 });
-    io.observe(wrapper);
-  } else {
-    start();
-  }
-
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) stop();
-    else if (wrapper.getBoundingClientRect().top < window.innerHeight && wrapper.getBoundingClientRect().bottom > 0) start();
-  });
+  carousel.style.transform = '';
 })();
 
 /* ===== Mobile: Science section ingredient carousels (per group) =====
@@ -2193,7 +2152,7 @@ if ('IntersectionObserver' in window) {
       <span class="price-badge" id="modalPriceBadge">37% OFF TODAY</span>
     </div>
 
-    <a href="#" class="btn-primary hero-checkout-btn bundle-modal-cta">
+    <a href="#bundles" class="btn-primary hero-checkout-btn bundle-modal-cta">
       Continue to checkout
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
@@ -2240,7 +2199,7 @@ if ('IntersectionObserver' in window) {
     <span class="sticky-buy-current" id="stickyPrice">$47.99</span>
     <span class="sticky-buy-original" id="stickyOriginal">$75.98</span>
   </div>
-  <a href="#" class="btn-primary hero-checkout-btn">
+  <a href="#bundles" class="btn-primary hero-checkout-btn">
     Shop Now
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
   </a>
@@ -2268,6 +2227,22 @@ if ('IntersectionObserver' in window) {
       bar.setAttribute('aria-hidden', below ? 'false' : 'true');
     }, { threshold: 0 }).observe(hero);
   }
+})();
+</script>
+<script>
+// Price pop: re-trigger the pop animation whenever the displayed price changes
+// (plan/pack selection re-renders #priceCurrent and #modalPriceCurrent).
+(function() {
+  if (!window.MutationObserver) return;
+  ['priceCurrent', 'modalPriceCurrent'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    new MutationObserver(function() {
+      el.classList.remove('price-pop');
+      void el.offsetWidth;
+      el.classList.add('price-pop');
+    }).observe(el, { childList: true, characterData: true, subtree: true });
+  });
 })();
 </script>
 </body>
