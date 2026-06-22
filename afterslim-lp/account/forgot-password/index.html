@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WVF2ZGCL');</script>
+<!-- End Google Tag Manager -->
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reset Password — AfterSlim</title>
+<meta name="description" content="Reset your AfterSlim account password.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LCTNMWWXWB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LCTNMWWXWB');</script>
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<link rel="canonical" href="https://www.afterslim.com/account/forgot-password">
+<meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVF2ZGCL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/account/login" class="nav-back" aria-label="Back to sign in">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Sign in
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></div>
+    <h1>Reset password</h1>
+    <p class="auth-lede">Enter your email and we'll send you a link to set a new password.</p>
+
+    <div id="authError" class="auth-error" style="display: none;"></div>
+
+    <form class="auth-form" id="resetForm" novalidate>
+      <div class="auth-field">
+        <label for="resetEmail">Email</label>
+        <input type="email" id="resetEmail" name="email" autocomplete="email" required>
+      </div>
+      <button type="submit" class="auth-submit" id="resetSubmit">Send reset link</button>
+    </form>
+
+    <p class="auth-meta">Remembered it? <a href="/account/login">Back to sign in</a></p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+document.getElementById('resetForm').addEventListener('submit', async function(ev) {
+  ev.preventDefault();
+  var box = document.getElementById('authError');
+  var btn = document.getElementById('resetSubmit');
+  var email = document.getElementById('resetEmail').value.trim();
+  box.style.display = 'none';
+  box.className = 'auth-error';
+  if (!email) {
+    box.textContent = 'Please enter your email.';
+    box.style.display = 'block';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  var { error } = await window.afterslimSupabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/account/reset-password'
+  });
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Send reset link';
+    box.textContent = error.message || 'Could not send reset link. Try again.';
+    box.style.display = 'block';
+    return;
+  }
+  box.className = 'auth-success';
+  box.textContent = "If an account exists for that email, a reset link is on its way.";
+  box.style.display = 'block';
+  btn.textContent = 'Link sent';
+});
+</script>
+
+</body>
+</html>

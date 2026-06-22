@@ -92,6 +92,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       data-size="large"
       data-logo_alignment="left"></div>
 
+    <div class="auth-divider">or</div>
+
+    <form class="auth-form" id="emailLoginForm" novalidate>
+      <div class="auth-field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" name="email" autocomplete="email" required>
+      </div>
+      <div class="auth-field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" name="password" autocomplete="current-password" required minlength="8">
+      </div>
+      <div class="auth-field-row">
+        <a href="/account/forgot-password">Forgot password?</a>
+      </div>
+      <button type="submit" class="auth-submit" id="loginSubmit">Sign in</button>
+    </form>
+
     <p class="auth-meta">New to AfterSlim? <a href="/account/signup">Create an account</a></p>
   </div>
 </main>
@@ -103,6 +120,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (async function() {
   await window.afterslimAuth.redirectIfAuthed();
 })();
+
+function afterslimNextUrl() {
+  var params = new URLSearchParams(window.location.search);
+  return params.get('next') || '/account';
+}
 
 window.afterslimGoogleCredential = async function(response) {
   var errBox = document.getElementById('authError');
@@ -116,10 +138,33 @@ window.afterslimGoogleCredential = async function(response) {
     errBox.style.display = 'block';
     return;
   }
-  var params = new URLSearchParams(window.location.search);
-  var next = params.get('next') || '/account';
-  window.location.href = next;
+  window.location.href = afterslimNextUrl();
 };
+
+document.getElementById('emailLoginForm').addEventListener('submit', async function(ev) {
+  ev.preventDefault();
+  var errBox = document.getElementById('authError');
+  var btn = document.getElementById('loginSubmit');
+  var email = document.getElementById('loginEmail').value.trim();
+  var password = document.getElementById('loginPassword').value;
+  errBox.style.display = 'none';
+  if (!email || !password) {
+    errBox.textContent = 'Please enter your email and password.';
+    errBox.style.display = 'block';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+  var { error } = await window.afterslimSupabase.auth.signInWithPassword({ email: email, password: password });
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Sign in';
+    errBox.textContent = error.message || 'Sign in failed. Please check your credentials.';
+    errBox.style.display = 'block';
+    return;
+  }
+  window.location.href = afterslimNextUrl();
+});
 </script>
 
 </body>

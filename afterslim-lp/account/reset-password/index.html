@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set New Password — AfterSlim</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/styles/policy.css">
+<link rel="stylesheet" href="/styles/account.css">
+<meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-back" aria-label="Back to home">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Home
+    </a>
+    <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
+    <span style="width: 64px;"></span>
+  </div>
+</nav>
+
+<main class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></div>
+    <h1>Set new password</h1>
+    <p class="auth-lede">Choose a new password for your AfterSlim account.</p>
+
+    <div id="authError" class="auth-error" style="display: none;"></div>
+
+    <form class="auth-form" id="setPwForm" novalidate>
+      <div class="auth-field">
+        <label for="newPassword">New password</label>
+        <input type="password" id="newPassword" name="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">
+      </div>
+      <div class="auth-field">
+        <label for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" name="confirm" autocomplete="new-password" required minlength="8">
+      </div>
+      <button type="submit" class="auth-submit" id="setPwSubmit">Update password</button>
+    </form>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/js/supabase-client.js"></script>
+<script>
+document.getElementById('setPwForm').addEventListener('submit', async function(ev) {
+  ev.preventDefault();
+  var box = document.getElementById('authError');
+  var btn = document.getElementById('setPwSubmit');
+  var pw = document.getElementById('newPassword').value;
+  var confirm = document.getElementById('confirmPassword').value;
+  box.style.display = 'none';
+  box.className = 'auth-error';
+  if (pw.length < 8) {
+    box.textContent = 'Password must be at least 8 characters.';
+    box.style.display = 'block';
+    return;
+  }
+  if (pw !== confirm) {
+    box.textContent = 'Passwords do not match.';
+    box.style.display = 'block';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Updating...';
+  var { error } = await window.afterslimSupabase.auth.updateUser({ password: pw });
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Update password';
+    box.textContent = error.message || 'Could not update password. The reset link may have expired.';
+    box.style.display = 'block';
+    return;
+  }
+  box.className = 'auth-success';
+  box.textContent = 'Password updated. Redirecting...';
+  box.style.display = 'block';
+  setTimeout(function() { window.location.href = '/account'; }, 1500);
+});
+</script>
+
+</body>
+</html>

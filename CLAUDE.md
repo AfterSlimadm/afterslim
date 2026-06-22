@@ -9,9 +9,10 @@ AfterSlim is a US-market GLP-1 companion probiotic. Daily capsule designed for t
 - `bottle3d/` — Blender pipeline for the 3D bottle render. Waiting on vector files from Eagle Labs.
 
 ## Auth
-- **Google Sign In only.** Google Identity Services renders the One Tap prompt and the standard button on /account/login and /account/signup. Tokens go to Supabase via `signInWithIdToken`, no email/password, no Cloudflare Turnstile.
+- **Two paths: Google Sign In + email/password.** Google Identity Services renders the One Tap prompt and the standard button at the top of /account/login and /account/signup (tokens go to Supabase via `signInWithIdToken`). Below an "or" divider, an email/password form calls `signInWithPassword` / `signUp`. Forgot-password flow lives at `/account/forgot-password` (sends Supabase reset link) and `/account/reset-password` (consumes the link, calls `updateUser({ password })`). Apple Sign In is **not** wired (would require paid Apple Developer Program).
 - Google Cloud project `afterslim`. OAuth Client ID `306360274988-8t7r8lb0hmqf6if4kdc0bl58ch9pbbf1.apps.googleusercontent.com`. Authorized JS origins: `https://www.afterslim.com`, `https://afterslim.com`. Redirect URI: `https://qutpbtazoxlaegievmew.supabase.co/auth/v1/callback`.
 - Publishing status: **In Production** (no unverified-app warning).
+- Email provider in Supabase Auth must be **enabled** for the email/password flow to work. Confirm-email is required (signup returns no session until the user clicks the confirmation link).
 
 ## Supabase
 - Project ID: `qutpbtazoxlaegievmew`
