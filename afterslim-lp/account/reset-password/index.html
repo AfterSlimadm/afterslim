@@ -63,7 +63,14 @@ document.getElementById('setPwForm').addEventListener('submit', async function(e
   if (error) {
     btn.disabled = false;
     btn.textContent = 'Update password';
-    box.textContent = error.message || 'Could not update password. The reset link may have expired.';
+    var msg = (error.message || '').toLowerCase();
+    if (msg.indexOf('password') !== -1 && (msg.indexOf('character') !== -1 || msg.indexOf('contain') !== -1 || msg.indexOf('should') !== -1)) {
+      box.textContent = 'Password must have at least 8 characters, with one uppercase letter, one lowercase letter, and a digit.';
+    } else if (msg.indexOf('expired') !== -1 || msg.indexOf('invalid') !== -1) {
+      box.textContent = 'This reset link has expired. Request a new one from the Forgot password page.';
+    } else {
+      box.textContent = error.message || 'Could not update password. The reset link may have expired.';
+    }
     box.style.display = 'block';
     return;
   }
