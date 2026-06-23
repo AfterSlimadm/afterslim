@@ -10,7 +10,7 @@ html[data-auth="pending"] body { visibility: hidden; }
   display: flex;
   justify-content: center;
 }
-.auth-nav img { height: 36px; display: block; }
+.auth-nav img { height: 56px; width: auto; display: block; }
 
 .auth-shell {
   max-width: 360px;
