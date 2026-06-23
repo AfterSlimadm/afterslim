@@ -86,6 +86,16 @@
       "source": "/blog/:slug*",
       "destination": "/science",
       "permanent": true
+    },
+    {
+      "source": "/medical-advisory",
+      "destination": "/research",
+      "permanent": true
+    },
+    {
+      "source": "/medical-advisory/:slug*",
+      "destination": "/research",
+      "permanent": true
     }
   ]
 }

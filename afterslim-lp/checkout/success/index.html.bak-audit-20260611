@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WVF2ZGCL');</script>
+<!-- End Google Tag Manager -->
+<!-- TikTok Pixel Code -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+  ttq.load('D8CTDJ3C77UBL2TTU6E0');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- End TikTok Pixel Code -->
+<!-- TikTok attribution capture: persist ttclid, expose asTikTokAttr() for checkout -->
+<script>
+(function(){
+  try{var c=new URLSearchParams(location.search).get('ttclid');if(c)localStorage.setItem('as_ttclid',c);}catch(e){}
+  window.asTikTokAttr=function(){
+    var ttclid='';try{ttclid=localStorage.getItem('as_ttclid')||'';}catch(e){}
+    var ttp='';try{var m=document.cookie.match(/(?:^|; )_ttp=([^;]+)/);if(m)ttp=decodeURIComponent(m[1]);}catch(e){}
+    return {ttclid:ttclid,ttp:ttp};
+  };
+})();
+</script>
+
+<!-- Google tag (gtag.js) - GA4 + Google Ads (for direct conversion fire on /checkout/success) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LCTNMWWXWB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','G-LCTNMWWXWB');gtag('config','AW-18141752970');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed | AfterSlim</title>
+
+  <!-- PostHog Analytics -->
+  <script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('phc_M05Y8p9sTGkPpIEjIqsczpA0dVMW4cvYtkMX7BVgLfS', {
+    api_host: 'https://us.i.posthog.com',
+    person_profiles: 'identified_only',
+    session_recording: { maskAllInputs: true, maskTextSelector: '[data-private], .ph-no-capture' },
+    loaded: function(p){ try{ if(localStorage.getItem('posthog_internal_user')==='true') p.opt_out_capturing(); if(/^\/checkout(\/|$)/.test(location.pathname)) p.stopSessionRecording(); }catch(e){} },
+    capture_pageview: 'history_change',
+    capture_pageleave: true,
+    capture_exceptions: true
+  });
+  </script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Seed Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .success-card {
+      text-align: center;
+      max-width: 480px;
+      padding: 3rem 2rem;
+    }
+    .check-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(76,175,80,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .check-circle svg {
+      width: 40px;
+      height: 40px;
+      stroke: #4CAF50;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .desc {
+      color: rgba(255,255,255,0.6);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.875rem 2rem;
+      background: #4CAF50;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #43A047; }
+    .order-id {
+      margin-top: 1.5rem;
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVF2ZGCL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  <div class="success-card">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h1>Order Confirmed!</h1>
+    <p class="desc">
+      Thank you for your purchase. You'll receive a confirmation email shortly with your order details and tracking information.
+    </p>
+    <a href="/" class="btn">Back to AfterSlim</a>
+    <div class="order-id" id="order-id"></div>
+  </div>
+  <script>
+    (function(){
+      var params = new URLSearchParams(window.location.search);
+      var txnId = params.get('session_id') || params.get('payment_id') || params.get('payment_intent') || '';
+
+      // Pull customer + cart context persisted by /checkout before redirect.
+      // Used for purchase event value/items AND Enhanced Conversions user_data.
+      var ctx = {};
+      try {
+        var raw = sessionStorage.getItem('as_order_ctx');
+        if (raw) ctx = JSON.parse(raw) || {};
+      } catch (e) {}
+
+      // SHA-256 over a normalized string (trim + lowercase). Used to hash
+      // email/phone for Enhanced Conversions per Google spec.
+      async function sha256Hex(input) {
+        if (!input) return '';
+        var normalized = String(input).trim().toLowerCase();
+        if (!normalized) return '';
+        var buf = new TextEncoder().encode(normalized);
+        var hash = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(hash))
+          .map(function(b){return b.toString(16).padStart(2,'0');})
+          .join('');
+      }
+
+      // Normalize phone to E.164 (digits + leading +) before hashing.
+      function normalizePhone(phone) {
+        if (!phone) return '';
+        var digits = String(phone).replace(/[^\d+]/g, '');
+        if (!digits) return '';
+        if (digits.charAt(0) !== '+') digits = '+1' + digits.replace(/^\+/, '');
+        return digits;
+      }
+
+      async function pushPurchase() {
+        if (!txnId && !ctx.value) return;
+        document.getElementById('order-id').textContent = 'Your order has been confirmed.';
+
+        var items = (ctx.items && ctx.items.length) ? ctx.items : [{
+          item_id: 'AFTERSLIM-GLP1-COMPANION',
+          item_name: 'AfterSlim GLP-1 Companion',
+          item_brand: 'AfterSlim',
+          item_category: 'Supplements',
+          price: 27.99,
+          quantity: 1
+        }];
+        var value = (typeof ctx.value === 'number' && ctx.value > 0) ? ctx.value : 27.99;
+
+        var userData = {};
+        try {
+          if (ctx.email) userData.sha256_email_address = await sha256Hex(ctx.email);
+          var phoneN = normalizePhone(ctx.phone);
+          if (phoneN) userData.sha256_phone_number = await sha256Hex(phoneN);
+        } catch (e) {}
+
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ ecommerce: null });
+        window.dataLayer.push({
+          event: 'purchase',
+          ecommerce: {
+            transaction_id: txnId,
+            value: value,
+            currency: ctx.currency || 'USD',
+            coupon: ctx.coupon || undefined,
+            items: items
+          },
+          user_data: userData
+        });
+
+        // TikTok: CompletePayment. event_id is keyed on the Stripe id (txnId),
+        // the same key the server-side Events API uses, so TikTok deduplicates
+        // the browser and server events into one conversion.
+        try {
+          if (window.ttq) {
+            var ttIdentify = {};
+            var ttEmail = ctx.email ? String(ctx.email).trim().toLowerCase() : '';
+            var ttPhone = normalizePhone(ctx.phone);
+            if (ttEmail) { ttIdentify.email = ttEmail; ttIdentify.external_id = ttEmail; }
+            if (ttPhone) ttIdentify.phone_number = ttPhone;
+            ttq.identify(ttIdentify);
+            ttq.track('CompletePayment', {
+              contents: items.map(function (it) {
+                return {
+                  content_id: it.item_id,
+                  content_type: 'product',
+                  content_name: it.item_name,
+                  quantity: it.quantity,
+                  price: it.price
+                };
+              }),
+              value: value,
+              currency: ctx.currency || 'USD'
+            }, { event_id: 'tt_purchase_' + txnId });
+          }
+        } catch (e) {}
+
+        // Direct Google Ads conversion fire via gtag. We bypass the GTM
+        // Custom Event trigger here because GTM was firing the conversion
+        // ping with value=0 (couldn't pull ecommerce.value from dataLayer
+        // reliably). gtag('set','user_data',...) enables Enhanced
+        // Conversions on this hit.
+        try {
+          if (typeof window.gtag === 'function') {
+            if (userData.sha256_email_address || userData.sha256_phone_number) {
+              window.gtag('set', 'user_data', userData);
+            }
+            window.gtag('event', 'conversion', {
+              send_to: 'AW-18141752970/9RbMCOGm5rQcEIrd1MpD',
+              value: value,
+              currency: ctx.currency || 'USD',
+              transaction_id: txnId
+            });
+          }
+        } catch (e) {}
+
+        try { sessionStorage.removeItem('as_order_ctx'); } catch (e) {}
+      }
+
+      pushPurchase();
+      window.history.replaceState({}, '', '/checkout/success');
+    })();
+  </script>
+</body>
+</html>

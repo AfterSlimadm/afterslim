@@ -1,0 +1,27 @@
+# Files excluded from the Vercel deploy bundle. They stay in the repo/working
+# tree (nothing is deleted) but are not shipped to production. This removes
+# ~120MB of dead weight from the deploy. See afterslim_performance_2026-06.md
+# (P1) and afterslim_code_audit_2026-06.md (L1).
+
+# Playwright/automation debug screenshots — never referenced by any page.
+.daemon/
+
+# Dead-weight media: verified not referenced by any live page (only by the
+# superseded index-v*/v* versions below).
+images/bacteriagif.gif
+images/scroller-*.png
+images/highlight-*.png
+videos/*.mov
+
+# Superseded landing-page versions. Also 301-redirected to / in vercel.json;
+# excluding them here keeps the old copy/claims/prices out of the deploy
+# entirely (compliance + SEO duplicate-content).
+index-v1.html
+index-v3.html
+v2.html
+v4.html
+v5.html
+index.html.bak-before-v6-hero
+
+# Build/edit scripts and the local dev server — not needed in a static deploy.
+*.py

@@ -84,7 +84,9 @@ class SeedHandler(http.server.SimpleHTTPRequestHandler):
             super().log_message(format, *args)
 
 if __name__ == '__main__':
-    with http.server.HTTPServer(('', PORT), SeedHandler) as httpd:
+    # ThreadingHTTPServer: a stuck keep-alive connection from one browser tab
+    # must not block every other request (single-threaded HTTPServer wedges).
+    with http.server.ThreadingHTTPServer(('', PORT), SeedHandler) as httpd:
         print(f"Serving seed.com clone on http://localhost:{PORT}")
         print(f"Directory: {DIRECTORY}")
         print("Press Ctrl+C to stop")
