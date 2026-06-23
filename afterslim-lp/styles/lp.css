@@ -186,6 +186,9 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
   .nav-links { display: none; }
   .nav-account { padding: 0; width: 48px; justify-content: center; }
   .nav-account-label { display: none; }
+  .nav-inner { padding: 8px 12px; gap: 8px; }
+  .nav-right { gap: 4px; }
+  .nav-left { gap: 4px; }
 }
 
 /* Side menu drawer */
