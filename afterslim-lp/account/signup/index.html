@@ -97,6 +97,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <label for="signupPassword">Password</label>
         <input type="password" id="signupPassword" name="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters">
       </div>
+      <div class="auth-field">
+        <label for="signupConfirmPassword">Confirm password</label>
+        <input type="password" id="signupConfirmPassword" name="confirm" autocomplete="new-password" required minlength="8">
+      </div>
       <button type="submit" class="auth-submit" id="signupSubmit">Create account</button>
     </form>
 
@@ -136,9 +140,16 @@ document.getElementById('emailSignupForm').addEventListener('submit', async func
   var btn = document.getElementById('signupSubmit');
   var email = document.getElementById('signupEmail').value.trim();
   var password = document.getElementById('signupPassword').value;
+  var confirm = document.getElementById('signupConfirmPassword').value;
   errBox.style.display = 'none';
+  errBox.className = 'auth-error';
   if (!email || password.length < 8) {
     errBox.textContent = 'Please enter your email and a password of at least 8 characters.';
+    errBox.style.display = 'block';
+    return;
+  }
+  if (password !== confirm) {
+    errBox.textContent = 'Passwords do not match. Please type your password the same in both fields.';
     errBox.style.display = 'block';
     return;
   }
