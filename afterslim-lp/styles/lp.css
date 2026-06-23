@@ -181,7 +181,8 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .nav-account svg { flex-shrink: 0; }
 .nav-account-label { white-space: nowrap; }
 @media (max-width: 860px) {
-  .nav-inner { grid-template-columns: auto 1fr auto; }
+  /* Keep 1fr auto 1fr so the logo stays optically centered between the
+     unequal-width hamburger (left) and account+cart (right) clusters. */
   .nav-links { display: none; }
   .nav-account { padding: 0; width: 48px; justify-content: center; }
   .nav-account-label { display: none; }
