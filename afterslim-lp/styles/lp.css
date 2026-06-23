@@ -1487,24 +1487,33 @@ body.bundle-modal-open {
 }
 .testimonials-carousel-wrapper {
   position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-padding-left: 24px;
+  overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
           mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
 }
-.testimonials-carousel-wrapper::-webkit-scrollbar { display: none; }
 .testimonials-carousel {
   display: flex;
   gap: 20px;
-  padding: 10px 24px;
+  padding: 10px 0;
   width: max-content;
+  animation: testimonialsMarquee 60s linear infinite;
+  will-change: transform;
 }
-.testimonials-carousel .testimonial-card {
-  scroll-snap-align: start;
+.testimonials-carousel-wrapper:hover .testimonials-carousel,
+.testimonials-carousel:focus-within { animation-play-state: paused; }
+@keyframes testimonialsMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-carousel { animation: none; }
+  .testimonials-carousel-wrapper {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .testimonials-carousel-wrapper::-webkit-scrollbar { display: none; }
+  .testimonials-carousel .testimonial-card { scroll-snap-align: start; }
 }
 .testimonial-card {
   flex: 0 0 320px;

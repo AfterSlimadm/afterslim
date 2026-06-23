@@ -2043,22 +2043,21 @@ if ('IntersectionObserver' in window) {
   checks.forEach(function(c) { io.observe(c); });
 })();
 
-/* ===== Testimonials marquee — JS-driven RAF loop.
-   CSS keyframes with `translate3d(-50%, 0, 0)` can fail to start on iOS
-   Safari when the carousel's max-content width is recalculated after
-   background-images load. Driving the transform from JS sidesteps that
-   timing race entirely. */
+/* ===== Testimonials marquee — CSS animation, JS just duplicates the
+   real cards once so the loop closes seamlessly without showing the same
+   reviews twice on screen. The CSS keyframes translate -50% over 60s, so
+   when the duplicate set rolls in the original set rolls out at the same
+   moment — visually one continuous stream. Hover pauses (CSS). */
 (function() {
-  // Carousel is now manual horizontal scroll (swipe on mobile, scroll
-  // wheel + drag on desktop), styled via scroll-snap in lp.css. The old
-  // auto-scrolling animation depended on a duplicated card set to loop
-  // seamlessly; that duplication read as fake/repeated reviews to careful
-  // visitors. Removing both the duplicate cards and the JS auto-scroll
-  // resolves the perception problem and leaves the 4 real reviews
-  // navigable manually.
   var carousel = document.getElementById('testimonialsCarousel');
   if (!carousel) return;
-  carousel.style.transform = '';
+  var originals = Array.prototype.slice.call(carousel.children);
+  if (originals.length === 0) return;
+  originals.forEach(function(card) {
+    var clone = card.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    carousel.appendChild(clone);
+  });
 })();
 
 /* ===== Mobile: Science section ingredient carousels (per group) =====
