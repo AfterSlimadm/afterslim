@@ -144,7 +144,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 .nav-links a { color: var(--ink); transition: color 0.2s; }
 .nav-links a:hover { color: var(--orange); }
 .nav-logo { justify-self: center; }
-.nav-logo img { height: 56px; width: auto; }
+.nav-logo img { height: 44px; width: auto; }
 .nav-right { justify-self: end; display: flex; align-items: center; gap: 12px; font-size: 14px; }
 .nav-right a { color: var(--ink); }
 .nav-left { justify-self: start; display: flex; align-items: center; gap: 12px; }
