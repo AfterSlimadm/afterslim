@@ -4,32 +4,39 @@
 html[data-auth="pending"] body { visibility: hidden; }
 
 /* ─── Auth card (sign in / create account) ────────────────────────────── */
+/* Minimal Club-inspired: no card, content breathes on page bg. */
+.auth-nav {
+  padding: 28px 20px 0;
+  display: flex;
+  justify-content: center;
+}
+.auth-nav img { height: 36px; display: block; }
+
 .auth-shell {
-  max-width: 420px;
+  max-width: 360px;
   margin: 0 auto;
-  padding: 56px 20px 96px;
+  padding: 64px 20px 80px;
 }
 .auth-card {
-  background: #ffffff;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 36px 32px 32px;
-  box-shadow: 0 1px 2px rgba(31, 20, 16, 0.04), 0 8px 24px rgba(31, 20, 16, 0.06);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  box-shadow: none;
 }
 .auth-card h1 {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   margin: 0 0 8px;
   text-align: center;
   color: var(--ink);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 .auth-card .auth-lede {
   font-size: 14.5px;
   color: var(--ink-2);
   text-align: center;
-  margin: 0 0 24px;
+  margin: 0 0 28px;
   line-height: 1.55;
 }
 
@@ -76,17 +83,18 @@ html[data-auth="pending"] body { visibility: hidden; }
   width: 100%;
   font-family: inherit;
   font-size: 15px;
-  padding: 12px 14px;
+  padding: 13px 14px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: var(--bg);
+  background: #ffffff;
   color: var(--ink);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
+.auth-field input::placeholder { color: #b5a195; }
 .auth-field input:focus {
   outline: none;
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(31, 20, 16, 0.08);
 }
 .auth-field-row {
   display: flex;
