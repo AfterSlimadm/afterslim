@@ -363,6 +363,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <input type="text" id="card-name" placeholder="Name on card" value="" style="width:100%;border:none;outline:none;font-size:15px;color:#1a1a1a;background:transparent;padding:0">
                   </div>
                 </div>
+                <!-- Apple Pay option -->
+                <div id="applepay-option" onclick="ckSelectApplePay()" style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div id="applepay-radio" style="width:20px;height:20px;border-radius:50%;border:2px solid #ccc"></div>
+                    <span style="font-size:15px;font-weight:500">Apple Pay</span>
+                  </div>
+                  <div style="background:#000;border-radius:4px;padding:4px 8px;display:flex;align-items:center;gap:3px">
+                    <svg viewBox="0 0 170 72" style="height:18px" fill="#fff"><path d="M29.5 12.5c-1.8 2.2-4.7 3.9-7.6 3.7-.4-2.9 1.1-5.9 2.7-7.8 1.8-2.2 5-3.8 7.5-3.9.3 3 -.9 5.9-2.6 8zm2.6 4.1c-4.2-.2-7.8 2.4-9.8 2.4s-5.1-2.3-8.4-2.3c-4.3.1-8.3 2.5-10.5 6.4-4.5 7.8-1.2 19.3 3.2 25.6 2.1 3.1 4.7 6.6 8 6.5 3.2-.1 4.4-2.1 8.3-2.1s5 2.1 8.4 2c3.5-.1 5.7-3.2 7.8-6.3 2.4-3.6 3.4-7.1 3.5-7.3-.1-.1-6.7-2.6-6.8-10.3-.1-6.4 5.3-9.5 5.5-9.6-3-4.5-7.7-5-9.2-5.1zM60.9 8.8v43.1h6.7V37.2h9.3c8.5 0 14.5-5.8 14.5-14.2s-5.9-14.2-14.3-14.2H60.9zm6.7 5.6h7.7c5.9 0 9.2 3.1 9.2 8.6s-3.3 8.6-9.2 8.6h-7.7V14.4zM103.3 52.3c4.2 0 8.1-2.1 9.9-5.5h.1v5.1h6.2V30.5c0-6.2-5-10.2-12.6-10.2-7.1 0-12.4 4.1-12.6 9.7h6c.5-2.7 3-4.4 6.4-4.4 4.2 0 6.5 2 6.5 5.6v2.5l-8.4.5c-7.8.5-12.1 3.7-12.1 9.3 0 5.7 4.4 9.5 10.6 9.5zm1.8-5.1c-3.7 0-6-1.8-6-4.5 0-2.8 2.2-4.5 6.5-4.7l7.5-.5v2.6c0 4.2-3.5 7.1-8 7.1zM128.3 64c6.5 0 9.6-2.5 12.3-10.1l11.8-33.1h-6.8L137.7 46h-.1l-7.9-25.2h-7l11.4 31.4-.6 1.9c-1 3.3-2.7 4.5-5.7 4.5-.5 0-1.6 0-1.9-.1v5.2c.3.1 2 .2 2.4.2z"/></svg>
+                  </div>
+                </div>
                 <!-- PayPal option -->
                 <div id="paypal-option" onclick="ckSelectPayPal()" style="padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e0e0e0;cursor:pointer">
                   <div style="display:flex;align-items:center;gap:10px">
@@ -712,6 +722,10 @@ async function ckPay(){
     errEl.textContent='PayPal is not available yet. Please choose Credit card or Afterpay.';
     errEl.style.display='block';return;
   }
+  if(CK_payMethod==='applepay'){
+    errEl.textContent='Apple Pay is being configured. Please use the Express Checkout button at the top, or choose another method.';
+    errEl.style.display='block';return;
+  }
   ckPushAddPaymentInfo();
   ckPersistOrderContext(CK_cust.email, CK_cust.name, CK_cust.phone);
   procEl.classList.add('active');
@@ -1001,6 +1015,8 @@ function ckResetPayRadios(){
   var apRadio=document.getElementById('afterpay-radio');
   var ppOpt=document.getElementById('paypal-option');
   var ppRadio=document.getElementById('paypal-radio');
+  var appOpt=document.getElementById('applepay-option');
+  var appRadio=document.getElementById('applepay-radio');
   if(cardOpt)cardOpt.style.background='#fff';
   if(cardRadio)cardRadio.style.border='2px solid #ccc';
   if(cardDot)cardDot.style.background='transparent';
@@ -1008,6 +1024,8 @@ function ckResetPayRadios(){
   if(apRadio){apRadio.style.border='2px solid #ccc';apRadio.innerHTML='';}
   if(ppOpt)ppOpt.style.background='#fff';
   if(ppRadio){ppRadio.style.border='2px solid #ccc';ppRadio.innerHTML='';}
+  if(appOpt)appOpt.style.background='#fff';
+  if(appRadio){appRadio.style.border='2px solid #ccc';appRadio.innerHTML='';}
 }
 function ckFillRadio(radioId){
   var r=document.getElementById(radioId);
@@ -1040,6 +1058,15 @@ function ckSelectPayPal(){
   if(opt)opt.style.background='#fff5f0';
   ckFillRadio('paypal-radio');
 }
+function ckSelectApplePay(){
+  CK_payMethod='applepay';
+  ckResetPayRadios();
+  document.querySelector('#step3 .payment-method-card-fields').style.display='none';
+  var opt=document.getElementById('applepay-option');
+  if(opt)opt.style.background='#fff5f0';
+  ckFillRadio('applepay-radio');
+}
+
 // Set afterpay installment amount
 var apEl=document.getElementById('afterpay-installment');
 if(apEl) apEl.textContent=(CK_info.price/4).toFixed(2);
