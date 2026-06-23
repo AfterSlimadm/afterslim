@@ -153,7 +153,14 @@ document.getElementById('emailLoginForm').addEventListener('submit', async funct
   if (error) {
     btn.disabled = false;
     btn.textContent = 'Sign in';
-    errBox.textContent = error.message || 'Sign in failed. Please check your credentials.';
+    var msg = (error.message || '').toLowerCase();
+    if (msg.indexOf('invalid') !== -1) {
+      errBox.textContent = "Couldn't sign you in. Check your email and password, or reset it below.";
+    } else if (msg.indexOf('confirm') !== -1) {
+      errBox.textContent = 'Please confirm your email first. Check your inbox for the confirmation link.';
+    } else {
+      errBox.textContent = error.message || 'Sign in failed. Please try again.';
+    }
     errBox.style.display = 'block';
     return;
   }

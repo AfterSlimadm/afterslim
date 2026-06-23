@@ -152,7 +152,16 @@ document.getElementById('emailSignupForm').addEventListener('submit', async func
   if (error) {
     btn.disabled = false;
     btn.textContent = 'Create account';
-    errBox.textContent = error.message || 'Sign up failed. Please try again.';
+    var msg = (error.message || '').toLowerCase();
+    if (msg.indexOf('already') !== -1 || msg.indexOf('registered') !== -1) {
+      errBox.textContent = 'An account with this email already exists. Try signing in instead.';
+    } else if (msg.indexOf('password') !== -1) {
+      errBox.textContent = 'Password must have at least 8 characters, with one uppercase letter, one lowercase letter, and a digit.';
+    } else if (msg.indexOf('valid') !== -1 && msg.indexOf('email') !== -1) {
+      errBox.textContent = 'Please enter a valid email address.';
+    } else {
+      errBox.textContent = error.message || 'Sign up failed. Please try again.';
+    }
     errBox.style.display = 'block';
     return;
   }
