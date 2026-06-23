@@ -1496,17 +1496,10 @@ body.bundle-modal-open {
   gap: 20px;
   padding: 10px 0;
   width: max-content;
-  animation: testimonialsMarquee 60s linear infinite;
   will-change: transform;
-}
-.testimonials-carousel-wrapper:hover .testimonials-carousel,
-.testimonials-carousel:focus-within { animation-play-state: paused; }
-@keyframes testimonialsMarquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  transform: translate3d(0, 0, 0);
 }
 @media (prefers-reduced-motion: reduce) {
-  .testimonials-carousel { animation: none; }
   .testimonials-carousel-wrapper {
     overflow-x: auto;
     scroll-snap-type: x mandatory;

@@ -2043,14 +2043,18 @@ if ('IntersectionObserver' in window) {
   checks.forEach(function(c) { io.observe(c); });
 })();
 
-/* ===== Testimonials marquee — CSS animation, JS just duplicates the
-   real cards once so the loop closes seamlessly without showing the same
-   reviews twice on screen. The CSS keyframes translate -50% over 60s, so
-   when the duplicate set rolls in the original set rolls out at the same
-   moment — visually one continuous stream. Hover pauses (CSS). */
+/* ===== Testimonials marquee — JS RAF loop.
+   CSS keyframes with translateX(-50%) on a width:max-content container can
+   silently fail to start on iOS Safari when background-images load after
+   the initial layout. Driving the transform from requestAnimationFrame
+   sidesteps that race. JS also clones the 4 real cards once so the loop
+   closes seamlessly (the second set rolls in as the first rolls out, so
+   at any visible moment the viewer sees the 4 distinct reviews, not 8). */
 (function() {
   var carousel = document.getElementById('testimonialsCarousel');
   if (!carousel) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
   var originals = Array.prototype.slice.call(carousel.children);
   if (originals.length === 0) return;
   originals.forEach(function(card) {
@@ -2058,6 +2062,44 @@ if ('IntersectionObserver' in window) {
     clone.setAttribute('aria-hidden', 'true');
     carousel.appendChild(clone);
   });
+
+  // Half-width = the original 4-card set (the duplicates are the second half).
+  // Loop resets the transform to 0 when it reaches -halfWidth, so the
+  // duplicates' position visually becomes the new "start" with no jump.
+  var halfWidth = 0;
+  function measure() {
+    halfWidth = carousel.scrollWidth / 2;
+  }
+  measure();
+  window.addEventListener('resize', measure);
+  // Background-images shift the carousel width after they decode, so
+  // re-measure once they have all settled.
+  if (document.readyState === 'complete') setTimeout(measure, 50);
+  else window.addEventListener('load', function() { setTimeout(measure, 50); });
+
+  var speedPxPerSec = 40; // ~60s for a 2400px set
+  var offset = 0;
+  var lastTs = null;
+  var paused = false;
+
+  var wrapper = carousel.closest('.testimonials-carousel-wrapper');
+  if (wrapper) {
+    wrapper.addEventListener('mouseenter', function() { paused = true; });
+    wrapper.addEventListener('mouseleave', function() { paused = false; });
+  }
+
+  function tick(ts) {
+    if (lastTs === null) lastTs = ts;
+    var dt = ts - lastTs;
+    lastTs = ts;
+    if (!paused && halfWidth > 0) {
+      offset += (speedPxPerSec * dt) / 1000;
+      if (offset >= halfWidth) offset -= halfWidth;
+      carousel.style.transform = 'translate3d(-' + offset.toFixed(2) + 'px, 0, 0)';
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 })();
 
 /* ===== Mobile: Science section ingredient carousels (per group) =====
