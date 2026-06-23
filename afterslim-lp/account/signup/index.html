@@ -180,6 +180,17 @@ document.getElementById('emailSignupForm').addEventListener('submit', async func
     window.location.href = '/account';
     return;
   }
+  // Supabase anti-enumeration: when an email is already registered, signUp
+  // returns a "user" object but with an empty identities array (no error).
+  // Detect that case and tell the user clearly so they don't sit waiting
+  // for an email that will never come.
+  if (data && data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    btn.disabled = false;
+    btn.textContent = 'Create account';
+    errBox.textContent = 'An account with this email already exists. Try signing in instead, or use "Forgot password" to recover access.';
+    errBox.style.display = 'block';
+    return;
+  }
   errBox.className = 'auth-success';
   errBox.textContent = 'Check your inbox to confirm your email and finish creating your account.';
   errBox.style.display = 'block';
