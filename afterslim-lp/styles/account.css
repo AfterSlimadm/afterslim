@@ -631,16 +631,26 @@ html[data-auth="pending"] body { visibility: hidden; }
    shimmer + underline). Smaller scale because it lives inside the
    720px account column. */
 .account-cta-eyebrow {
-  display: inline-block;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--orange-dark);
-  background: var(--orange-tint);
-  padding: 6px 14px;
-  border-radius: 999px;
+  color: var(--ink);
   margin: 0 0 14px;
+  padding: 0;
+  background: transparent;
+}
+.account-cta-eyebrow::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.18);
+  flex-shrink: 0;
 }
 .account-cta-title {
   font-size: clamp(28px, 3.6vw, 36px);

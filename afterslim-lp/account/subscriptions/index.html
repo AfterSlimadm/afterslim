@@ -257,13 +257,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // /api/subscriptions/me endpoint for the LP, the safest UX is to show
     // the same empty state instead of a scary "Couldn't load" error.
     console.warn('[subscriptions] query failed, falling back to empty state:', error.message);
-    document.getElementById('subStatusBadge').style.display = 'inline-block';
+    document.getElementById('subStatusBadge').style.display = 'inline-flex';
     document.getElementById('emptyState').style.display = 'block';
     return;
   }
 
   if (!subs || subs.length === 0) {
-    document.getElementById('subStatusBadge').style.display = 'inline-block';
+    document.getElementById('subStatusBadge').style.display = 'inline-flex';
     document.getElementById('emptyState').style.display = 'block';
     return;
   }
