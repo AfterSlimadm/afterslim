@@ -141,9 +141,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="subsList"></div>
 
   <div id="emptyState" class="account-empty" style="display: none;">
-    <p>You don't have any active subscriptions yet.</p>
-    <a class="account-empty-cta" href="/#bundles">Start Subscribe &amp; Save
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <p>No active subscriptions yet. Lock in 5% back and Subscribe &amp; Save when you place your first order.</p>
+    <a class="account-empty-cta" href="/#bundles">
+      Shop AfterSlim
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
   </div>
 </main>
@@ -162,8 +163,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     .order('created_at', { ascending: false });
 
   if (error) {
-    document.getElementById('subsList').innerHTML =
-      '<div class="account-empty"><p>Couldn\'t load your subscriptions. Please refresh or email support@afterslim.com.</p></div>';
+    // Customer subscriptions live in Stripe, not in the public `subscriptions`
+    // table (that one tracks the company's own SaaS costs — Vercel, Supabase,
+    // etc — and RLS blocks customer reads). Until the admin exposes a
+    // /api/subscriptions/me endpoint for the LP, the safest UX is to show
+    // the same empty state instead of a scary "Couldn't load" error.
+    console.warn('[subscriptions] query failed, falling back to empty state:', error.message);
+    document.getElementById('emptyState').style.display = 'block';
     return;
   }
 
