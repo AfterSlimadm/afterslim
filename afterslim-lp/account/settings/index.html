@@ -43,33 +43,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
 .settings-section {
-  background: var(--bg-2); border: 1px solid var(--line);
-  border-radius: 14px; padding: 24px;
-  margin-bottom: 18px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
 }
-.settings-section h2 { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
-.settings-section .help { font-size: 13.5px; color: var(--ink-2); margin: 0 0 18px; line-height: 1.5; }
-.settings-form { display: grid; gap: 12px; max-width: 480px; }
-.settings-form label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px; }
+.settings-section:first-of-type { padding-top: 8px; }
+.settings-section:last-of-type { border-bottom: 0; }
+.settings-section h2 { font-size: 17px; font-weight: 700; margin: 0 0 6px; }
+.settings-section .help { font-size: 14px; color: var(--ink-2); margin: 0 0 18px; line-height: 1.55; }
+.settings-form { display: grid; gap: 14px; max-width: 460px; }
+.settings-form label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 4px; color: var(--ink); }
 .settings-form input {
   width: 100%; font-family: inherit; font-size: 14.5px;
   background: #fff; border: 1px solid var(--line); border-radius: 10px;
-  padding: 12px 14px; outline: 0;
+  padding: 11px 14px; outline: 0;
 }
 .settings-form input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.12); }
 .settings-form button {
   margin-top: 4px;
   background: var(--orange); color: #fff;
   font-family: inherit; font-size: 14px; font-weight: 700;
-  letter-spacing: 0.4px; text-transform: uppercase;
-  padding: 12px 22px; border: 0; border-radius: 999px; cursor: pointer;
+  padding: 11px 22px; border: 0; border-radius: 999px; cursor: pointer;
   justify-self: start;
 }
 .settings-form button:hover { background: var(--orange-dark); }
-.settings-form button:disabled { opacity: 0.55; cursor: not-allowed; }
-.settings-msg { font-size: 13px; padding: 8px 12px; border-radius: 8px; margin-top: 4px; }
-.settings-msg.ok { background: rgba(22,163,74,0.08); color: #15803d; }
-.settings-msg.err { background: rgba(220,38,38,0.08); color: #b91c1c; }
+.settings-form button:disabled { opacity: 0.65; cursor: wait; }
+.auth-hint { font-size: 12.5px; color: var(--ink-2); margin: 4px 0 0; line-height: 1.5; }
+.settings-msg { font-size: 13.5px; padding: 10px 12px; border-radius: 10px; margin-top: 2px; }
+.settings-msg.ok { color: #15803d; background: #ecfdf5; border: 1px solid #bbf7d0; }
+.settings-msg.err { color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/settings">
 <meta name="robots" content="noindex, nofollow">
@@ -135,16 +136,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="settings-section">
     <h2>Password</h2>
-    <p class="help">Pick a new password. You'll stay signed in on this device after the change.</p>
-    <form class="settings-form" id="pwForm">
+    <p class="help">Confirm your current password to choose a new one. You'll stay signed in on this device after the change.</p>
+    <form class="settings-form" id="pwForm" autocomplete="off">
+      <div>
+        <label for="current_pw">Current password</label>
+        <input id="current_pw" type="password" autocomplete="current-password" required>
+      </div>
       <div>
         <label for="new_pw">New password</label>
-        <input id="new_pw" type="password" autocomplete="new-password" minlength="8">
+        <input id="new_pw" type="password" autocomplete="new-password" minlength="8" required>
         <p class="auth-hint">At least 8 characters, with one uppercase letter, one lowercase letter, and one special character.</p>
       </div>
       <div>
         <label for="confirm_pw">Confirm new password</label>
-        <input id="confirm_pw" type="password" autocomplete="new-password" minlength="8">
+        <input id="confirm_pw" type="password" autocomplete="new-password" minlength="8" required>
       </div>
       <div id="pwMsg" style="display: none;"></div>
       <button type="submit" id="pwBtn">Update password</button>
@@ -198,17 +203,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   document.getElementById('pwForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     var msgId = 'pwMsg';
+    var currentPw = document.getElementById('current_pw').value;
     var pw = document.getElementById('new_pw').value;
-    var confirm = document.getElementById('confirm_pw').value;
+    var confirmVal = document.getElementById('confirm_pw').value;
+
+    if (!currentPw) return showMsg(msgId, 'Enter your current password to continue.', 'err');
     var pwError = validatePassword(pw);
     if (pwError) return showMsg(msgId, pwError, 'err');
-    if (pw !== confirm) return showMsg(msgId, 'Passwords do not match.', 'err');
+    if (pw !== confirmVal) return showMsg(msgId, 'New passwords do not match.', 'err');
+    if (pw === currentPw) return showMsg(msgId, 'Pick a password different from the current one.', 'err');
+
     var btn = document.getElementById('pwBtn');
     btn.disabled = true; btn.textContent = 'Updating...';
+
+    // Re-authenticate with the current password before allowing the change.
+    // Supabase doesn't expose a "verify password without re-login" endpoint,
+    // so we call signInWithPassword as a verification step. On success the
+    // session is refreshed in place (user stays on this device).
+    var verify = await supabase.auth.signInWithPassword({ email: user.email, password: currentPw });
+    if (verify.error) {
+      btn.disabled = false; btn.textContent = 'Update password';
+      return showMsg(msgId, 'Current password is incorrect.', 'err');
+    }
+
     var { error } = await supabase.auth.updateUser({ password: pw });
     btn.disabled = false; btn.textContent = 'Update password';
     if (error) showMsg(msgId, error.message, 'err');
     else {
+      document.getElementById('current_pw').value = '';
       document.getElementById('new_pw').value = '';
       document.getElementById('confirm_pw').value = '';
       showMsg(msgId, 'Password updated.', 'ok');
