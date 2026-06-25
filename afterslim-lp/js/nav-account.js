@@ -77,7 +77,7 @@
         '<span>Subscriptions</span>' +
       '</a>' +
       '<a class="nav-account-menu-item" href="/account/store-credit">' +
-        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M15 9.5a3 3 0 0 0-3-1.5h0a3 3 0 0 0 0 6h0a3 3 0 0 1 0 6h0a3 3 0 0 1-3-1.5"/></svg>' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>' +
         '<span>Store credit</span>' +
       '</a>' +
       '<div class="nav-account-menu-sep"></div>' +
