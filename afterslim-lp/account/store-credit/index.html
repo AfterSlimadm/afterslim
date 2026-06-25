@@ -381,6 +381,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="credit-modal">
       <h3 id="creditRedeemTitle">Redeem your balance as a coupon?</h3>
       <p>Your <strong id="creditRedeemModalAmount">$0.00</strong> balance becomes a single-use coupon. <strong>You can't get it back as balance later.</strong> The coupon is valid for 7 days; if you don't use it in time, the credit is forfeited.</p>
+      <p id="creditRedeemError" style="display:none;font-size:13.5px;line-height:1.5;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px 12px;margin:0 0 14px;"></p>
       <div class="credit-modal-actions">
         <button type="button" class="credit-modal-btn credit-modal-btn--cancel" id="creditRedeemCancel">Cancel</button>
         <button type="button" class="credit-modal-btn credit-modal-btn--confirm" id="creditRedeemConfirm">Yes, generate coupon</button>
@@ -579,9 +580,26 @@ async function initRedeem(balance, couponPromise) {
   confirmBtn.addEventListener('click', async function() {
     confirmBtn.disabled = true;
     confirmBtn.textContent = 'Generating...';
+    var errInline = document.getElementById('creditRedeemError');
+    if (errInline) { errInline.textContent = ''; errInline.style.display = 'none'; }
+
+    function fail(msg, ctx) {
+      console.warn('[store-credit redeem] failed:', ctx);
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Yes, generate coupon';
+      if (errInline) {
+        errInline.textContent = msg;
+        errInline.style.display = 'block';
+      }
+    }
+
     try {
       var session = await window.afterslimSupabase.auth.getSession();
       var token = session.data.session && session.data.session.access_token;
+      if (!token) {
+        fail('Your session expired. Please sign in again.', { reason: 'no-token' });
+        return;
+      }
       var res = await fetch(ADMIN + '/api/store-credit/redeem', {
         method: 'POST',
         headers: {
@@ -590,16 +608,35 @@ async function initRedeem(balance, couponPromise) {
         },
         body: '{}'
       });
-      if (!res.ok) throw new Error('redeem failed: ' + res.status);
-      var data = await res.json();
+
+      var bodyText = '';
+      try { bodyText = await res.text(); } catch (_) {}
+      var parsed = null;
+      try { parsed = JSON.parse(bodyText); } catch (_) {}
+
+      if (!res.ok) {
+        var ctx = { status: res.status, body: bodyText, parsed: parsed };
+        if (res.status === 401) return fail('Your session expired. Please sign in again.', ctx);
+        if (res.status === 400) return fail("You don't have any balance to redeem right now.", ctx);
+        if (res.status === 409) {
+          // Already has an active coupon — try to surface it instead of erroring.
+          fail('You already have an active coupon. Refreshing...', ctx);
+          setTimeout(function() { window.location.reload(); }, 1200);
+          return;
+        }
+        var serverMsg = (parsed && (parsed.error || parsed.message)) || ('Server returned ' + res.status);
+        return fail('Could not generate your coupon: ' + serverMsg + '. Email support@afterslim.com if it keeps failing.', ctx);
+      }
+
+      var data = parsed || {};
+      if (!data.code) return fail('Server response was missing the coupon code. Email support@afterslim.com.', { status: res.status, body: bodyText });
+
       modal.classList.remove('open');
       document.getElementById('creditBalance').textContent = '$0.00';
       document.getElementById('creditAvailable').textContent = 'Your coupon is ready below. Use it within 7 days.';
       showCoupon(data);
     } catch (err) {
-      confirmBtn.disabled = false;
-      confirmBtn.textContent = 'Yes, generate coupon';
-      alert('Could not generate your coupon right now. Please try again, or email support@afterslim.com if it keeps failing.');
+      fail('Could not reach the server. Check your connection and try again.', { error: String(err) });
     }
   });
 }
