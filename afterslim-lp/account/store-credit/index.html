@@ -81,23 +81,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   border-bottom: 1px solid var(--line);
 }
 .credit-info-item {
-  padding: 22px 0;
   border-top: 1px solid var(--line);
 }
-.credit-info-item:first-child { border-top: 0; padding-top: 6px; }
-.credit-info-item h3 {
+.credit-info-item:first-child { border-top: 0; }
+.credit-info-item > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--orange-dark);
-  margin: 0 0 8px;
+  transition: color 0.15s;
 }
-.credit-info-item p {
+.credit-info-item > summary::-webkit-details-marker { display: none; }
+.credit-info-item > summary:hover { color: var(--orange); }
+.credit-info-item > summary::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-right: 4px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.credit-info-item[open] > summary::after { transform: rotate(-135deg); }
+.credit-info-item > p {
   font-size: 15px;
   line-height: 1.6;
   color: var(--ink);
-  margin: 0;
+  margin: 0 0 18px;
   max-width: 640px;
 }
 
@@ -175,18 +195,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <section class="credit-info-list">
-    <div class="credit-info-item">
-      <h3>How you earn</h3>
+    <details class="credit-info-item">
+      <summary>How you earn</summary>
       <p>5% of the product subtotal of every completed order returns to your balance, including subscription shipments.</p>
-    </div>
-    <div class="credit-info-item">
-      <h3>How it applies</h3>
+    </details>
+    <details class="credit-info-item">
+      <summary>How it applies</summary>
       <p>Sign in before checking out. Your available balance shows up as a one-click discount, applied up to the order total. No code needed.</p>
-    </div>
-    <div class="credit-info-item">
-      <h3>What if I refund?</h3>
+    </details>
+    <details class="credit-info-item">
+      <summary>What if I refund?</summary>
       <p>Refunded orders forfeit the credit earned from that order. If you've already spent it, the refund will return what's left after that deduction.</p>
-    </div>
+    </details>
   </section>
 
   <h2 class="credit-history-title">Transaction history</h2>
