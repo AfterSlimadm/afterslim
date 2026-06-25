@@ -34,6 +34,10 @@
     {
       "source": "/api/checkout",
       "destination": "https://admin.afterslim.com/api/checkout"
+    },
+    {
+      "source": "/api/coupons/validate",
+      "destination": "https://admin.afterslim.com/api/coupons/validate"
     }
   ],
   "redirects": [
