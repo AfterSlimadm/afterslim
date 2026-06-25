@@ -141,6 +141,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="tv-thread" id="tvThread"></div>
+  <div id="messages-bottom" aria-hidden="true"></div>
 
   <div id="replyArea"></div>
 </main>
@@ -160,6 +161,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var messagesCache = [];
   var ticketCache = null;
+
+  function scrollToBottom(opts) {
+    var behavior = (opts && opts.behavior) || 'smooth';
+    var sentinel = document.getElementById('messages-bottom');
+    if (sentinel && typeof sentinel.scrollIntoView === 'function') {
+      sentinel.scrollIntoView({ behavior: behavior, block: 'end' });
+    }
+  }
 
   function messageHtml(m) {
     var date = new Date(m.created_at).toLocaleString('en-US', {
@@ -188,10 +197,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var thread = document.getElementById('tvThread');
     if (messagesCache.length === 1) thread.innerHTML = '';      // clear the "No messages yet" placeholder
     thread.insertAdjacentHTML('beforeend', messageHtml(m));
-    var last = thread.lastElementChild;
-    if (last && typeof last.scrollIntoView === 'function') {
-      last.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
+    scrollToBottom({ behavior: 'smooth' });
   }
 
   function renderTicketHeader(ticket) {
@@ -263,6 +269,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   await refresh();
+  scrollToBottom({ behavior: 'auto' });    // jump to the latest message on first paint, no animation
 
   // Realtime: staff replies and status changes land instantly without
   // a manual refresh. Mirrors what the admin already does on its side
