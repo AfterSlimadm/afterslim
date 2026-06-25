@@ -625,60 +625,121 @@ html[data-auth="pending"] body { visibility: hidden; }
 .account-empty-cta svg { color: var(--orange); transition: transform 0.15s; }
 .account-empty-cta:hover svg { transform: translateX(3px); color: var(--orange-dark); }
 
-/* Account: inline bundle card (used in /account/subscriptions empty
-   state so the customer can subscribe in one click without bouncing
-   back to the storefront). Quiet, editorial, not an ad. */
+/* Account: inline bundle PDP (used in /account/subscriptions empty
+   state). PDP-style on a smaller canvas — square product photo on top,
+   rating, title, meta, bundle picker (home-equivalent), price, and a
+   big CTA. The customer should not feel they have to bounce back to
+   the storefront. */
 .account-bundle-card {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 22px;
-  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
   background: #ffffff;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  margin: 24px 0 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 24px 0 0;
 }
-.account-bundle-thumb {
-  width: 76px;
-  height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.account-bundle-hero {
+  width: 100%;
+  aspect-ratio: 1 / 1;
   background: var(--orange-tint);
-  border-radius: 14px;
-  flex-shrink: 0;
   overflow: hidden;
 }
-.account-bundle-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.account-bundle-body { min-width: 0; }
-.account-bundle-title {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  margin: 0 0 4px;
-  color: var(--ink);
-}
-.account-bundle-meta {
+.account-bundle-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.account-bundle-info { padding: 24px 24px 28px; }
+
+.account-bundle-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
   font-size: 13.5px;
   color: var(--ink-2);
-  margin: 0 0 10px;
-  line-height: 1.45;
 }
+.account-bundle-rating img { height: 16px; width: auto; display: block; }
+.account-bundle-rating strong { color: var(--ink); font-weight: 700; }
+
+.account-bundle-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 0 0 6px;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.account-bundle-meta {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.account-bundle-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 24px 0 22px;
+}
+.account-bundle-opt {
+  position: relative;
+  background: #ffffff;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 10px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.account-bundle-opt:hover { border-color: var(--orange-tint); }
+.account-bundle-opt[aria-pressed="true"] {
+  border-color: var(--orange);
+  background: rgba(234, 88, 12, 0.04);
+}
+.account-bundle-opt-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--orange);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.account-bundle-opt-badge--best { background: #b91c1c; }
+.account-bundle-opt-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.account-bundle-opt-save {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--orange-dark);
+}
+
 .account-bundle-price {
   display: flex;
   align-items: baseline;
   gap: 10px;
   flex-wrap: wrap;
+  margin: 0 0 18px;
 }
 .account-bundle-price-now {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 .account-bundle-price-was {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--ink-3);
   text-decoration: line-through;
 }
@@ -687,75 +748,37 @@ html[data-auth="pending"] body { visibility: hidden; }
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--orange-dark);
-  padding: 3px 8px;
+  padding: 3px 9px;
   background: var(--orange-tint);
   border-radius: 999px;
 }
+
 .account-bundle-cta {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
   background: var(--orange);
   color: #ffffff;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   border-radius: 999px;
-  flex-shrink: 0;
   transition: background 0.15s, transform 0.05s;
 }
-.account-bundle-cta:hover { background: var(--orange-dark); color: #fff; }
+.account-bundle-cta:hover { background: var(--orange-dark); color: #ffffff; }
 .account-bundle-cta:active { transform: translateY(1px); }
-.account-bundle-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--ink-2);
-  text-decoration: none;
-}
-.account-bundle-secondary:hover { color: var(--orange-dark); }
 
-/* Quantity picker (1 / 2 / 3 bottles) inside the bundle card */
-.account-bundle-qty {
-  display: inline-flex;
-  border: 1px solid var(--line-strong, var(--line));
-  border-radius: 999px;
-  padding: 4px;
-  gap: 2px;
-  margin: 0 0 14px;
-}
-.account-bundle-qty-btn {
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-2);
-  background: transparent;
-  border: 0;
-  border-radius: 999px;
-  padding: 7px 14px;
-  cursor: pointer;
-  letter-spacing: 0.01em;
-  transition: background 0.12s, color 0.12s;
-}
-.account-bundle-qty-btn:hover { color: var(--ink); }
-.account-bundle-qty-btn[aria-pressed="true"] {
-  background: var(--ink);
-  color: #ffffff;
-}
-.account-bundle-qty-tag {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin-left: 6px;
-  opacity: 0.85;
-}
 @media (max-width: 560px) {
-  .account-bundle-card { grid-template-columns: 1fr; gap: 14px; padding: 20px; }
-  .account-bundle-thumb { width: 56px; height: 56px; }
-  .account-bundle-cta { width: 100%; justify-content: center; }
+  .account-bundle-info { padding: 20px 18px 24px; }
+  .account-bundle-title { font-size: 20px; }
+  .account-bundle-picker { gap: 6px; }
+  .account-bundle-opt { padding: 22px 6px 12px; }
+  .account-bundle-opt-title { font-size: 13px; }
+  .account-bundle-opt-save { font-size: 11px; }
+  .account-bundle-price-now { font-size: 22px; }
 }
