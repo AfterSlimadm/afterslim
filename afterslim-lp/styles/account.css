@@ -624,3 +624,102 @@ html[data-auth="pending"] body { visibility: hidden; }
 .account-empty-cta:hover { color: var(--orange-dark); border-color: var(--orange-dark); }
 .account-empty-cta svg { color: var(--orange); transition: transform 0.15s; }
 .account-empty-cta:hover svg { transform: translateX(3px); color: var(--orange-dark); }
+
+/* Account: inline bundle card (used in /account/subscriptions empty
+   state so the customer can subscribe in one click without bouncing
+   back to the storefront). Quiet, editorial, not an ad. */
+.account-bundle-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 22px;
+  padding: 22px 24px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  margin: 24px 0 14px;
+}
+.account-bundle-thumb {
+  width: 76px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--orange-tint);
+  border-radius: 14px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.account-bundle-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.account-bundle-body { min-width: 0; }
+.account-bundle-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+  color: var(--ink);
+}
+.account-bundle-meta {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  margin: 0 0 10px;
+  line-height: 1.45;
+}
+.account-bundle-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.account-bundle-price-now {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.account-bundle-price-was {
+  font-size: 13.5px;
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.account-bundle-price-save {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--orange-dark);
+  padding: 3px 8px;
+  background: var(--orange-tint);
+  border-radius: 999px;
+}
+.account-bundle-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: var(--orange);
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border-radius: 999px;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.05s;
+}
+.account-bundle-cta:hover { background: var(--orange-dark); color: #fff; }
+.account-bundle-cta:active { transform: translateY(1px); }
+.account-bundle-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.account-bundle-secondary:hover { color: var(--orange-dark); }
+@media (max-width: 560px) {
+  .account-bundle-card { grid-template-columns: 1fr; gap: 14px; padding: 20px; }
+  .account-bundle-thumb { width: 56px; height: 56px; }
+  .account-bundle-cta { width: 100%; justify-content: center; }
+}
