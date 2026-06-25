@@ -40,6 +40,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],u.toString=function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e},u.people.toString=function(){return u.toString(1)+'.people (stub)'},o='init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_M05Y8p9sTGkPpIEjIqsczpA0dVMW4cvYtkMX7BVgLfS',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',session_recording:{maskAllInputs:true,maskTextSelector:'[data-private], .ph-no-capture'},loaded:function(p){try{if(localStorage.getItem('posthog_internal_user')==='true')p.opt_out_capturing();if(/^\/checkout(\/|$)/.test(location.pathname))p.stopSessionRecording();}catch(e){}}});</script>
 <link rel="stylesheet" href="/styles/policy.css">
 <link rel="stylesheet" href="/styles/account.css">
+<link rel="stylesheet" href="/styles/account-v2.css">
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <link rel="canonical" href="https://www.afterslim.com/account">
@@ -72,114 +73,129 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </nav>
 
-<main class="dash-shell">
+<main class="v2-shell">
 
-  <div class="dash-hero">
+  <div class="v2-greeting">
     <div>
-      <h1 id="greetingTitle">Your account</h1>
-      <p id="greetingSub">Loading…</p>
+      <h1 class="v2-greeting-title" id="greetingTitle">Your account</h1>
+      <p class="v2-greeting-email" id="greetingSub"></p>
     </div>
-    <button type="button" class="dash-signout" id="signOutBtn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Sign out
-    </button>
+    <div class="v2-greeting-right">
+      <a href="/account/store-credit" id="creditChip" class="v2-credit-chip" style="display:none;" aria-label="Store credit">
+        <span class="v2-credit-chip-dot"></span>
+        <span id="creditAmount">$0.00</span> credit
+      </a>
+      <button type="button" id="signOutBtn" class="v2-signout">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign out
+      </button>
+    </div>
   </div>
 
-  <a class="dash-credit" href="/account/store-credit" aria-label="View store credit history">
-    <div>
-      <span class="dash-credit-label">Store credit</span>
-      <div class="dash-credit-amount" id="creditAmount">$0.00</div>
-    </div>
-    <p class="dash-credit-note">5% back on every order, applied automatically at checkout.</p>
-  </a>
+  <section class="v2-start" id="startSection">
+    <span class="v2-start-eyebrow">New here</span>
+    <h2 class="v2-start-title">Your AfterSlim account is ready.</h2>
+    <p class="v2-start-lede">Add a shipping address now or jump straight to your first bottle. Either way, you earn 5% back in store credit on every order.</p>
+    <a href="/#bundles" class="v2-start-cta">
+      Shop AfterSlim
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </section>
 
-  <section class="dash-section" aria-labelledby="activitySection">
-    <h2 class="dash-section-head" id="activitySection">Activity</h2>
-    <div class="dash-tiles">
-      <a class="dash-tile" href="/account/orders">
-        <div>
-          <div class="dash-tile-eyebrow">Orders</div>
-          <div class="dash-tile-value" id="ordersValue">0</div>
+  <section class="v2-section" aria-labelledby="activitySectionLabel">
+    <h2 class="v2-section-head" id="activitySectionLabel">Account</h2>
+    <div class="v2-settings">
+
+      <a class="v2-setting-tile" href="/account/orders">
+        <div class="v2-setting-tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         </div>
-        <p class="dash-tile-meta">Track shipments, reorder, or download invoices.</p>
-      </a>
-      <a class="dash-tile" href="/account/subscriptions">
-        <div>
-          <div class="dash-tile-eyebrow">Subscriptions</div>
-          <div class="dash-tile-value" id="subsValue">0</div>
+        <div class="v2-setting-tile-body">
+          <p class="v2-setting-tile-title">Orders</p>
+          <p class="v2-setting-tile-sub" id="ordersSub">Track shipments, reorder, or download invoices.</p>
         </div>
-        <p class="dash-tile-meta">Skip, change frequency, or cancel. No fees, no holds.</p>
+        <span class="v2-setting-tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
       </a>
+
+      <a class="v2-setting-tile" href="/account/subscriptions">
+        <div class="v2-setting-tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+        </div>
+        <div class="v2-setting-tile-body">
+          <p class="v2-setting-tile-title">Subscriptions</p>
+          <p class="v2-setting-tile-sub" id="subsSub">Skip, change frequency, or cancel. No fees.</p>
+        </div>
+        <span class="v2-setting-tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </a>
+
+      <a class="v2-setting-tile" href="/account/store-credit">
+        <div class="v2-setting-tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M15 9.5a3 3 0 0 0-3-1.5h0a3 3 0 0 0 0 6h0a3 3 0 0 1 0 6h0a3 3 0 0 1-3-1.5"/></svg>
+        </div>
+        <div class="v2-setting-tile-body">
+          <p class="v2-setting-tile-title">Store credit</p>
+          <p class="v2-setting-tile-sub">5% back on every shipped order. Redeem as a coupon.</p>
+        </div>
+        <span class="v2-setting-tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </a>
+
+      <a class="v2-setting-tile" href="/account/addresses">
+        <div class="v2-setting-tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="v2-setting-tile-body">
+          <p class="v2-setting-tile-title">Shipping addresses</p>
+          <p class="v2-setting-tile-sub">Update where your bottles ship.</p>
+        </div>
+        <span class="v2-setting-tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </a>
+
+      <a class="v2-setting-tile" href="/account/payment">
+        <div class="v2-setting-tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 11h20"/></svg>
+        </div>
+        <div class="v2-setting-tile-body">
+          <p class="v2-setting-tile-title">Payment methods</p>
+          <p class="v2-setting-tile-sub">Cards saved through Stripe.</p>
+        </div>
+        <span class="v2-setting-tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </a>
+
+      <a class="v2-setting-tile" href="/account/tickets">
+        <div class="v2-setting-tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <div class="v2-setting-tile-body">
+          <p class="v2-setting-tile-title">Support</p>
+          <p class="v2-setting-tile-sub" id="ticketsSub">Open a ticket or follow up.</p>
+        </div>
+        <span class="v2-setting-tile-tag" id="ticketsTag" hidden></span>
+        <span class="v2-setting-tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </a>
+
+      <a class="v2-setting-tile" href="/account/settings">
+        <div class="v2-setting-tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="v2-setting-tile-body">
+          <p class="v2-setting-tile-title">Login &amp; security</p>
+          <p class="v2-setting-tile-sub">Manage sign-in and preferences.</p>
+        </div>
+        <span class="v2-setting-tile-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+      </a>
+
     </div>
   </section>
 
-  <section class="dash-section dash-refer-section" id="referSection" hidden aria-labelledby="referSectionHead">
-    <h2 class="dash-section-head" id="referSectionHead">Refer a friend</h2>
+  <section class="v2-section dash-refer-section" id="referSection" hidden aria-labelledby="referSectionHead">
+    <h2 class="v2-section-head" id="referSectionHead">Refer a friend</h2>
     <div id="referContent"></div>
   </section>
 
-  <section class="dash-section" aria-labelledby="settingsSection">
-    <h2 class="dash-section-head" id="settingsSection">Settings</h2>
-    <div class="dash-list">
-
-      <a class="dash-row" href="/account/addresses">
-        <div class="dash-row-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </div>
-        <div class="dash-row-body">
-          <div class="dash-row-title">Shipping addresses</div>
-          <div class="dash-row-sub">Update where your bottles ship.</div>
-        </div>
-        <div class="dash-row-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
-      </a>
-
-      <a class="dash-row" href="/account/payment">
-        <div class="dash-row-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 11h20"/></svg>
-        </div>
-        <div class="dash-row-body">
-          <div class="dash-row-title">Payment methods</div>
-          <div class="dash-row-sub">Cards saved through Stripe's encrypted portal.</div>
-        </div>
-        <div class="dash-row-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
-      </a>
-
-      <a class="dash-row" href="/account/tickets">
-        <div class="dash-row-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        </div>
-        <div class="dash-row-body">
-          <div class="dash-row-title">Support</div>
-          <div class="dash-row-sub" id="ticketsSub">Open a ticket or follow up on a conversation.</div>
-        </div>
-        <span class="dash-row-tag" id="ticketsTag" hidden></span>
-        <div class="dash-row-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
-      </a>
-
-      <a class="dash-row" href="/account/settings">
-        <div class="dash-row-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="dash-row-body">
-          <div class="dash-row-title">Login &amp; security</div>
-          <div class="dash-row-sub">Manage your sign-in details and account preferences.</div>
-        </div>
-        <div class="dash-row-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
-      </a>
-
-    </div>
-  </section>
-
-  <a class="dash-affiliate" id="affiliateCard" href="/partner-with-us">
-    <div class="dash-affiliate-body">
-      <h3 id="affiliateTitle">Become an affiliate</h3>
-      <p id="affiliateBody">Earn commission on every order placed through your referral link. Open to creators, clinicians, and aligned communities.</p>
-    </div>
-    <span class="dash-affiliate-cta" id="affiliateCta">
-      Apply
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-    </span>
-  </a>
+  <!-- legacy IDs kept for the JS that still writes counts; visually hidden -->
+  <span id="ordersValue" hidden>0</span>
+  <span id="subsValue" hidden>0</span>
+  <a id="affiliateCard" href="/partner-with-us" hidden><span id="affiliateTitle"></span><span id="affiliateBody"></span><span id="affiliateCta"><span></span></span></a>
 
 </main>
 
@@ -275,12 +291,18 @@ if (!window.afterslimAuth || !window.afterslimSupabase) {
       }
     });
 
-  // 2) Orders count
+  // 2) Orders count — drives "Start your AfterSlim journey" empty hero
+  //    visibility and the Orders tile sub copy.
   safeQuery('orders', supabase.from('orders')
       .select('id', { count: 'exact', head: true }).eq('profile_id', user.id))
     .then(function(res) {
       var n = (res && res.count) || 0;
       document.getElementById('ordersValue').textContent = n;
+      if (n > 0) {
+        document.getElementById('ordersSub').textContent =
+          (n === 1 ? '1 order' : n + ' orders') + ' on your account.';
+        hideStartHero();
+      }
     });
 
   // 3) Active subscriptions count
@@ -290,15 +312,29 @@ if (!window.afterslimAuth || !window.afterslimSupabase) {
     .then(function(res) {
       var n = (res && res.count) || 0;
       document.getElementById('subsValue').textContent = n;
+      if (n > 0) {
+        document.getElementById('subsSub').textContent =
+          (n === 1 ? '1 active subscription' : n + ' active subscriptions') + '. Skip or cancel anytime.';
+        hideStartHero();
+      }
     });
 
-  // 4) Store credit balance — hero panel
+  // 4) Store credit balance — surfaces as a small chip beside Sign out
+  //    when there's anything to show. Hides when balance is 0.
   safeQuery('credit_balance', supabase.from('customer_credit_balance')
       .select('balance_cents').eq('profile_id', user.id).maybeSingle())
     .then(function(res) {
       var cents = (res && res.data && res.data.balance_cents) || 0;
       document.getElementById('creditAmount').textContent = window.formatMoney(cents);
+      if (cents > 0) {
+        document.getElementById('creditChip').style.display = 'inline-flex';
+      }
     });
+
+  function hideStartHero() {
+    var hero = document.getElementById('startSection');
+    if (hero) hero.style.display = 'none';
+  }
 
   // 5) Open support tickets count — tags the support row
   safeQuery('tickets', supabase.from('support_tickets')
