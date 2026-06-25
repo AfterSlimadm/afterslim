@@ -542,21 +542,19 @@ async function initRedeem(balance, couponPromise) {
       if (balance > 0) showRedeemBtn();
       return;
     }
-    var hours = Math.floor(diff / (60 * 60 * 1000));
-    var mins  = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
-    var label, cls = 'credit-coupon-expires';
-    if (hours >= 24) {
-      var days = Math.floor(hours / 24);
-      var remH = hours % 24;
-      label = 'Expires in ' + days + (days === 1 ? ' day' : ' days');
-      if (remH > 0 && days < 3) label += ' ' + remH + 'h';
-    } else if (hours >= 1) {
-      label = 'Expires in ' + hours + 'h ' + mins + 'm';
-      cls += ' credit-coupon-expires--soon';
-    } else {
-      label = 'Expires in ' + mins + 'm';
-      cls += ' credit-coupon-expires--urgent';
-    }
+    var totalSec = Math.floor(diff / 1000);
+    var days  = Math.floor(totalSec / 86400);
+    var hours = Math.floor((totalSec % 86400) / 3600);
+    var mins  = Math.floor((totalSec % 3600) / 60);
+    var secs  = totalSec % 60;
+    var label = 'Expires in ';
+    if (days > 0)  label += days  + 'd ';
+    if (days > 0 || hours > 0) label += hours + 'h ';
+    if (days > 0 || hours > 0 || mins > 0) label += mins + 'm ';
+    label += secs + 's';
+    var cls = 'credit-coupon-expires';
+    if (totalSec < 3600) cls += ' credit-coupon-expires--urgent';
+    else if (totalSec < 86400) cls += ' credit-coupon-expires--soon';
     couponExp.textContent = label;
     couponExp.className = cls;
   }
@@ -572,7 +570,7 @@ async function initRedeem(balance, couponPromise) {
     var expiresAtMs = new Date(c.expires_at).getTime();
     if (countdownTimer) clearInterval(countdownTimer);
     renderCountdown(expiresAtMs);
-    countdownTimer = setInterval(function() { renderCountdown(expiresAtMs); }, 60 * 1000);
+    countdownTimer = setInterval(function() { renderCountdown(expiresAtMs); }, 1000);
 
     copyBtn.onclick = function() {
       navigator.clipboard.writeText(c.code).then(function() {
