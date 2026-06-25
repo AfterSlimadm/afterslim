@@ -625,13 +625,109 @@ html[data-auth="pending"] body { visibility: hidden; }
 .account-empty-cta svg { color: var(--orange); transition: transform 0.15s; }
 .account-empty-cta:hover svg { transform: translateX(3px); color: var(--orange-dark); }
 
+/* Account subscriptions empty state: editorial CTA headline mirroring
+   the .problems-title pattern on the home page (ink + gradient on the
+   main phrase, italic orange serif accent on the final word with the
+   shimmer + underline). Smaller scale because it lives inside the
+   720px account column. */
+.account-cta-title {
+  font-size: clamp(28px, 3.6vw, 36px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 24px 0 12px;
+  color: var(--ink);
+}
+.account-cta-title-grad {
+  background: linear-gradient(135deg, var(--ink) 40%, var(--orange) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.account-cta-title-accent {
+  color: var(--orange);
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-weight: 700;
+  position: relative;
+  white-space: nowrap;
+  background: linear-gradient(
+    90deg,
+    var(--orange) 0%,
+    var(--orange) 35%,
+    #ffc59a 50%,
+    var(--orange) 65%,
+    var(--orange) 100%
+  );
+  background-size: 260% 100%;
+  background-position: 200% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: account-accent-shimmer 3.6s ease-in-out infinite;
+}
+.account-cta-title-accent::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: var(--orange);
+  border-radius: 2px;
+  opacity: 0.6;
+}
+@keyframes account-accent-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .account-cta-title-accent { animation: none; background: none; -webkit-text-fill-color: var(--orange); }
+}
+.account-cta-desc {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0 0 8px;
+  max-width: 560px;
+}
+
+/* Final CTA below the bundle card. Reuses .btn-primary styling
+   semantics (orange gradient, uppercase, 16px radius, full width) but
+   keeps the class local so we can iterate independently. */
+.account-bundle-cta-final {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 32px;
+  margin-top: 22px;
+  background: linear-gradient(to right, var(--orange) 0%, var(--orange) 55%, var(--orange-dark) 100%);
+  color: #ffffff;
+  border: 2px solid var(--orange-dark);
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.account-bundle-cta-final:hover {
+  background: linear-gradient(to right, var(--orange-dark) 0%, var(--orange-dark) 55%, #8a2f08 100%);
+  border-color: #8a2f08;
+  color: #ffffff;
+}
+
 /* Account: inline bundle card (used in /account/subscriptions empty
    state). Compact horizontal row — small product thumb on the left,
-   star rating + title + ship meta + price + CTA on the right. Bundle
-   picker (home-style) sits underneath spanning the whole card width. */
+   star rating + title + price on the right. Bundle picker (home-style)
+   sits underneath spanning the whole card width. CTA is rendered
+   OUTSIDE the card (as .account-bundle-cta-final) so the card stays
+   focused on the variant pick and the conversion sits separate. */
 .account-bundle-card {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;
   align-items: center;
   column-gap: 22px;
@@ -640,7 +736,7 @@ html[data-auth="pending"] body { visibility: hidden; }
   background: #ffffff;
   border: 1px solid var(--line);
   border-radius: 16px;
-  margin: 24px 0 0;
+  margin: 18px 0 0;
 }
 .account-bundle-thumb {
   width: 96px;

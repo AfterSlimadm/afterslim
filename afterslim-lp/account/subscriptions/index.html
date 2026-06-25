@@ -141,7 +141,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="subsList"></div>
 
   <div id="emptyState" class="account-empty" style="display: none;">
-    <p>No active subscription yet. Subscribe &amp; Save up to 28% off retail, earn 5% back in store credit, and skip or cancel anytime.</p>
+
+    <h2 class="account-cta-title">
+      <span class="account-cta-title-grad">Start your AfterSlim</span>
+      <span class="account-cta-title-accent">subscription</span>
+    </h2>
+    <p class="account-cta-desc" id="bundleDesc">Ships every 60 days. Free shipping. 5% back in store credit. Skip or cancel anytime.</p>
 
     <div class="account-bundle-card">
       <div class="account-bundle-thumb">
@@ -153,17 +158,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span><strong>847</strong> Reviews</span>
         </div>
         <h3 class="account-bundle-title" id="bundleTitle">AfterSlim · 2 bottles · Subscribe &amp; Save</h3>
-        <p class="account-bundle-meta" id="bundleMeta">Ships every 60 days. Free shipping. 5% back in store credit.</p>
         <div class="account-bundle-price">
           <span class="account-bundle-price-now" id="bundlePriceNow">$47.99 every 2 months</span>
           <span class="account-bundle-price-was" id="bundlePriceWas">$59.99</span>
           <span class="account-bundle-price-save" id="bundlePriceSave">Save 20%</span>
         </div>
       </div>
-      <a href="/#bundles" id="bundleCta" class="account-bundle-cta">
-        Claim your bundle
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </a>
 
       <div class="account-bundle-picker" role="group" aria-label="Pick your bundle">
         <button type="button" class="account-bundle-opt" data-qty="1" aria-pressed="false">
@@ -182,6 +182,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
       </div>
     </div>
+
+    <a href="/#bundles" id="bundleCta" class="account-bundle-cta-final">
+      Claim your bundle
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
   </div>
 
   <script>
@@ -195,7 +200,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     };
     var thumb     = document.getElementById('bundleThumb');
     var titleEl   = document.getElementById('bundleTitle');
-    var metaEl    = document.getElementById('bundleMeta');
+    var descEl    = document.getElementById('bundleDesc');
     var priceNow  = document.getElementById('bundlePriceNow');
     var priceWas  = document.getElementById('bundlePriceWas');
     var priceSave = document.getElementById('bundlePriceSave');
@@ -211,7 +216,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       thumb.src = '/images/bundle-' + qty + '.webp';
       thumb.alt = 'AfterSlim ' + qty + '-bottle pack';
       titleEl.innerHTML = 'AfterSlim · ' + b.title + ' · Subscribe & Save';
-      metaEl.textContent = b.ships;
+      descEl.textContent = b.ships + ' Skip or cancel anytime.';
       priceNow.textContent = '$' + b.price + ' ' + b.freqLabel;
       priceWas.textContent = '$' + b.was;
       priceSave.textContent = 'Save ' + b.off + '%';
