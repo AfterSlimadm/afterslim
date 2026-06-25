@@ -718,6 +718,42 @@ html[data-auth="pending"] body { visibility: hidden; }
   text-decoration: none;
 }
 .account-bundle-secondary:hover { color: var(--orange-dark); }
+
+/* Quantity picker (1 / 2 / 3 bottles) inside the bundle card */
+.account-bundle-qty {
+  display: inline-flex;
+  border: 1px solid var(--line-strong, var(--line));
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+  margin: 0 0 14px;
+}
+.account-bundle-qty-btn {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.12s, color 0.12s;
+}
+.account-bundle-qty-btn:hover { color: var(--ink); }
+.account-bundle-qty-btn[aria-pressed="true"] {
+  background: var(--ink);
+  color: #ffffff;
+}
+.account-bundle-qty-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: 6px;
+  opacity: 0.85;
+}
 @media (max-width: 560px) {
   .account-bundle-card { grid-template-columns: 1fr; gap: 14px; padding: 20px; }
   .account-bundle-thumb { width: 56px; height: 56px; }
