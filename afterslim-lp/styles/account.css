@@ -649,39 +649,7 @@ html[data-auth="pending"] body { visibility: hidden; }
   font-style: italic;
   font-family: Georgia, serif;
   font-weight: 700;
-  position: relative;
   white-space: nowrap;
-  background: linear-gradient(
-    90deg,
-    var(--orange) 0%,
-    var(--orange) 35%,
-    #ffc59a 50%,
-    var(--orange) 65%,
-    var(--orange) 100%
-  );
-  background-size: 260% 100%;
-  background-position: 200% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: account-accent-shimmer 3.6s ease-in-out infinite;
-}
-.account-cta-title-accent::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  bottom: -4px;
-  height: 2px;
-  background: var(--orange);
-  border-radius: 2px;
-  opacity: 0.6;
-}
-@keyframes account-accent-shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -100% 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .account-cta-title-accent { animation: none; background: none; -webkit-text-fill-color: var(--orange); }
 }
 .account-cta-desc {
   font-size: 15.5px;
@@ -689,6 +657,10 @@ html[data-auth="pending"] body { visibility: hidden; }
   color: var(--ink-2);
   margin: 0 0 8px;
   max-width: 560px;
+}
+.account-cta-desc-highlight {
+  color: var(--orange-dark);
+  font-weight: 700;
 }
 
 /* Final CTA below the bundle card. Reuses .btn-primary styling

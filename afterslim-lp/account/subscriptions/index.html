@@ -146,7 +146,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="account-cta-title-grad">Start your AfterSlim</span>
       <span class="account-cta-title-accent">subscription</span>
     </h2>
-    <p class="account-cta-desc" id="bundleDesc">Ships every 60 days. Free shipping. 5% back in store credit. Skip or cancel anytime.</p>
+    <p class="account-cta-desc" id="bundleDesc">Ships every 60 days. <span class="account-cta-desc-highlight">Free shipping.</span> 5% back in store credit. Skip or cancel anytime.</p>
 
     <div class="account-bundle-card">
       <div class="account-bundle-thumb">
@@ -216,7 +216,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       thumb.src = '/images/bundle-' + qty + '.webp';
       thumb.alt = 'AfterSlim ' + qty + '-bottle pack';
       titleEl.innerHTML = 'AfterSlim · ' + b.title + ' · Subscribe & Save';
-      descEl.textContent = b.ships + ' Skip or cancel anytime.';
+      var descText = b.ships + ' Skip or cancel anytime.';
+      // Highlight "Free shipping" in orange-dark when the chosen pack
+      // includes it (2- and 3-bottle bundles). Falls back to plain text
+      // for the 1-bottle pack which doesn't ship for free.
+      descEl.innerHTML = descText.replace(
+        'Free shipping.',
+        '<span class="account-cta-desc-highlight">Free shipping.</span>'
+      );
       priceNow.textContent = '$' + b.price + ' ' + b.freqLabel;
       priceWas.textContent = '$' + b.was;
       priceSave.textContent = 'Save ' + b.off + '%';
