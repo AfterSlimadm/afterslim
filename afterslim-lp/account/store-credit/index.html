@@ -208,7 +208,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 .credit-coupon-expires {
   font-size: 13px; color: var(--ink-2); margin-left: auto;
+  font-variant-numeric: tabular-nums;
 }
+.credit-coupon-expires--soon { color: var(--orange-dark); font-weight: 600; }
+.credit-coupon-expires--urgent { color: #b91c1c; font-weight: 700; }
 .credit-coupon-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .credit-coupon-btn {
   flex: 1; min-width: 160px;
@@ -364,8 +367,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="credit-coupon-expires" id="creditCouponExpires">Expires in 7 days</span>
       </div>
       <div class="credit-coupon-actions">
-        <a href="/#bundles" id="creditCouponApply" class="credit-coupon-btn credit-coupon-btn--primary">
-          Apply at checkout
+        <a href="/" id="creditCouponApply" class="credit-coupon-btn credit-coupon-btn--primary">
+          Shop now
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
         <button type="button" id="creditCouponCopy" class="credit-coupon-btn credit-coupon-btn--secondary">
@@ -526,14 +529,50 @@ async function initRedeem(balance, couponPromise) {
 
   var ADMIN = 'https://admin.afterslim.com';
 
+  var countdownTimer = null;
+
+  function renderCountdown(expiresAtMs) {
+    var diff = expiresAtMs - Date.now();
+    if (diff <= 0) {
+      // Coupon expired. Stop ticking, hide the card, and decide what to show
+      // in its place: the redeem CTA (if there's still a balance) or nothing.
+      if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+      couponCard.style.display = 'none';
+      couponExp.className = 'credit-coupon-expires';
+      if (balance > 0) showRedeemBtn();
+      return;
+    }
+    var hours = Math.floor(diff / (60 * 60 * 1000));
+    var mins  = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
+    var label, cls = 'credit-coupon-expires';
+    if (hours >= 24) {
+      var days = Math.floor(hours / 24);
+      var remH = hours % 24;
+      label = 'Expires in ' + days + (days === 1 ? ' day' : ' days');
+      if (remH > 0 && days < 3) label += ' ' + remH + 'h';
+    } else if (hours >= 1) {
+      label = 'Expires in ' + hours + 'h ' + mins + 'm';
+      cls += ' credit-coupon-expires--soon';
+    } else {
+      label = 'Expires in ' + mins + 'm';
+      cls += ' credit-coupon-expires--urgent';
+    }
+    couponExp.textContent = label;
+    couponExp.className = cls;
+  }
+
   function showCoupon(c) {
     couponAmt.textContent = window.formatMoney(c.amount_cents) + ' off';
     couponCode.textContent = c.code;
-    couponExp.textContent = 'Expires ' + new Date(c.expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    couponApply.href = '/checkout?promo=' + encodeURIComponent(c.code);
+    couponApply.href = '/';
     skel.style.display = 'none';
     btn.style.display = 'none';
     couponCard.style.display = '';
+
+    var expiresAtMs = new Date(c.expires_at).getTime();
+    if (countdownTimer) clearInterval(countdownTimer);
+    renderCountdown(expiresAtMs);
+    countdownTimer = setInterval(function() { renderCountdown(expiresAtMs); }, 60 * 1000);
 
     copyBtn.onclick = function() {
       navigator.clipboard.writeText(c.code).then(function() {

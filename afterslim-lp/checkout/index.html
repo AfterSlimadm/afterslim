@@ -1119,22 +1119,46 @@ ckInitSidebar();
 ckUpdateSidebarTotals();
 ckShowStep(1);
 
-// Auto-apply a promo code that arrived in the URL (?promo=CODE).
-// Used by /account/store-credit's "Apply at checkout" CTA so the
-// redeemed coupon lands pre-validated in the discount field. Runs
-// after the DOM is ready and the discount input exists; reuses
-// ckApplyDiscount() so the validation path stays identical to a
-// manual paste.
-(function ckAutoApplyPromoFromUrl(){
-  var code = CK_params.get('promo');
-  if (!code) return;
+// Auto-apply a promo code at checkout. Two sources, in priority order:
+//   1. ?promo=CODE in the URL (legacy / shareable link flow)
+//   2. Signed-in customer with an active store-credit coupon — fetched
+//      from admin via GET /api/store-credit/active-coupon with the JWT.
+// Both reuse ckApplyDiscount() so the validation path stays identical
+// to a manual paste. When the coupon comes from the customer's own
+// store credit, we override the feedback label so it reads
+// "Your store credit ($X.XX) was applied" instead of the raw
+// "Store credit redeem (profile XXX) applied" string.
+async function ckAutoApplyPromo(){
   var input = document.getElementById('discount-input');
   if (!input) return;
-  input.value = code.trim().toUpperCase();
-  // Defer one tick so the rest of the init queue settles before the
-  // /api/coupons/validate fetch fires.
-  setTimeout(function(){ ckApplyDiscount(); }, 0);
-})();
+  var feedback = document.getElementById('discount-feedback');
+
+  var urlCode = CK_params.get('promo');
+  if (urlCode) {
+    input.value = urlCode.trim().toUpperCase();
+    await ckApplyDiscount();
+    return;
+  }
+
+  // No URL code — try the signed-in customer's active store-credit coupon.
+  if (!window.afterslimAuth || !window.afterslimSupabase) return;
+  try {
+    var session = await window.afterslimAuth.session();
+    if (!session || !session.access_token) return;
+    var r = await fetch('https://admin.afterslim.com/api/store-credit/active-coupon', {
+      headers: { 'Authorization': 'Bearer ' + session.access_token },
+    });
+    if (r.status !== 200) return;
+    var data = await r.json();
+    if (!data || !data.code) return;
+    input.value = data.code;
+    await ckApplyDiscount();
+    if (feedback && CK_discount.code === data.code) {
+      feedback.textContent = '✓ Your store credit (' + window.formatMoney(data.amount_cents) + ') was applied';
+    }
+  } catch (e) { /* silent: best-effort */ }
+}
+setTimeout(function(){ ckAutoApplyPromo(); }, 0);
 
 // Loyalty / store credit redemption (Phase 2). Only signed-in customers
 // can apply a balance against the order. We grab the Supabase session
