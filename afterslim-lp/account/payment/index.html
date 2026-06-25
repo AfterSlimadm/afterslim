@@ -130,9 +130,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <p class="pay-note" id="payNote" style="display: none;">
-    The Stripe billing portal hasn't been wired to your account yet. In the meantime, email
+    Self-service billing is rolling out shortly. Until then, email
     <a href="mailto:support@afterslim.com" style="color: var(--orange-dark); font-weight: 600;">support@afterslim.com</a>
-    and we'll update your payment method manually.
+    to update your card, request an invoice, or cancel a subscription. We reply within one business day.
   </p>
 </main>
 
@@ -143,24 +143,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var user = await window.afterslimAuth.requireAuth();
   var supabase = window.afterslimSupabase;
 
-  document.getElementById('openPortalBtn').addEventListener('click', async function() {
-    var btn = this;
+  var btn = document.getElementById('openPortalBtn');
+  var note = document.getElementById('payNote');
+  var card = document.querySelector('.pay-card');
+
+  // Probe the admin endpoint on load. If it 404s, the integration is not
+  // wired yet — hide the button and surface the email fallback up front
+  // so the customer never clicks into a broken state. When admin ships
+  // the route, this page lights up automatically (no LP deploy needed).
+  async function probeEndpoint() {
+    try {
+      var session = await window.afterslimAuth.session();
+      var headers = {};
+      if (session && session.access_token) headers['Authorization'] = 'Bearer ' + session.access_token;
+      var r = await fetch('https://admin.afterslim.com/api/billing-portal', {
+        method: 'OPTIONS', headers: headers,
+      });
+      return r.status !== 404;
+    } catch (e) { return false; }
+  }
+
+  var ready = await probeEndpoint();
+  if (!ready) {
+    if (card) card.style.display = 'none';
+    note.style.display = 'block';
+  }
+
+  btn.addEventListener('click', async function() {
     btn.disabled = true;
     btn.textContent = 'Opening...';
     try {
-      // Expected endpoint: POST /api/billing-portal -> { url: 'https://billing.stripe.com/...' }
-      // Server creates a Stripe billing portal session for this user and
-      // returns the redirect URL.
-      var res = await fetch('/api/billing-portal', { method: 'POST' });
+      var session = await window.afterslimAuth.session();
+      var token = session && session.access_token;
+      var res = await fetch('https://admin.afterslim.com/api/billing-portal', {
+        method: 'POST',
+        headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+      });
       if (!res.ok) throw new Error('Endpoint not ready');
       var json = await res.json();
-      if (json.url) {
-        window.location.href = json.url;
-        return;
-      }
+      if (json.url) { window.location.href = json.url; return; }
       throw new Error('No URL returned');
     } catch (err) {
-      document.getElementById('payNote').style.display = 'block';
+      if (card) card.style.display = 'none';
+      note.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Open Stripe billing portal';
     }
