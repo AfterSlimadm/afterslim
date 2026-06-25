@@ -158,42 +158,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return;
   }
 
-  async function refresh() {
-    var [tRes, mRes] = await Promise.all([
-      supabase.from('support_tickets').select('id, ticket_number, subject, status, category, created_at, updated_at')
-        .eq('profile_id', user.id).eq('id', ticketId).maybeSingle(),
-      supabase.from('support_ticket_messages').select('id, author_type, body, created_at')
-        .eq('ticket_id', ticketId).order('created_at', { ascending: true }),
-    ]);
-    var ticket = tRes.data;
-    if (!ticket) {
-      document.getElementById('tvSubject').textContent = 'Ticket not found';
-      return;
+  var messagesCache = [];
+  var ticketCache = null;
+
+  function messageHtml(m) {
+    var date = new Date(m.created_at).toLocaleString('en-US', {
+      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+    });
+    var label = m.author_type === 'staff' ? 'AfterSlim support' : 'You';
+    return '<article class="tv-msg ' + m.author_type + '">'
+      + '<p class="tv-msg-author">' + label + '</p>'
+      + '<p class="tv-msg-body">' + escapeHtml(m.body) + '</p>'
+      + '<p class="tv-msg-date">' + date + '</p>'
+    + '</article>';
+  }
+
+  function renderThread(msgs) {
+    messagesCache = msgs;
+    var thread = document.getElementById('tvThread');
+    thread.innerHTML = msgs.length
+      ? msgs.map(messageHtml).join('')
+      : '<p style="color: var(--ink-2);">No messages yet.</p>';
+  }
+
+  function appendMessage(m) {
+    if (m.is_internal) return;                                  // staff-only notes never leak to the customer
+    if (messagesCache.some(function(x) { return x.id === m.id; })) return;  // dedup if the row arrives via both the refresh and the realtime channel
+    messagesCache.push(m);
+    var thread = document.getElementById('tvThread');
+    if (messagesCache.length === 1) thread.innerHTML = '';      // clear the "No messages yet" placeholder
+    thread.insertAdjacentHTML('beforeend', messageHtml(m));
+    var last = thread.lastElementChild;
+    if (last && typeof last.scrollIntoView === 'function') {
+      last.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
+  }
+
+  function renderTicketHeader(ticket) {
+    ticketCache = ticket;
     document.getElementById('tvSubject').textContent = ticket.subject;
     document.getElementById('tvMeta').textContent = (ticket.ticket_number || '')
-      + ' Â· opened ' + new Date(ticket.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      + ' · opened ' + new Date(ticket.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     var st = document.getElementById('tvStatus');
     st.setAttribute('data-s', ticket.status);
     st.textContent = ticket.status;
+  }
 
-    var msgs = mRes.data || [];
-    document.getElementById('tvThread').innerHTML = msgs.map(function(m) {
-      var date = new Date(m.created_at).toLocaleString('en-US', {
-        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
-      });
-      var label = m.author_type === 'staff' ? 'AfterSlim support' : 'You';
-      return '<article class="tv-msg ' + m.author_type + '">'
-        + '<p class="tv-msg-author">' + label + '</p>'
-        + '<p class="tv-msg-body">' + escapeHtml(m.body) + '</p>'
-        + '<p class="tv-msg-date">' + date + '</p>'
-      + '</article>';
-    }).join('') || '<p style="color: var(--ink-2);">No messages yet.</p>';
-
+  function renderReplyArea(status) {
     var replyArea = document.getElementById('replyArea');
-    if (ticket.status === 'closed') {
+    if (status === 'closed') {
       replyArea.innerHTML = '<div class="tv-closed-note">This ticket is closed. Open a new ticket if anything else comes up.</div>';
-    } else {
+    } else if (!document.getElementById('replyForm')) {
       replyArea.innerHTML =
         '<form class="tv-reply" id="replyForm">'
           + '<h3>Add a reply</h3>'
@@ -204,29 +219,78 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
+  async function refresh() {
+    var [tRes, mRes] = await Promise.all([
+      supabase.from('support_tickets').select('id, ticket_number, subject, status, category, created_at, updated_at')
+        .eq('profile_id', user.id).eq('id', ticketId).maybeSingle(),
+      supabase.from('support_ticket_messages').select('id, author_type, body, created_at, is_internal')
+        .eq('ticket_id', ticketId).order('created_at', { ascending: true }),
+    ]);
+    var ticket = tRes.data;
+    if (!ticket) {
+      document.getElementById('tvSubject').textContent = 'Ticket not found';
+      return;
+    }
+    renderTicketHeader(ticket);
+    renderThread((mRes.data || []).filter(function(m) { return !m.is_internal; }));
+    renderReplyArea(ticket.status);
+  }
+
   async function sendReply(e) {
     e.preventDefault();
     var body = document.getElementById('replyBody').value.trim();
     if (!body) return;
     var btn = document.getElementById('replyBtn');
     btn.disabled = true; btn.textContent = 'Sending...';
-    var { error } = await supabase.from('support_ticket_messages').insert({
+    var ins = await supabase.from('support_ticket_messages').insert({
       ticket_id: ticketId,
       author_type: 'customer',
       author_id: user.id,
       body: body,
-    });
-    if (error) {
-      alert(error.message);
+    }).select('id, author_type, body, created_at, is_internal').single();
+    if (ins.error) {
+      alert(ins.error.message);
       btn.disabled = false; btn.textContent = 'Send reply';
       return;
     }
-    // Bump ticket back to "open" so staff sees the new reply
-    await supabase.from('support_tickets').update({ status: 'open', updated_at: new Date().toISOString() }).eq('id', ticketId);
-    await refresh();
+    // Optimistic append. Realtime will broadcast the same row to us;
+    // appendMessage's dedup by id keeps it from doubling up.
+    appendMessage(ins.data);
+    document.getElementById('replyBody').value = '';
+    btn.disabled = false; btn.textContent = 'Send reply';
+    // Bump ticket back to "open" so staff sees the new reply.
+    supabase.from('support_tickets').update({ status: 'open', updated_at: new Date().toISOString() }).eq('id', ticketId);
   }
 
   await refresh();
+
+  // Realtime: staff replies and status changes land instantly without
+  // a manual refresh. Mirrors what the admin already does on its side
+  // (Admin Slim handoff 2026-06-25, migration 038). Uses a per-ticket
+  // channel filtered server-side so we don't receive every customer's
+  // traffic.
+  var channel = supabase
+    .channel('ticket-' + ticketId)
+    .on('postgres_changes', {
+      event: 'INSERT', schema: 'public',
+      table: 'support_ticket_messages',
+      filter: 'ticket_id=eq.' + ticketId,
+    }, function(payload) {
+      appendMessage(payload.new);
+    })
+    .on('postgres_changes', {
+      event: 'UPDATE', schema: 'public',
+      table: 'support_tickets',
+      filter: 'id=eq.' + ticketId,
+    }, function(payload) {
+      renderTicketHeader(payload.new);
+      renderReplyArea(payload.new.status);
+    })
+    .subscribe();
+
+  window.addEventListener('beforeunload', function() {
+    try { supabase.removeChannel(channel); } catch (e) {}
+  });
 })();
 
 function escapeHtml(s) {
