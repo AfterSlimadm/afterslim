@@ -160,7 +160,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div><label for="addr_line2">Address line 2 (optional)</label><input id="addr_line2" type="text" placeholder="Apt, suite, unit, etc." autocomplete="address-line2"></div>
     <div class="row-two">
       <div><label for="addr_city">City</label><input id="addr_city" type="text" required></div>
-      <div><label for="addr_state">State</label><input id="addr_state" type="text" maxlength="2" placeholder="FL" required></div>
+      <div><label for="addr_state">State</label><select id="addr_state" autocomplete="address-level1" required><option value="">Select state</option></select></div>
     </div>
     <div class="row-two">
       <div><label for="addr_zip">ZIP code</label><input id="addr_zip" type="text" required></div>
@@ -178,6 +178,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/js/supabase-client.js"></script>
+<script src="/js/us-states.js"></script>
 <script>
 (async function() {
   var user = await window.afterslimAuth.requireAuth();
@@ -189,6 +190,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var newBtn = document.getElementById('newAddrBtn');
   var cancelBtn = document.getElementById('addrCancelBtn');
   var formTitle = document.getElementById('addrFormTitle');
+
+  // Populate the State <select> with US states + DC. Sourced from
+  // a pipe-delimited string to keep this block compact and editable.
+  (function populateStates() {
+    var sel = document.getElementById('addr_state');
+    if (!sel) return;
+    var raw = window.AFTERSLIM_US_STATES || '';
+    raw.split('|').forEach(function(pair) {
+      if (!pair) return;
+      var parts = pair.split(':');
+      var opt = document.createElement('option');
+      opt.value = parts[0];
+      opt.textContent = parts[1];
+      sel.appendChild(opt);
+    });
+  })();
 
   async function loadAddresses() {
     var [profRes, addrRes] = await Promise.all([
