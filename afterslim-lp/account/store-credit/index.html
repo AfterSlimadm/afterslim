@@ -60,10 +60,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .credit-hero-sub { font-size: 14.5px; opacity: 0.9; margin: 0; line-height: 1.5; }
 
 .credit-info-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
   margin-bottom: 32px;
 }
-@media (max-width: 540px) { .credit-info-grid { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .credit-info-grid { grid-template-columns: 1fr; } }
 .credit-info {
   background: var(--bg-2); border: 1px solid var(--line);
   border-radius: 12px; padding: 18px 20px;
@@ -143,6 +143,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="credit-info">
       <h3>How it applies</h3>
       <p>Sign in before checking out. Your available balance shows up as a one-click discount, applied up to the order total. No code needed.</p>
+    </div>
+    <div class="credit-info">
+      <h3>What if I refund?</h3>
+      <p>Refunded orders forfeit the credit earned from that order. If you've already spent it, the refund will return what's left after that deduction.</p>
     </div>
   </div>
 
