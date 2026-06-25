@@ -117,7 +117,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 function afterslimNextUrl() {
   var params = new URLSearchParams(window.location.search);
-  return params.get('next') || '/account';
+  return params.get('next') || '/';
 }
 
 window.afterslimGoogleCredential = async function(response) {

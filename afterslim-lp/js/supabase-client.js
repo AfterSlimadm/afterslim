@@ -105,12 +105,12 @@
       return user;
     },
 
-    /** Bounce to dashboard if already signed in. Used on /login + /signup. */
+    /** Bounce to home (or next) if already signed in. Used on /login + /signup. */
     async redirectIfAuthed() {
       const user = await this.user();
       if (user) {
         const params = new URLSearchParams(window.location.search);
-        const next = params.get('next') || '/account';
+        const next = params.get('next') || '/';
         window.location.href = next;
         return true;
       }
@@ -121,9 +121,39 @@
       return client.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: redirectTo || (window.location.origin + '/account'),
+          redirectTo: redirectTo || (window.location.origin + '/'),
         },
       });
+    },
+
+    /**
+     * First-name greeting for the nav. Order of preference:
+     *   profiles.first_name -> user_metadata.first_name
+     *   -> user_metadata.full_name (first word) -> Google "name" (first word)
+     *   -> "Usuário NNNNNN" deterministic fallback so legacy customers
+     *      who signed up before we collected names still see a
+     *      personalised label instead of "Account".
+     */
+    async displayName() {
+      const user = await this.user();
+      if (!user) return null;
+      const meta = user.user_metadata || {};
+      if (meta.first_name) return String(meta.first_name).trim().split(' ')[0];
+      if (meta.full_name)  return String(meta.full_name).trim().split(' ')[0];
+      if (meta.name)       return String(meta.name).trim().split(' ')[0];
+      try {
+        const { data } = await client
+          .from('profiles')
+          .select('first_name, full_name')
+          .eq('id', user.id)
+          .maybeSingle();
+        if (data) {
+          if (data.first_name) return String(data.first_name).trim().split(' ')[0];
+          if (data.full_name)  return String(data.full_name).trim().split(' ')[0];
+        }
+      } catch (e) { /* fall through */ }
+      const tail = (user.id || '').replace(/[^0-9]/g, '').slice(-6) || '000000';
+      return 'Usuário ' + tail;
     },
 
     async signOut() {
