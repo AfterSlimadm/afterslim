@@ -770,7 +770,45 @@ html[data-auth="pending"] body { visibility: hidden; }
   line-height: 1.45;
 }
 
-/* Picker spans the full card width on row 2 */
+/* Purchase-type toggle (Subscribe & Save / One-time) sits on the first
+   row of the bundle card when present, spanning both columns. Mirrors
+   the .variant-opt look from the storefront PDP. */
+.account-bundle-mode {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 0 0 4px;
+}
+.account-bundle-mode-opt {
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.account-bundle-mode-opt:hover { border-color: var(--orange-tint); }
+.account-bundle-mode-opt[aria-pressed="true"] {
+  border-color: var(--orange);
+  background: var(--orange-tint);
+}
+.account-bundle-mode-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.account-bundle-mode-sub {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+/* Picker spans the full card width */
 .account-bundle-picker {
   grid-column: 1 / -1;
   display: grid;

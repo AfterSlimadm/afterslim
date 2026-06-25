@@ -176,6 +176,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="account-cta-desc" id="bundleDesc">Ships every 60 days. <span class="account-cta-desc-highlight">Free shipping.</span> 5% back in store credit. Skip or cancel anytime.</p>
 
     <div class="account-bundle-card">
+
+      <div class="account-bundle-mode" role="group" aria-label="Purchase type">
+        <button type="button" class="account-bundle-mode-opt" data-mode="subscribe" aria-pressed="true">
+          <span class="account-bundle-mode-title">Subscribe &amp; Save up to 28%</span>
+          <span class="account-bundle-mode-sub">Ships on cadence. Cancel anytime.</span>
+        </button>
+        <button type="button" class="account-bundle-mode-opt" data-mode="onetime" aria-pressed="false">
+          <span class="account-bundle-mode-title">One-time purchase</span>
+          <span class="account-bundle-mode-sub">Try it once. No subscription.</span>
+        </button>
+      </div>
+
       <div class="account-bundle-thumb">
         <img id="bundleThumb" src="/images/bundle-2.webp" alt="AfterSlim 2-bottle pack" loading="lazy">
       </div>
@@ -195,17 +207,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="account-bundle-picker" role="group" aria-label="Pick your bundle">
         <button type="button" class="account-bundle-opt" data-qty="1" aria-pressed="false">
           <div class="account-bundle-opt-title">1 Bottle</div>
-          <div class="account-bundle-opt-save">Save $5.00</div>
+          <div class="account-bundle-opt-save" data-opt-save="1">Save $5.00</div>
         </button>
         <button type="button" class="account-bundle-opt" data-qty="2" aria-pressed="true">
           <span class="account-bundle-opt-badge">Recommended</span>
           <div class="account-bundle-opt-title">2 Bottles</div>
-          <div class="account-bundle-opt-save">Save $12.00</div>
+          <div class="account-bundle-opt-save" data-opt-save="2">Save $12.00</div>
         </button>
         <button type="button" class="account-bundle-opt" data-qty="3" aria-pressed="false">
           <span class="account-bundle-opt-badge account-bundle-opt-badge--best">Best value</span>
           <div class="account-bundle-opt-title">3 Bottles</div>
-          <div class="account-bundle-opt-save">Save $22.00</div>
+          <div class="account-bundle-opt-save" data-opt-save="3">Save $22.00</div>
         </button>
       </div>
     </div>
@@ -218,10 +230,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <script>
   (function() {
+    // Mirrors /index.html pricing config one-to-one. Keep them in sync
+    // if a price moves on the storefront.
     var BUNDLES = {
-      1: { price: '27.99', was: '32.99', off: 15, save: '5.00',  freqLabel: 'every month',    ships: 'Ships every 30 days. 5% back in store credit.',                 title: '1 bottle' },
-      2: { price: '47.99', was: '59.99', off: 20, save: '12.00', freqLabel: 'every 2 months', ships: 'Ships every 60 days. Free shipping. 5% back in store credit.',  title: '2 bottles' },
-      3: { price: '57.99', was: '79.99', off: 28, save: '22.00', freqLabel: 'every 3 months', ships: 'Ships every 90 days. Free shipping. 5% back in store credit.',  title: '3 bottles' }
+      subscribe: {
+        1: { price: '27.99', was: '32.99', off: 15, save: '5.00',  freqLabel: 'every month',    ships: 'Ships every 30 days. 5% back in store credit.',                 title: '1 bottle' },
+        2: { price: '47.99', was: '59.99', off: 20, save: '12.00', freqLabel: 'every 2 months', ships: 'Ships every 60 days. Free shipping. 5% back in store credit.',  title: '2 bottles' },
+        3: { price: '57.99', was: '79.99', off: 28, save: '22.00', freqLabel: 'every 3 months', ships: 'Ships every 90 days. Free shipping. 5% back in store credit.',  title: '3 bottles' }
+      },
+      onetime: {
+        1: { price: '37.99', was: '37.99', off: 0,  save: '0.00',  freqLabel: '',               ships: 'One-time order. 5% back in store credit.',                       title: '1 bottle' },
+        2: { price: '57.99', was: '59.99', off: 3,  save: '2.00',  freqLabel: '',               ships: 'One-time order. Free shipping. 5% back in store credit.',         title: '2 bottles' },
+        3: { price: '67.99', was: '79.99', off: 15, save: '12.00', freqLabel: '',               ships: 'One-time order. Free shipping. 5% back in store credit.',         title: '3 bottles' }
+      }
     };
     var thumb     = document.getElementById('bundleThumb');
     var titleEl   = document.getElementById('bundleTitle');
@@ -230,30 +251,78 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var priceWas  = document.getElementById('bundlePriceWas');
     var priceSave = document.getElementById('bundlePriceSave');
     var ctaEl     = document.getElementById('bundleCta');
-    var opts = document.querySelectorAll('.account-bundle-opt');
+    var modeOpts = document.querySelectorAll('.account-bundle-mode-opt');
+    var opts     = document.querySelectorAll('.account-bundle-opt');
+    var saveSlots = {
+      1: document.querySelector('[data-opt-save="1"]'),
+      2: document.querySelector('[data-opt-save="2"]'),
+      3: document.querySelector('[data-opt-save="3"]')
+    };
 
-    function pick(qty) {
-      var b = BUNDLES[qty];
-      if (!b) return;
-      opts.forEach(function(o) {
-        o.setAttribute('aria-pressed', o.getAttribute('data-qty') === String(qty) ? 'true' : 'false');
+    var currentMode = 'subscribe';
+    var currentQty  = 2;
+
+    function render() {
+      var pack = BUNDLES[currentMode][currentQty];
+
+      modeOpts.forEach(function(m) {
+        m.setAttribute('aria-pressed', m.getAttribute('data-mode') === currentMode ? 'true' : 'false');
       });
-      thumb.src = '/images/bundle-' + qty + '.webp';
-      thumb.alt = 'AfterSlim ' + qty + '-bottle pack';
-      titleEl.innerHTML = 'AfterSlim · ' + b.title + ' · Subscribe & Save';
-      var descText = b.ships + ' Skip or cancel anytime.';
+      opts.forEach(function(o) {
+        o.setAttribute('aria-pressed', o.getAttribute('data-qty') === String(currentQty) ? 'true' : 'false');
+      });
+
+      Object.keys(saveSlots).forEach(function(q) {
+        var p = BUNDLES[currentMode][q];
+        if (parseFloat(p.save) > 0) {
+          saveSlots[q].textContent = 'Save $' + p.save;
+          saveSlots[q].style.display = '';
+        } else {
+          saveSlots[q].textContent = 'Single bottle';
+          saveSlots[q].style.display = '';
+        }
+      });
+
+      thumb.src = '/images/bundle-' + currentQty + '.webp';
+      thumb.alt = 'AfterSlim ' + currentQty + '-bottle pack';
+
+      var modeLabel = currentMode === 'subscribe' ? 'Subscribe & Save' : 'One-time';
+      titleEl.innerHTML = 'AfterSlim · ' + pack.title + ' · ' + modeLabel;
+
+      var descText = pack.ships + (currentMode === 'subscribe' ? ' Skip or cancel anytime.' : '');
       descEl.innerHTML = descText.replace(
         'Free shipping.',
         '<span class="account-cta-desc-highlight">Free shipping.</span>'
       );
-      priceNow.textContent = '$' + b.price + ' ' + b.freqLabel;
-      priceWas.textContent = '$' + b.was;
-      priceSave.textContent = 'Save ' + b.off + '%';
+
+      var priceText = '$' + pack.price + (pack.freqLabel ? ' ' + pack.freqLabel : '');
+      priceNow.textContent = priceText;
+      if (pack.was !== pack.price && parseFloat(pack.off) > 0) {
+        priceWas.textContent = '$' + pack.was;
+        priceWas.style.display = '';
+        priceSave.textContent = 'Save ' + pack.off + '%';
+        priceSave.style.display = '';
+      } else {
+        priceWas.style.display = 'none';
+        priceSave.style.display = 'none';
+      }
+
       ctaEl.href = '/#bundles';
     }
-    opts.forEach(function(o) {
-      o.addEventListener('click', function() { pick(parseInt(o.getAttribute('data-qty'), 10)); });
+
+    modeOpts.forEach(function(m) {
+      m.addEventListener('click', function() {
+        currentMode = m.getAttribute('data-mode');
+        render();
+      });
     });
+    opts.forEach(function(o) {
+      o.addEventListener('click', function() {
+        currentQty = parseInt(o.getAttribute('data-qty'), 10);
+        render();
+      });
+    });
+    render();
   })();
   </script>
 </main>
