@@ -31,7 +31,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Payment Methods — AfterSlim</title>
+<title>Billing — AfterSlim</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCTNMWWXWB"></script>
@@ -42,42 +42,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
-.pay-card {
-  background: var(--bg-2); border: 1px solid var(--line);
-  border-radius: 16px; padding: 32px 28px;
-  display: flex; gap: 20px; align-items: flex-start;
-  flex-wrap: wrap;
+.pay-list {
+  margin: 32px 0 26px;
+  border-top: 1px solid var(--line);
 }
-.pay-icon {
-  width: 56px; height: 56px;
-  background: var(--orange-tint);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--orange);
-  flex-shrink: 0;
+.pay-list-item {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
 }
-.pay-body { flex: 1; min-width: 260px; }
-.pay-body h2 { font-size: 19px; font-weight: 800; margin: 0 0 6px; }
-.pay-body p { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); margin: 0 0 16px; }
+.pay-list-item-label {
+  font-size: 15.5px; font-weight: 500; color: var(--ink);
+  flex: 1;
+}
+.pay-list-item-hint {
+  font-size: 13px; color: var(--ink-2);
+}
+.pay-cta-row {
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  margin-bottom: 18px;
+}
 .pay-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 22px;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 22px;
   background: var(--orange); color: #fff;
   border-radius: 999px; font-weight: 700; font-size: 14px;
-  letter-spacing: 0.4px; text-transform: uppercase;
   text-decoration: none;
   transition: background 0.15s;
   border: 0; cursor: pointer; font-family: inherit;
 }
 .pay-cta:hover { background: var(--orange-dark); }
-.pay-cta:disabled { opacity: 0.6; cursor: not-allowed; }
-
+.pay-cta:disabled { opacity: 0.65; cursor: wait; }
+.pay-fineprint {
+  font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
+  margin: 0;
+}
 .pay-note {
   margin-top: 24px;
-  font-size: 13.5px; color: var(--ink-2); line-height: 1.55;
-  background: rgba(31, 20, 16, 0.03); border-radius: 10px;
-  padding: 14px 16px;
+  font-size: 14px; color: var(--ink-2); line-height: 1.6;
 }
+.pay-note a { color: var(--orange-dark); font-weight: 600; }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/payment">
 <meta name="robots" content="noindex, nofollow">
@@ -112,26 +116,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     Back to account
   </a>
-  <h1>Payment methods</h1>
-  <p class="account-page-lede">We use Stripe's encrypted billing portal for payment information. AfterSlim never sees or stores your card number.</p>
+  <h1>Billing</h1>
+  <p class="account-page-lede">Update your card, view invoices, or cancel a subscription anytime.</p>
 
-  <div class="pay-card">
-    <div class="pay-icon">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+  <div id="payReady">
+    <div class="pay-list">
+      <div class="pay-list-item">
+        <span class="pay-list-item-label">Update your saved payment method</span>
+      </div>
+      <div class="pay-list-item">
+        <span class="pay-list-item-label">View and download past invoices</span>
+      </div>
+      <div class="pay-list-item">
+        <span class="pay-list-item-label">Cancel an active subscription</span>
+      </div>
     </div>
-    <div class="pay-body">
-      <h2>Manage cards via Stripe</h2>
-      <p>Add, remove, or update the cards we use for orders and subscriptions. Stripe is PCI-DSS Level 1 certified and is the same processor used by Lyft, Shopify, Amazon, and Twitter.</p>
-      <button type="button" class="pay-cta" id="openPortalBtn">
-        Open Stripe billing portal
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      </button>
+
+    <div class="pay-cta-row">
+      <button type="button" class="pay-cta" id="openPortalBtn">Open billing</button>
     </div>
+
+    <p class="pay-fineprint">Powered by Stripe. AfterSlim never sees your card number.</p>
   </div>
 
   <p class="pay-note" id="payNote" style="display: none;">
     Self-service billing is rolling out shortly. Until then, email
-    <a href="mailto:support@afterslim.com" style="color: var(--orange-dark); font-weight: 600;">support@afterslim.com</a>
+    <a href="mailto:support@afterslim.com">support@afterslim.com</a>
     to update your card, request an invoice, or cancel a subscription. We reply within one business day.
   </p>
 </main>
@@ -145,7 +155,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var btn = document.getElementById('openPortalBtn');
   var note = document.getElementById('payNote');
-  var card = document.querySelector('.pay-card');
+  var card = document.getElementById('payReady');
 
   // Probe the admin endpoint on load. If it 404s, the integration is not
   // wired yet — hide the button and surface the email fallback up front
@@ -187,7 +197,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (card) card.style.display = 'none';
       note.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = 'Open Stripe billing portal';
+      btn.textContent = 'Open billing';
     }
   });
 })();
