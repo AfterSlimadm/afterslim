@@ -283,6 +283,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 .credit-modal-btn--confirm:hover { background: var(--orange-dark); }
 .credit-modal-btn--confirm:disabled { opacity: 0.6; cursor: wait; }
+
+/* Skeleton placeholder shown in the redeem slot while we wait for
+   /api/store-credit/active-coupon to resolve. Same footprint as the
+   Redeem button so the layout doesn't shift when the real CTA paints. */
+.credit-redeem-skeleton {
+  display: inline-block;
+  height: 56px;
+  width: min(320px, 100%);
+  border-radius: 14px;
+  margin-top: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(234, 88, 12, 0.10) 0%,
+    rgba(234, 88, 12, 0.22) 50%,
+    rgba(234, 88, 12, 0.10) 100%
+  );
+  background-size: 200% 100%;
+  animation: credit-skeleton-shimmer 1.2s ease-in-out infinite;
+}
+@keyframes credit-skeleton-shimmer {
+  0%   { background-position: 0% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .credit-redeem-skeleton { animation: none; opacity: 0.45; }
+}
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/store-credit">
 <meta name="robots" content="noindex, nofollow">
@@ -324,6 +350,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="credit-balance-label">Available balance</span>
     <p class="credit-balance-amount" id="creditBalance">$0.00</p>
     <p class="credit-balance-sub" id="creditAvailable">Use it on your next AfterSlim order.</p>
+    <div id="creditRedeemSkeleton" class="credit-redeem-skeleton" style="display:none;" aria-hidden="true"></div>
+
     <button type="button" id="creditRedeemBtn" class="credit-redeem-cta" style="display:none;">
       Redeem <span id="creditRedeemAmount">$0.00</span> as a coupon
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -388,28 +416,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (async function() {
   var user = await window.afterslimAuth.requireAuth();
   var supabase = window.afterslimSupabase;
+  var ADMIN = 'https://admin.afterslim.com';
 
-  var [balanceRes, historyRes] = await Promise.all([
-    supabase.from('customer_credit_balance').select('balance_cents').eq('profile_id', user.id).maybeSingle(),
-    supabase.from('customer_credit_transactions')
-      .select('amount_cents, type, description, created_at, orders(order_number)')
-      .eq('profile_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(50),
-  ]);
+  // ---- Render incremental, no falling-domino awaits ---------------------
+  // Three fetches dispatched in parallel:
+  //   - balance      (~124ms warm, Supabase view)
+  //   - history      (~similar, Supabase table)
+  //   - active-coupon(~292ms warm cold up to 511ms, admin endpoint)
+  //
+  // We don't wait for active-coupon before painting the balance. While it's
+  // in flight, the redeem slot shows a skeleton shimmer so the page never
+  // looks "broken/blank" for the slow endpoint.
+  // ---------------------------------------------------------------------
 
+  var balancePromise = supabase
+    .from('customer_credit_balance')
+    .select('balance_cents')
+    .eq('profile_id', user.id)
+    .maybeSingle();
+
+  var historyPromise = supabase
+    .from('customer_credit_transactions')
+    .select('amount_cents, type, description, created_at, orders(order_number)')
+    .eq('profile_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  // Dispatch active-coupon immediately; we'll await it later.
+  var couponPromise = (async function() {
+    try {
+      var session = await supabase.auth.getSession();
+      var token = session.data.session && session.data.session.access_token;
+      if (!token) return { ok: false };
+      var res = await fetch(ADMIN + '/api/store-credit/active-coupon', {
+        headers: { Authorization: 'Bearer ' + token }
+      });
+      if (!res.ok) return { ok: false, status: res.status };
+      var data = await res.json();
+      return { ok: true, data: data };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
+  })();
+
+  // Paint the balance the moment it's back.
+  var balanceRes = await balancePromise;
   var balance = (balanceRes && balanceRes.data && balanceRes.data.balance_cents) || 0;
   document.getElementById('creditBalance').textContent = window.formatMoney(balance);
   if (balance <= 0) {
     document.getElementById('creditAvailable').textContent = "You'll see credit here after your first order ships.";
   }
 
-  // Redeem flow. UI surfaces three states depending on what the admin's
-  // /api/store-credit/active-coupon returns:
-  //   - active coupon: show coupon card with Apply + Copy
-  //   - no coupon, balance > 0: show Redeem CTA
-  //   - no coupon, balance 0: hide both (default)
-  await initRedeem(balance);
+  // Show the skeleton in the redeem slot ONLY when there's something to
+  // potentially redeem. Zero balance = no point in waiting for the coupon
+  // endpoint, just hide everything.
+  if (balance > 0) {
+    document.getElementById('creditRedeemSkeleton').style.display = '';
+  }
+
+  // Now wire up the redeem state. It awaits the coupon fetch internally;
+  // by the time that resolves, the skeleton flips to either the Active
+  // Coupon card or the Redeem CTA.
+  initRedeem(balance, couponPromise);
+
+  // History query goes its own way; if it's still pending here, we wait.
+  var historyRes = await historyPromise;
 
   var txns = (historyRes && historyRes.data) || [];
   if (txns.length === 0) {
@@ -435,10 +506,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 
 // ===== Redeem balance as a single-use Stripe coupon =====
-// Calls the admin's /api/store-credit/* endpoints (built in the admin
-// repo). UI degrades gracefully if those endpoints aren't live yet —
-// fetch failures just leave the redeem card hidden.
-async function initRedeem(balance) {
+// Receives the active-coupon fetch as a promise so the caller can dispatch
+// it in parallel with the balance query and hand it down here. The redeem
+// slot shows a skeleton until this resolves, then flips to either the
+// Active Coupon card or the Redeem CTA.
+async function initRedeem(balance, couponPromise) {
+  var skel      = document.getElementById('creditRedeemSkeleton');
   var btn       = document.getElementById('creditRedeemBtn');
   var btnAmount = document.getElementById('creditRedeemAmount');
   var couponCard= document.getElementById('creditCoupon');
@@ -460,8 +533,9 @@ async function initRedeem(balance) {
     couponCode.textContent = c.code;
     couponExp.textContent = 'Expires ' + new Date(c.expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     couponApply.href = '/checkout?promo=' + encodeURIComponent(c.code);
-    couponCard.style.display = '';
+    skel.style.display = 'none';
     btn.style.display = 'none';
+    couponCard.style.display = '';
 
     copyBtn.onclick = function() {
       navigator.clipboard.writeText(c.code).then(function() {
@@ -475,26 +549,25 @@ async function initRedeem(balance) {
     };
   }
 
-  // 1) Check for an active coupon first.
-  try {
-    var session = await window.afterslimSupabase.auth.getSession();
-    var token = session.data.session && session.data.session.access_token;
-    if (!token) return;
-
-    var activeRes = await fetch(ADMIN + '/api/store-credit/active-coupon', {
-      headers: { Authorization: 'Bearer ' + token }
-    });
-    if (activeRes.ok) {
-      var data = await activeRes.json();
-      if (data && data.code) { showCoupon(data); return; }
-    }
-  } catch (e) { /* endpoint not live yet — fall through */ }
-
-  // 2) No active coupon. If balance > 0, surface the Redeem CTA.
-  if (balance > 0) {
+  function showRedeemBtn() {
+    skel.style.display = 'none';
     btnAmount.textContent = window.formatMoney(balance);
     modalAmt.textContent = window.formatMoney(balance);
     btn.style.display = '';
+  }
+
+  // Resolve the coupon-check that was already dispatched upstream.
+  var result = await couponPromise;
+  if (result && result.ok && result.data && result.data.code) {
+    showCoupon(result.data);
+  } else if (balance > 0) {
+    // No active coupon (404, network error, or missing token); fall back to
+    // the Redeem CTA if there's anything to redeem.
+    showRedeemBtn();
+  } else {
+    // Nothing to do: balance 0 and no coupon. Hide the skeleton if it was
+    // ever shown (caller only shows it when balance > 0, so usually noop).
+    skel.style.display = 'none';
   }
 
   btn.addEventListener('click', function() { modal.classList.add('open'); });
