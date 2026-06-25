@@ -117,7 +117,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 function afterslimNextUrl() {
   var params = new URLSearchParams(window.location.search);
-  return params.get('next') || '/';
+  var next = params.get('next') || '';
+  // Allan's call: customers logging back in should land on the storefront,
+  // not the /account dashboard. Treat /account (and its bare /) as "no
+  // destination" so requireAuth's bounce-and-return loop doesn't drop the
+  // user on the dashboard. Specific subpages like /account/orders still
+  // route correctly.
+  if (next === '/account' || next === '/account/') next = '';
+  return next || '/';
 }
 
 window.afterslimGoogleCredential = async function(response) {

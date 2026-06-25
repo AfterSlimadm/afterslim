@@ -105,13 +105,18 @@
       return user;
     },
 
-    /** Bounce to home (or next) if already signed in. Used on /login + /signup. */
+    /** Bounce to home (or next) if already signed in. Used on /login + /signup.
+     *  next=/account is treated as "no destination" so customers land on the
+     *  storefront after logging back in (Allan's call — dashboard is the
+     *  optional hub, not the post-login landing). Specific subpages like
+     *  /account/orders still route correctly. */
     async redirectIfAuthed() {
       const user = await this.user();
       if (user) {
         const params = new URLSearchParams(window.location.search);
-        const next = params.get('next') || '/';
-        window.location.href = next;
+        let next = params.get('next') || '';
+        if (next === '/account' || next === '/account/') next = '';
+        window.location.href = next || '/';
         return true;
       }
       return false;
