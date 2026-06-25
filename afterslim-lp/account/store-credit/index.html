@@ -151,6 +151,138 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 .credit-tx-amount.earn { color: #15803d; }
 .credit-tx-amount.spend { color: var(--ink); }
+
+/* Redeem CTA — shown when balance > 0 and no active coupon */
+.credit-redeem-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 28px;
+  margin-top: 6px;
+  background: linear-gradient(to right, var(--orange) 0%, var(--orange) 55%, var(--orange-dark) 100%);
+  color: #ffffff;
+  border: 2px solid var(--orange-dark);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.credit-redeem-cta:hover { background: linear-gradient(to right, var(--orange-dark) 0%, var(--orange-dark) 55%, #8a2f08 100%); }
+.credit-redeem-cta:disabled { opacity: 0.65; cursor: wait; }
+
+/* Active coupon card */
+.credit-coupon {
+  border: 1px solid var(--orange);
+  background: var(--orange-tint);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-top: 18px;
+}
+.credit-coupon-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.credit-coupon-label {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--orange-dark);
+}
+.credit-coupon-amount { font-size: 18px; font-weight: 800; color: var(--ink); }
+.credit-coupon-code-row {
+  display: flex; align-items: center; gap: 12px;
+  background: #ffffff;
+  border: 1px dashed var(--orange);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.credit-coupon-code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 22px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--ink);
+  user-select: all;
+}
+.credit-coupon-expires {
+  font-size: 13px; color: var(--ink-2); margin-left: auto;
+}
+.credit-coupon-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.credit-coupon-btn {
+  flex: 1; min-width: 160px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 18px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.credit-coupon-btn--primary {
+  background: var(--orange); color: #ffffff; border: 0;
+}
+.credit-coupon-btn--primary:hover { background: var(--orange-dark); color: #ffffff; }
+.credit-coupon-btn--secondary {
+  background: #ffffff; color: var(--ink); border: 1px solid var(--line-strong, var(--line));
+}
+.credit-coupon-btn--secondary:hover { border-color: var(--ink); }
+.credit-coupon-btn--secondary.copied { color: #15803d; border-color: #15803d; }
+
+/* Confirmation modal */
+.credit-modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(31, 20, 16, 0.55);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+.credit-modal-backdrop.open { display: flex; }
+.credit-modal {
+  background: #ffffff;
+  border-radius: 18px;
+  max-width: 440px; width: 100%;
+  padding: 28px 28px 24px;
+  box-shadow: 0 12px 40px rgba(31, 20, 16, 0.18);
+}
+.credit-modal h3 {
+  font-size: 20px; font-weight: 800; letter-spacing: -0.015em;
+  margin: 0 0 12px; color: var(--ink);
+}
+.credit-modal p {
+  font-size: 14.5px; line-height: 1.6;
+  color: var(--ink-2); margin: 0 0 18px;
+}
+.credit-modal strong { color: var(--ink); }
+.credit-modal-actions {
+  display: flex; gap: 10px;
+  justify-content: flex-end; flex-wrap: wrap;
+}
+.credit-modal-btn {
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.credit-modal-btn--cancel {
+  background: transparent; color: var(--ink-2);
+}
+.credit-modal-btn--cancel:hover { color: var(--ink); }
+.credit-modal-btn--confirm {
+  background: var(--orange); color: #ffffff;
+}
+.credit-modal-btn--confirm:hover { background: var(--orange-dark); }
+.credit-modal-btn--confirm:disabled { opacity: 0.6; cursor: wait; }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/store-credit">
 <meta name="robots" content="noindex, nofollow">
@@ -192,7 +324,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="credit-balance-label">Available balance</span>
     <p class="credit-balance-amount" id="creditBalance">$0.00</p>
     <p class="credit-balance-sub" id="creditAvailable">Use it on your next AfterSlim order.</p>
+    <button type="button" id="creditRedeemBtn" class="credit-redeem-cta" style="display:none;">
+      Redeem <span id="creditRedeemAmount">$0.00</span> as a coupon
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
+
+    <div id="creditCoupon" class="credit-coupon" style="display:none;">
+      <div class="credit-coupon-head">
+        <span class="credit-coupon-label">Active coupon</span>
+        <span class="credit-coupon-amount" id="creditCouponAmount">$0.00 off</span>
+      </div>
+      <div class="credit-coupon-code-row">
+        <span class="credit-coupon-code" id="creditCouponCode">AFXXXX</span>
+        <span class="credit-coupon-expires" id="creditCouponExpires">Expires in 7 days</span>
+      </div>
+      <div class="credit-coupon-actions">
+        <a href="/#bundles" id="creditCouponApply" class="credit-coupon-btn credit-coupon-btn--primary">
+          Apply at checkout
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <button type="button" id="creditCouponCopy" class="credit-coupon-btn credit-coupon-btn--secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="creditCouponCopyLabel">Copy code</span>
+        </button>
+      </div>
+    </div>
   </section>
+
+  <!-- Confirm redeem modal -->
+  <div class="credit-modal-backdrop" id="creditRedeemModal" role="dialog" aria-modal="true" aria-labelledby="creditRedeemTitle">
+    <div class="credit-modal">
+      <h3 id="creditRedeemTitle">Redeem your balance as a coupon?</h3>
+      <p>Your <strong id="creditRedeemModalAmount">$0.00</strong> balance becomes a single-use coupon. <strong>You can't get it back as balance later.</strong> The coupon is valid for 7 days; if you don't use it in time, the credit is forfeited.</p>
+      <div class="credit-modal-actions">
+        <button type="button" class="credit-modal-btn credit-modal-btn--cancel" id="creditRedeemCancel">Cancel</button>
+        <button type="button" class="credit-modal-btn credit-modal-btn--confirm" id="creditRedeemConfirm">Yes, generate coupon</button>
+      </div>
+    </div>
+  </div>
 
   <section class="credit-info-list">
     <details class="credit-info-item">
@@ -235,6 +404,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     document.getElementById('creditAvailable').textContent = "You'll see credit here after your first order ships.";
   }
 
+  // Redeem flow. UI surfaces three states depending on what the admin's
+  // /api/store-credit/active-coupon returns:
+  //   - active coupon: show coupon card with Apply + Copy
+  //   - no coupon, balance > 0: show Redeem CTA
+  //   - no coupon, balance 0: hide both (default)
+  await initRedeem(balance);
+
   var txns = (historyRes && historyRes.data) || [];
   if (txns.length === 0) {
     document.getElementById('creditHistory').innerHTML =
@@ -257,6 +433,106 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   document.getElementById('creditHistory').innerHTML = html;
 })();
+
+// ===== Redeem balance as a single-use Stripe coupon =====
+// Calls the admin's /api/store-credit/* endpoints (built in the admin
+// repo). UI degrades gracefully if those endpoints aren't live yet —
+// fetch failures just leave the redeem card hidden.
+async function initRedeem(balance) {
+  var btn       = document.getElementById('creditRedeemBtn');
+  var btnAmount = document.getElementById('creditRedeemAmount');
+  var couponCard= document.getElementById('creditCoupon');
+  var couponAmt = document.getElementById('creditCouponAmount');
+  var couponCode= document.getElementById('creditCouponCode');
+  var couponExp = document.getElementById('creditCouponExpires');
+  var couponApply = document.getElementById('creditCouponApply');
+  var copyBtn   = document.getElementById('creditCouponCopy');
+  var copyLabel = document.getElementById('creditCouponCopyLabel');
+  var modal     = document.getElementById('creditRedeemModal');
+  var modalAmt  = document.getElementById('creditRedeemModalAmount');
+  var cancelBtn = document.getElementById('creditRedeemCancel');
+  var confirmBtn= document.getElementById('creditRedeemConfirm');
+
+  var ADMIN = 'https://admin.afterslim.com';
+
+  function showCoupon(c) {
+    couponAmt.textContent = window.formatMoney(c.amount_cents) + ' off';
+    couponCode.textContent = c.code;
+    couponExp.textContent = 'Expires ' + new Date(c.expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    couponApply.href = '/checkout?promo=' + encodeURIComponent(c.code);
+    couponCard.style.display = '';
+    btn.style.display = 'none';
+
+    copyBtn.onclick = function() {
+      navigator.clipboard.writeText(c.code).then(function() {
+        copyBtn.classList.add('copied');
+        copyLabel.textContent = 'Copied';
+        setTimeout(function() {
+          copyBtn.classList.remove('copied');
+          copyLabel.textContent = 'Copy code';
+        }, 2400);
+      });
+    };
+  }
+
+  // 1) Check for an active coupon first.
+  try {
+    var session = await window.afterslimSupabase.auth.getSession();
+    var token = session.data.session && session.data.session.access_token;
+    if (!token) return;
+
+    var activeRes = await fetch(ADMIN + '/api/store-credit/active-coupon', {
+      headers: { Authorization: 'Bearer ' + token }
+    });
+    if (activeRes.ok) {
+      var data = await activeRes.json();
+      if (data && data.code) { showCoupon(data); return; }
+    }
+  } catch (e) { /* endpoint not live yet — fall through */ }
+
+  // 2) No active coupon. If balance > 0, surface the Redeem CTA.
+  if (balance > 0) {
+    btnAmount.textContent = window.formatMoney(balance);
+    modalAmt.textContent = window.formatMoney(balance);
+    btn.style.display = '';
+  }
+
+  btn.addEventListener('click', function() { modal.classList.add('open'); });
+  cancelBtn.addEventListener('click', function() { modal.classList.remove('open'); });
+  modal.addEventListener('click', function(ev) {
+    if (ev.target === modal) modal.classList.remove('open');
+  });
+  document.addEventListener('keydown', function(ev) {
+    if (ev.key === 'Escape') modal.classList.remove('open');
+  });
+
+  confirmBtn.addEventListener('click', async function() {
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Generating...';
+    try {
+      var session = await window.afterslimSupabase.auth.getSession();
+      var token = session.data.session && session.data.session.access_token;
+      var res = await fetch(ADMIN + '/api/store-credit/redeem', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token
+        },
+        body: '{}'
+      });
+      if (!res.ok) throw new Error('redeem failed: ' + res.status);
+      var data = await res.json();
+      modal.classList.remove('open');
+      document.getElementById('creditBalance').textContent = '$0.00';
+      document.getElementById('creditAvailable').textContent = 'Your coupon is ready below. Use it within 7 days.';
+      showCoupon(data);
+    } catch (err) {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Yes, generate coupon';
+      alert('Could not generate your coupon right now. Please try again, or email support@afterslim.com if it keeps failing.');
+    }
+  });
+}
 
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
