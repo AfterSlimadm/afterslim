@@ -905,7 +905,7 @@ async function ckApplyDiscount(){
   try{
     var r=await fetch('/api/coupons/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:code,price_id:CK_priceId})});
     var data=await r.json();
-    if(!data.valid){
+    if(!r.ok||!data.discount_cents){
       feedback.textContent=data.error||'Invalid code';
       feedback.style.color='#dc2626';
       btn.disabled=false;input.disabled=false;
