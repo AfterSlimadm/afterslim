@@ -1119,6 +1119,23 @@ ckInitSidebar();
 ckUpdateSidebarTotals();
 ckShowStep(1);
 
+// Auto-apply a promo code that arrived in the URL (?promo=CODE).
+// Used by /account/store-credit's "Apply at checkout" CTA so the
+// redeemed coupon lands pre-validated in the discount field. Runs
+// after the DOM is ready and the discount input exists; reuses
+// ckApplyDiscount() so the validation path stays identical to a
+// manual paste.
+(function ckAutoApplyPromoFromUrl(){
+  var code = CK_params.get('promo');
+  if (!code) return;
+  var input = document.getElementById('discount-input');
+  if (!input) return;
+  input.value = code.trim().toUpperCase();
+  // Defer one tick so the rest of the init queue settles before the
+  // /api/coupons/validate fetch fires.
+  setTimeout(function(){ ckApplyDiscount(); }, 0);
+})();
+
 // Loyalty / store credit redemption (Phase 2). Only signed-in customers
 // can apply a balance against the order. We grab the Supabase session
 // quietly: if the customer is a guest, the credit-row stays hidden.
