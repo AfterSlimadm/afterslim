@@ -173,13 +173,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="account-cta-title-grad">Place your first AfterSlim</span>
       <span class="account-cta-title-accent">order</span>
     </h2>
-    <p class="account-cta-desc">Subscribe &amp; Save up to 28% off retail. <span class="account-cta-desc-highlight">Free shipping</span> on 2+ bottles. 5% back in store credit on every order.</p>
+    <p class="account-cta-desc" id="bundleDesc">Ships every 60 days. <span class="account-cta-desc-highlight">Free shipping.</span> 5% back in store credit. Skip or cancel anytime.</p>
 
-    <a href="/#bundles" class="account-bundle-cta-final">
-      Shop AfterSlim
+    <div class="account-bundle-card">
+      <div class="account-bundle-thumb">
+        <img id="bundleThumb" src="/images/bundle-2.webp" alt="AfterSlim 2-bottle pack" loading="lazy">
+      </div>
+      <div class="account-bundle-info">
+        <div class="account-bundle-rating" aria-label="Rated 5 stars from 847 reviews">
+          <img src="/images/reviews-stars-orange.png" alt="" aria-hidden="true">
+          <span><strong>847</strong> Reviews</span>
+        </div>
+        <h3 class="account-bundle-title" id="bundleTitle">AfterSlim · 2 bottles · Subscribe &amp; Save</h3>
+        <div class="account-bundle-price">
+          <span class="account-bundle-price-now" id="bundlePriceNow">$47.99 every 2 months</span>
+          <span class="account-bundle-price-was" id="bundlePriceWas">$59.99</span>
+          <span class="account-bundle-price-save" id="bundlePriceSave">Save 20%</span>
+        </div>
+      </div>
+
+      <div class="account-bundle-picker" role="group" aria-label="Pick your bundle">
+        <button type="button" class="account-bundle-opt" data-qty="1" aria-pressed="false">
+          <div class="account-bundle-opt-title">1 Bottle</div>
+          <div class="account-bundle-opt-save">Save $5.00</div>
+        </button>
+        <button type="button" class="account-bundle-opt" data-qty="2" aria-pressed="true">
+          <span class="account-bundle-opt-badge">Recommended</span>
+          <div class="account-bundle-opt-title">2 Bottles</div>
+          <div class="account-bundle-opt-save">Save $12.00</div>
+        </button>
+        <button type="button" class="account-bundle-opt" data-qty="3" aria-pressed="false">
+          <span class="account-bundle-opt-badge account-bundle-opt-badge--best">Best value</span>
+          <div class="account-bundle-opt-title">3 Bottles</div>
+          <div class="account-bundle-opt-save">Save $22.00</div>
+        </button>
+      </div>
+    </div>
+
+    <a href="/#bundles" id="bundleCta" class="account-bundle-cta-final">
+      Claim your bundle
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
   </div>
+
+  <script>
+  (function() {
+    var BUNDLES = {
+      1: { price: '27.99', was: '32.99', off: 15, save: '5.00',  freqLabel: 'every month',    ships: 'Ships every 30 days. 5% back in store credit.',                 title: '1 bottle' },
+      2: { price: '47.99', was: '59.99', off: 20, save: '12.00', freqLabel: 'every 2 months', ships: 'Ships every 60 days. Free shipping. 5% back in store credit.',  title: '2 bottles' },
+      3: { price: '57.99', was: '79.99', off: 28, save: '22.00', freqLabel: 'every 3 months', ships: 'Ships every 90 days. Free shipping. 5% back in store credit.',  title: '3 bottles' }
+    };
+    var thumb     = document.getElementById('bundleThumb');
+    var titleEl   = document.getElementById('bundleTitle');
+    var descEl    = document.getElementById('bundleDesc');
+    var priceNow  = document.getElementById('bundlePriceNow');
+    var priceWas  = document.getElementById('bundlePriceWas');
+    var priceSave = document.getElementById('bundlePriceSave');
+    var ctaEl     = document.getElementById('bundleCta');
+    var opts = document.querySelectorAll('.account-bundle-opt');
+
+    function pick(qty) {
+      var b = BUNDLES[qty];
+      if (!b) return;
+      opts.forEach(function(o) {
+        o.setAttribute('aria-pressed', o.getAttribute('data-qty') === String(qty) ? 'true' : 'false');
+      });
+      thumb.src = '/images/bundle-' + qty + '.webp';
+      thumb.alt = 'AfterSlim ' + qty + '-bottle pack';
+      titleEl.innerHTML = 'AfterSlim · ' + b.title + ' · Subscribe & Save';
+      var descText = b.ships + ' Skip or cancel anytime.';
+      descEl.innerHTML = descText.replace(
+        'Free shipping.',
+        '<span class="account-cta-desc-highlight">Free shipping.</span>'
+      );
+      priceNow.textContent = '$' + b.price + ' ' + b.freqLabel;
+      priceWas.textContent = '$' + b.was;
+      priceSave.textContent = 'Save ' + b.off + '%';
+      ctaEl.href = '/#bundles';
+    }
+    opts.forEach(function(o) {
+      o.addEventListener('click', function() { pick(parseInt(o.getAttribute('data-qty'), 10)); });
+    });
+  })();
+  </script>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
