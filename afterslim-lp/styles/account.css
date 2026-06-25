@@ -625,61 +625,68 @@ html[data-auth="pending"] body { visibility: hidden; }
 .account-empty-cta svg { color: var(--orange); transition: transform 0.15s; }
 .account-empty-cta:hover svg { transform: translateX(3px); color: var(--orange-dark); }
 
-/* Account: inline bundle PDP (used in /account/subscriptions empty
-   state). PDP-style on a smaller canvas — square product photo on top,
-   rating, title, meta, bundle picker (home-equivalent), price, and a
-   big CTA. The customer should not feel they have to bounce back to
-   the storefront. */
+/* Account: inline bundle card (used in /account/subscriptions empty
+   state). Compact horizontal row — small product thumb on the left,
+   star rating + title + ship meta + price + CTA on the right. Bundle
+   picker (home-style) sits underneath spanning the whole card width. */
 .account-bundle-card {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 22px;
+  row-gap: 20px;
+  padding: 22px 24px;
   background: #ffffff;
   border: 1px solid var(--line);
-  border-radius: 18px;
-  overflow: hidden;
+  border-radius: 16px;
   margin: 24px 0 0;
 }
-.account-bundle-hero {
-  width: 100%;
-  aspect-ratio: 1 / 1;
+.account-bundle-thumb {
+  width: 96px;
+  height: 96px;
   background: var(--orange-tint);
+  border-radius: 14px;
   overflow: hidden;
+  flex-shrink: 0;
 }
-.account-bundle-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.account-bundle-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-.account-bundle-info { padding: 24px 24px 28px; }
+.account-bundle-info { min-width: 0; }
 
 .account-bundle-rating {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  font-size: 13.5px;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12.5px;
   color: var(--ink-2);
 }
-.account-bundle-rating img { height: 16px; width: auto; display: block; }
+.account-bundle-rating img { height: 14px; width: auto; display: block; }
 .account-bundle-rating strong { color: var(--ink); font-weight: 700; }
 
 .account-bundle-title {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: -0.015em;
-  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
   color: var(--ink);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 .account-bundle-meta {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--ink-2);
-  margin: 0;
-  line-height: 1.5;
+  margin: 0 0 10px;
+  line-height: 1.45;
 }
 
+/* Picker spans the full card width on row 2 */
 .account-bundle-picker {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin: 24px 0 22px;
+  margin: 4px 0 0;
 }
 .account-bundle-opt {
   position: relative;
@@ -730,16 +737,15 @@ html[data-auth="pending"] body { visibility: hidden; }
   align-items: baseline;
   gap: 10px;
   flex-wrap: wrap;
-  margin: 0 0 18px;
 }
 .account-bundle-price-now {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 .account-bundle-price-was {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--ink-3);
   text-decoration: line-through;
 }
@@ -748,37 +754,42 @@ html[data-auth="pending"] body { visibility: hidden; }
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--orange-dark);
-  padding: 3px 9px;
+  padding: 3px 8px;
   background: var(--orange-tint);
   border-radius: 999px;
 }
 
 .account-bundle-cta {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 16px;
+  gap: 8px;
+  padding: 12px 22px;
   background: var(--orange);
   color: #ffffff;
   text-decoration: none;
-  font-size: 14.5px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   border-radius: 999px;
+  flex-shrink: 0;
   transition: background 0.15s, transform 0.05s;
 }
 .account-bundle-cta:hover { background: var(--orange-dark); color: #ffffff; }
 .account-bundle-cta:active { transform: translateY(1px); }
 
 @media (max-width: 560px) {
-  .account-bundle-info { padding: 20px 18px 24px; }
-  .account-bundle-title { font-size: 20px; }
+  .account-bundle-card {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 16px;
+    padding: 20px;
+    text-align: left;
+  }
+  .account-bundle-thumb { width: 72px; height: 72px; }
+  .account-bundle-cta { width: 100%; justify-content: center; }
   .account-bundle-picker { gap: 6px; }
   .account-bundle-opt { padding: 22px 6px 12px; }
   .account-bundle-opt-title { font-size: 13px; }
   .account-bundle-opt-save { font-size: 11px; }
-  .account-bundle-price-now { font-size: 22px; }
 }
