@@ -42,50 +42,89 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
-.credit-hero {
-  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
-  border-radius: 18px;
-  padding: 32px 28px;
-  color: #fff;
-  margin-bottom: 28px;
+/* Editorial Pendulum-style store-credit page. No saturated hero card,
+   no tile grid, no display-weight typography. Hairlines separate
+   sections, the balance number does the visual heavy lifting on its
+   own without a coloured frame around it. */
+.credit-balance {
+  padding: 28px 0 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
 }
-.credit-hero-label {
-  font-size: 12px; font-weight: 700; letter-spacing: 1.4px;
-  text-transform: uppercase; opacity: 0.85; margin: 0 0 6px;
+.credit-balance-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0 0 12px;
 }
-.credit-hero-balance {
-  font-size: clamp(40px, 5vw, 56px); font-weight: 800; letter-spacing: -0.02em;
-  line-height: 1; margin: 0 0 8px;
+.credit-balance-amount {
+  font-size: clamp(44px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0 0 12px;
 }
-.credit-hero-sub { font-size: 14.5px; opacity: 0.9; margin: 0; line-height: 1.5; }
+.credit-balance-sub {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.55;
+  max-width: 520px;
+}
 
-.credit-info-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
-  margin-bottom: 32px;
+.credit-info-list {
+  margin-bottom: 36px;
+  border-bottom: 1px solid var(--line);
 }
-@media (max-width: 860px) { .credit-info-grid { grid-template-columns: 1fr; } }
-.credit-info {
-  background: var(--bg-2); border: 1px solid var(--line);
-  border-radius: 12px; padding: 18px 20px;
+.credit-info-item {
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
 }
-.credit-info h3 { font-size: 13px; font-weight: 800; margin: 0 0 8px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--orange-dark); }
-.credit-info p { font-size: 14px; line-height: 1.55; color: var(--ink-2); margin: 0; }
+.credit-info-item:first-child { border-top: 0; padding-top: 6px; }
+.credit-info-item h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange-dark);
+  margin: 0 0 8px;
+}
+.credit-info-item p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0;
+  max-width: 640px;
+}
 
-.credit-history-title { font-size: 20px; font-weight: 800; letter-spacing: -0.005em; margin: 0 0 14px; }
+.credit-history-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0 0 16px;
+}
 .credit-tx-table {
-  background: var(--bg-2); border: 1px solid var(--line);
-  border-radius: 14px; overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
 }
 .credit-tx {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 16px;
-  padding: 16px 20px;
+  padding: 16px 0;
   border-bottom: 1px solid var(--line);
   align-items: center;
 }
 .credit-tx:last-child { border-bottom: 0; }
-.credit-tx-desc { font-size: 14.5px; font-weight: 600; margin: 0 0 2px; }
+.credit-tx-desc { font-size: 14.5px; font-weight: 600; margin: 0 0 2px; color: var(--ink); }
 .credit-tx-date { font-size: 12.5px; color: var(--ink-2); margin: 0; }
 .credit-tx-amount {
   font-size: 16px; font-weight: 800; white-space: nowrap;
@@ -129,26 +168,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <h1>Store credit</h1>
   <p class="account-page-lede">Earn 5% back as store credit on every shipped order. Apply your balance at checkout with one click.</p>
 
-  <div class="credit-hero">
-    <p class="credit-hero-label">Available balance</p>
-    <p class="credit-hero-balance" id="creditBalance">$0.00</p>
-    <p class="credit-hero-sub" id="creditAvailable">Use it on your next AfterSlim order.</p>
-  </div>
+  <section class="credit-balance">
+    <span class="credit-balance-label">Available balance</span>
+    <p class="credit-balance-amount" id="creditBalance">$0.00</p>
+    <p class="credit-balance-sub" id="creditAvailable">Use it on your next AfterSlim order.</p>
+  </section>
 
-  <div class="credit-info-grid">
-    <div class="credit-info">
+  <section class="credit-info-list">
+    <div class="credit-info-item">
       <h3>How you earn</h3>
       <p>5% of the product subtotal of every completed order returns to your balance, including subscription shipments.</p>
     </div>
-    <div class="credit-info">
+    <div class="credit-info-item">
       <h3>How it applies</h3>
       <p>Sign in before checking out. Your available balance shows up as a one-click discount, applied up to the order total. No code needed.</p>
     </div>
-    <div class="credit-info">
+    <div class="credit-info-item">
       <h3>What if I refund?</h3>
       <p>Refunded orders forfeit the credit earned from that order. If you've already spent it, the refund will return what's left after that deduction.</p>
     </div>
-  </div>
+  </section>
 
   <h2 class="credit-history-title">Transaction history</h2>
   <div id="creditHistory"></div>
