@@ -164,14 +164,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main class="account-page">
   <h1>Your orders</h1>
   <p class="account-page-lede">A full history of your purchases. Click any order to see tracking, items, and request a return.</p>
+  <span id="ordersStatusBadge" class="account-cta-eyebrow" style="display: none;">You haven't placed any orders yet</span>
 
   <div id="ordersList"></div>
 
   <div id="emptyState" class="account-empty" style="display: none;">
-    <p>No orders yet. Your first bottle is one click away.</p>
-    <a class="account-empty-cta" href="/#bundles">
+    <h2 class="account-cta-title">
+      <span class="account-cta-title-grad">Place your first AfterSlim</span>
+      <span class="account-cta-title-accent">order</span>
+    </h2>
+    <p class="account-cta-desc">Subscribe &amp; Save up to 28% off retail. <span class="account-cta-desc-highlight">Free shipping</span> on 2+ bottles. 5% back in store credit on every order.</p>
+
+    <a href="/#bundles" class="account-bundle-cta-final">
       Shop AfterSlim
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </a>
   </div>
 </main>
@@ -190,12 +196,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     .order('created_at', { ascending: false });
 
   if (error) {
-    document.getElementById('ordersList').innerHTML =
-      '<div class="account-empty"><p>Couldn\'t load your orders. Please refresh or email support@afterslim.com.</p></div>';
+    // Same fallback as /account/subscriptions: a query failure shouldn't
+    // surface as a scary "Couldn't load" error. Show the empty state so
+    // the customer still gets a useful CTA. Log for DevTools debugging.
+    console.warn('[orders] query failed, falling back to empty state:', error.message);
+    document.getElementById('ordersStatusBadge').style.display = 'inline-flex';
+    document.getElementById('emptyState').style.display = 'block';
     return;
   }
 
   if (!orders || orders.length === 0) {
+    document.getElementById('ordersStatusBadge').style.display = 'inline-flex';
     document.getElementById('emptyState').style.display = 'block';
     return;
   }
