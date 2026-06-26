@@ -457,11 +457,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var id = btn.getAttribute('data-id');
         var idx = pendingFiles.findIndex(function(p) { return p.id === id; });
         if (idx >= 0) {
-          URL.revokeObjectURL(pendingFiles[idx].previewUrl);
           pendingFiles.splice(idx, 1);
           renderPending();
         }
       });
+    });
+  }
+
+  function readAsDataUrl(file) {
+    return new Promise(function(resolve) {
+      var r = new FileReader();
+      r.onload = function() { resolve(r.result); };
+      r.onerror = function() { resolve(''); };
+      r.readAsDataURL(file);
     });
   }
 
@@ -475,10 +483,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var f = picked[i];
       var err = await validateFile(f);
       if (err) { alert(f.name + ': ' + err); continue; }
+      // CSP do site nao permite blob: em img-src (so data: e https:), entao
+      // usamos dataURL pro preview no composer. So precisamos pra imagens —
+      // PDF/video sao mostrados via placeholder icon, nao precisam da URL.
+      var previewUrl = f.type.indexOf('image/') === 0 ? await readAsDataUrl(f) : '';
       pendingFiles.push({
         id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2),
         file: f,
-        previewUrl: URL.createObjectURL(f),
+        previewUrl: previewUrl,
       });
     }
     e.target.value = '';
@@ -567,8 +579,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         })
       ).select('*');
       if (attRes.error) {
-        // Mensagem ja foi enviada — so loga, nao bloqueia
-        console.warn('Attachment rows failed:', attRes.error.message);
+        // Msg ja foi enviada sem o anexo. Avisa o usuario em vez de
+        // silenciar — assim ele sabe que precisa reenviar o arquivo.
+        console.error('Attachment rows failed:', attRes.error.message);
+        alert('Message sent, but file failed to attach: ' + attRes.error.message);
       } else {
         insertedAtts = attRes.data || [];
       }
@@ -577,7 +591,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Optimistic append (dedup por id se vier via Realtime)
     appendMessage(ins.data, insertedAtts);
 
-    pendingFiles.forEach(function(p) { URL.revokeObjectURL(p.previewUrl); });
     pendingFiles = [];
     renderPending();
     document.getElementById('replyBody').value = '';
