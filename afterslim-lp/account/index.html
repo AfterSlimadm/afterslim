@@ -368,9 +368,13 @@ if (!window.afterslimAuth || !window.afterslimSupabase) {
       }
     });
 
-  // 7) Refer-a-friend panel. Mounts the section once /api/referrals/me
-  // returns. Four states: none (apply CTA), pending (waiting), rejected,
-  // approved (link, code, balance, recent referrals).
+  // 7) Refer-a-friend panel. Auto-enrollment: every customer who has paid
+  // at least one order is enrolled by the migration 044 trigger, no manual
+  // application. Three states the API still returns:
+  //   approved: show link, code, balance, recent referrals (the happy path)
+  //   none:     no row yet (guest checkout or pre-backfill) — placeholder
+  //   rejected: legacy admin action (shouldn't happen post auto-enrollment,
+  //             but we keep the handler for the few historical rows)
   mountReferPanel(supabase);
 })();
 
@@ -404,70 +408,23 @@ async function mountReferPanel(supabase) {
 
   section.hidden = false;
 
-  if (status === 'none') {
-    renderReferNone(slot);
-  } else if (status === 'pending') {
-    renderReferPending(slot);
+  if (status === 'none' || status === 'pending') {
+    // 'none' = nunca comprou, ou pre-backfill. 'pending' = legacy row de
+    // antes do auto-enrollment. Em ambos os casos, o cliente nao tem link
+    // ativo ainda — primeira compra paga aciona a entrada automatica.
+    renderReferLocked(slot);
   } else if (status === 'rejected') {
     renderReferRejected(slot);
   } else if (status === 'approved') {
     renderReferApproved(slot, payload);
   }
 
-  async function applyToRefer(button) {
-    button.disabled = true;
-    button.textContent = 'Submitting...';
-    try {
-      var session = await supabase.auth.getSession();
-      var tok = session.data.session && session.data.session.access_token;
-      var r = await fetch('https://admin.afterslim.com/api/referrals/apply', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tok
-        },
-        body: JSON.stringify({})
-      });
-      if (r.status === 201 || r.status === 409) {
-        renderReferPending(slot);
-        return;
-      }
-      button.disabled = false;
-      button.textContent = 'Apply to refer friends';
-      var msg = document.getElementById('referApplyError');
-      if (msg) {
-        msg.textContent = 'Could not submit right now. Please try again in a moment.';
-        msg.hidden = false;
-      }
-    } catch (err) {
-      button.disabled = false;
-      button.textContent = 'Apply to refer friends';
-    }
-  }
-
-  function renderReferNone(slot) {
+  function renderReferLocked(slot) {
     slot.innerHTML =
       '<div class="dash-refer-card">' +
-        '<p class="dash-refer-lede">Refer AfterSlim to a friend and earn <strong>15% store credit</strong> on every paid order they place. They get <strong>10% off</strong>. Apply once, no paperwork.</p>' +
-        '<button type="button" class="dash-refer-cta" id="referApplyBtn">Apply to refer friends</button>' +
-        '<p class="dash-refer-error" id="referApplyError" hidden></p>' +
-        '<p class="dash-refer-foot">Manual review, usually a couple of days. <a href="/partner-with-us/resellers">How it works</a>.</p>' +
-      '</div>';
-    var btn = document.getElementById('referApplyBtn');
-    btn.addEventListener('click', function() { applyToRefer(btn); });
-  }
-
-  function renderReferPending(slot) {
-    slot.innerHTML =
-      '<div class="dash-refer-card dash-refer-state">' +
-        '<div class="dash-refer-state-icon dash-refer-state-pending">' +
-          '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
-        '</div>' +
-        '<div>' +
-          '<h3>Application under review</h3>' +
-          '<p>We are reviewing your application by hand. Most decisions come back within a couple of days. You will see your referral link here as soon as it is approved.</p>' +
-        '</div>' +
+        '<p class="dash-refer-lede">Once your first AfterSlim order ships, your personal referral link unlocks here. Share it and earn <strong>15% store credit</strong> on every paid order. Friends get <strong>10% off</strong>.</p>' +
+        '<a href="/?ref=" class="dash-refer-cta" style="text-decoration:none;display:inline-block">Shop AfterSlim</a>' +
+        '<p class="dash-refer-foot"><a href="/partner-with-us/resellers">How it works</a></p>' +
       '</div>';
   }
 
