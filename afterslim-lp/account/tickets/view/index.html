@@ -96,13 +96,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   color: var(--ink-2);
 }
 .tv-avatar.customer svg { width: 18px; height: 18px; }
-.tv-avatar.staff {
-  background: var(--orange-tint);
-  color: var(--orange-dark);
-  font-family: inherit;
-  font-size: 13px; font-weight: 800;
-  letter-spacing: -0.02em;
-}
+.tv-avatar.staff { background: #fff; }
+.tv-avatar.staff img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .tv-msg:not(.first-in-group) .tv-avatar { visibility: hidden; }
 .tv-bubble {
   flex: 0 1 auto;
@@ -474,7 +469,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function avatarHtml(authorType) {
     if (authorType === 'staff') {
-      return '<div class="tv-avatar staff" aria-label="AfterSlim">A</div>';
+      return '<div class="tv-avatar staff" aria-label="AfterSlim"><img src="/favicon.png" alt=""></div>';
     }
     return '<div class="tv-avatar customer" aria-label="You">' + CUSTOMER_AVATAR_SVG + '</div>';
   }
