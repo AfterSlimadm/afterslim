@@ -97,6 +97,78 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   text-align: center; font-size: 13.5px; color: var(--ink-2);
   background: rgba(31,20,16,0.04); padding: 14px; border-radius: 12px;
 }
+
+/* Attachments — inline na bubble + composer */
+.tv-attachments { display: grid; gap: 8px; margin-top: 8px; }
+.tv-att {
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  background: #fff;
+}
+.tv-att img, .tv-att video {
+  max-width: 100%; max-height: 280px; display: block;
+  margin: 0 auto; background: #f6f4f1;
+}
+.tv-att-pdf {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; text-decoration: none; color: var(--ink);
+}
+.tv-att-pdf:hover { background: var(--bg-2); }
+.tv-att-meta {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-top: 1px solid var(--line);
+  font-size: 11.5px; color: var(--ink-2); background: var(--bg-2);
+}
+.tv-att-meta .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tv-att-meta a {
+  color: var(--ink-2); text-decoration: none; padding: 2px 4px;
+}
+.tv-att-meta a:hover { color: var(--ink); }
+
+/* Composer */
+.tv-reply .composer-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.tv-reply .attach-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fff; color: var(--ink);
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 10px 16px; font-size: 13px; font-weight: 600;
+  text-transform: none; letter-spacing: 0; cursor: pointer;
+}
+.tv-reply .attach-btn:hover { border-color: var(--orange); color: var(--orange); }
+.tv-reply .attach-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.tv-pending { display: flex; flex-wrap: wrap; gap: 8px; }
+.tv-pending-item {
+  position: relative; width: 84px; height: 84px;
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  background: var(--bg-2);
+}
+.tv-pending-item img, .tv-pending-item video {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.tv-pending-item .placeholder {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  color: var(--ink-2);
+}
+.tv-pending-item .remove {
+  position: absolute; top: 4px; right: 4px;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: rgba(0,0,0,0.7); color: #fff; border: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; line-height: 1; padding: 0;
+}
+.tv-pending-item .label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.65); color: #fff; font-size: 9.5px;
+  padding: 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tv-hint { font-size: 11px; color: var(--ink-2); margin: 0; }
+.tv-att-pinned {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  color: var(--orange-dark); letter-spacing: 0.5px;
+}
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/tickets/view">
 <meta name="robots" content="noindex, nofollow">
@@ -161,6 +233,101 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var messagesCache = [];
   var ticketCache = null;
+  var pendingFiles = [];   // arquivos selecionados antes de enviar
+
+  // ─── Anexos ────────────────────────────────────────────────────
+  // Tipos sincronizados com migration 041 (bucket allowed_mime_types).
+  // 10 MB hard cap (browser valida antes do upload; server tem o mesmo
+  // limite via storage policy). Video ate 1 min, validado lendo metadata.
+  var ALLOWED = {
+    'image/jpeg':1,'image/png':1,'image/webp':1,'image/heic':1,'image/heif':1,'image/gif':1,
+    'application/pdf':1,
+    'video/mp4':1,'video/quicktime':1,'video/webm':1
+  };
+  var MAX_BYTES = 10 * 1024 * 1024;
+  var MAX_VIDEO_SECONDS = 60;
+  var MAX_PER_MSG = 3;
+
+  function bytesLabel(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1024*1024) return Math.round(b/1024) + ' KB';
+    return (b / 1024 / 1024).toFixed(1) + ' MB';
+  }
+
+  function readVideoDuration(file) {
+    return new Promise(function(resolve) {
+      var v = document.createElement('video');
+      v.preload = 'metadata';
+      v.onloadedmetadata = function() {
+        URL.revokeObjectURL(v.src);
+        resolve(v.duration || 0);
+      };
+      v.onerror = function() { resolve(0); };
+      v.src = URL.createObjectURL(file);
+    });
+  }
+
+  async function validateFile(f) {
+    if (!ALLOWED[f.type]) return 'File type not allowed';
+    if (f.size > MAX_BYTES) return 'File larger than 10 MB';
+    if (f.type.indexOf('video/') === 0) {
+      var dur = await readVideoDuration(f);
+      if (dur > MAX_VIDEO_SECONDS) return 'Video longer than 1 minute';
+    }
+    return null;
+  }
+
+  function sanitizeFileName(name) {
+    return String(name).normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-zA-Z0-9._-]/g, '_').replace(/_+/g, '_').slice(0, 100);
+  }
+
+  function attachmentHtml(a, signedUrl) {
+    var name = escapeHtml(a.file_name);
+    var size = bytesLabel(a.size_bytes);
+    var url = escapeHtml(signedUrl || '#');
+    var media = '';
+    if (a.mime_type.indexOf('image/') === 0) {
+      media = '<a href="' + url + '" target="_blank" rel="noopener"><img src="' + url + '" alt="' + name + '"></a>';
+    } else if (a.mime_type.indexOf('video/') === 0) {
+      media = '<video src="' + url + '" controls preload="metadata"></video>';
+    } else {
+      media = '<a class="tv-att-pdf" href="' + url + '" target="_blank" rel="noopener">'
+        + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+        + '<span>' + name + '</span></a>';
+    }
+    var pinned = a.pinned
+      ? '<span class="tv-att-pinned" title="Saved by support">'
+        + '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2z"/></svg>'
+        + 'Saved</span>'
+      : '';
+    return '<div class="tv-att">'
+      + media
+      + '<div class="tv-att-meta">'
+        + '<span class="name">' + name + '</span>'
+        + '<span>' + size + '</span>'
+        + pinned
+        + '<a href="' + url + '" download="' + name + '" title="Download">'
+          + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+        + '</a>'
+      + '</div>'
+    + '</div>';
+  }
+
+  async function renderAttachments(container, atts) {
+    if (!atts || atts.length === 0) return;
+    // Pede signed URL pra cada anexo. 1h de validade.
+    var urls = await Promise.all(atts.map(function(a) {
+      return supabase.storage.from('ticket-attachments')
+        .createSignedUrl(a.storage_path, 3600)
+        .then(function(r) { return (r.data && r.data.signedUrl) || ''; })
+        .catch(function() { return ''; });
+    }));
+    var wrap = document.createElement('div');
+    wrap.className = 'tv-attachments';
+    wrap.innerHTML = atts.map(function(a, i) { return attachmentHtml(a, urls[i]); }).join('');
+    container.appendChild(wrap);
+  }
 
   function scrollToBottom(opts) {
     var behavior = (opts && opts.behavior) || 'smooth';
@@ -170,33 +337,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
-  function messageHtml(m) {
+  function renderMessageInto(article, m) {
     var date = new Date(m.created_at).toLocaleString('en-US', {
       month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
     });
     var label = m.author_type === 'staff' ? 'AfterSlim support' : 'You';
-    return '<article class="tv-msg ' + m.author_type + '">'
-      + '<p class="tv-msg-author">' + label + '</p>'
-      + '<p class="tv-msg-body">' + escapeHtml(m.body) + '</p>'
-      + '<p class="tv-msg-date">' + date + '</p>'
-    + '</article>';
+    var bodyHtml = m.body
+      ? '<p class="tv-msg-body">' + escapeHtml(m.body) + '</p>'
+      : '';
+    article.className = 'tv-msg ' + m.author_type;
+    article.innerHTML =
+      '<p class="tv-msg-author">' + label + '</p>'
+      + bodyHtml
+      + '<p class="tv-msg-date">' + date + '</p>';
+    renderAttachments(article, m.attachments || []);
   }
 
   function renderThread(msgs) {
     messagesCache = msgs;
     var thread = document.getElementById('tvThread');
-    thread.innerHTML = msgs.length
-      ? msgs.map(messageHtml).join('')
-      : '<p style="color: var(--ink-2);">No messages yet.</p>';
+    thread.innerHTML = '';
+    if (!msgs.length) {
+      thread.innerHTML = '<p style="color: var(--ink-2);">No messages yet.</p>';
+      return;
+    }
+    msgs.forEach(function(m) {
+      var art = document.createElement('article');
+      renderMessageInto(art, m);
+      thread.appendChild(art);
+    });
   }
 
-  function appendMessage(m) {
-    if (m.is_internal) return;                                  // staff-only notes never leak to the customer
-    if (messagesCache.some(function(x) { return x.id === m.id; })) return;  // dedup if the row arrives via both the refresh and the realtime channel
+  async function appendMessage(m, knownAttachments) {
+    if (m.is_internal) return;
+    if (messagesCache.some(function(x) { return x.id === m.id; })) return;
+    // Se nao veio com attachments (caso Realtime), busca da tabela.
+    if (!knownAttachments) {
+      var atts = await supabase.from('support_ticket_attachments')
+        .select('*').eq('message_id', m.id);
+      m.attachments = atts.data || [];
+    } else {
+      m.attachments = knownAttachments;
+    }
     messagesCache.push(m);
     var thread = document.getElementById('tvThread');
-    if (messagesCache.length === 1) thread.innerHTML = '';      // clear the "No messages yet" placeholder
-    thread.insertAdjacentHTML('beforeend', messageHtml(m));
+    if (messagesCache.length === 1) thread.innerHTML = '';
+    var art = document.createElement('article');
+    renderMessageInto(art, m);
+    thread.appendChild(art);
     scrollToBottom({ behavior: 'smooth' });
   }
 
@@ -218,18 +406,90 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       replyArea.innerHTML =
         '<form class="tv-reply" id="replyForm">'
           + '<h3>Add a reply</h3>'
-          + '<textarea id="replyBody" placeholder="Type your reply..." required></textarea>'
-          + '<button type="submit" id="replyBtn">Send reply</button>'
+          + '<textarea id="replyBody" placeholder="Type your reply..."></textarea>'
+          + '<div class="tv-pending" id="tvPending" style="display:none"></div>'
+          + '<input type="file" id="replyFile" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/gif,application/pdf,video/mp4,video/quicktime,video/webm" multiple style="display:none">'
+          + '<div class="composer-actions">'
+            + '<button type="button" class="attach-btn" id="attachBtn">'
+              + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>'
+              + 'Attach file'
+            + '</button>'
+            + '<button type="submit" id="replyBtn">Send reply</button>'
+          + '</div>'
+          + '<p class="tv-hint">Images, PDF, or video up to 1 min. Max 10 MB per file, ' + MAX_PER_MSG + ' files per message.</p>'
         + '</form>';
       document.getElementById('replyForm').addEventListener('submit', sendReply);
+      document.getElementById('attachBtn').addEventListener('click', function() {
+        document.getElementById('replyFile').click();
+      });
+      document.getElementById('replyFile').addEventListener('change', onFilesPicked);
     }
+  }
+
+  function renderPending() {
+    var wrap = document.getElementById('tvPending');
+    if (!wrap) return;
+    if (pendingFiles.length === 0) {
+      wrap.style.display = 'none';
+      wrap.innerHTML = '';
+      return;
+    }
+    wrap.style.display = '';
+    wrap.innerHTML = '';
+    pendingFiles.forEach(function(item) {
+      var div = document.createElement('div');
+      div.className = 'tv-pending-item';
+      var preview;
+      if (item.file.type.indexOf('image/') === 0) {
+        preview = '<img src="' + item.previewUrl + '" alt="">';
+      } else if (item.file.type.indexOf('video/') === 0) {
+        preview = '<div class="placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>';
+      } else {
+        preview = '<div class="placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>';
+      }
+      div.innerHTML = preview
+        + '<button type="button" class="remove" data-id="' + item.id + '" aria-label="Remove">×</button>'
+        + '<span class="label">' + escapeHtml(item.file.name) + '</span>';
+      wrap.appendChild(div);
+    });
+    Array.prototype.forEach.call(wrap.querySelectorAll('.remove'), function(btn) {
+      btn.addEventListener('click', function() {
+        var id = btn.getAttribute('data-id');
+        var idx = pendingFiles.findIndex(function(p) { return p.id === id; });
+        if (idx >= 0) {
+          URL.revokeObjectURL(pendingFiles[idx].previewUrl);
+          pendingFiles.splice(idx, 1);
+          renderPending();
+        }
+      });
+    });
+  }
+
+  async function onFilesPicked(e) {
+    var files = e.target.files;
+    if (!files || !files.length) return;
+    var slots = MAX_PER_MSG - pendingFiles.length;
+    if (slots <= 0) { alert('Max ' + MAX_PER_MSG + ' files per message'); e.target.value = ''; return; }
+    var picked = Array.prototype.slice.call(files, 0, slots);
+    for (var i = 0; i < picked.length; i++) {
+      var f = picked[i];
+      var err = await validateFile(f);
+      if (err) { alert(f.name + ': ' + err); continue; }
+      pendingFiles.push({
+        id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2),
+        file: f,
+        previewUrl: URL.createObjectURL(f),
+      });
+    }
+    e.target.value = '';
+    renderPending();
   }
 
   async function refresh() {
     var [tRes, mRes] = await Promise.all([
       supabase.from('support_tickets').select('id, ticket_number, subject, status, category, created_at, updated_at')
         .eq('profile_id', user.id).eq('id', ticketId).maybeSingle(),
-      supabase.from('support_ticket_messages').select('id, author_type, body, created_at, is_internal')
+      supabase.from('support_ticket_messages').select('id, author_type, body, created_at, is_internal, attachments:support_ticket_attachments(*)')
         .eq('ticket_id', ticketId).order('created_at', { ascending: true }),
     ]);
     var ticket = tRes.data;
@@ -245,26 +505,83 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   async function sendReply(e) {
     e.preventDefault();
     var body = document.getElementById('replyBody').value.trim();
-    if (!body) return;
+    if (!body && pendingFiles.length === 0) {
+      alert('Type a reply or attach a file.');
+      return;
+    }
     var btn = document.getElementById('replyBtn');
     btn.disabled = true; btn.textContent = 'Sending...';
+
+    // 1) Upload de arquivos (se houver) direto pro Storage. RLS permite
+    //    porque o cliente eh dono do ticket (policy "customer can upload
+    //    to own ticket path" em migration 041).
+    var uploaded = [];
+    try {
+      for (var i = 0; i < pendingFiles.length; i++) {
+        var item = pendingFiles[i];
+        var safe = sanitizeFileName(item.file.name);
+        var path = 'tickets/' + ticketId + '/' + ((window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now() + '-' + i) + '-' + safe;
+        var up = await supabase.storage.from('ticket-attachments').upload(path, item.file, {
+          contentType: item.file.type, upsert: false
+        });
+        if (up.error) throw new Error('Upload failed: ' + up.error.message);
+        uploaded.push({
+          storage_path: path,
+          file_name: item.file.name,
+          mime_type: item.file.type,
+          size_bytes: item.file.size,
+        });
+      }
+    } catch (err) {
+      alert(err.message || 'Upload failed');
+      btn.disabled = false; btn.textContent = 'Send reply';
+      return;
+    }
+
+    // 2) Insere a mensagem
     var ins = await supabase.from('support_ticket_messages').insert({
       ticket_id: ticketId,
       author_type: 'customer',
       author_id: user.id,
-      body: body,
+      body: body || '',
     }).select('id, author_type, body, created_at, is_internal').single();
     if (ins.error) {
       alert(ins.error.message);
       btn.disabled = false; btn.textContent = 'Send reply';
       return;
     }
-    // Optimistic append. Realtime will broadcast the same row to us;
-    // appendMessage's dedup by id keeps it from doubling up.
-    appendMessage(ins.data);
+
+    // 3) Insere as rows de attachment vinculadas a essa mensagem
+    var insertedAtts = [];
+    if (uploaded.length > 0) {
+      var attRes = await supabase.from('support_ticket_attachments').insert(
+        uploaded.map(function(u) {
+          return {
+            message_id: ins.data.id,
+            ticket_id: ticketId,
+            storage_path: u.storage_path,
+            file_name: u.file_name,
+            mime_type: u.mime_type,
+            size_bytes: u.size_bytes,
+          };
+        })
+      ).select('*');
+      if (attRes.error) {
+        // Mensagem ja foi enviada — so loga, nao bloqueia
+        console.warn('Attachment rows failed:', attRes.error.message);
+      } else {
+        insertedAtts = attRes.data || [];
+      }
+    }
+
+    // Optimistic append (dedup por id se vier via Realtime)
+    appendMessage(ins.data, insertedAtts);
+
+    pendingFiles.forEach(function(p) { URL.revokeObjectURL(p.previewUrl); });
+    pendingFiles = [];
+    renderPending();
     document.getElementById('replyBody').value = '';
     btn.disabled = false; btn.textContent = 'Send reply';
-    // Bump ticket back to "open" so staff sees the new reply.
     supabase.from('support_tickets').update({ status: 'open', updated_at: new Date().toISOString() }).eq('id', ticketId);
   }
 
