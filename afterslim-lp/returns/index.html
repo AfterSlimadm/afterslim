@@ -61,16 +61,29 @@ a:hover { color: var(--orange); }
 .nav-back:hover { color: var(--orange); }
 .nav-cart { color: var(--ink); }
 
-.policy-page { padding: 56px 0 96px; max-width: 760px; margin: 0 auto; }
-.policy-page h1 { font-size: clamp(32px, 4vw, 44px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 8px; color: var(--ink); }
-.policy-meta { color: var(--ink-2); font-size: 14px; margin: 0 0 36px; }
-.policy-page h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; margin: 36px 0 12px; color: var(--ink); }
-.policy-page p, .policy-page li { font-size: 16px; line-height: 1.65; color: var(--ink); }
-.policy-page ul, .policy-page ol { padding-left: 22px; margin: 12px 0 20px; }
+/* Policy / legal doc layout. Stripe Terms / Notion docs / GitHub
+   policy convention: a clean white surface, smaller heading scale
+   than a marketing page, no tinted callout boxes (those read as
+   Bootstrap alerts). The guarantee gets emphasis through a hairline
+   left rule and a slightly heavier opener, not its own panel. */
+body { background: #ffffff; }
+.policy-page { padding: 48px 0 80px; max-width: 720px; margin: 0 auto; }
+.policy-page h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; margin: 0 0 6px; color: var(--ink); }
+.policy-meta { color: var(--ink-2); font-size: 13.5px; margin: 0 0 36px; }
+.policy-page h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.005em; margin: 36px 0 10px; color: var(--ink); }
+.policy-page p, .policy-page li { font-size: 15.5px; line-height: 1.65; color: var(--ink); }
+.policy-page ul, .policy-page ol { padding-left: 22px; margin: 10px 0 18px; }
 .policy-page li { margin-bottom: 6px; }
-.policy-page strong { font-weight: 700; }
-.policy-guarantee { background: rgba(234,88,12,0.08); border: 1px solid rgba(234,88,12,0.18); padding: 18px 22px; border-radius: 12px; margin: 12px 0 28px; }
-.policy-guarantee p { margin: 0; font-weight: 500; }
+.policy-page strong { font-weight: 600; color: var(--ink); }
+.policy-page a { font-weight: 500; }
+.policy-page hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+.policy-page .lead {
+  font-size: 16.5px; line-height: 1.6;
+  margin: 8px 0 28px;
+  padding-left: 16px;
+  border-left: 2px solid var(--orange);
+  color: var(--ink);
+}
 
 .footer { background: var(--orange-dark); color: #fff; padding: 48px 0 24px; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
@@ -123,11 +136,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <h1>Returns &amp; Refunds</h1>
 <p class="policy-meta">Last updated: May 26, 2026</p>
 
-<h2>90-day money-back guarantee</h2>
-
-<div class="policy-guarantee">
-  <p>Try AfterSlim for up to 90 days. If you're not satisfied, for any reason, email us within 90 days of your delivery date for a full refund on the product. Even empty bottles count.</p>
-</div>
+<p class="lead">Try AfterSlim for up to 90 days. If you're not satisfied, for any reason, email us within 90 days of your delivery date for a full refund on the product. Even empty bottles count.</p>
 
 <h2>How to request a refund</h2>
 
