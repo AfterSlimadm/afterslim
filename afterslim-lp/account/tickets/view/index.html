@@ -444,17 +444,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   async function renderAttachments(container, atts) {
     if (!atts || atts.length === 0) return;
-    // Pede signed URL pra cada anexo. 1h de validade.
+    // Place the wrap synchronously so its DOM position is locked BEFORE
+    // any subsequent appendChild (the caption text). If we only inserted
+    // after awaiting signed URLs, the text appended in the meantime would
+    // land above the image — wrong order for WhatsApp-style layout.
+    var wrap = document.createElement('div');
+    wrap.className = 'tv-attachments';
+    container.appendChild(wrap);
+    // Now async-load signed URLs and fill the wrap (1h validity).
     var urls = await Promise.all(atts.map(function(a) {
       return supabase.storage.from('ticket-attachments')
         .createSignedUrl(a.storage_path, 3600)
         .then(function(r) { return (r.data && r.data.signedUrl) || ''; })
         .catch(function() { return ''; });
     }));
-    var wrap = document.createElement('div');
-    wrap.className = 'tv-attachments';
     wrap.innerHTML = atts.map(function(a, i) { return attachmentHtml(a, urls[i]); }).join('');
-    container.appendChild(wrap);
   }
 
   function scrollToBottom(opts) {
