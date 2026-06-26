@@ -42,6 +42,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
+/* Settings-class page: a real form. Stripe / Linear / Notion all use a
+   clean white surface for CRUD-heavy admin views; the warm tint reads
+   as marketing on a page where the customer is editing structured data. */
+body { background: #ffffff; }
 .addr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
 .addr-card {
   background: var(--bg-2); border: 1px solid var(--line);

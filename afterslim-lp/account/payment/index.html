@@ -42,6 +42,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
+/* Billing surface: lives in the same administrative pocket as
+   /account/settings and /account/login. Keep the surface white so the
+   account-area's admin pages share one visual register. */
+body { background: #ffffff; }
 .pay-list {
   margin: 32px 0 26px;
   border-top: 1px solid var(--line);
