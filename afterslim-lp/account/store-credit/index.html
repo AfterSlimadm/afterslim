@@ -502,7 +502,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var sign = isEarn ? '+' : '';
     var orderNumber = t.orders && t.orders.order_number;
     var desc = t.description || (t.type === 'earn' ? '5% back on order' : t.type === 'spend' ? 'Applied at checkout' : t.type);
-    if (orderNumber) desc += ' Â· ' + orderNumber;
+    if (orderNumber) desc += ' · ' + orderNumber;
     return '<div class="credit-tx">'
       + '<div><p class="credit-tx-desc">' + escapeHtml(desc) + '</p><p class="credit-tx-date">' + date + '</p></div>'
       + '<div class="credit-tx-amount ' + (isEarn ? 'earn' : 'spend') + '">' + sign + window.formatMoney(t.amount_cents) + '</div>'
