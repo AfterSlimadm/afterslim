@@ -40,57 +40,106 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],u.toString=function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e},u.people.toString=function(){return u.toString(1)+'.people (stub)'},o='init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_M05Y8p9sTGkPpIEjIqsczpA0dVMW4cvYtkMX7BVgLfS',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',session_recording:{maskAllInputs:true,maskTextSelector:'[data-private], .ph-no-capture'},loaded:function(p){try{if(localStorage.getItem('posthog_internal_user')==='true')p.opt_out_capturing();if(/^\/checkout(\/|$)/.test(location.pathname))p.stopSessionRecording();}catch(e){}}});</script>
 <link rel="stylesheet" href="/styles/policy.css">
 <style>
-.ma-hero { padding: 56px 24px 24px; max-width: 760px; margin: 0 auto; text-align: center; }
-.ma-eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--orange-dark); margin: 0 0 14px; }
-.ma-hero h1 { font-size: clamp(36px, 4.6vw, 52px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0 0 16px; }
-.ma-hero p { font-size: 17px; color: var(--ink-2); margin: 0 auto; max-width: 560px; line-height: 1.55; }
-
-.ma-section { max-width: 760px; margin: 0 auto; padding: 24px 24px; }
-.ma-section h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.01em; margin: 32px 0 12px; }
-.ma-section h3 { font-size: 17px; font-weight: 700; margin: 22px 0 8px; }
-.ma-section p { font-size: 16px; line-height: 1.7; color: var(--ink); margin: 0 0 14px; }
-.ma-section ul { padding-left: 22px; margin: 8px 0 18px; }
-.ma-section li { font-size: 15.5px; line-height: 1.6; color: var(--ink); margin-bottom: 6px; }
-.ma-section em { color: var(--orange); font-style: italic; font-family: Georgia, serif; font-weight: 600; }
-
-.ma-references {
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 24px 28px;
-  margin: 24px 0;
+/* Editorial methodology doc — sister to /science, but text-first.
+   /science is the customer-facing visual narrative (mechanism, stats,
+   ingredients). /research is the methodology + references + standards
+   document — text register, smaller heading scale, less art-directed
+   decoration. Read together they shouldn't repeat each other. */
+.ma-page { max-width: 680px; margin: 0 auto; padding: 56px 24px 0; }
+.ma-page h1 {
+  font-size: 32px; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.2;
+  margin: 0 0 14px;
+  color: var(--ink);
 }
-.ma-references h3 { font-size: 15px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; margin: 0 0 12px; color: var(--orange-dark); }
-.ma-references ol { padding-left: 22px; margin: 0; }
-.ma-references li { font-size: 13.5px; line-height: 1.55; color: var(--ink-2); margin-bottom: 8px; }
-.ma-references a { color: var(--orange-dark); }
-
-.ma-board {
-  background: var(--orange-tint);
-  padding: 48px 0;
-  margin: 32px 0 16px;
+.ma-page > .lede {
+  font-size: 17px; line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 40px;
+  max-width: 600px;
 }
-.ma-board .inner { max-width: 760px; margin: 0 auto; padding: 0 24px; text-align: center; }
-.ma-board h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 12px; }
-.ma-board p { font-size: 15.5px; line-height: 1.65; color: var(--ink); margin: 0 auto 18px; max-width: 540px; }
+.ma-section { margin: 0 0 40px; }
+.ma-section h2 {
+  font-size: 19px; font-weight: 600;
+  letter-spacing: -0.005em;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+.ma-section h3 {
+  font-size: 15.5px; font-weight: 600;
+  margin: 22px 0 6px;
+  color: var(--ink);
+}
+.ma-section p {
+  font-size: 16px; line-height: 1.7;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.ma-section em { font-style: italic; }
+.ma-section strong { font-weight: 600; color: var(--ink); }
+
+/* Criteria list: hairline rhythm with an inline strong opener, not
+   bullets. Reads as methodology, not as a feature list. */
+.ma-criteria { list-style: none; padding: 0; margin: 4px 0 18px; }
+.ma-criteria li {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  font-size: 15.5px; line-height: 1.6;
+  color: var(--ink);
+}
+.ma-criteria li:last-child { border-bottom: 1px solid var(--line); }
+.ma-criteria li strong { display: block; margin-bottom: 4px; }
+
+/* References block: plain ordered list under a section heading, no
+   tinted panel. Subtler — academic feel. */
+.ma-references { margin: 0 0 40px; }
+.ma-references h2 {
+  font-size: 19px; font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+.ma-references ol {
+  padding-left: 22px;
+  margin: 0;
+  counter-reset: ref;
+}
+.ma-references li {
+  font-size: 14px; line-height: 1.6;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+}
+
+/* Advisors CTA — calm pill, no orange-tint panel. */
+.ma-board { margin: 40px 0 12px; }
+.ma-board h2 {
+  font-size: 19px; font-weight: 600;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+.ma-board p {
+  font-size: 16px; line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0 0 16px;
+  max-width: 580px;
+}
 .ma-board-cta {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 13px 22px;
+  padding: 10px 20px;
   background: var(--orange); color: #fff;
-  border-radius: 999px; font-weight: 700; font-size: 14.5px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px; font-weight: 600;
   text-decoration: none;
   transition: background 0.15s;
 }
 .ma-board-cta:hover { background: var(--orange-dark); color: #fff; }
 
 .ma-disclaimer {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 16px 24px 96px;
-  font-size: 13px;
+  margin: 32px 0 56px;
+  font-size: 12.5px;
   color: var(--ink-2);
   line-height: 1.6;
-  text-align: center;
+  font-style: italic;
 }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/research">
@@ -142,71 +191,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </nav>
 
-<main>
+<main class="ma-page">
 
-<section class="ma-hero container">
-  <p class="ma-eyebrow">Scientific approach</p>
-  <h1>The research behind AfterSlim</h1>
-  <p>AfterSlim is a dietary supplement, not a prescription drug. That doesn't mean the standards are lower. Here's the research and methodology that informed every choice in the formula.</p>
+<h1>How AfterSlim is formulated.</h1>
+<p class="lede">AfterSlim is a dietary supplement, not a prescription drug. The standards we hold the formula to are not lower because of that. This page documents the methodology, the references behind each ingredient choice, and the testing every batch goes through. The mechanism story lives on <a href="/science">The Science</a>.</p>
+
+<section class="ma-section">
+  <h2>How we choose strains</h2>
+  <p>Each probiotic strain in AfterSlim has to clear three criteria before going into the capsule.</p>
+  <ul class="ma-criteria">
+    <li>
+      <strong>Mechanism clarity</strong>
+      Published research must explain <em>how</em> the strain interacts with the gut barrier, the mucus layer, or short-chain fatty acid production. We don't include strains based on marketing claims.
+    </li>
+    <li>
+      <strong>Dose-response evidence</strong>
+      Human trials must establish a working dose. We formulate at or above that dose, not below it.
+    </li>
+    <li>
+      <strong>Survivability</strong>
+      The strain has to survive room-temperature shipping and stomach acid. We use enteric-coated, moisture-locked capsules to keep CFU counts intact at the point of absorption.
+    </li>
+  </ul>
 </section>
 
-<section class="ma-section container">
-
-  <h2>How we choose strains</h2>
-  <p>Each probiotic strain in AfterSlim had to clear three criteria before going into the capsule:</p>
-  <ul>
-    <li><strong>Mechanism clarity.</strong> Published research must explain <em>how</em> the strain interacts with the gut barrier, the mucus layer, or short-chain fatty acid production. We don't include strains based on marketing claims.</li>
-    <li><strong>Dose-response evidence.</strong> Human trials must establish a working dose. We then formulate at or above that dose, not below it.</li>
-    <li><strong>Survivability.</strong> The strain has to survive room-temperature shipping and stomach acid. We use enteric-coated, moisture-locked capsules to keep CFU counts intact at the point of absorption.</li>
-  </ul>
-
+<section class="ma-section">
   <h2>How we choose prebiotics</h2>
-  <p>A probiotic without its fuel is a seed without soil. We pair every strain in AfterSlim with a prebiotic fiber that human studies show feeds it:</p>
-  <ul>
-    <li><strong>Chicory root inulin</strong> for <em>Akkermansia muciniphila</em> support. Cani et al. (2017) showed inulin can roughly triple Akkermansia abundance over 8 weeks.</li>
-    <li><strong>Resistant starch</strong> as colonic fermentation fuel that converts to butyrate, supporting the gut barrier and helping with satiety between GLP-1 doses.</li>
+  <p>A probiotic without its fuel is a seed without soil. Every strain is paired with a prebiotic fiber that human studies show feeds it.</p>
+  <ul class="ma-criteria">
+    <li>
+      <strong>Chicory root inulin</strong>
+      Pairs with <em>Akkermansia muciniphila</em>. Cani et al. (2017) reported inulin can roughly triple <em>Akkermansia</em> abundance over 8 weeks.
+    </li>
+    <li>
+      <strong>Resistant starch</strong>
+      Colonic fermentation fuel that converts to butyrate, supporting the gut barrier and satiety between GLP-1 doses.
+    </li>
   </ul>
+</section>
 
-  <h2>The GLP-1 context</h2>
-  <p>GLP-1 medications (semaglutide, tirzepatide, liraglutide) work primarily by slowing gastric emptying and influencing appetite signaling. A side effect of slowed emptying is that food sits longer, and the microbiome shifts accordingly. Specifically, <em>Akkermansia muciniphila</em>, a keystone gut strain, tends to decline.</p>
-  <p>AfterSlim is formulated to compensate for that shift: replenishing the strains that decline, feeding them with the right prebiotics, and supporting the mucus layer that GLP-1-induced slowdown can thin.</p>
-  <p>AfterSlim is not a GLP-1 agonist, does not affect blood sugar through the GLP-1 pathway, and is not a substitute for prescribed medication. It is a companion protocol for the gut.</p>
-
-  <div class="ma-references">
-    <h3>Key references</h3>
-    <ol>
-      <li>Cani PD, de Vos WM. <em>Next-generation beneficial microbes: the case of</em> Akkermansia muciniphila. Frontiers in Microbiology, 2017.</li>
-      <li>Depommier C, et al. <em>Supplementation with</em> Akkermansia muciniphila <em>in overweight and obese human volunteers: a proof-of-concept exploratory study.</em> Nature Medicine, 2019.</li>
-      <li>Plovier H, et al. <em>A purified membrane protein from</em> Akkermansia muciniphila <em>or the pasteurized bacterium improves metabolism in obese and diabetic mice.</em> Nature Medicine, 2017.</li>
-      <li>Hagi T, Belzer C. <em>The interaction of Akkermansia muciniphila with host-derived substances.</em> Applied Microbiology and Biotechnology, 2021.</li>
-      <li>Cani PD, et al. <em>Akkermansia muciniphila: paradigm for next-generation beneficial microorganisms.</em> Nature Reviews Gastroenterology &amp; Hepatology, 2022.</li>
-    </ol>
-  </div>
-
+<section class="ma-section">
   <h2>Third-party testing</h2>
   <p>Every batch of AfterSlim is tested by an independent ISO 17025-accredited laboratory for:</p>
   <ul>
     <li>Strain identity and CFU potency at time of release and at end-of-shelf-life</li>
     <li>Heavy metals (lead, arsenic, cadmium, mercury) below USP limits</li>
-    <li>Microbial safety (no detectable pathogens)</li>
+    <li>Microbial safety, with no detectable pathogens</li>
     <li>Pesticide and gluten contamination</li>
   </ul>
-  <p>Test reports ship with every order. They are also available on request at <a href="mailto:support@afterslim.com">support@afterslim.com</a>.</p>
+  <p>Test reports ship with every order, and on request at <a href="mailto:support@afterslim.com">support@afterslim.com</a>.</p>
+</section>
 
+<section class="ma-section">
+  <h2>Regulatory boundaries</h2>
+  <p>AfterSlim is not a GLP-1 agonist, does not affect blood sugar through the GLP-1 pathway, and is not a substitute for prescribed medication. It is a companion protocol for the gut while a GLP-1 medication does its work.</p>
+</section>
+
+<section class="ma-references">
+  <h2>Key references</h2>
+  <ol>
+    <li>Cani PD, de Vos WM. <em>Next-generation beneficial microbes: the case of</em> Akkermansia muciniphila. Frontiers in Microbiology, 2017.</li>
+    <li>Depommier C, et al. <em>Supplementation with</em> Akkermansia muciniphila <em>in overweight and obese human volunteers: a proof-of-concept exploratory study.</em> Nature Medicine, 2019.</li>
+    <li>Plovier H, et al. <em>A purified membrane protein from</em> Akkermansia muciniphila <em>or the pasteurized bacterium improves metabolism in obese and diabetic mice.</em> Nature Medicine, 2017.</li>
+    <li>Hagi T, Belzer C. <em>The interaction of Akkermansia muciniphila with host-derived substances.</em> Applied Microbiology and Biotechnology, 2021.</li>
+    <li>Cani PD, et al. <em>Akkermansia muciniphila: paradigm for next-generation beneficial microorganisms.</em> Nature Reviews Gastroenterology &amp; Hepatology, 2022.</li>
+  </ol>
 </section>
 
 <section class="ma-board">
-  <div class="inner">
-    <h2>Building our science advisors</h2>
-    <p>We are recruiting clinicians who work directly with GLP-1 patients (endocrinologists, gastroenterologists, obesity medicine specialists, registered dietitians) to advise on product development and patient education. If that's you, we'd like to talk.</p>
-    <a class="ma-board-cta" href="mailto:support@afterslim.com?subject=Science%20advisors%20interest">Get in touch
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-    </a>
-  </div>
+  <h2>Building our science advisors</h2>
+  <p>We are recruiting clinicians who work directly with GLP-1 patients (endocrinologists, gastroenterologists, obesity medicine specialists, registered dietitians) to advise on product development and patient education. If that's you, we'd like to talk.</p>
+  <a class="ma-board-cta" href="mailto:support@afterslim.com?subject=Science%20advisors%20interest">Get in touch</a>
 </section>
 
 <p class="ma-disclaimer">
-  Information on this page is provided for educational purposes and is not a substitute for medical advice. Always consult your healthcare provider before starting any supplement, especially if you are on prescription medication, pregnant, or nursing.
+  Information on this page is for educational purposes and not a substitute for medical advice. Always consult your healthcare provider before starting any supplement, especially if you are on prescription medication, pregnant, or nursing.
 </p>
 
 </main>
