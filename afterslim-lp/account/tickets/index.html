@@ -48,47 +48,101 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 8px;
 }
 .tickets-head .new-ticket-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 22px; background: var(--orange); color: #fff;
-  border-radius: 999px; font-weight: 700; font-size: 14px;
-  letter-spacing: 0.4px; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 16px;
+  background: var(--orange); color: #fff;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13.5px; font-weight: 600;
   text-decoration: none;
+  transition: background 0.15s;
 }
 .tickets-head .new-ticket-btn:hover { background: var(--orange-dark); color: #fff; }
+.tickets-head .new-ticket-btn svg { stroke-width: 2.2; }
 
+.tickets-list {
+  margin-top: 26px;
+  border-top: 1px solid var(--line);
+}
 .ticket-row {
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin-bottom: 10px;
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 18px;
+  grid-template-columns: 14px 1fr auto auto;
   align-items: center;
+  gap: 14px;
+  padding: 16px 6px;
+  border-bottom: 1px solid var(--line);
   text-decoration: none;
   color: var(--ink);
-  transition: border-color 0.15s;
+  transition: background 0.12s;
 }
-.ticket-row:hover { border-color: var(--orange); color: var(--ink); }
-.ticket-subject { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
-.ticket-meta { font-size: 12.5px; color: var(--ink-2); margin: 0; }
+.ticket-row:hover { background: rgba(31,20,16,0.025); color: var(--ink); }
+.ticket-dot {
+  width: 8px; height: 8px; border-radius: 999px;
+  display: inline-block; justify-self: center;
+}
+.ticket-dot[data-s="open"], .ticket-dot[data-s="pending"] { background: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.15); }
+.ticket-dot[data-s="resolved"] { background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,0.15); }
+.ticket-dot[data-s="closed"] { background: #9ca3af; }
+.ticket-main { min-width: 0; }
+.ticket-subject {
+  font-size: 15px; font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ticket-meta {
+  font-size: 12.5px; color: var(--ink-2);
+  margin: 3px 0 0;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.ticket-meta .sep { opacity: 0.4; }
+.ticket-number {
+  font-size: 12.5px; color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
 .ticket-status {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 10px; border-radius: 999px;
-  font-size: 11.5px; font-weight: 700; text-transform: capitalize;
+  font-size: 12.5px;
+  text-transform: capitalize;
+  color: var(--ink-2);
+  min-width: 70px; text-align: right;
 }
-.ticket-status[data-s="open"], .ticket-status[data-s="pending"] { background: rgba(234,88,12,0.1); color: var(--orange-dark); }
-.ticket-status[data-s="resolved"] { background: rgba(22,163,74,0.1); color: #15803d; }
-.ticket-status[data-s="closed"] { background: rgba(31,20,16,0.08); color: var(--ink-2); }
+.ticket-status[data-s="open"], .ticket-status[data-s="pending"] { color: var(--orange-dark); font-weight: 600; }
+.ticket-status[data-s="resolved"] { color: #15803d; font-weight: 600; }
 
-.ticket-number { font-size: 12.5px; color: var(--ink-2); font-weight: 600; }
+.tickets-empty {
+  margin-top: 56px;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+}
+.tickets-empty-icon {
+  width: 56px; height: 56px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-2);
+}
+.tickets-empty p {
+  font-size: 14.5px; color: var(--ink-2);
+  margin: 0; max-width: 360px; line-height: 1.55;
+}
+.tickets-empty-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 18px;
+  background: var(--orange); color: #fff;
+  border-radius: 999px;
+  font-size: 14px; font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.tickets-empty-cta:hover { background: var(--orange-dark); color: #fff; }
 
 @media (max-width: 600px) {
-  .ticket-row { grid-template-columns: 1fr; gap: 8px; }
+  .ticket-row { grid-template-columns: 12px 1fr auto; gap: 10px; padding: 14px 4px; }
+  .ticket-number { display: none; }              /* mobile: keep dot, subject, status — drop the ID */
 }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/tickets">
@@ -131,18 +185,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="account-page-lede" style="margin: 6px 0 0;">Open tickets get a first reply within one business day.</p>
     </div>
     <a class="new-ticket-btn" href="/account/tickets/new">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       New ticket
     </a>
   </div>
 
-  <div id="ticketsList"></div>
+  <div id="ticketsList" class="tickets-list" style="display: none;"></div>
 
-  <div id="emptyState" class="account-empty" style="display: none;">
-    <p>You haven't opened any tickets yet. We're here when you need us.</p>
-    <a class="account-empty-cta" href="/account/tickets/new">Open a ticket
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-    </a>
+  <div id="emptyState" class="tickets-empty" style="display: none;">
+    <div class="tickets-empty-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </div>
+    <p>No tickets yet. Open one whenever you have a question about an order, a charge, or how AfterSlim is going for you.</p>
+    <a class="tickets-empty-cta" href="/account/tickets/new">Open a ticket</a>
   </div>
 </main>
 
@@ -160,18 +215,55 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     .order('updated_at', { ascending: false });
 
   if (!tickets || tickets.length === 0) {
-    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('emptyState').style.display = 'flex';
     return;
   }
 
-  document.getElementById('ticketsList').innerHTML = tickets.map(function(t) {
-    var date = new Date(t.updated_at || t.created_at).toLocaleDateString('en-US', {
-      year: 'numeric', month: 'short', day: 'numeric'
-    });
+  // Customer-facing labels for the raw category enum stored in the DB.
+  var CATEGORY_LABEL = {
+    order_issue: 'Order issue',
+    shipping: 'Shipping',
+    billing: 'Billing',
+    product_question: 'Product question',
+    side_effects: 'Side effects',
+    account: 'Account',
+    other: 'Other',
+  };
+  function categoryLabel(raw) {
+    if (!raw) return '';
+    return CATEGORY_LABEL[raw] || raw.replace(/_/g, ' ').replace(/^./, function(c) { return c.toUpperCase(); });
+  }
+
+  function activityLabel(iso) {
+    var d = new Date(iso);
+    var now = new Date();
+    var diffMs = now - d;
+    var diffMin = Math.floor(diffMs / 60000);
+    var diffHr = Math.floor(diffMin / 60);
+    var diffDay = Math.floor(diffHr / 24);
+    if (diffMin < 1) return 'just now';
+    if (diffMin < 60) return diffMin + ' min ago';
+    if (diffHr < 24) return diffHr + 'h ago';
+    if (diffDay < 7) return diffDay + 'd ago';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  var list = document.getElementById('ticketsList');
+  list.style.display = '';
+  list.innerHTML = tickets.map(function(t) {
+    var when = activityLabel(t.updated_at || t.created_at);
+    var cat = categoryLabel(t.category);
+    var metaParts = [when];
+    if (cat) metaParts.push(cat);
+    var metaHtml = metaParts.map(function(p, i) {
+      var sep = i > 0 ? '<span class="sep" aria-hidden="true">·</span>' : '';
+      return sep + '<span>' + escapeHtml(p) + '</span>';
+    }).join('');
     return '<a class="ticket-row" href="/account/tickets/view?id=' + t.id + '">'
-      + '<div>'
+      + '<span class="ticket-dot" data-s="' + t.status + '" aria-hidden="true"></span>'
+      + '<div class="ticket-main">'
         + '<p class="ticket-subject">' + escapeHtml(t.subject) + '</p>'
-        + '<p class="ticket-meta">Last activity ' + date + (t.category ? ' Â· ' + escapeHtml(t.category) : '') + '</p>'
+        + '<p class="ticket-meta">' + metaHtml + '</p>'
       + '</div>'
       + '<span class="ticket-number">' + escapeHtml(t.ticket_number || '') + '</span>'
       + '<span class="ticket-status" data-s="' + t.status + '">' + t.status + '</span>'
