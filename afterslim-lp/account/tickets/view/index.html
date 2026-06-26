@@ -228,13 +228,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .tv-msg.staff .tv-att-meta { color: var(--ink-2); }
 
 /* Bubble with media: kill padding so the image bleeds to the edges
-   and gets clipped by the bubble's border-radius. */
+   and gets clipped by the bubble's border-radius. Cap absolute width
+   so a large viewport doesn't render the image full-row-wide (WhatsApp
+   and iMessage cap media bubbles around 360-380px regardless of
+   viewport — the row stays narrow even when the bubble has space). */
 .tv-bubble.with-media {
   padding: 3px 3px 0;
   overflow: hidden;
+  max-width: 360px;
 }
 .tv-bubble.with-media .tv-att img,
 .tv-bubble.with-media .tv-att video {
+  max-height: 260px;
   border-radius: 14px;
 }
 .tv-bubble-text {
