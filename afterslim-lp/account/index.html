@@ -391,7 +391,6 @@ async function mountReferPanel(supabase) {
   try {
     var res = await fetch('https://admin.afterslim.com/api/referrals/me', {
       method: 'GET',
-      credentials: 'include',
       headers: { Authorization: 'Bearer ' + token }
     });
     if (!res.ok) {
