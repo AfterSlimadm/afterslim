@@ -198,32 +198,56 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    composer when scrollIntoView fires. */
 #messages-bottom { scroll-margin-bottom: 100px; height: 1px; }
 
-/* Attachments — inline na bubble + composer */
-.tv-attachments { display: grid; gap: 6px; margin-top: 8px; }
-.tv-bubble:has(.tv-attachments) > .tv-attachments:first-child { margin-top: 0; }
-.tv-att {
-  border-radius: 12px; overflow: hidden;
-  background: rgba(255,255,255,0.7);
-}
+/* Attachments — WhatsApp/iMessage style: media fills bubble width,
+   no internal white card, caption sits below with light padding. */
+.tv-attachments { display: grid; gap: 2px; }
+.tv-att { background: transparent; overflow: hidden; }
 .tv-att img, .tv-att video {
-  max-width: 100%; max-height: 240px; display: block;
-  margin: 0 auto; background: rgba(31,20,16,0.04);
+  display: block;
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  background: rgba(31,20,16,0.06);
 }
 .tv-att-pdf {
   display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px; text-decoration: none; color: var(--ink);
+  padding: 10px 14px; text-decoration: none;
+  color: inherit;
 }
-.tv-att-pdf:hover { background: var(--bg-2); }
+.tv-msg.staff .tv-att-pdf:hover { background: rgba(31,20,16,0.03); }
 .tv-att-meta {
   display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px; border-top: 1px solid var(--line);
-  font-size: 11.5px; color: var(--ink-2); background: var(--bg-2);
+  padding: 6px 12px 4px;
+  font-size: 11.5px;
+  border: 0; background: transparent;
 }
 .tv-att-meta .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tv-att-meta a {
-  color: var(--ink-2); text-decoration: none; padding: 2px 4px;
+.tv-att-meta a { text-decoration: none; padding: 2px 4px; color: inherit; opacity: 0.85; }
+.tv-att-meta a:hover { opacity: 1; }
+.tv-msg.customer .tv-att-meta { color: rgba(255,255,255,0.88); }
+.tv-msg.staff .tv-att-meta { color: var(--ink-2); }
+
+/* Bubble with media: kill padding so the image bleeds to the edges
+   and gets clipped by the bubble's border-radius. */
+.tv-bubble.with-media {
+  padding: 3px 3px 0;
+  overflow: hidden;
 }
-.tv-att-meta a:hover { color: var(--ink); }
+.tv-bubble.with-media .tv-att img,
+.tv-bubble.with-media .tv-att video {
+  border-radius: 14px;
+}
+.tv-bubble-text {
+  padding: 6px 11px 4px;
+  white-space: pre-wrap; word-wrap: break-word; overflow-wrap: anywhere;
+}
+.tv-bubble.with-media.body-on-top .tv-bubble-text { padding: 4px 11px 6px; }
+.tv-bubble.with-media .tv-att-meta { padding: 4px 11px 6px; }
+/* Hide filename/size/download row for images and videos (WhatsApp does
+   not show it on inline media — long-press is the recall affordance).
+   PDFs keep their meta row since the filename IS the affordance. */
+.tv-att--image .tv-att-meta,
+.tv-att--video .tv-att-meta { display: none; }
 
 /* Composer */
 .tv-reply .composer-actions {
@@ -388,9 +412,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var size = bytesLabel(a.size_bytes);
     var url = escapeHtml(signedUrl || '#');
     var media = '';
+    var typeClass = 'tv-att--file';
     if (a.mime_type.indexOf('image/') === 0) {
+      typeClass = 'tv-att--image';
       media = '<a href="' + url + '" target="_blank" rel="noopener"><img src="' + url + '" alt="' + name + '"></a>';
     } else if (a.mime_type.indexOf('video/') === 0) {
+      typeClass = 'tv-att--video';
       media = '<video src="' + url + '" controls preload="metadata"></video>';
     } else {
       media = '<a class="tv-att-pdf" href="' + url + '" target="_blank" rel="noopener">'
@@ -402,7 +429,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2z"/></svg>'
         + 'Saved</span>'
       : '';
-    return '<div class="tv-att">'
+    return '<div class="tv-att ' + typeClass + '">'
       + media
       + '<div class="tv-att-meta">'
         + '<span class="name">' + name + '</span>'
@@ -492,15 +519,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (lastInGroup) classes.push('last-in-group');
     article.className = classes.join(' ');
 
-    var bubbleInner = m.body ? escapeHtml(m.body) : '';
+    var atts = m.attachments || [];
+    var hasMedia = atts.length > 0;
+
     article.innerHTML =
       '<div class="tv-row">'
         + avatarHtml(m.author_type)
-        + '<div class="tv-bubble">' + bubbleInner + '</div>'
+        + '<div class="tv-bubble' + (hasMedia ? ' with-media' : '') + '"></div>'
       + '</div>';
 
     var bubble = article.querySelector('.tv-bubble');
-    renderAttachments(bubble, m.attachments || []);
+
+    // Media goes first (WhatsApp-style), caption below.
+    if (hasMedia) {
+      renderAttachments(bubble, atts);
+    }
+    if (m.body) {
+      if (hasMedia) {
+        // Wrap so the caption can get its own padding inside a media bubble
+        // whose outer padding was zeroed to let the image bleed to the edges.
+        var text = document.createElement('div');
+        text.className = 'tv-bubble-text';
+        text.textContent = m.body;
+        bubble.appendChild(text);
+      } else {
+        bubble.appendChild(document.createTextNode(m.body));      // text-only bubble keeps its native padding
+      }
+    }
 
     if (lastInGroup) {
       var meta = document.createElement('div');
