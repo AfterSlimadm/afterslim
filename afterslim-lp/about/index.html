@@ -40,39 +40,92 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],u.toString=function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e},u.people.toString=function(){return u.toString(1)+'.people (stub)'},o='init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_M05Y8p9sTGkPpIEjIqsczpA0dVMW4cvYtkMX7BVgLfS',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',session_recording:{maskAllInputs:true,maskTextSelector:'[data-private], .ph-no-capture'},loaded:function(p){try{if(localStorage.getItem('posthog_internal_user')==='true')p.opt_out_capturing();if(/^\/checkout(\/|$)/.test(location.pathname))p.stopSessionRecording();}catch(e){}}});</script>
 <link rel="stylesheet" href="/styles/policy.css">
 <style>
-.about-hero { padding: 56px 24px 24px; max-width: 760px; margin: 0 auto; text-align: center; }
-.about-eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--orange-dark); margin: 0 0 14px; }
-.about-hero h1 { font-size: clamp(40px, 5.2vw, 60px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.02; margin: 0 0 16px; }
-.about-hero h1 em { color: var(--orange); font-style: italic; font-family: Georgia, serif; font-weight: 700; }
-.about-hero p { font-size: 18px; color: var(--ink-2); margin: 0 auto; max-width: 580px; line-height: 1.55; }
+/* Letter-from-founder editorial layout. About is the page where you
+   say what you believe in words, not in grid cards with trust icons.
+   Hers, Lemme, Cha­rdash, Curology — they all stripped their About
+   page back to a narrative. Match that register. */
+.about-page { max-width: 680px; margin: 0 auto; padding: 56px 24px 0; }
+.about-page h1 {
+  font-size: 34px; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.15;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+.about-page > .lede {
+  font-size: 17.5px; line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 40px;
+  max-width: 580px;
+}
+.about-section { margin: 0 0 40px; }
+.about-section h2 {
+  font-size: 19px; font-weight: 600;
+  letter-spacing: -0.005em;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+.about-section p {
+  font-size: 16px; line-height: 1.7;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.about-section em { font-style: italic; }
+.about-section strong { font-weight: 600; color: var(--ink); }
 
-.about-section { max-width: 720px; margin: 0 auto; padding: 32px 24px; }
-.about-section h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; margin: 32px 0 14px; }
-.about-section p { font-size: 16.5px; line-height: 1.7; color: var(--ink); margin: 0 0 16px; }
-.about-section strong { font-weight: 700; }
+/* Beliefs: 4 stacked statements, not a card grid. Each is a small
+   inline heading + a paragraph, separated by hairline rhythm. */
+.beliefs { margin: 0 0 48px; }
+.belief {
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+.belief:last-of-type { border-bottom: 1px solid var(--line); }
+.belief h3 {
+  font-size: 15.5px; font-weight: 600;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.belief p {
+  font-size: 15px; line-height: 1.6;
+  color: var(--ink-2);
+  margin: 0;
+}
 
-.values-grid { max-width: 920px; margin: 0 auto; padding: 24px 0 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-@media (max-width: 720px) { .values-grid { grid-template-columns: 1fr; } }
-.value-card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
-.value-card h3 { font-size: 17px; font-weight: 800; margin: 0 0 8px; }
-.value-card p { font-size: 14.5px; color: var(--ink-2); margin: 0; line-height: 1.6; }
+/* Quality bar: plain prose list, no green-check icons, no panel. */
+.quality { margin: 0 0 48px; }
+.quality h2 {
+  font-size: 19px; font-weight: 600;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+.quality ul {
+  list-style: none; padding: 0; margin: 0;
+}
+.quality li {
+  position: relative;
+  padding: 12px 0 12px 22px;
+  border-top: 1px solid var(--line);
+  font-size: 15px; line-height: 1.55;
+  color: var(--ink);
+}
+.quality li:last-child { border-bottom: 1px solid var(--line); }
+.quality li::before {
+  content: ''; position: absolute; left: 0; top: 22px;
+  width: 8px; height: 8px; border-radius: 999px;
+  background: var(--orange);
+}
+.quality li strong { font-weight: 600; }
 
-.commits { background: var(--orange-tint); padding: 56px 0; margin: 32px 0; }
-.commits .inner { max-width: 760px; margin: 0 auto; padding: 0 24px; }
-.commits h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 24px; text-align: center; }
-.commits ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
-.commits li { display: flex; gap: 12px; align-items: flex-start; font-size: 15.5px; line-height: 1.55; }
-.commits li svg { flex-shrink: 0; color: var(--orange); margin-top: 3px; }
-
-.about-cta { text-align: center; padding: 16px 24px 80px; max-width: 720px; margin: 0 auto; }
-.about-cta h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 12px; }
-.about-cta p { font-size: 16px; color: var(--ink-2); margin: 0 0 22px; }
+/* CTA at the end. Calm pill, not a marketing scream. */
+.about-cta { margin: 8px 0 80px; }
+.about-cta p { font-size: 16px; color: var(--ink-2); margin: 0 0 18px; line-height: 1.6; }
 .about-cta-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 16px 28px;
+  padding: 11px 22px;
   background: var(--orange); color: #fff;
-  border-radius: 999px; font-weight: 700; font-size: 15.5px;
-  letter-spacing: 0.4px; text-transform: uppercase;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px; font-weight: 600;
   text-decoration: none;
   transition: background 0.15s;
 }
@@ -128,77 +181,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </nav>
 
-<main>
+<main class="about-page">
 
-<section class="about-hero container">
-  <p class="about-eyebrow">About AfterSlim</p>
-  <h1>Built for the <em>GLP-1 generation</em></h1>
-  <p>GLP-1 medications work. They also wreck the gut. We built AfterSlim so the people taking them don't have to choose between losing weight and feeling like themselves.</p>
-</section>
+<h1>Built for people on GLP-1s.</h1>
+<p class="lede">GLP-1 medications work. They also wreck the gut. We built AfterSlim so the people taking them don't have to choose between losing weight and feeling like themselves.</p>
 
-<section class="about-section container">
+<section class="about-section">
   <h2>Why we exist</h2>
   <p>Tens of millions of people are now on GLP-1 medications like Ozempic, Mounjaro, Wegovy, and Zepbound. They are seeing real results. They are also dealing with side effects almost nobody talks about: nausea that lasts for weeks, constipation that turns dinner out into a panic, bloating that makes the weight loss invisible in the mirror.</p>
   <p>Most of that comes down to the gut. GLP-1s slow digestion, shift the microbiome, and deplete one specific strain (<em>Akkermansia muciniphila</em>) that the gut depends on. Existing probiotics weren't built for that. They were built for general digestive health, with strains chosen because they're cheap to manufacture.</p>
   <p>AfterSlim is one capsule a day, formulated end-to-end for one situation: keeping your gut working while a GLP-1 medication does its job.</p>
 </section>
 
-<section class="about-section container">
-  <h2>What we believe</h2>
-</section>
-
-<section class="values-grid container">
-  <div class="value-card">
+<section class="beliefs">
+  <h2 style="font-size: 19px; font-weight: 600; margin: 0 0 16px;">What we believe</h2>
+  <div class="belief">
     <h3>Formulation over marketing</h3>
     <p>We picked strains and prebiotics based on what published research actually shows, not what's cheapest or trendiest. The full label is on the bottle.</p>
   </div>
-  <div class="value-card">
+  <div class="belief">
     <h3>One capsule, not nine</h3>
     <p>The standard post-GLP-1 supplement stack is nine pills, $190 a month, and four different times of day. We compressed it to one capsule, one moment, less than a quarter of the cost.</p>
   </div>
-  <div class="value-card">
+  <div class="belief">
     <h3>Transparency by default</h3>
     <p>Third-party test results ship with every order. If we change a strain dose or a sourcing relationship, we publish it. No hidden proprietary blends.</p>
   </div>
-  <div class="value-card">
+  <div class="belief">
     <h3>Side with the customer</h3>
     <p>90-day money-back guarantee. No restocking fees, no return shipping, no questions. If AfterSlim doesn't work for you, you get your money back.</p>
   </div>
 </section>
 
-<section class="commits">
-  <div class="inner">
-    <h2>The quality bar</h2>
-    <ul>
-      <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Made in the USA</strong> in an FDA-registered, GMP-certified facility.</span>
-      </li>
-      <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Third-party tested</strong> every batch for potency, purity, and microbial safety. Reports ship with each order.</span>
-      </li>
-      <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Clinically-studied strains</strong> at dosages backed by published research, not the bare minimum to put a name on the bottle.</span>
-      </li>
-      <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>No fillers, no synthetic sweeteners, no stimulants.</strong> Vegan, gluten-free, soy-free, non-GMO.</span>
-      </li>
-      <li>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-        <span><strong>Refrigerate for optimal quality.</strong> The capsules survive room-temperature shipping and stomach acid. After opening, refrigeration preserves potency longer.</span>
-      </li>
-    </ul>
-  </div>
+<section class="quality">
+  <h2>The quality bar</h2>
+  <ul>
+    <li><strong>Made in the USA</strong> in an FDA-registered, GMP-certified facility.</li>
+    <li><strong>Third-party tested</strong> every batch for potency, purity, and microbial safety. Reports ship with each order.</li>
+    <li><strong>Clinically-studied strains</strong> at dosages backed by published research, not the bare minimum to put a name on the bottle.</li>
+    <li><strong>No fillers, no synthetic sweeteners, no stimulants.</strong> Vegan, gluten-free, soy-free, non-GMO.</li>
+  </ul>
 </section>
 
-<section class="about-cta container">
-  <h2>The fastest way to know if it works</h2>
+<section class="about-cta">
   <p>One capsule, 90 days, full refund if it doesn't work for you. That's the deal.</p>
-  <a class="about-cta-btn" href="/#bundles">Start AfterSlim today
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+  <a class="about-cta-btn" href="/#bundles">
+    Start AfterSlim
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
   </a>
 </section>
 
