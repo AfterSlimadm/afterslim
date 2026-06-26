@@ -167,6 +167,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 @media (max-width: 980px) { .flow-row { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 580px) { .flow-row { grid-template-columns: 1fr; } }
 .flow-step {
+  position: relative;                          /* anchor for the .flow-num badge so each badge sits on its own step */
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -255,6 +256,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   background: transparent;
   border: 1.5px dashed rgba(31,20,16,0.2);
 }
+.state-vis-caption {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: -10px 0 18px;
+}
+.state-card--depleted .state-vis-caption { color: rgba(31,20,16,0.45); }
 .state-card ul { list-style: none; padding: 0; margin: 0; }
 .state-card li {
   font-size: 14.5px; line-height: 1.6; color: var(--ink);
@@ -761,11 +771,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <article class="state-card">
         <p class="state-card-eyebrow">With AfterSlim</p>
         <p class="state-card-title">Restored microbiome</p>
-        <div class="state-vis">
+        <div class="state-vis" aria-hidden="true">
           <span class="bact-dot"></span><span class="bact-dot bact-dot--alt"></span><span class="bact-dot bact-dot--alt2"></span><span class="bact-dot"></span>
           <span class="bact-dot bact-dot--alt"></span><span class="bact-dot"></span><span class="bact-dot bact-dot--alt3"></span><span class="bact-dot bact-dot--alt"></span>
           <span class="bact-dot bact-dot--alt2"></span><span class="bact-dot"></span><span class="bact-dot"></span><span class="bact-dot bact-dot--alt"></span>
         </div>
+        <p class="state-vis-caption">12 keystone strains · diverse ecosystem</p>
         <ul>
           <li><em>Akkermansia muciniphila</em> replenished daily</li>
           <li>Butyrate production from <em>Clostridium butyricum</em> supports the gut barrier</li>
@@ -776,11 +787,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <article class="state-card state-card--depleted">
         <p class="state-card-eyebrow">On GLP-1, untreated</p>
         <p class="state-card-title">Depleted microbiome</p>
-        <div class="state-vis">
+        <div class="state-vis" aria-hidden="true">
           <span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot--alt2 bact-dot"></span><span class="bact-dot bact-dot--empty"></span>
           <span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--alt3"></span>
           <span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span><span class="bact-dot bact-dot--empty"></span>
         </div>
+        <p class="state-vis-caption">Only 2 strains surviving · ecosystem collapse</p>
         <ul>
           <li><em>Akkermansia</em> population drops with slowed transit</li>
           <li>Mucus layer thins; gut barrier becomes more permeable</li>
