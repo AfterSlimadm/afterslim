@@ -731,6 +731,11 @@ async function ckPay(){
   procEl.classList.add('active');
   try{
     var payBody={price_id:CK_priceId,customer_email:CK_cust.email,customer_name:CK_cust.name,shipping:CK_ship,...(window.asTikTokAttr?window.asTikTokAttr():{})};
+    // BUG #2 fix (2026-06-26): forward selected shipping method to the
+    // backend. Without this the PaymentIntent never included the $4.99
+    // express fee even though the UI showed it.
+    var __ckShipMethod=document.querySelector('input[name="shipping-method"]:checked');
+    payBody.shipping_method=(__ckShipMethod&&__ckShipMethod.value==='express')?'express':'standard';
     if(CK_payMethod==='afterpay') payBody.payment_method_type='afterpay_clearpay';
     if(CK_discount.code) payBody.promotion_code=CK_discount.code;
     var __refCode=window.afterslimReferral&&window.afterslimReferral.code();
