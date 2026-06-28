@@ -714,7 +714,17 @@ function ckInitStripe(){
   cvcEl.mount('#card-cvc');
 }
 
+var CK_paying=false;
 async function ckPay(){
+  // Guard against double-invocation. The Pay Now button is wired both via
+  // onclick="ckPay()" AND via a delegated capture-phase click listener
+  // (see document.addEventListener below) — both fire on a single click,
+  // which used to create TWO PaymentIntents per checkout (one succeeded,
+  // the other became orphan with status=requires_payment_method) and also
+  // briefly surfaced a "card incomplete" flash error from the second
+  // call hitting confirmCardPayment while the first was still resolving.
+  if(CK_paying) return;
+  CK_paying=true;
   var errEl=document.getElementById('checkout-error');
   var procEl=document.getElementById('processing');
   errEl.style.display='none';
@@ -759,6 +769,7 @@ async function ckPay(){
       window.location.href='/checkout/success?payment_id='+(result.paymentIntent?result.paymentIntent.id:'');
     }
   }catch(err){procEl.classList.remove('active');errEl.textContent=err.message||'Something went wrong.';errEl.style.display='block';}
+  finally{CK_paying=false;}
 }
 
 document.addEventListener('click',function(e){
