@@ -8,135 +8,284 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-WVF2ZGCL');</script>
 <!-- End Google Tag Manager -->
-<!-- TikTok Pixel Code -->
-<script>
-!function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
-  ttq.load('D8CTDJ3C77UBL2TTU6E0');
-  ttq.page();
-}(window, document, 'ttq');
-</script>
-<!-- End TikTok Pixel Code -->
-<!-- TikTok attribution capture: persist ttclid, expose asTikTokAttr() for checkout -->
-<script>
-(function(){
-  try{var c=new URLSearchParams(location.search).get('ttclid');if(c)localStorage.setItem('as_ttclid',c);}catch(e){}
-  window.asTikTokAttr=function(){
-    var ttclid='';try{ttclid=localStorage.getItem('as_ttclid')||'';}catch(e){}
-    var ttp='';try{var m=document.cookie.match(/(?:^|; )_ttp=([^;]+)/);if(m)ttp=decodeURIComponent(m[1]);}catch(e){}
-    return {ttclid:ttclid,ttp:ttp};
-  };
-})();
-</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no, address=no, email=no, date=no">
 <title>Order Details — AfterSlim</title>
 <link rel="icon" type="image/png" href="/favicon.png">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LCTNMWWXWB"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-LCTNMWWXWB');</script>
-<script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],u.toString=function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e},u.people.toString=function(){return u.toString(1)+'.people (stub)'},o='init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init('phc_M05Y8p9sTGkPpIEjIqsczpA0dVMW4cvYtkMX7BVgLfS',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',session_recording:{maskAllInputs:true,maskTextSelector:'[data-private], .ph-no-capture'},loaded:function(p){try{if(localStorage.getItem('posthog_internal_user')==='true')p.opt_out_capturing();if(/^\/checkout(\/|$)/.test(location.pathname))p.stopSessionRecording();}catch(e){}}});</script>
 <link rel="stylesheet" href="/styles/policy.css">
 <link rel="stylesheet" href="/styles/account.css">
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
-.od-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; }
-@media (max-width: 760px) { .od-grid { grid-template-columns: 1fr; } }
-.od-block {
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 22px;
+body { background: #ffffff; }
+
+.od-hero {
+  background: linear-gradient(to right, #ea580c 0%, #ea580c 55%, #c2410c 100%);
+  border: 1px solid #c2410c;
+  border-radius: 12px 12px 0 0;
+  padding: 22px 26px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: center;
+  color: #fff;
 }
-.od-block h2 {
-  font-size: 15px;
+.od-hero-eyebrow {
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin: 0 0 14px;
-  color: var(--ink-2);
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 4px;
 }
-.od-status-row {
-  display: flex; align-items: center; gap: 12px;
-  flex-wrap: wrap;
-  margin: 0 0 18px;
+.od-hero h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+  color: #fff;
 }
-.od-status {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 12px; border-radius: 999px;
-  font-size: 12.5px; font-weight: 700; text-transform: capitalize;
-}
-.od-status[data-s="pending"], .od-status[data-s="paid"] { background: rgba(234,88,12,0.1); color: var(--orange-dark); }
-.od-status[data-s="processing"] { background: rgba(59,130,246,0.1); color: #1e40af; }
-.od-status[data-s="shipped"] { background: rgba(168,85,247,0.12); color: #6b21a8; }
-.od-status[data-s="delivered"] { background: rgba(22,163,74,0.1); color: #15803d; }
-.od-status[data-s="cancelled"], .od-status[data-s="refunded"] { background: rgba(31,20,16,0.08); color: var(--ink-2); }
-
-.od-items { display: flex; flex-direction: column; gap: 12px; }
-.od-item { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.od-item:last-child { border-bottom: 0; }
-.od-item-img {
-  width: 64px; height: 64px;
-  background: var(--orange-tint);
-  border-radius: 10px;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-}
-.od-item-img img { max-width: 100%; max-height: 100%; }
-.od-item-info { flex: 1; min-width: 0; }
-.od-item-name { font-size: 14.5px; font-weight: 600; margin: 0 0 2px; }
-.od-item-meta { font-size: 13px; color: var(--ink-2); margin: 0; }
-.od-item-price { font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; }
-
-.od-summary-row {
-  display: flex; justify-content: space-between;
-  padding: 6px 0;
+.od-hero-sub {
   font-size: 14px;
+  color: rgba(255,255,255,0.92);
+  margin: 0;
 }
+.od-hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.32);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.od-hero-status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.od-card {
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 0 0 12px 12px;
+  border-top: 0;
+  padding: 26px;
+  margin-bottom: 24px;
+}
+
+.od-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 28px;
+}
+@media (max-width: 760px) { .od-grid { grid-template-columns: 1fr; } }
+
+.od-section { margin-bottom: 28px; }
+.od-section:last-child { margin-bottom: 0; }
+.od-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #565959;
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+/* Items */
+.od-items { list-style: none; padding: 0; margin: 0; }
+.od-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+.od-item:last-child { border-bottom: 0; }
+.od-item-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  background: #fafafa;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.od-item-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 4px; }
+.od-item-name { font-size: 14px; font-weight: 600; color: #0f1111; margin: 0 0 4px; line-height: 1.35; }
+.od-item-meta { font-size: 13px; color: #565959; margin: 0; }
+.od-item-meta a { color: inherit !important; text-decoration: none !important; }
+.od-item-total {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f1111;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Summary */
+.od-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #0f1111;
+}
+.od-summary-row span:first-child { color: #565959; }
+.od-summary-row span:last-child { font-variant-numeric: tabular-nums; }
+.od-summary-row.od-discount span:last-child { color: #c2410c; font-weight: 600; }
 .od-summary-row.od-total {
-  border-top: 1px solid var(--line);
-  margin-top: 10px;
+  border-top: 1px solid #e7e7e7;
+  margin-top: 8px;
   padding-top: 14px;
   font-size: 16px;
   font-weight: 700;
 }
-.od-address-card { font-size: 14px; line-height: 1.55; color: var(--ink); }
-.od-action-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
-.od-action {
-  font-size: 13.5px; font-weight: 600;
+.od-summary-row.od-total span:first-child { color: #0f1111; }
+
+/* Address + shipping method */
+.od-address {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #0f1111;
+  margin: 0 0 10px;
+}
+.od-address strong { display: block; margin-bottom: 4px; }
+.od-meta-line {
+  font-size: 13px;
+  color: #565959;
+  margin: 8px 0 0;
+}
+
+/* Action buttons */
+.od-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.od-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
   padding: 10px 18px;
   border-radius: 999px;
-  background: var(--orange); color: #fff;
   text-decoration: none;
-  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
 }
-.od-action:hover { background: var(--orange-dark); color: #fff; }
-.od-action--ghost {
-  background: transparent; color: var(--ink); border: 1px solid var(--line);
+.od-btn svg { width: 14px; height: 14px; }
+.od-btn--primary {
+  background: linear-gradient(to right, #ea580c 0%, #ea580c 55%, #c2410c 100%);
+  border: 1px solid transparent;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(194,65,12,0.2);
 }
-.od-action--ghost:hover { border-color: var(--orange); color: var(--orange); }
+.od-btn--primary:hover {
+  background: linear-gradient(to right, #c2410c 0%, #c2410c 55%, #8a2f0d 100%);
+  box-shadow: 0 4px 14px rgba(194,65,12,0.32);
+}
+.od-btn--secondary {
+  background: #fff;
+  border: 1.5px solid #ea580c;
+  color: #c2410c;
+}
+.od-btn--secondary:hover {
+  background: #fff3e6;
+  color: #8a2f0d;
+}
 
-.od-loading { padding: 56px 0; text-align: center; color: var(--ink-2); }
+/* Invoice block */
+.od-invoice {
+  background: #fafafa;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  padding: 22px 24px;
+}
+.od-invoice-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e7e7e7;
+  flex-wrap: wrap;
+}
+.od-invoice-head h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: #0f1111;
+  letter-spacing: -0.01em;
+}
+.od-invoice-meta-line {
+  font-size: 13px;
+  color: #565959;
+  margin: 4px 0 0;
+}
+.od-invoice-foot {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #e7e7e7;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #565959;
+}
+.od-invoice-foot strong { color: #0f1111; }
+
+.od-loading { padding: 56px 0; text-align: center; color: #565959; font-size: 14px; }
+
+/* PRINT */
+@media print {
+  body { background: #fff; }
+  nav.nav, .account-page-back, .od-actions, .od-print-hide { display: none !important; }
+  .od-hero {
+    background: #fff !important;
+    color: #0f1111 !important;
+    border: 0 !important;
+    border-bottom: 2px solid #ea580c !important;
+    border-radius: 0 !important;
+    padding: 0 0 20px !important;
+  }
+  .od-hero h1, .od-hero-eyebrow, .od-hero-sub { color: #0f1111 !important; }
+  .od-hero-eyebrow { color: #ea580c !important; }
+  .od-hero-status {
+    background: transparent !important;
+    color: #ea580c !important;
+    border-color: #ea580c !important;
+  }
+  .od-hero-status::before { background: #ea580c !important; }
+  .od-card { border: 0 !important; padding: 20px 0 !important; }
+  .account-page { padding: 20px !important; max-width: none !important; }
+  a { color: #0f1111 !important; text-decoration: none !important; }
+}
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/orders/detail">
 <meta name="robots" content="noindex, nofollow">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.afterslim.com/account/orders/detail">
-<meta property="og:title" content="Order Details — AfterSlim">
-<meta property="og:description" content="Order Details — AfterSlim">
-<meta property="og:site_name" content="AfterSlim">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Order Details — AfterSlim">
-<meta name="twitter:description" content="Order Details — AfterSlim">
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVF2ZGCL"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 
 <nav class="nav">
   <div class="nav-inner">
@@ -150,14 +299,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </nav>
 
 <main class="account-page">
-  <a href="/account/orders" class="account-page-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    Back to orders
-  </a>
-  <h1 id="orderTitle">Order details</h1>
-  <p class="account-page-lede" id="orderSub">Loading order...</p>
-
-  <div id="orderBody" class="od-loading">Loading...</div>
+  <div id="orderBody" class="od-loading">Loading order...</div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -171,86 +313,163 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   if (!orderId) {
     document.getElementById('orderBody').innerHTML =
-      '<div class="account-empty"><p>No order specified. <a href="/account/orders" style="color: var(--orange-dark);">Back to orders</a></p></div>';
+      '<div class="account-empty"><p>No order specified. <a href="/account/orders" style="color: #c2410c; font-weight: 600;">Back to orders</a></p></div>';
     return;
   }
 
   var { data: order, error } = await supabase
     .from('orders')
-    .select('id, order_number, status, subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, shipping_address, shipping_method, tracking_number, tracking_url, coupon_code, created_at, shipped_at, delivered_at, order_items(product_name, product_image, quantity, unit_price_cents)')
+    .select('id, order_number, email, status, subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, shipping_address, shipping_method, tracking_number, tracking_url, coupon_code, stripe_payment_intent_id, metadata, created_at, shipped_at, delivered_at, order_items(product_name, product_image, quantity, unit_price_cents)')
     .eq('profile_id', user.id)
     .eq('id', orderId)
     .maybeSingle();
 
   if (error || !order) {
     document.getElementById('orderBody').innerHTML =
-      '<div class="account-empty"><p>Order not found or you don\'t have access.</p></div>';
+      '<div class="account-empty"><p>Order not found or you don\'t have access. <a href="/account/orders" style="color: #c2410c; font-weight: 600;">Back to orders</a></p></div>';
     return;
   }
 
-  document.getElementById('orderTitle').textContent = 'Order ' + (order.order_number || '');
-  var date = new Date(order.created_at).toLocaleDateString('en-US', {
+  var placedAt = new Date(order.created_at);
+  var datePretty = placedAt.toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric'
   });
-  document.getElementById('orderSub').textContent = 'Placed on ' + date;
+  var dateShort = placedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
+  // Address — campos do shipping_address vem como { name, line1, line2, city, state, postal_code, country }
   var addr = order.shipping_address || {};
-  var addressHtml = (addr.address_line1)
-    ? escapeHtml((addr.first_name || '') + ' ' + (addr.last_name || '')).trim() + '<br>'
-      + escapeHtml(addr.address_line1) + '<br>'
-      + (addr.address_line2 ? escapeHtml(addr.address_line2) + '<br>' : '')
-      + escapeHtml(addr.city || '') + ', ' + escapeHtml(addr.state || '') + ' ' + escapeHtml(addr.zip_code || '')
-    : 'No address on file';
+  var addrName = addr.name || '';
+  var addressHtml = (addr.line1)
+    ? '<strong>' + escapeHtml(addrName) + '</strong>'
+      + escapeHtml(addr.line1)
+      + (addr.line2 ? '<br>' + escapeHtml(addr.line2) : '')
+      + '<br>' + escapeHtml(addr.city || '') + ', ' + escapeHtml(addr.state || '') + ' ' + escapeHtml(addr.postal_code || '')
+      + '<br>' + escapeHtml(addr.country || 'US')
+    : '<em style="color: #8a7a6e;">No address on file</em>';
 
+  // Shipping method label friendly
+  var shipMethodLabel = order.shipping_method === 'express'
+    ? 'DHL Expedited (2-3 days)'
+    : (order.shipping_method === 'standard' ? 'Standard Shipping (5-7 days)' : (order.shipping_method || 'Standard'));
+
+  // Items
   var itemsHtml = (order.order_items || []).map(function(it) {
-    return '<div class="od-item">'
-      + '<div class="od-item-img">'
-        + (it.product_image
-            ? '<img src="' + it.product_image + '" alt="">'
-            : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--orange);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>')
+    var qty = it.quantity || 1;
+    var lineTotal = (it.unit_price_cents || 0) * qty;
+    // Bundle image fallback by qty
+    var fallback = '/images/bundle-' + Math.max(1, Math.min(3, qty)) + '.webp';
+    var img = it.product_image || fallback;
+    return '<li class="od-item">'
+      + '<div class="od-item-thumb"><img src="' + img + '" alt="' + escapeHtml(it.product_name || 'AfterSlim') + '" loading="lazy"></div>'
+      + '<div>'
+        + '<p class="od-item-name">' + escapeHtml(it.product_name || 'AfterSlim') + '</p>'
+        + '<p class="od-item-meta">Qty ' + qty + ' . ' + window.formatMoney(it.unit_price_cents || 0) + ' each</p>'
       + '</div>'
-      + '<div class="od-item-info">'
-        + '<p class="od-item-name">' + escapeHtml(it.product_name) + '</p>'
-        + '<p class="od-item-meta">Qty ' + it.quantity + '</p>'
-      + '</div>'
-      + '<div class="od-item-price">' + window.formatMoney((it.unit_price_cents || 0) * (it.quantity || 1)) + '</div>'
-    + '</div>';
+      + '<div class="od-item-total">' + window.formatMoney(lineTotal) + '</div>'
+    + '</li>';
   }).join('');
 
+  // Payment method label: stripe_payment_intent_id eh pi_..., descricao curta
+  var paymentLine = order.stripe_payment_intent_id
+    ? 'Visa / Mastercard via Stripe . ref ' + escapeHtml(order.stripe_payment_intent_id.slice(0, 22)) + '...'
+    : 'Stripe';
+
+  // Return window
+  var returnEnd = new Date(placedAt);
+  returnEnd.setDate(returnEnd.getDate() + 90);
+  var returnPretty = returnEnd.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  // Status pretty
+  var statusCap = (order.status || '').charAt(0).toUpperCase() + (order.status || '').slice(1);
+
+  var trackingBtn = (order.tracking_url || order.tracking_number)
+    ? '<a class="od-btn od-btn--secondary" href="' + (order.tracking_url || '#') + '" target="_blank" rel="noopener">'
+        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/></svg>'
+        + 'Track package</a>'
+    : '';
+
   document.getElementById('orderBody').innerHTML =
-    '<div class="od-status-row">'
-      + '<span class="od-status" data-s="' + order.status + '">' + order.status + '</span>'
-      + (order.tracking_number ? '<span style="font-size: 13.5px; color: var(--ink-2);">Tracking: <strong>' + escapeHtml(order.tracking_number) + '</strong></span>' : '')
-    + '</div>'
-    + '<div class="od-grid">'
+    '<a href="/account/orders" class="account-page-back" style="margin-bottom:18px;">'
+      + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>'
+      + 'Back to orders</a>'
+
+    + '<div class="od-hero">'
       + '<div>'
-        + '<div class="od-block">'
-          + '<h2>Items</h2>'
-          + '<div class="od-items">' + itemsHtml + '</div>'
-        + '</div>'
-        + '<div class="od-action-row">'
-          + (order.tracking_url
-              ? '<a class="od-action" href="' + order.tracking_url + '" target="_blank" rel="noopener">Track package</a>'
-              : '')
-          + '<a class="od-action od-action--ghost" href="/account/tickets/new?order=' + order.id + '">Need help with this order?</a>'
-        + '</div>'
+        + '<p class="od-hero-eyebrow">Order ' + escapeHtml(order.order_number || '') + '</p>'
+        + '<h1>AfterSlim GLP-1 Companion</h1>'
+        + '<p class="od-hero-sub">Placed on ' + datePretty + ' . ' + (order.order_items?.length || 0) + ' item' + ((order.order_items?.length || 0) !== 1 ? 's' : '') + ' . ' + window.formatMoney(order.total_cents) + ' total</p>'
       + '</div>'
-      + '<div>'
-        + '<div class="od-block">'
-          + '<h2>Summary</h2>'
-          + '<div class="od-summary-row"><span>Subtotal</span><span>' + window.formatMoney(order.subtotal_cents) + '</span></div>'
-          + (order.discount_cents > 0 ? '<div class="od-summary-row"><span>Discount' + (order.coupon_code ? ' (' + escapeHtml(order.coupon_code) + ')' : '') + '</span><span>-' + window.formatMoney(order.discount_cents) + '</span></div>' : '')
-          + '<div class="od-summary-row"><span>Shipping</span><span>' + window.formatMoney(order.shipping_cents) + '</span></div>'
-          + '<div class="od-summary-row"><span>Tax</span><span>' + window.formatMoney(order.tax_cents) + '</span></div>'
-          + '<div class="od-summary-row od-total"><span>Total</span><span>' + window.formatMoney(order.total_cents) + '</span></div>'
+      + '<span class="od-hero-status">' + statusCap + '</span>'
+    + '</div>'
+
+    + '<div class="od-card">'
+      + '<div class="od-grid">'
+
+        // LEFT: items + ship-to + return window
+        + '<div>'
+          + '<div class="od-section">'
+            + '<h2 class="od-section-title">Items in this order</h2>'
+            + '<ul class="od-items">' + itemsHtml + '</ul>'
+          + '</div>'
+          + '<div class="od-section">'
+            + '<h2 class="od-section-title">Shipping address</h2>'
+            + '<p class="od-address">' + addressHtml + '</p>'
+            + '<p class="od-meta-line"><strong>Method:</strong> ' + shipMethodLabel + '</p>'
+            + (order.tracking_number ? '<p class="od-meta-line"><strong>Tracking:</strong> ' + escapeHtml(order.tracking_number) + '</p>' : '')
+          + '</div>'
+          + '<div class="od-section">'
+            + '<h2 class="od-section-title">Return policy</h2>'
+            + '<p class="od-meta-line">90-day money-back guarantee. <strong>Return window closes ' + returnPretty + '.</strong></p>'
+          + '</div>'
         + '</div>'
-        + '<div class="od-block" style="margin-top: 14px;">'
-          + '<h2>Ship to</h2>'
-          + '<p class="od-address-card">' + addressHtml + '</p>'
-          + (order.shipping_method ? '<p style="font-size: 13px; color: var(--ink-2); margin: 12px 0 0;">Method: ' + escapeHtml(order.shipping_method) + '</p>' : '')
+
+        // RIGHT: invoice + actions
+        + '<div>'
+          + '<div class="od-invoice">'
+            + '<div class="od-invoice-head">'
+              + '<div>'
+                + '<h2>Invoice</h2>'
+                + '<p class="od-invoice-meta-line">' + escapeHtml(order.order_number || '') + ' . ' + dateShort + '</p>'
+              + '</div>'
+              + '<button type="button" class="od-btn od-btn--primary od-print-hide" onclick="window.print()">'
+                + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+                + 'Download</button>'
+            + '</div>'
+            + '<div class="od-summary-row"><span>Subtotal</span><span>' + window.formatMoney(order.subtotal_cents || 0) + '</span></div>'
+            + (order.discount_cents > 0
+                ? '<div class="od-summary-row od-discount"><span>Discount' + (order.coupon_code ? ' (' + escapeHtml(order.coupon_code) + ')' : '') + '</span><span>-' + window.formatMoney(order.discount_cents) + '</span></div>'
+                : '')
+            + '<div class="od-summary-row"><span>Shipping</span><span>' + (order.shipping_cents > 0 ? window.formatMoney(order.shipping_cents) : 'Free') + '</span></div>'
+            + (order.tax_cents > 0
+                ? '<div class="od-summary-row"><span>Sales tax</span><span>' + window.formatMoney(order.tax_cents) + '</span></div>'
+                : '')
+            + '<div class="od-summary-row od-total"><span>Total paid</span><span>' + window.formatMoney(order.total_cents) + '</span></div>'
+            + '<p class="od-meta-line" style="margin-top:14px"><strong>Payment:</strong> ' + paymentLine + '</p>'
+            + '<p class="od-meta-line"><strong>Billed to:</strong> ' + escapeHtml(order.email || '') + '</p>'
+            + '<div class="od-invoice-foot">'
+              + '<strong>VQ Group LLC</strong><br>'
+              + 'Florida, United States<br>'
+              + 'support@afterslim.com<br>'
+              + 'Made in the USA . FDA-registered facility<br>'
+              + 'This invoice serves as proof of purchase for tax and return purposes.'
+            + '</div>'
+          + '</div>'
+          + '<div class="od-actions od-print-hide">'
+            + trackingBtn
+            + '<a class="od-btn od-btn--secondary" href="/account/tickets/new?order=' + order.id + '">'
+              + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
+              + 'Need help with this order</a>'
+          + '</div>'
         + '</div>'
+
       + '</div>'
     + '</div>';
+
+  // Auto-foca a seção #invoice se vier do link "Invoice" da listagem
+  if (window.location.hash === '#invoice') {
+    var inv = document.querySelector('.od-invoice');
+    if (inv) inv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 })();
 
 function escapeHtml(s) {
