@@ -54,23 +54,24 @@ body { background: #ffffff; }
   overflow: hidden;
 }
 
-/* Header strip estilo Amazon: tira de fundo cinza-claro com 4 colunas */
+/* Header strip estilo Amazon: tira compacta de fundo cinza-claro */
 .order-header {
   background: #f0f2f2;
   border-bottom: 1px solid #d5d9d9;
-  padding: 14px 22px;
+  padding: 10px 20px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
-  gap: 28px;
+  gap: 24px;
   align-items: center;
 }
 .order-col-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #565959;
-  margin: 0 0 2px;
+  margin: 0;
+  line-height: 1.4;
 }
 .order-col-value {
   font-size: 13px;
@@ -81,31 +82,18 @@ body { background: #ffffff; }
 }
 .order-col-value strong { font-weight: 600; }
 .order-col-right { text-align: right; min-width: 200px; }
-.order-col-right .order-col-label { margin-bottom: 4px; }
-.order-detail-links {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: flex-end;
-}
-.order-detail-links a {
-  font-size: 13px;
-  color: var(--orange-dark);
-  text-decoration: none;
-}
-.order-detail-links a:hover { color: var(--orange); text-decoration: underline; }
-.order-detail-links .sep {
-  display: inline-block;
-  width: 1px;
-  background: #d5d9d9;
-  margin: 0 8px;
-  height: 12px;
-}
 .order-detail-links-inline {
   font-size: 13px;
+  margin: 0;
+  line-height: 1.4;
 }
-.order-detail-links-inline a { color: var(--orange-dark); text-decoration: none; }
-.order-detail-links-inline a:hover { color: var(--orange); text-decoration: underline; }
+.order-detail-links-inline a { color: var(--orange); text-decoration: none; }
+.order-detail-links-inline a:hover { color: var(--orange-dark); text-decoration: underline; }
+.order-detail-links-inline .sep {
+  display: inline-block;
+  color: #d5d9d9;
+  margin: 0 6px;
+}
 
 /* Body: imagem do produto + nome + actions */
 .order-body {
@@ -452,6 +440,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var statusCap = (o.status || '').charAt(0).toUpperCase() + (o.status || '').slice(1);
     var shipName = (o.shipping_address && o.shipping_address.name) || '';
 
+    // 90-day money-back guarantee: mostra a data limite (Amazon-style).
+    var placedAt = new Date(o.created_at);
+    var returnWindowEnd = new Date(placedAt);
+    returnWindowEnd.setDate(returnWindowEnd.getDate() + 90);
+    var now = new Date();
+    var returnText;
+    if (returnWindowEnd > now) {
+      returnText = 'Return window closes ' + returnWindowEnd.toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      }) + '.';
+    } else {
+      returnText = 'Return window closed on ' + returnWindowEnd.toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      }) + '.';
+    }
+
     var trackingBtn = (o.tracking_url || o.tracking_number)
       ? '<a class="order-btn" href="' + (o.tracking_url || '#') + '" target="_blank" rel="noopener">'
           + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/></svg>'
@@ -478,7 +482,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '<p class="order-col-label">Order # ' + escapeHtml(o.order_number || '') + '</p>'
           + '<p class="order-detail-links-inline">'
             + '<a href="/account/orders/detail?id=' + o.id + '">View order details</a>'
-            + '<span class="sep"></span>'
+            + '<span class="sep">|</span>'
             + '<a href="/account/orders/detail?id=' + o.id + '#invoice">Invoice</a>'
           + '</p>'
         + '</div>'
@@ -489,6 +493,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '<h3 class="order-title">' + escapeHtml(first.product_name) + '</h3>'
           + '<p class="order-status-line"><strong>' + statusCap + '</strong></p>'
           + '<p class="order-meta-line">' + qtyText + ' . ' + window.formatMoney(first.unit_price_cents) + ' each</p>'
+          + '<p class="order-meta-line" style="margin-top:8px">' + returnText + '</p>'
         + '</div>'
         + '<div class="order-actions">'
           + trackingBtn
