@@ -59,11 +59,11 @@ body { background: #ffffff; }
   overflow: hidden;
 }
 
-/* Header strip pintada na cor de marca (mesmo laranja do botao SHOP NOW
-   na home: #ea580c). Texto branco pra ler em cima. */
+/* Header strip pintada no mesmo gradient do botao SHOP NOW na home
+   (claro -> queimado da esquerda pra direita). Texto branco. */
 .order-header {
-  background: #ea580c;
-  border-bottom: 1px solid #c2410c;
+  background: linear-gradient(to right, #ea580c 0%, #ea580c 55%, #c2410c 100%);
+  border-bottom: 1px solid #a8390b;
   padding: 10px 18px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
