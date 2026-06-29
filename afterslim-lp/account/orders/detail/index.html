@@ -81,10 +81,52 @@ html, body { background: #ffffff !important; }
 
 .od-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: 28px;
+  align-items: start;
 }
 @media (max-width: 760px) { .od-grid { grid-template-columns: 1fr; } }
+
+/* Bloco summary do lado direito do grid top. Compacto, so com totais. */
+.od-summary-block {
+  background: #fafafa;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+/* Invoice em largura total ABAIXO do grid. Tem sub-grid interno
+   (Billed to | Sold by) pra nao virar coluna unica esticada. */
+.od-invoice {
+  background: #fafafa;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-top: 24px;
+}
+.od-invoice-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e7e7e7;
+  flex-wrap: wrap;
+}
+.od-invoice-head h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #0f1111;
+  letter-spacing: -0.01em;
+}
+.od-invoice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+@media (max-width: 600px) { .od-invoice-grid { grid-template-columns: 1fr; } }
 
 .od-section { margin-bottom: 28px; }
 .od-section:last-child { margin-bottom: 0; }
@@ -245,38 +287,14 @@ html, body { background: #ffffff !important; }
   color: #8a2f0d;
 }
 
-/* Invoice block */
-.od-invoice {
-  background: #fafafa;
-  border: 1px solid #e7e7e7;
-  border-radius: 10px;
-  padding: 22px 24px;
-}
-.od-invoice-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #e7e7e7;
-  flex-wrap: wrap;
-}
-.od-invoice-head h2 {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
-  color: #0f1111;
-  letter-spacing: -0.01em;
-}
 .od-invoice-meta-line {
   font-size: 13px;
   color: #565959;
   margin: 4px 0 0;
 }
 .od-invoice-foot {
-  margin-top: 14px;
-  padding-top: 14px;
+  margin-top: 18px;
+  padding-top: 16px;
   border-top: 1px solid #e7e7e7;
 }
 .od-invoice-foot p { word-break: break-word; }
@@ -465,20 +483,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '</div>'
         + '</div>'
 
-        // RIGHT: invoice + actions
+        // RIGHT: summary compacto + actions
         + '<div>'
-          + '<div class="od-invoice">'
-            + '<div class="od-invoice-head">'
-              + '<div>'
-                + '<h2>Invoice</h2>'
-                + '<p class="od-invoice-meta-line"><strong>Invoice #:</strong> ' + escapeHtml(order.order_number || '') + '</p>'
-                + '<p class="od-invoice-meta-line"><strong>Date issued:</strong> ' + dateShort + '</p>'
-                + '<p class="od-invoice-meta-line"><strong>Date paid:</strong> ' + dateShort + '</p>'
-              + '</div>'
-              + '<button type="button" class="od-btn od-btn--primary od-print-hide" onclick="window.print()">'
-                + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
-                + 'Download</button>'
-            + '</div>'
+          + '<div class="od-summary-block">'
+            + '<h2 class="od-section-title" style="border:0;padding:0;margin:0 0 12px">Order summary</h2>'
             + '<div class="od-summary-row"><span>Subtotal</span><span>' + window.formatMoney(order.subtotal_cents || 0) + '</span></div>'
             + (order.discount_cents > 0
                 ? '<div class="od-summary-row od-discount"><span>Discount' + (order.coupon_code ? ' (' + escapeHtml(order.coupon_code) + ')' : '') + '</span><span>-' + window.formatMoney(order.discount_cents) + '</span></div>'
@@ -486,34 +494,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + '<div class="od-summary-row"><span>Shipping</span><span>' + (order.shipping_cents > 0 ? window.formatMoney(order.shipping_cents) : 'Free') + '</span></div>'
             + '<div class="od-summary-row"><span>Sales tax</span><span>' + window.formatMoney(order.tax_cents || 0) + '</span></div>'
             + '<div class="od-summary-row od-total"><span>Total paid</span><span>' + window.formatMoney(order.total_cents) + '</span></div>'
-            + '<div class="od-info-block" style="margin-top:16px">'
+            + '<div class="od-info-block" style="margin-top:14px">'
               + '<p class="od-info-label">Payment method</p>'
               + '<p class="od-info-text">' + paymentLine + '</p>'
             + '</div>'
-            + (billingName || billedAddressLines || order.email
-                ? '<div class="od-info-block">'
-                    + '<p class="od-info-label">Billed to</p>'
-                    + (billingName ? '<p class="od-info-name">' + escapeHtml(billingName) + '</p>' : '')
-                    + (billedAddressLines ? '<p class="od-info-text">' + billedAddressLines + '</p>' : '')
-                    + (order.email ? '<p class="od-info-text" style="margin-top:6px">' + escapeHtml(order.email) + '</p>' : '')
-                  + '</div>'
-                : '')
-            + '<div class="od-invoice-foot">'
-              + '<p class="od-info-label" style="color:#565959;margin-bottom:6px">Sold by</p>'
-              + '<p class="od-info-name">VQ Group LLC</p>'
-              + '<p class="od-info-text">'
-                + '16362 Hamlin Hills Road<br>'
-                + 'Winter Garden, FL 34787-8027<br>'
-                + 'United States'
-              + '</p>'
-              + '<p class="od-info-text" style="margin-top:6px">support@afterslim.com</p>'
-              + '<p style="font-size:11px;line-height:1.6;color:#8a7a6e;margin:14px 0 0">'
-                + 'Made in the USA . FDA-registered facility.<br>'
-                + 'This document serves as proof of purchase for tax, insurance reimbursement (HSA/FSA), and return purposes.'
-              + '</p>'
-            + '</div>'
           + '</div>'
-          + '<div class="od-actions od-print-hide">'
+          + '<div class="od-actions od-print-hide" style="margin-top:14px">'
             + trackingBtn
             + '<a class="od-btn od-btn--secondary" href="/account/tickets/new?order=' + order.id + '">'
               + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
@@ -522,6 +508,50 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '</div>'
 
       + '</div>'
+
+      // INVOICE em largura total ABAIXO
+      + '<div class="od-invoice">'
+        + '<div class="od-invoice-head">'
+          + '<div>'
+            + '<h2>Invoice</h2>'
+            + '<p class="od-invoice-meta-line"><strong>Invoice #:</strong> ' + escapeHtml(order.order_number || '') + '</p>'
+            + '<p class="od-invoice-meta-line"><strong>Date issued:</strong> ' + dateShort + '</p>'
+            + '<p class="od-invoice-meta-line"><strong>Date paid:</strong> ' + dateShort + '</p>'
+          + '</div>'
+          + '<button type="button" class="od-btn od-btn--primary od-print-hide" onclick="window.print()">'
+            + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+            + 'Download invoice</button>'
+        + '</div>'
+
+        + '<div class="od-invoice-grid">'
+          // BILLED TO
+          + '<div>'
+            + '<p class="od-info-label">Billed to</p>'
+            + (billingName ? '<p class="od-info-name">' + escapeHtml(billingName) + '</p>' : '')
+            + (billedAddressLines ? '<p class="od-info-text">' + billedAddressLines + '</p>' : '')
+            + (order.email ? '<p class="od-info-text" style="margin-top:6px">' + escapeHtml(order.email) + '</p>' : '')
+          + '</div>'
+          // SOLD BY
+          + '<div>'
+            + '<p class="od-info-label">Sold by</p>'
+            + '<p class="od-info-name">VQ Group LLC</p>'
+            + '<p class="od-info-text">'
+              + '16362 Hamlin Hills Road<br>'
+              + 'Winter Garden, FL 34787-8027<br>'
+              + 'United States'
+            + '</p>'
+            + '<p class="od-info-text" style="margin-top:6px">support@afterslim.com</p>'
+          + '</div>'
+        + '</div>'
+
+        + '<div class="od-invoice-foot">'
+          + '<p style="font-size:11px;line-height:1.6;color:#8a7a6e;margin:0">'
+            + 'Made in the USA . FDA-registered facility. '
+            + 'This document serves as proof of purchase for tax, insurance reimbursement (HSA/FSA), and return purposes.'
+          + '</p>'
+        + '</div>'
+      + '</div>'
+
     + '</div>';
 
   // Auto-foca a seção #invoice se vier do link "Invoice" da listagem
