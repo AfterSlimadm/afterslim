@@ -554,16 +554,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       + '</div>'
 
-      // Return policy centralizada, full-width entre o grid e a invoice
-      + '<div class="od-return-policy">'
-        + '<p class="od-section-title" style="border:0;padding:0;margin:0 0 8px;text-align:center">Return policy</p>'
-        + '<p style="font-size:14px;line-height:1.6;color:#0f1111;margin:0;text-align:center">'
-          + '90-day money-back guarantee. <strong>Return window closes ' + returnPretty + '.</strong>'
-        + '</p>'
-      + '</div>'
+    + '</div>'
 
-      // INVOICE em largura total ABAIXO
-      + '<div class="od-invoice">'
+    // Return policy centralizada, full-width SIBLING do card (nao dentro)
+    + '<div class="od-return-policy">'
+      + '<p class="od-section-title" style="border:0;padding:0;margin:0 0 8px;text-align:center">Return policy</p>'
+      + '<p style="font-size:14px;line-height:1.6;color:#0f1111;margin:0;text-align:center">'
+        + '90-day money-back guarantee. <strong>Return window closes ' + returnPretty + '.</strong>'
+      + '</p>'
+    + '</div>'
+
+    // INVOICE em largura total, SIBLING do card pra alinhar com Items
+    + '<div class="od-invoice">'
         + '<div class="od-invoice-head">'
           + '<div>'
             + '<h2>Invoice</h2>'
@@ -600,9 +602,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + 'This document serves as proof of purchase for tax, insurance reimbursement (HSA/FSA), and return purposes.'
           + '</p>'
         + '</div>'
-      + '</div>'
-
-    + '</div>';
+      + '</div>';
 
   // Auto-foca a seção #invoice se vier do link "Invoice" da listagem
   if (window.location.hash === '#invoice') {
