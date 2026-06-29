@@ -365,6 +365,23 @@ main.account-page .od-invoice * { text-align: left; }
   .od-card { border: 0 !important; padding: 20px 0 !important; }
   .account-page { padding: 20px !important; max-width: none !important; }
   a { color: #0f1111 !important; text-decoration: none !important; }
+
+  /* Page breaks: bloco invoice fica inteiro em uma pagina, items
+     individuais nao quebram, e o head do invoice (Invoice # + Return
+     policy + BILLED TO/SOLD BY) fica colado. */
+  @page { size: A4; margin: 14mm; }
+  .od-invoice,
+  .od-invoice-head,
+  .od-invoice-grid,
+  .od-info-block,
+  .od-items > li,
+  .od-summary-block { break-inside: avoid; page-break-inside: avoid; }
+  .od-invoice { margin-top: 12px !important; padding: 16px 0 0 !important; border-top: 1px solid #e7e7e7 !important; background: #fff !important; }
+  .od-card + .od-invoice { margin-top: 16px !important; }
+  /* Tira o background cinza do summary no print, fica enxuto. */
+  main.account-page .od-card,
+  main.account-page .od-invoice,
+  .od-summary-block { background: #fff !important; }
 }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/orders/detail">
