@@ -133,11 +133,17 @@ main.account-page .od-invoice * { text-align: left; }
 }
 
 /* Return policy mora dentro do header do invoice (lado direito), alinhado
-   com Invoice # / Date issued / Date paid no lado esquerdo. */
+   com Invoice # / Date issued / Date paid no lado esquerdo. Padding-top
+   alinha o topo do label "RETURN POLICY" com o topo do h2 "Invoice"
+   (o h2 tem mais cap-height entao o label fica visualmente mais alto sem
+   esse offset). */
 .od-return-inline,
 .od-return-inline * { text-align: right !important; }
-.od-return-inline { min-width: 220px; }
-.od-return-inline .od-info-label { margin: 0 0 4px; }
+.od-return-inline {
+  min-width: 220px;
+  padding-top: 8px;
+}
+.od-return-inline .od-info-label { margin: 0 0 6px; font-size: 12px; }
 .od-return-inline .od-invoice-meta-line { margin: 2px 0; }
 
 /* Invoice em largura total ABAIXO do grid. Mesmo padding horizontal do
