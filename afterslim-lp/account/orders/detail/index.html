@@ -102,12 +102,20 @@ main.account-page .od-card * { text-align: left; }
 }
 @media (max-width: 760px) { .od-grid { grid-template-columns: 1fr; } }
 
-/* Bloco summary do lado direito do grid top. Compacto, so com totais. */
+/* Bloco summary do lado direito do grid top. Sem padding-top extra pra
+   alinhar o titulo ORDER SUMMARY com o titulo ITEMS IN THIS ORDER do
+   left col, que comeca em y=0. O titulo interno recebe padding/border
+   estilo "header" do card, dando o respiro visual sem desalinhar. */
 .od-summary-block {
   background: #fafafa;
   border: 1px solid #e7e7e7;
   border-radius: 10px;
-  padding: 18px 20px;
+  padding: 0 20px 18px;
+}
+.od-summary-block .od-section-title {
+  margin: 0 -20px 14px !important;
+  padding: 0 20px 8px !important;
+  border-bottom: 1px solid #e7e7e7 !important;
 }
 
 /* Return policy: bloco full-width centralizado entre o grid e a invoice. */
