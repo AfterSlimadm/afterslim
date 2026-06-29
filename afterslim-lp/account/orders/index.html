@@ -31,6 +31,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Edge/Safari auto-detect prices, dates and addresses as tappable links,
+     applying the browser's blue link color. That's where the "blue $37.99"
+     was coming from. Disable across the page. -->
+<meta name="format-detection" content="telephone=no, address=no, email=no, date=no">
+<meta name="x-apple-disable-message-reformatting" content="">
 <title>Your Orders — AfterSlim</title>
 <meta name="description" content="View and manage your AfterSlim orders.">
 <link rel="icon" type="image/png" href="/favicon.png">
@@ -144,6 +149,11 @@ body { background: #ffffff; }
   color: #565959;
   margin: 0;
 }
+/* Edge insiste em autolinkar precos/datas mesmo com format-detection.
+   Forca a heranca de cor pra qualquer <a> implicito dentro das meta lines. */
+.order-meta-line a,
+.order-status-line a,
+.order-title a { color: inherit !important; text-decoration: none !important; }
 
 /* CTAs estilo Amazon: pequenas pill buttons brancas com border */
 .order-actions {
