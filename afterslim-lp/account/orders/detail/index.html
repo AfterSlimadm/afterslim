@@ -19,7 +19,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
-body { background: #ffffff; }
+html, body { background: #ffffff !important; }
 
 .od-hero {
   background: linear-gradient(to right, #ea580c 0%, #ea580c 55%, #c2410c 100%);
@@ -471,7 +471,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + '<div class="od-invoice-head">'
               + '<div>'
                 + '<h2>Invoice</h2>'
-                + '<p class="od-invoice-meta-line">' + escapeHtml(order.order_number || '') + ' . ' + dateShort + '</p>'
+                + '<p class="od-invoice-meta-line"><strong>Invoice #:</strong> ' + escapeHtml(order.order_number || '') + '</p>'
+                + '<p class="od-invoice-meta-line"><strong>Date issued:</strong> ' + dateShort + '</p>'
+                + '<p class="od-invoice-meta-line"><strong>Date paid:</strong> ' + dateShort + '</p>'
               + '</div>'
               + '<button type="button" class="od-btn od-btn--primary od-print-hide" onclick="window.print()">'
                 + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
@@ -482,9 +484,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 ? '<div class="od-summary-row od-discount"><span>Discount' + (order.coupon_code ? ' (' + escapeHtml(order.coupon_code) + ')' : '') + '</span><span>-' + window.formatMoney(order.discount_cents) + '</span></div>'
                 : '')
             + '<div class="od-summary-row"><span>Shipping</span><span>' + (order.shipping_cents > 0 ? window.formatMoney(order.shipping_cents) : 'Free') + '</span></div>'
-            + (order.tax_cents > 0
-                ? '<div class="od-summary-row"><span>Sales tax</span><span>' + window.formatMoney(order.tax_cents) + '</span></div>'
-                : '')
+            + '<div class="od-summary-row"><span>Sales tax</span><span>' + window.formatMoney(order.tax_cents || 0) + '</span></div>'
             + '<div class="od-summary-row od-total"><span>Total paid</span><span>' + window.formatMoney(order.total_cents) + '</span></div>'
             + '<div class="od-info-block" style="margin-top:16px">'
               + '<p class="od-info-label">Payment method</p>'
