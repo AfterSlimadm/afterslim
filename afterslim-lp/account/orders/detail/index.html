@@ -114,8 +114,20 @@ main.account-page .od-card * { text-align: left; }
 }
 .od-summary-block .od-section-title {
   margin: 0 -20px 14px !important;
-  padding: 0 20px 8px !important;
+  padding: 14px 20px !important;
   border-bottom: 1px solid #e7e7e7 !important;
+  text-align: center !important;
+}
+/* Sem linhas separadoras antes de Total e Payment method dentro do bloco
+   summary — Allan removeu pra ficar mais limpo. */
+.od-summary-block .od-summary-row.od-total {
+  border-top: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 6px !important;
+}
+.od-summary-block .od-info-block {
+  border-top: 0 !important;
+  padding-top: 6px !important;
 }
 
 /* Return policy: bloco full-width centralizado entre o grid e a invoice. */
