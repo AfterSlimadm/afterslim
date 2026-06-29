@@ -130,22 +130,24 @@ main.account-page .od-card * { text-align: left; }
   padding-top: 6px !important;
 }
 
-/* Return policy: bloco full-width centralizado entre o grid e a invoice. */
+/* Return policy: bloco full-width centralizado entre o grid e a invoice.
+   Mesmo padding horizontal do .od-card (26px) pra que o conteudo destes
+   blocos comece exatamente na mesma coluna X visualmente. */
 .od-return-policy {
   margin-top: 24px;
-  padding: 18px 24px;
+  padding: 18px 26px;
   background: #fafafa;
   border: 1px solid #e7e7e7;
   border-radius: 10px;
 }
 
-/* Invoice em largura total ABAIXO do grid. Tem sub-grid interno
-   (Billed to | Sold by) pra nao virar coluna unica esticada. */
+/* Invoice em largura total ABAIXO do grid. Mesmo padding horizontal do
+   .od-card (26px) pra alinhar com Items/Shipping acima. */
 .od-invoice {
   background: #fafafa;
   border: 1px solid #e7e7e7;
   border-radius: 10px;
-  padding: 24px 28px;
+  padding: 24px 26px;
   margin-top: 24px;
 }
 .od-invoice-head {
