@@ -313,7 +313,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var { data: order, error } = await supabase
     .from('orders')
-    .select('id, order_number, email, status, subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, shipping_address, shipping_method, tracking_number, tracking_url, coupon_code, stripe_payment_intent_id, metadata, created_at, shipped_at, delivered_at, order_items(product_name, product_image, quantity, unit_price_cents)')
+    .select('id, order_number, email, status, subtotal_cents, discount_cents, shipping_cents, tax_cents, total_cents, shipping_address, shipping_method, tracking_number, tracking_url, coupon_code, stripe_payment_intent_id, payment_brand, payment_last4, billing_name, billing_address, metadata, created_at, shipped_at, delivered_at, order_items(product_name, product_image, quantity, unit_price_cents)')
     .eq('profile_id', user.id)
     .eq('id', orderId)
     .maybeSingle();
@@ -363,10 +363,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     + '</li>';
   }).join('');
 
-  // Payment method label: stripe_payment_intent_id eh pi_..., descricao curta
-  var paymentLine = order.stripe_payment_intent_id
-    ? 'Visa / Mastercard via Stripe . ref ' + escapeHtml(order.stripe_payment_intent_id.slice(0, 22)) + '...'
-    : 'Stripe';
+  // Payment method label (HSA/FSA-friendly): "Visa ending in 4242"
+  var paymentLine;
+  if (order.payment_brand && order.payment_last4) {
+    var brandPretty = (order.payment_brand.charAt(0).toUpperCase() + order.payment_brand.slice(1)).replace(/_/g, ' ');
+    paymentLine = brandPretty + ' ending in ' + escapeHtml(order.payment_last4);
+  } else {
+    paymentLine = 'Card via Stripe';
+  }
+
+  // Billed-to: nome do cartao + endereco de cobranca (separado do shipping)
+  var billingName = order.billing_name || addr.name || '';
+  var billingAddr = order.billing_address;
+  var billedToHtml = billingName ? '<strong>' + escapeHtml(billingName) + '</strong>' : '';
+  if (billingAddr && billingAddr.line1) {
+    billedToHtml += escapeHtml(billingAddr.line1)
+      + (billingAddr.line2 ? '<br>' + escapeHtml(billingAddr.line2) : '')
+      + '<br>' + escapeHtml(billingAddr.city || '') + ', ' + escapeHtml(billingAddr.state || '') + ' ' + escapeHtml(billingAddr.postal_code || '')
+      + '<br>' + escapeHtml(billingAddr.country || 'US');
+  } else if (order.email) {
+    billedToHtml += escapeHtml(order.email);
+  }
 
   // Return window
   var returnEnd = new Date(placedAt);
@@ -441,14 +458,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 ? '<div class="od-summary-row"><span>Sales tax</span><span>' + window.formatMoney(order.tax_cents) + '</span></div>'
                 : '')
             + '<div class="od-summary-row od-total"><span>Total paid</span><span>' + window.formatMoney(order.total_cents) + '</span></div>'
-            + '<p class="od-meta-line" style="margin-top:14px"><strong>Payment:</strong> ' + paymentLine + '</p>'
-            + '<p class="od-meta-line"><strong>Billed to:</strong> ' + escapeHtml(order.email || '') + '</p>'
+            + '<p class="od-meta-line" style="margin-top:14px"><strong>Payment method:</strong> ' + paymentLine + '</p>'
+            + (billedToHtml
+                ? '<p class="od-meta-line"><strong>Billed to:</strong></p>'
+                  + '<p class="od-meta-line" style="margin-top:2px">' + billedToHtml + '</p>'
+                : '')
+            + (order.email
+                ? '<p class="od-meta-line" style="margin-top:6px"><strong>Email:</strong> ' + escapeHtml(order.email) + '</p>'
+                : '')
             + '<div class="od-invoice-foot">'
               + '<strong>VQ Group LLC</strong><br>'
-              + 'Florida, United States<br>'
+              + '16362 Hamlin Hills Road<br>'
+              + 'Winter Garden, FL 34787-8027<br>'
+              + 'United States<br>'
               + 'support@afterslim.com<br>'
-              + 'Made in the USA . FDA-registered facility<br>'
-              + 'This invoice serves as proof of purchase for tax and return purposes.'
+              + '<br>'
+              + 'Made in the USA . FDA-registered facility.<br>'
+              + 'This invoice serves as proof of purchase for tax, insurance reimbursement (HSA/FSA), and return purposes.'
             + '</div>'
           + '</div>'
           + '<div class="od-actions od-print-hide">'
