@@ -644,10 +644,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '</div>'
       + '</div>';
 
-  // Auto-foca a seção #invoice se vier do link "Invoice" da listagem
-  if (window.location.hash === '#invoice') {
-    var inv = document.querySelector('.od-invoice');
-    if (inv) inv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Pagina sempre abre no topo, mesmo vindo de /orders?...#invoice. O hash
+  // fica na URL pra referencia mas nao dispara scroll automatico — cliente
+  // quer ver o pedido completo, nao so o invoice.
+  if (window.location.hash) {
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   // Download invoice: usa window.print() do Chrome (renderiza o @media print
