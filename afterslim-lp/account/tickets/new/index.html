@@ -60,15 +60,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .t-form textarea { min-height: 160px; resize: vertical; }
 .t-form button[type="submit"] {
   margin-top: 6px;
-  background: var(--orange); color: #fff;
-  font-family: inherit; font-size: 14px; font-weight: 700;
+  background: linear-gradient(to right, var(--orange) 0%, var(--orange) 55%, var(--orange-dark) 100%);
+  color: #fff;
+  border: 2px solid var(--orange-dark);
+  font-family: inherit; font-size: 14px; font-weight: 600;
   letter-spacing: 0.4px; text-transform: uppercase;
-  padding: 14px 22px; border: 0; border-radius: 999px; cursor: pointer;
+  padding: 14px 28px; border-radius: 14px; cursor: pointer;
   justify-self: start;
+  transition: background 0.15s ease, border-color 0.15s ease,
+              transform 0.2s cubic-bezier(0.22,1,0.36,1), box-shadow 0.2s ease;
+  box-shadow: 0 6px 16px rgba(194, 65, 12, 0.18);
 }
-.t-form button[type="submit"]:hover { background: var(--orange-dark); }
-.t-form button[type="submit"]:disabled { opacity: 0.55; cursor: not-allowed; }
+.t-form button[type="submit"]:hover {
+  background: linear-gradient(to right, var(--orange-dark) 0%, var(--orange-dark) 55%, #8a2f08 100%);
+  border-color: #8a2f08;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(194, 65, 12, 0.32);
+}
+.t-form button[type="submit"]:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(194, 65, 12, 0.25); }
+.t-form button[type="submit"]:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 .t-error { background: rgba(220,38,38,0.08); color: #b91c1c; font-size: 13.5px; padding: 10px 12px; border-radius: 8px; }
+
+/* Titulo "Open a new ticket" com mesmo gradient da home (problems-title-grad). */
+main.account-page > h1 {
+  background: linear-gradient(135deg, var(--ink) 40%, var(--orange) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/tickets/new">
 <meta name="robots" content="noindex, nofollow">
