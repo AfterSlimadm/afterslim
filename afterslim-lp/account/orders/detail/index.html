@@ -137,13 +137,9 @@ main.account-page .od-invoice * { text-align: left; }
    alinha o topo do label "RETURN POLICY" com o topo do h2 "Invoice"
    (o h2 tem mais cap-height entao o label fica visualmente mais alto sem
    esse offset). */
-.od-return-inline,
-.od-return-inline * { text-align: right !important; }
-.od-return-inline {
-  min-width: 220px;
-  padding-top: 8px;
-}
-.od-return-inline .od-info-label { margin: 0 0 6px; font-size: 12px; }
+/* Return policy mora na coluna direita do header (mesma coluna do SOLD BY abaixo). */
+.od-return-inline { padding-top: 4px; }
+.od-return-inline .od-info-label { margin: 0 0 6px; }
 .od-return-inline .od-invoice-meta-line { margin: 2px 0; }
 
 /* Invoice em largura total ABAIXO do grid. Mesmo padding horizontal do
@@ -156,15 +152,15 @@ main.account-page .od-invoice * { text-align: left; }
   margin-top: 24px;
 }
 .od-invoice-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
   margin-bottom: 18px;
   padding-bottom: 14px;
   border-bottom: 1px solid #e7e7e7;
-  flex-wrap: wrap;
 }
+@media (max-width: 600px) { .od-invoice-head { grid-template-columns: 1fr; } }
 .od-invoice-head h2 {
   font-size: 18px;
   font-weight: 700;
