@@ -53,25 +53,21 @@ body { background: #ffffff; }
   margin: 0;
 }
 .od-hero-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.32);
-  border-radius: 999px;
   font-size: 13px;
   font-weight: 700;
   color: #fff;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
+  align-self: end;
+  text-align: right;
 }
-.od-hero-status::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #fff;
+.od-hero-status-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
 }
 
 .od-card {
@@ -169,6 +165,8 @@ body { background: #ffffff; }
   font-size: 13px;
   color: #565959;
   margin: 8px 0 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Action buttons */
@@ -269,12 +267,8 @@ body { background: #ffffff; }
   }
   .od-hero h1, .od-hero-eyebrow, .od-hero-sub { color: #0f1111 !important; }
   .od-hero-eyebrow { color: #ea580c !important; }
-  .od-hero-status {
-    background: transparent !important;
-    color: #ea580c !important;
-    border-color: #ea580c !important;
-  }
-  .od-hero-status::before { background: #ea580c !important; }
+  .od-hero-status { color: #ea580c !important; }
+  .od-hero-status-label { color: #565959 !important; }
   .od-card { border: 0 !important; padding: 20px 0 !important; }
   .account-page { padding: 20px !important; max-width: none !important; }
   a { color: #0f1111 !important; text-decoration: none !important; }
@@ -399,7 +393,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '<h1>AfterSlim GLP-1 Companion</h1>'
         + '<p class="od-hero-sub">Placed on ' + datePretty + ' . ' + (order.order_items?.length || 0) + ' item' + ((order.order_items?.length || 0) !== 1 ? 's' : '') + ' . ' + window.formatMoney(order.total_cents) + ' total</p>'
       + '</div>'
-      + '<span class="od-hero-status">' + statusCap + '</span>'
+      + '<div class="od-hero-status">'
+        + '<span class="od-hero-status-label">Status</span>'
+        + statusCap
+      + '</div>'
     + '</div>'
 
     + '<div class="od-card">'
