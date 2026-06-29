@@ -164,10 +164,43 @@ body { background: #ffffff; }
 .od-meta-line {
   font-size: 13px;
   color: #565959;
-  margin: 8px 0 0;
-  overflow-wrap: anywhere;
+  margin: 6px 0 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.od-meta-line strong { color: #0f1111; }
+
+/* Bloco de dados destacado dentro do invoice (billed-to, vendor info).
+   Layout coluna com nome em destaque e endereco abaixo, sem colar. */
+.od-info-block {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #e7e7e7;
+}
+.od-info-block:first-of-type { border-top: 0; padding-top: 0; }
+.od-info-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #565959;
+  margin: 0 0 4px;
+}
+.od-info-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f1111;
+  margin: 0 0 4px;
+  line-height: 1.35;
+}
+.od-info-text {
+  font-size: 13px;
+  color: #0f1111;
+  line-height: 1.55;
+  margin: 0;
   word-break: break-word;
 }
+.od-info-text a { color: inherit !important; text-decoration: none !important; }
 
 /* Action buttons */
 .od-actions {
@@ -242,14 +275,11 @@ body { background: #ffffff; }
   margin: 4px 0 0;
 }
 .od-invoice-foot {
-  margin-top: 18px;
-  padding-top: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
   border-top: 1px solid #e7e7e7;
-  font-size: 11px;
-  line-height: 1.6;
-  color: #565959;
 }
-.od-invoice-foot strong { color: #0f1111; }
+.od-invoice-foot p { word-break: break-word; }
 
 .od-loading { padding: 56px 0; text-align: center; color: #565959; font-size: 14px; }
 
@@ -375,14 +405,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Billed-to: nome do cartao + endereco de cobranca (separado do shipping)
   var billingName = order.billing_name || addr.name || '';
   var billingAddr = order.billing_address;
-  var billedToHtml = billingName ? '<strong>' + escapeHtml(billingName) + '</strong>' : '';
+  var billedAddressLines = '';
   if (billingAddr && billingAddr.line1) {
-    billedToHtml += escapeHtml(billingAddr.line1)
+    billedAddressLines = escapeHtml(billingAddr.line1)
       + (billingAddr.line2 ? '<br>' + escapeHtml(billingAddr.line2) : '')
       + '<br>' + escapeHtml(billingAddr.city || '') + ', ' + escapeHtml(billingAddr.state || '') + ' ' + escapeHtml(billingAddr.postal_code || '')
       + '<br>' + escapeHtml(billingAddr.country || 'US');
-  } else if (order.email) {
-    billedToHtml += escapeHtml(order.email);
   }
 
   // Return window
@@ -458,23 +486,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 ? '<div class="od-summary-row"><span>Sales tax</span><span>' + window.formatMoney(order.tax_cents) + '</span></div>'
                 : '')
             + '<div class="od-summary-row od-total"><span>Total paid</span><span>' + window.formatMoney(order.total_cents) + '</span></div>'
-            + '<p class="od-meta-line" style="margin-top:14px"><strong>Payment method:</strong> ' + paymentLine + '</p>'
-            + (billedToHtml
-                ? '<p class="od-meta-line"><strong>Billed to:</strong></p>'
-                  + '<p class="od-meta-line" style="margin-top:2px">' + billedToHtml + '</p>'
-                : '')
-            + (order.email
-                ? '<p class="od-meta-line" style="margin-top:6px"><strong>Email:</strong> ' + escapeHtml(order.email) + '</p>'
+            + '<div class="od-info-block" style="margin-top:16px">'
+              + '<p class="od-info-label">Payment method</p>'
+              + '<p class="od-info-text">' + paymentLine + '</p>'
+            + '</div>'
+            + (billingName || billedAddressLines || order.email
+                ? '<div class="od-info-block">'
+                    + '<p class="od-info-label">Billed to</p>'
+                    + (billingName ? '<p class="od-info-name">' + escapeHtml(billingName) + '</p>' : '')
+                    + (billedAddressLines ? '<p class="od-info-text">' + billedAddressLines + '</p>' : '')
+                    + (order.email ? '<p class="od-info-text" style="margin-top:6px">' + escapeHtml(order.email) + '</p>' : '')
+                  + '</div>'
                 : '')
             + '<div class="od-invoice-foot">'
-              + '<strong>VQ Group LLC</strong><br>'
-              + '16362 Hamlin Hills Road<br>'
-              + 'Winter Garden, FL 34787-8027<br>'
-              + 'United States<br>'
-              + 'support@afterslim.com<br>'
-              + '<br>'
-              + 'Made in the USA . FDA-registered facility.<br>'
-              + 'This invoice serves as proof of purchase for tax, insurance reimbursement (HSA/FSA), and return purposes.'
+              + '<p class="od-info-label" style="color:#565959;margin-bottom:6px">Sold by</p>'
+              + '<p class="od-info-name">VQ Group LLC</p>'
+              + '<p class="od-info-text">'
+                + '16362 Hamlin Hills Road<br>'
+                + 'Winter Garden, FL 34787-8027<br>'
+                + 'United States'
+              + '</p>'
+              + '<p class="od-info-text" style="margin-top:6px">support@afterslim.com</p>'
+              + '<p style="font-size:11px;line-height:1.6;color:#8a7a6e;margin:14px 0 0">'
+                + 'Made in the USA . FDA-registered facility.<br>'
+                + 'This document serves as proof of purchase for tax, insurance reimbursement (HSA/FSA), and return purposes.'
+              + '</p>'
             + '</div>'
           + '</div>'
           + '<div class="od-actions od-print-hide">'
