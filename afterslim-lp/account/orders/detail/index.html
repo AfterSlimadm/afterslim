@@ -23,30 +23,6 @@ html, body { background: #ffffff !important; }
 /* Detail page precisa de mais largura pra acomodar o grid 2-col + invoice
    full-width abaixo. Default da .account-page eh 720px (apertado). */
 main.account-page { max-width: 980px; text-align: left; padding-top: 16px; }
-@keyframes od-spin { to { transform: rotate(360deg); } }
-
-/* Modo PDF: aplicado via JS na hora de capturar com html2canvas. Forca
-   layout estreito (720px) que cabe em A4 portrait, single-column nos
-   grids 2-col, e remove backgrounds custosos. Reverter depois da captura. */
-.od-pdf-mode {
-  width: 720px !important;
-  max-width: 720px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-.od-pdf-mode .od-grid,
-.od-pdf-mode .od-invoice-head,
-.od-pdf-mode .od-invoice-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-.od-pdf-mode .od-hero {
-  background: #ea580c !important;
-  color: #fff !important;
-  border-radius: 10px !important;
-  padding: 22px 24px !important;
-  margin: 0 0 18px !important;
-}
-.od-pdf-mode .od-card { box-shadow: none !important; margin-bottom: 16px !important; padding: 22px !important; }
-.od-pdf-mode .od-invoice { margin-top: 16px !important; padding: 22px !important; }
-.od-pdf-mode .od-summary-block { margin: 0 !important; padding: 16px !important; border: 1px solid #e7e7e7 !important; border-radius: 10px !important; }
 
 /* Toast que aparece quando o cliente clica em Download invoice. Avisa
    que o dialog de impressao vai abrir e onde escolher "Save as PDF". */
@@ -433,7 +409,6 @@ main.account-page .od-invoice * { text-align: left; }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/orders/detail">
 <meta name="robots" content="noindex, nofollow">
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVF2ZGCL"
@@ -675,61 +650,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (inv) inv.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
-  // Download invoice: gera PDF real via html2pdf, Chrome dispara o download
-  // nativo (notificacao + icone na toolbar). Fallback pra window.print() se
-  // a lib nao carregar (CDN bloqueado, offline, etc).
+  // Download invoice: usa window.print() do Chrome (renderiza o @media print
+  // bonito) com toast antes (instruindo a escolher "Save as PDF") e toast
+  // depois (confirmando o save). Detecta cancel via afterprint timing.
   var dlBtn = document.getElementById('od-download-btn');
-  if (dlBtn) dlBtn.addEventListener('click', function() { downloadInvoicePdf(dlBtn); });
+  if (dlBtn) dlBtn.addEventListener('click', function() {
+    var dialogOpenedAt = 0;
+    showToast('Print dialog opening... choose "Save as PDF" to download.', 4000);
+    function onAfterPrint() {
+      window.removeEventListener('afterprint', onAfterPrint);
+      var elapsed = Date.now() - dialogOpenedAt;
+      // Se o dialog ficou aberto >1.2s, provavelmente o cliente clicou Save
+      // (cancel/Esc fecha quase instantaneo). Mostra confirmacao.
+      if (elapsed > 1200) {
+        showToast('Invoice saved. Check your downloads folder.');
+      }
+    }
+    window.addEventListener('afterprint', onAfterPrint);
+    setTimeout(function() {
+      dialogOpenedAt = Date.now();
+      window.print();
+    }, 250);
+  });
 })();
 
-async function downloadInvoicePdf(btn) {
-  var orderRef = btn.getAttribute('data-order') || 'order';
-  var originalHtml = btn.innerHTML;
-  var page = document.querySelector('main.account-page');
-  if (!page) return;
-
-  btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:od-spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Generating...';
-  showToast('Generating your invoice PDF...');
-
-  var hidden = document.querySelectorAll('.od-print-hide, nav.nav');
-  var prevDisplay = [];
-  hidden.forEach(function(el, i) { prevDisplay[i] = el.style.display; el.style.display = 'none'; });
-  page.classList.add('od-pdf-mode');
-
-  function restore() {
-    page.classList.remove('od-pdf-mode');
-    hidden.forEach(function(el, i) { el.style.display = prevDisplay[i] || ''; });
-    btn.disabled = false;
-    btn.innerHTML = originalHtml;
-  }
-
-  if (typeof html2pdf === 'undefined') {
-    restore();
-    window.print();
-    return;
-  }
-
-  try {
-    await new Promise(function(r) { setTimeout(r, 50); }); // deixa o reflow aplicar
-    await html2pdf().set({
-      margin: [12, 12, 14, 12],
-      filename: 'AfterSlim-Invoice-' + orderRef + '.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', windowWidth: 720, width: 720 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['css', 'avoid-all'], avoid: ['.od-invoice', '.od-items > li', '.od-info-block'] }
-    }).from(page).save();
-    showToast('Invoice saved to your downloads.');
-  } catch (err) {
-    console.error('Falha ao gerar PDF, abrindo print dialog:', err);
-    window.print();
-  } finally {
-    restore();
-  }
-}
-
-function showToast(message) {
+function showToast(message, durationMs) {
   var existing = document.querySelector('.od-toast');
   if (existing) existing.remove();
   var toast = document.createElement('div');
@@ -742,7 +687,7 @@ function showToast(message) {
   setTimeout(function() {
     toast.classList.remove('is-visible');
     setTimeout(function() { toast.remove(); }, 250);
-  }, 3500);
+  }, durationMs || 3500);
 }
 
 function escapeHtml(s) {
