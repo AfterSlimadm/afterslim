@@ -110,6 +110,15 @@ main.account-page .od-card * { text-align: left; }
   padding: 18px 20px;
 }
 
+/* Return policy: bloco full-width centralizado entre o grid e a invoice. */
+.od-return-policy {
+  margin-top: 24px;
+  padding: 18px 24px;
+  background: #fafafa;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+}
+
 /* Invoice em largura total ABAIXO do grid. Tem sub-grid interno
    (Billed to | Sold by) pra nao virar coluna unica esticada. */
 .od-invoice {
@@ -503,10 +512,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + '<p class="od-meta-line"><strong>Method:</strong> ' + shipMethodLabel + '</p>'
             + (order.tracking_number ? '<p class="od-meta-line"><strong>Tracking:</strong> ' + escapeHtml(order.tracking_number) + '</p>' : '')
           + '</div>'
-          + '<div class="od-section" style="text-align:center">'
-            + '<h2 class="od-section-title" style="text-align:center">Return policy</h2>'
-            + '<p class="od-meta-line" style="text-align:center">90-day money-back guarantee. <strong>Return window closes ' + returnPretty + '.</strong></p>'
-          + '</div>'
         + '</div>'
 
         // RIGHT: summary compacto + actions
@@ -527,6 +532,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '</div>'
         + '</div>'
 
+      + '</div>'
+
+      // Return policy centralizada, full-width entre o grid e a invoice
+      + '<div class="od-return-policy">'
+        + '<p class="od-section-title" style="border:0;padding:0;margin:0 0 8px;text-align:center">Return policy</p>'
+        + '<p style="font-size:14px;line-height:1.6;color:#0f1111;margin:0;text-align:center">'
+          + '90-day money-back guarantee. <strong>Return window closes ' + returnPretty + '.</strong>'
+        + '</p>'
       + '</div>'
 
       // INVOICE em largura total ABAIXO
