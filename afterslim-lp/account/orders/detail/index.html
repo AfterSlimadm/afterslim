@@ -132,16 +132,13 @@ main.account-page .od-invoice * { text-align: left; }
   padding-top: 6px !important;
 }
 
-/* Return policy: bloco full-width centralizado entre o grid e a invoice.
-   Mesmo padding horizontal do .od-card (26px) pra que o conteudo destes
-   blocos comece exatamente na mesma coluna X visualmente. */
-.od-return-policy {
-  margin-top: 24px;
-  padding: 18px 26px;
-  background: #fafafa;
-  border: 1px solid #e7e7e7;
-  border-radius: 10px;
-}
+/* Return policy mora dentro do header do invoice (lado direito), alinhado
+   com Invoice # / Date issued / Date paid no lado esquerdo. */
+.od-return-inline,
+.od-return-inline * { text-align: right !important; }
+.od-return-inline { min-width: 220px; }
+.od-return-inline .od-info-label { margin: 0 0 4px; }
+.od-return-inline .od-invoice-meta-line { margin: 2px 0; }
 
 /* Invoice em largura total ABAIXO do grid. Mesmo padding horizontal do
    .od-card (26px) pra alinhar com Items/Shipping acima. */
@@ -558,15 +555,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     + '</div>'
 
-    // Return policy centralizada, full-width SIBLING do card (nao dentro)
-    + '<div class="od-return-policy">'
-      + '<p class="od-section-title" style="border:0;padding:0;margin:0 0 8px;text-align:center">Return policy</p>'
-      + '<p style="font-size:14px;line-height:1.6;color:#0f1111;margin:0;text-align:center">'
-        + '90-day money-back guarantee. <strong>Return window closes ' + returnPretty + '.</strong>'
-      + '</p>'
-    + '</div>'
-
-    // INVOICE em largura total, SIBLING do card pra alinhar com Items
+    // INVOICE em largura total, SIBLING do card pra alinhar com Items.
+    // Return policy mora dentro do head do invoice (lado direito), ao lado
+    // dos dados de Invoice #/Date issued/Date paid.
     + '<div class="od-invoice">'
         + '<div class="od-invoice-head">'
           + '<div>'
@@ -574,6 +565,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + '<p class="od-invoice-meta-line"><strong>Invoice #:</strong> ' + escapeHtml(order.order_number || '') + '</p>'
             + '<p class="od-invoice-meta-line"><strong>Date issued:</strong> ' + dateShort + '</p>'
             + '<p class="od-invoice-meta-line"><strong>Date paid:</strong> ' + dateShort + '</p>'
+          + '</div>'
+          + '<div class="od-return-inline">'
+            + '<p class="od-info-label">Return policy</p>'
+            + '<p class="od-invoice-meta-line">90-day money-back guarantee.</p>'
+            + '<p class="od-invoice-meta-line"><strong>Window closes ' + returnPretty + '.</strong></p>'
           + '</div>'
         + '</div>'
 
