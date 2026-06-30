@@ -395,14 +395,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }).map(function(o) {
     var item = (o.order_items && o.order_items[0]) || {};
     var meta = o.metadata || {};
+    // Fallback de current_period_end: o webhook customer.subscription.created
+    // dispara antes do payment_intent.succeeded, entao a order ainda nao existe
+    // quando o handler tenta vincular o subscription_current_period_end no
+    // metadata. Estima como created_at + (30 * qty) dias — qty=1 -> 30d,
+    // qty=2 -> 60d, qty=3 -> 90d. Sera substituido pela data real no proximo
+    // ciclo (invoice.paid atualiza o metadata corretamente).
+    var qty = item.quantity || Number(meta.quantity) || 1;
+    var fallbackEnd = null;
+    if (o.created_at) {
+      var d = new Date(o.created_at);
+      d.setDate(d.getDate() + 30 * qty);
+      fallbackEnd = d.toISOString();
+    }
     return {
       id: meta.stripe_subscription_id,
       status: meta.subscription_status || 'active',
       interval: item.subscription_interval || meta.interval || 'month',
       price_cents: o.total_cents,
-      quantity: item.quantity || Number(meta.quantity) || 1,
-      current_period_start: meta.subscription_current_period_start || null,
-      current_period_end: meta.subscription_current_period_end || null,
+      quantity: qty,
+      current_period_start: meta.subscription_current_period_start || o.created_at || null,
+      current_period_end: meta.subscription_current_period_end || fallbackEnd,
       products: (item.products) ? { name: item.products.name } : null,
     };
   });
