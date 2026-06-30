@@ -72,6 +72,18 @@ main.account-page .od-invoice * { text-align: left; }
   align-items: center;
   color: #fff;
 }
+/* Variante subscription: hero amarelo (mesma cor da listagem + /account/subscriptions). */
+.od-hero--subscription {
+  background: linear-gradient(to right, #fbbf24 0%, #fbbf24 55%, #d97706 100%) !important;
+  border-color: #92400e !important;
+}
+.od-hero--subscription .od-hero-eyebrow,
+.od-hero--subscription h1,
+.od-hero--subscription .od-hero-sub,
+.od-hero--subscription .od-hero-status,
+.od-hero--subscription .od-hero-status-label {
+  text-shadow: 0 1px 1px rgba(146, 64, 14, 0.25);
+}
 .od-hero-eyebrow {
   font-size: 12px;
   font-weight: 700;
@@ -831,7 +843,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         : '')
   + '</div>';
 
-  var heroBlock = '<div class="od-hero">'
+  // Hero amarelo quando a order eh de subscription (mesma cor da listagem).
+  var isSubscriptionOrder = !!(order.metadata && order.metadata.stripe_subscription_id);
+  var heroClass = isSubscriptionOrder ? 'od-hero od-hero--subscription' : 'od-hero';
+  var heroBlock = '<div class="' + heroClass + '">'
     + '<div>'
       + '<p class="od-hero-eyebrow">Order ' + escapeHtml(order.order_number || '') + '</p>'
       + '<h1>AfterSlim GLP-1 Companion</h1>'
