@@ -244,25 +244,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var user = await window.afterslimAuth.requireAuth();
   var supabase = window.afterslimSupabase;
 
-  var { data: subs, error } = await supabase
-    .from('subscriptions')
-    .select('id, status, interval, price_cents, quantity, current_period_start, current_period_end, products(name)')
+  // Assinaturas de cliente vivem em Stripe; o nosso banco linka via
+  // orders.metadata.stripe_subscription_id. Le orders com esse metadata
+  // preenchido, deduplica por subscription_id (pra renewals nao duplicarem),
+  // e pega a order mais recente como o estado atual.
+  var { data: subOrders, error } = await supabase
+    .from('orders')
+    .select('id, total_cents, shipping_address, metadata, created_at, order_items(quantity, subscription_interval, products(name))')
     .eq('profile_id', user.id)
+    .not('metadata->>stripe_subscription_id', 'is', null)
     .order('created_at', { ascending: false });
 
   if (error) {
-    // Customer subscriptions live in Stripe, not in the public `subscriptions`
-    // table (that one tracks the company's own SaaS costs — Vercel, Supabase,
-    // etc — and RLS blocks customer reads). Until the admin exposes a
-    // /api/subscriptions/me endpoint for the LP, the safest UX is to show
-    // the same empty state instead of a scary "Couldn't load" error.
     console.warn('[subscriptions] query failed, falling back to empty state:', error.message);
     document.getElementById('subStatusBadge').style.display = 'inline-flex';
     document.getElementById('emptyState').style.display = 'block';
     return;
   }
 
-  if (!subs || subs.length === 0) {
+  // Deduplica por stripe_subscription_id (mantem a order mais recente).
+  var seen = {};
+  var subs = (subOrders || []).filter(function(o) {
+    var sid = o.metadata && o.metadata.stripe_subscription_id;
+    if (!sid || seen[sid]) return false;
+    seen[sid] = true;
+    return true;
+  }).map(function(o) {
+    var item = (o.order_items && o.order_items[0]) || {};
+    var meta = o.metadata || {};
+    return {
+      id: meta.stripe_subscription_id,
+      status: meta.subscription_status || 'active',
+      interval: item.subscription_interval || meta.interval || 'month',
+      price_cents: o.total_cents,
+      quantity: item.quantity || Number(meta.quantity) || 1,
+      current_period_start: meta.subscription_current_period_start || null,
+      current_period_end: meta.subscription_current_period_end || null,
+      products: (item.products) ? { name: item.products.name } : null,
+    };
+  });
+
+  if (!subs.length) {
     document.getElementById('subStatusBadge').style.display = 'inline-flex';
     document.getElementById('emptyState').style.display = 'block';
     return;
