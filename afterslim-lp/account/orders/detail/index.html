@@ -621,6 +621,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var shipMethodLabel = order.shipping_method === 'express'
     ? 'DHL Expedited (2-3 days)'
     : (order.shipping_method === 'standard' ? 'Standard Shipping (5-7 days)' : (order.shipping_method || 'Standard'));
+  // Label curta (sem prazo) pra usar no Order Summary, ex: "Shipping (DHL Expedited)".
+  var shipMethodShort = order.shipping_method === 'express'
+    ? 'DHL Expedited'
+    : (order.shipping_method === 'standard' ? 'Standard' : (order.shipping_method || ''));
 
   // Items
   var itemsHtml = (order.order_items || []).map(function(it) {
@@ -878,7 +882,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + (order.discount_cents > 0
                 ? '<div class="od-summary-row od-discount"><span>Discount' + (order.coupon_code ? ' (' + escapeHtml(order.coupon_code) + ')' : '') + '</span><span>-' + window.formatMoney(order.discount_cents) + '</span></div>'
                 : '')
-            + '<div class="od-summary-row"><span>Shipping</span><span>' + (order.shipping_cents > 0 ? window.formatMoney(order.shipping_cents) : 'Free') + '</span></div>'
+            + '<div class="od-summary-row"><span>Shipping' + (shipMethodShort ? ' (' + escapeHtml(shipMethodShort) + ')' : '') + '</span><span>' + (order.shipping_cents > 0 ? window.formatMoney(order.shipping_cents) : 'Free') + '</span></div>'
             + '<div class="od-summary-row"><span>Sales tax</span><span>' + window.formatMoney(order.tax_cents || 0) + '</span></div>'
             + '<div class="od-summary-row od-total"><span>Total paid</span><span>' + window.formatMoney(order.total_cents) + '</span></div>'
             + '<div class="od-info-block" style="margin-top:14px">'
