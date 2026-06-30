@@ -593,9 +593,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/account/orders" class="nav-back" aria-label="Back to orders">
+    <a href="/account/orders" class="nav-back" id="odNavBackLink" aria-label="Back to orders">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      Orders
+      <span id="odNavBackLabel">Orders</span>
     </a>
     <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
     <span style="width: 64px;"></span>
@@ -880,10 +880,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     + '</div>'
   + '</div>';
 
+  // Detecta de onde o cliente veio (?from=subscriptions) e ajusta os 2 botoes
+  // de voltar (nav-back no topo + account-page-back inline) pra apontar
+  // pra subscriptions em vez de orders.
+  var fromParam = new URLSearchParams(window.location.search).get('from');
+  var backHref = fromParam === 'subscriptions' ? '/account/subscriptions?from=orders' : '/account/orders';
+  var backLabel = fromParam === 'subscriptions' ? 'Subscription' : 'Orders';
+  var backInlineLabel = fromParam === 'subscriptions' ? 'Back to subscription' : 'Back to orders';
+  var navBackEl = document.getElementById('odNavBackLink');
+  var navBackLabelEl = document.getElementById('odNavBackLabel');
+  if (navBackEl) { navBackEl.href = backHref; navBackEl.setAttribute('aria-label', backInlineLabel); }
+  if (navBackLabelEl) navBackLabelEl.textContent = backLabel;
+
   document.getElementById('orderBody').innerHTML =
-    '<a href="/account/orders" class="account-page-back" style="margin-bottom:18px;">'
+    '<a href="' + backHref + '" class="account-page-back" style="margin-bottom:18px;">'
       + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>'
-      + 'Back to orders</a>'
+      + backInlineLabel + '</a>'
 
     + actionBar
     + heroBlock

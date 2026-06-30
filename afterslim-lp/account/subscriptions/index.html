@@ -957,7 +957,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '<div><strong>' + escapeHtml(o.order_number || '') + '</strong></div>'
           + '<div class="sub-history-date">' + escapeHtml(d) + '</div>'
           + '<span class="sub-history-status" data-s="' + escapeHtml(o.status || 'paid') + '">' + escapeHtml(statusPretty) + '</span>'
-          + '<a class="sub-history-link" href="/account/orders/detail?id=' + o.id + '">View</a>'
+          + '<a class="sub-history-link" href="/account/orders/detail?id=' + o.id + '&from=subscriptions">View</a>'
         + '</div>';
       }).join('');
       document.getElementById('historyList').innerHTML = historyHtml;
