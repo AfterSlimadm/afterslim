@@ -984,12 +984,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Comportamento por hash:
   //   sem hash (View order details) -> abre no topo, mostra tracking primeiro
   //   #invoice -> scroll suave ate o card de invoice (vindo do link "Invoice")
-  if (window.location.hash === '#invoice') {
-    var inv = document.querySelector('.od-invoice');
-    if (inv) setTimeout(function() { inv.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
-  } else {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }
+  // Sempre abre no topo, mesmo vindo do link "Invoice" (#invoice). O hash
+  // ainda controla o MODO (renderiza items/summary/invoice em vez de tracking),
+  // mas o scroll automatico pro invoice block descia a pagina e o cliente
+  // perdia o contexto (Items, Order Summary).
+  window.scrollTo({ top: 0, behavior: 'instant' });
 
   // Download invoice: usa window.print() do Chrome (renderiza o @media print
   // bonito) com toast antes (instruindo a escolher "Save as PDF") e toast
