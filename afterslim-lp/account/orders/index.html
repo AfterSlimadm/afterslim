@@ -51,13 +51,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 /* Branco no fundo, sem creme. Match com referencia Amazon "Seus pedidos". */
 body { background: #ffffff; }
 
-/* Titulo "Your orders" com gradient ink->orange (mesmo da home + tickets/new). */
+/* Titulo "Your orders" com gradient ink->orange (mesmo da home + tickets/new).
+   !important pra vencer a regra .account-page h1 do account.css. */
 main.account-page > h1 {
-  background: linear-gradient(135deg, var(--ink) 40%, var(--orange) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  background: linear-gradient(135deg, var(--ink) 40%, var(--orange) 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
 }
 
 .order-card {
