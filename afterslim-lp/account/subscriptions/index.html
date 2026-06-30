@@ -328,6 +328,108 @@ main.account-page > h1 {
   .sub-history-row > :nth-child(4) { grid-column: 2 / 3; justify-self: end; }
 }
 
+/* ===== Cancel modal ===== */
+.cancel-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 17, 17, 0.55);
+  display: flex;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+.cancel-modal {
+  background: #fff;
+  border-radius: 18px;
+  max-width: 460px; width: 100%;
+  padding: 26px 24px 22px;
+  box-shadow: 0 24px 56px rgba(0,0,0,0.22);
+  position: relative;
+}
+.cancel-close {
+  position: absolute; top: 12px; right: 12px;
+  background: none; border: 0; cursor: pointer;
+  color: #565959; padding: 8px;
+  border-radius: 8px;
+}
+.cancel-close:hover { background: #f5f5f4; color: #0f1111; }
+.cancel-title {
+  font-size: 20px; font-weight: 800;
+  color: #0f1111;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.cancel-sub {
+  font-size: 13.5px; color: #565959;
+  margin: 0 0 20px; line-height: 1.55;
+}
+.cancel-label {
+  display: block;
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #565959;
+  margin: 0 0 6px;
+}
+.cancel-textarea {
+  width: 100%;
+  border: 1.5px solid #e7e7e7;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.cancel-textarea:focus { border-color: #fbbf24; }
+.cancel-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+.cancel-btn {
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  border: 1.5px solid transparent;
+}
+.cancel-btn--keep {
+  background: linear-gradient(to right, #ea580c 0%, #ea580c 55%, #c2410c 100%);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 2px rgba(194,65,12,0.2);
+}
+.cancel-btn--keep:hover {
+  background: linear-gradient(to right, #c2410c 0%, #c2410c 55%, #8a2f0d 100%);
+  box-shadow: 0 4px 14px rgba(194,65,12,0.32);
+}
+.cancel-btn--go {
+  background: #fff;
+  border-color: #d5d9d9;
+  color: #565959;
+}
+.cancel-btn--go:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+.cancel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.cancel-status {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fef9c3;
+  color: #854d0e;
+  text-align: center;
+}
+@media (max-width: 480px) {
+  .cancel-actions { grid-template-columns: 1fr; }
+  .cancel-btn--keep { order: -1; }
+}
+
 /* ===== Upgrade modal ===== */
 .upgrade-overlay {
   position: fixed; inset: 0;
@@ -852,9 +954,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var subId = btn.getAttribute('data-sub');
 
       if (action === 'cancel') {
-        var ok = confirm("Cancel your subscription? You'll keep access to any remaining shipments already paid for. No future charges.");
-        if (!ok) return;
-        openBillingPortal(btn);
+        openCancelModal(subId, btn);
         return;
       }
 
@@ -864,6 +964,79 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
     });
   });
+
+  // ===== Cancel modal =====
+  function openCancelModal(subId, originBtn) {
+    var existing = document.getElementById('cancelOverlay');
+    if (existing) existing.remove();
+
+    var html = '<div class="cancel-overlay" id="cancelOverlay">'
+      + '<div class="cancel-modal">'
+        + '<button type="button" class="cancel-close" aria-label="Close">'
+          + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+        + '</button>'
+        + '<h2 class="cancel-title">We\'re sorry to see you go</h2>'
+        + '<p class="cancel-sub">Cancel anytime, no questions. You\'ll keep access to shipments already paid for — no future charges. Mind sharing why? It helps us improve.</p>'
+        + '<label for="cancelReason" class="cancel-label">Reason for canceling (optional)</label>'
+        + '<textarea id="cancelReason" class="cancel-textarea" rows="3" placeholder="Didn\'t work for me, too expensive, switching products..."></textarea>'
+        + '<div class="cancel-actions">'
+          + '<button type="button" class="cancel-btn cancel-btn--keep" id="cancelKeepBtn">Keep my plan</button>'
+          + '<button type="button" class="cancel-btn cancel-btn--go" id="cancelConfirmBtn">Cancel subscription</button>'
+        + '</div>'
+        + '<p class="cancel-status" id="cancelStatus" style="display:none"></p>'
+      + '</div>'
+    + '</div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+
+    var overlay = document.getElementById('cancelOverlay');
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay || e.target.closest('.cancel-close') || e.target.closest('#cancelKeepBtn')) {
+        overlay.remove();
+      }
+    });
+    document.getElementById('cancelConfirmBtn').addEventListener('click', async function() {
+      var reason = document.getElementById('cancelReason').value.trim();
+      var confirmBtn = document.getElementById('cancelConfirmBtn');
+      var keepBtn = document.getElementById('cancelKeepBtn');
+      var status = document.getElementById('cancelStatus');
+      confirmBtn.disabled = true;
+      keepBtn.disabled = true;
+      status.style.display = 'block';
+      status.textContent = 'Saving and redirecting...';
+
+      // Salva reason no metadata da subscription order (se preenchido).
+      // Best-effort: nao bloqueia o cancel se falhar.
+      if (reason) {
+        try {
+          var firstOrder = await supabase
+            .from('orders')
+            .select('id, metadata')
+            .eq('profile_id', user.id)
+            .eq('metadata->>stripe_subscription_id', subId)
+            .order('created_at', { ascending: true })
+            .limit(1)
+            .maybeSingle();
+          if (firstOrder && firstOrder.data) {
+            var meta = firstOrder.data.metadata || {};
+            await supabase
+              .from('orders')
+              .update({
+                metadata: Object.assign({}, meta, {
+                  cancel_reason: reason,
+                  cancel_reason_submitted_at: new Date().toISOString(),
+                }),
+              })
+              .eq('id', firstOrder.data.id);
+          }
+        } catch (err) {
+          console.warn('[cancel] failed to persist reason:', err);
+        }
+      }
+
+      // Redireciona pro Stripe Customer Portal pra confirmar cancel.
+      openBillingPortal(confirmBtn);
+    });
+  }
 
   // ===== Upgrade modal =====
   var UPGRADE_API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
