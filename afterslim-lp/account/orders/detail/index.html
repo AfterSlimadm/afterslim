@@ -72,10 +72,12 @@ main.account-page .od-invoice * { text-align: left; }
   align-items: center;
   color: #fff;
 }
-/* Variante subscription: hero amarelo (mesma cor da listagem + /account/subscriptions). */
+/* Variante subscription: hero amarelo sol com gradient suave (clarinho a
+   esquerda -> amber escuro a direita). Mesma identidade da listagem +
+   /account/subscriptions. */
 .od-hero--subscription {
-  background: linear-gradient(to right, #fbbf24 0%, #fbbf24 55%, #d97706 100%) !important;
-  border-color: #92400e !important;
+  background: linear-gradient(to right, #fef3c7 0%, #fcd34d 35%, #fbbf24 65%, #d97706 100%) !important;
+  border: 1px solid #d97706 !important;
 }
 .od-hero--subscription .od-hero-eyebrow,
 .od-hero--subscription h1,
@@ -83,6 +85,26 @@ main.account-page .od-invoice * { text-align: left; }
 .od-hero--subscription .od-hero-status,
 .od-hero--subscription .od-hero-status-label {
   text-shadow: 0 1px 1px rgba(146, 64, 14, 0.25);
+}
+
+/* Variante subscription nos botoes da action bar (Need help / Download invoice). */
+body:has(.od-hero--subscription) .od-btn--primary {
+  background: linear-gradient(to right, #fbbf24 0%, #fbbf24 55%, #d97706 100%) !important;
+  border-color: transparent !important;
+  text-shadow: 0 1px 1px rgba(146, 64, 14, 0.25);
+}
+body:has(.od-hero--subscription) .od-btn--primary:hover {
+  background: linear-gradient(to right, #d97706 0%, #d97706 55%, #92400e 100%) !important;
+  box-shadow: 0 4px 14px rgba(146, 64, 14, 0.32) !important;
+}
+body:has(.od-hero--subscription) .od-btn--secondary {
+  border: 1.5px solid #eab308 !important;
+  color: #a16207 !important;
+}
+body:has(.od-hero--subscription) .od-btn--secondary:hover {
+  background: #fef9c3 !important;
+  border-color: #ca8a04 !important;
+  color: #854d0e !important;
 }
 .od-hero-eyebrow {
   font-size: 12px;
