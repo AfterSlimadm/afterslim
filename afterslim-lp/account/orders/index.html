@@ -675,9 +675,7 @@ function escapeHtml(s) {
     if (pack) {
       e.preventDefault();
       var packN = pack.dataset.pack;
-      var target = '/checkout?qty=' + encodeURIComponent(packN) + '&ref=reorder';
-      console.log('[reorder] pack selected =', packN, '-> redirecting to', target);
-      window.location.assign(target);
+      window.location.assign('/checkout?qty=' + encodeURIComponent(packN) + '&ref=reorder');
       return;
     }
     if (e.target.matches('.reorder-overlay') || e.target.closest('.reorder-close')) {
