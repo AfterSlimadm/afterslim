@@ -674,7 +674,9 @@ function escapeHtml(s) {
     var pack = e.target.closest('.reorder-pack');
     if (pack) {
       var packN = pack.getAttribute('data-pack');
-      window.location.href = '/?pack=' + packN + '&ref=reorder#bundles';
+      // Vai direto pro checkout (compra avulsa). Pra assinatura seria
+      // `?qty=N&subscribe=true`, mas o reorder modal nao tem toggle de plano.
+      window.location.href = '/checkout?qty=' + packN + '&ref=reorder';
       return;
     }
     if (e.target.matches('.reorder-overlay') || e.target.closest('.reorder-close')) {
