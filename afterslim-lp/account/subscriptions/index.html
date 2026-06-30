@@ -459,7 +459,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     return '<article class="sub-card">'
       + '<header class="sub-header">'
-        + '<div><p class="sub-col-label">Next shipment</p><p class="sub-col-value"><strong>' + nextDate + '</strong></p></div>'
+        + '<div><p class="sub-col-label">Next renewal</p><p class="sub-col-value"><strong>' + nextDate + '</strong></p></div>'
         + '<div><p class="sub-col-label">Total</p><p class="sub-col-value"><strong>' + price + '</strong></p></div>'
         + '<div><p class="sub-col-label">Interval</p><p class="sub-col-value"><strong>' + escapeHtml(intervalLabel) + '</strong></p></div>'
         + '<div class="sub-col-right">'
@@ -472,7 +472,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '<p class="sub-title">' + escapeHtml(name) + '</p>'
           + '<p class="sub-status-line" data-s="' + s.status + '"><strong>' + escapeHtml(statusPretty) + '</strong></p>'
           + '<p class="sub-meta-line">' + (s.quantity || 1) + ' bottle' + ((s.quantity || 1) !== 1 ? 's' : '') + ' . ' + price + ' per shipment</p>'
-          + '<p class="sub-meta-line" style="margin-top:8px">Renews ' + escapeHtml(intervalLabel.toLowerCase()) + '. Next renewal: <strong>' + nextDate + '</strong>.</p>'
+          + '<p class="sub-meta-line" style="margin-top:8px">Renews ' + escapeHtml(intervalLabel.toLowerCase()) + '.</p>'
         + '</div>'
         + '<div class="sub-actions">' + actions + '</div>'
       + '</div>'
