@@ -483,11 +483,7 @@ main.account-page .od-invoice * { text-align: left; }
 }
 .od-event:first-child .od-event-body strong { color: #c2410c; }
 .od-events-empty {
-  background: #faf7f3;
-  border: 1px dashed #e7d9c5;
-  border-radius: 10px;
-  padding: 18px 20px;
-  text-align: center;
+  padding: 6px 0 4px;
   font-size: 13.5px;
   color: #8a7a6e;
   line-height: 1.55;
@@ -774,10 +770,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }).join('')
     + '</ul>';
   } else {
-    eventsHtml = '<div class="od-events-empty">'
-      + 'Detailed movement updates appear here once your package ships. '
-      + 'You\'ll get an email when it leaves our facility and another when it lands in your city.'
-    + '</div>';
+    eventsHtml = '<p class="od-events-empty">Detailed movement updates appear here once your package ships.</p>';
   }
 
   var trackingBlock =
