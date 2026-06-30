@@ -42,65 +42,183 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>html[data-auth=pending] body{visibility:hidden}</style>
 <script>document.documentElement.dataset.auth='pending';</script>
 <style>
+/* Mesmo design da /account/orders pra consistencia entre as duas telas. */
+body { background: #ffffff; }
+
+/* Titulo "Subscriptions" com gradient ink->orange (igual orders/tickets/new). */
+main.account-page > h1 {
+  background: linear-gradient(135deg, var(--ink) 40%, var(--orange) 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
 .sub-card {
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 22px;
-  margin-bottom: 16px;
+  background: #ffffff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  position: relative;
 }
-.sub-card-top {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
+.sub-card + .sub-card { margin-top: 28px; }
+.sub-card:not(:last-of-type)::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -16px;
+  height: 1px;
+  background: #e7e7e7;
 }
-.sub-card-img {
-  width: 56px; height: 56px;
-  background: var(--orange-tint);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  color: var(--orange);
-}
-.sub-card-title { flex: 1; min-width: 0; }
-.sub-card-title h3 { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
-.sub-card-title p { font-size: 13.5px; color: var(--ink-2); margin: 0; }
-.sub-status {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 10px; border-radius: 999px;
-  font-size: 12px; font-weight: 700; text-transform: capitalize;
-}
-.sub-status[data-s="active"] { background: rgba(22,163,74,0.1); color: #15803d; }
-.sub-status[data-s="paused"] { background: rgba(234,179,8,0.12); color: #a16207; }
-.sub-status[data-s="cancelled"] { background: rgba(31,20,16,0.08); color: var(--ink-2); }
-.sub-status[data-s="past_due"] { background: rgba(220,38,38,0.1); color: #b91c1c; }
-.sub-meta-row {
+
+/* Header com gradient laranja (mesmo do botao SHOP NOW). */
+.sub-header {
+  background: linear-gradient(to right, #ea580c 0%, #ea580c 55%, #c2410c 100%);
+  border-bottom: 1px solid #a8390b;
+  padding: 10px 18px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 24px;
+  align-items: center;
 }
-@media (max-width: 540px) { .sub-meta-row { grid-template-columns: 1fr 1fr; } }
-.sub-meta-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
-  text-transform: uppercase; color: var(--ink-2);
+.sub-col-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
+  line-height: 1.4;
+}
+.sub-col-value {
+  font-size: 13px;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.35;
+  font-weight: 500;
+}
+.sub-col-value strong { font-weight: 700; }
+.sub-col-right { text-align: right; min-width: 180px; }
+
+/* Body: thumb + info + actions */
+.sub-body {
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 18px;
+  align-items: center;
+}
+.sub-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  background: #fafafa;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sub-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+.sub-info { min-width: 0; padding-top: 2px; }
+.sub-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f1111;
+  margin: 0 0 8px;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+}
+.sub-status-line {
+  font-size: 13px;
+  color: #0f1111;
   margin: 0 0 4px;
 }
-.sub-meta-value { font-size: 14px; font-weight: 600; color: var(--ink); margin: 0; }
+.sub-status-line strong { font-weight: 700; }
+.sub-status-line[data-s="active"] strong { color: #15803d; }
+.sub-status-line[data-s="paused"] strong { color: #a16207; }
+.sub-status-line[data-s="cancelled"] strong { color: #565959; }
+.sub-status-line[data-s="past_due"] strong { color: #b91c1c; }
+.sub-meta-line {
+  font-size: 13px;
+  color: #565959;
+  margin: 0;
+}
 
-.sub-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-.sub-action {
-  font-size: 13.5px; font-weight: 600;
+/* CTAs em coluna à direita (igual orders). */
+.sub-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+.sub-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
   padding: 10px 18px;
   border-radius: 999px;
-  background: #fff; color: var(--ink); border: 1px solid var(--line);
-  cursor: pointer; font-family: inherit; text-decoration: none;
-  transition: border-color 0.15s, color 0.15s;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
 }
-.sub-action:hover { border-color: var(--orange); color: var(--orange); }
-.sub-action--danger:hover { border-color: #dc2626; color: #dc2626; }
+.sub-btn--primary {
+  background: linear-gradient(to right, #ea580c 0%, #ea580c 55%, #c2410c 100%);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 2px rgba(194,65,12,0.2);
+}
+.sub-btn--primary:hover {
+  background: linear-gradient(to right, #c2410c 0%, #c2410c 55%, #8a2f0d 100%);
+  box-shadow: 0 4px 14px rgba(194,65,12,0.32);
+}
+.sub-btn--secondary {
+  background: #fff;
+  border: 1.5px solid #ea580c;
+  color: #c2410c;
+}
+.sub-btn--secondary:hover {
+  background: #fff3e6;
+  color: #8a2f0d;
+}
+.sub-btn--ghost {
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  color: #565959;
+}
+.sub-btn--ghost:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+@media (max-width: 720px) {
+  .sub-header {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 24px;
+    padding: 14px 18px;
+  }
+  .sub-col-right { text-align: left; grid-column: 1 / -1; min-width: 0; }
+  .sub-body {
+    grid-template-columns: 80px 1fr;
+  }
+  .sub-actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+}
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/subscriptions">
 <meta name="robots" content="noindex, nofollow">
@@ -293,35 +411,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var labelMap = { month: 'Every 30 days', bimonth: 'Every 60 days', quarter: 'Every 90 days' };
 
   var html = subs.map(function(s) {
-    var name = (s.products && s.products.name) || 'AfterSlim';
+    var name = (s.products && s.products.name) || 'AfterSlim GLP-1 Support';
     var nextDate = s.current_period_end
       ? new Date(s.current_period_end).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })
       : '—';
     var price = window.formatMoney(s.price_cents);
+    var intervalLabel = labelMap[s.interval] || s.interval;
+    // Bundle image fallback by qty
+    var img = '/images/bundle-' + Math.max(1, Math.min(3, s.quantity || 1)) + '.webp';
+    var statusPretty = s.status.charAt(0).toUpperCase() + s.status.slice(1).replace('_', ' ');
+    // Subscription id curto: SUB-XXXX (ultimos 4 chars do stripe id)
+    var subShort = 'SUB-' + s.id.slice(-4).toUpperCase();
 
-    var actions = s.status === 'active' || s.status === 'paused'
-      ? '<button class="sub-action" data-action="skip" data-sub="' + s.id + '">Skip next</button>'
-        + '<button class="sub-action" data-action="frequency" data-sub="' + s.id + '">Change frequency</button>'
-        + '<button class="sub-action sub-action--danger" data-action="cancel" data-sub="' + s.id + '">Cancel</button>'
-      : (s.status === 'cancelled'
-          ? '<a class="sub-action" href="/#bundles">Resubscribe</a>'
-          : '<a class="sub-action" href="/account/payment">Update payment</a>');
+    var actions;
+    if (s.status === 'active' || s.status === 'paused') {
+      actions = '<button class="sub-btn sub-btn--primary" data-action="skip" data-sub="' + s.id + '">Skip next</button>'
+        + '<button class="sub-btn sub-btn--secondary" data-action="frequency" data-sub="' + s.id + '">Change frequency</button>'
+        + '<button class="sub-btn sub-btn--ghost" data-action="cancel" data-sub="' + s.id + '">Cancel</button>';
+    } else if (s.status === 'cancelled') {
+      actions = '<a class="sub-btn sub-btn--primary" href="/#bundles">Resubscribe</a>';
+    } else {
+      actions = '<a class="sub-btn sub-btn--primary" href="/account/payment">Update payment</a>';
+    }
 
     return '<article class="sub-card">'
-      + '<div class="sub-card-top">'
-        + '<div class="sub-card-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>'
-        + '<div class="sub-card-title">'
-          + '<h3>' + escapeHtml(name) + (s.quantity > 1 ? ' &times; ' + s.quantity : '') + '</h3>'
-          + '<p>' + (labelMap[s.interval] || s.interval) + ' · ' + price + ' per shipment</p>'
+      + '<header class="sub-header">'
+        + '<div><p class="sub-col-label">Next shipment</p><p class="sub-col-value"><strong>' + nextDate + '</strong></p></div>'
+        + '<div><p class="sub-col-label">Total</p><p class="sub-col-value"><strong>' + price + '</strong></p></div>'
+        + '<div><p class="sub-col-label">Interval</p><p class="sub-col-value"><strong>' + escapeHtml(intervalLabel) + '</strong></p></div>'
+        + '<div class="sub-col-right">'
+          + '<p class="sub-col-label">Subscription # ' + escapeHtml(subShort) + '</p>'
         + '</div>'
-        + '<span class="sub-status" data-s="' + s.status + '">' + s.status.replace('_', ' ') + '</span>'
+      + '</header>'
+      + '<div class="sub-body">'
+        + '<div class="sub-thumb"><img src="' + img + '" alt="' + escapeHtml(name) + '" loading="lazy"></div>'
+        + '<div class="sub-info">'
+          + '<p class="sub-title">' + escapeHtml(name) + '</p>'
+          + '<p class="sub-status-line" data-s="' + s.status + '"><strong>' + escapeHtml(statusPretty) + '</strong></p>'
+          + '<p class="sub-meta-line">' + (s.quantity || 1) + ' bottle' + ((s.quantity || 1) !== 1 ? 's' : '') + ' . ' + price + ' per shipment</p>'
+          + '<p class="sub-meta-line" style="margin-top:8px">Renews ' + escapeHtml(intervalLabel.toLowerCase()) + '. Cancel anytime.</p>'
+        + '</div>'
+        + '<div class="sub-actions">' + actions + '</div>'
       + '</div>'
-      + '<div class="sub-meta-row">'
-        + '<div><p class="sub-meta-label">Next shipment</p><p class="sub-meta-value">' + nextDate + '</p></div>'
-        + '<div><p class="sub-meta-label">Interval</p><p class="sub-meta-value">' + (labelMap[s.interval] || s.interval) + '</p></div>'
-        + '<div><p class="sub-meta-label">Per order</p><p class="sub-meta-value">' + price + '</p></div>'
-      + '</div>'
-      + '<div class="sub-actions">' + actions + '</div>'
     + '</article>';
   }).join('');
 
@@ -331,7 +462,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // applying the change to the customer's Stripe subscription needs a
   // server-side endpoint we haven't built yet. Once /api/subscriptions/*
   // exists, swap these for direct calls.
-  document.querySelectorAll('.sub-action[data-action]').forEach(function(btn) {
+  document.querySelectorAll('.sub-btn[data-action]').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var action = btn.getAttribute('data-action');
       var subId = btn.getAttribute('data-sub');
