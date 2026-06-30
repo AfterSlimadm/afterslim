@@ -390,14 +390,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/" class="nav-back" aria-label="Back to home">
+    <a href="/" class="nav-back" id="subsNavBackLink" aria-label="Back to home">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      Home
+      <span id="subsNavBackLabel">Home</span>
     </a>
     <a href="/" class="nav-logo" aria-label="AfterSlim home"><img src="/images/logo-afterslim-tight.png" alt="AfterSlim"></a>
     <span style="width: 64px;"></span>
   </div>
 </nav>
+<script>
+  // Quando o cliente chega aqui vindo de /account/orders (clicou "Manage
+  // subscription"), o botao de voltar leva pra orders, nao pra home.
+  (function() {
+    if (new URLSearchParams(location.search).get('from') !== 'orders') return;
+    var navBack = document.getElementById('subsNavBackLink');
+    var navLabel = document.getElementById('subsNavBackLabel');
+    if (navBack) { navBack.href = '/account/orders'; navBack.setAttribute('aria-label', 'Back to orders'); }
+    if (navLabel) navLabel.textContent = 'Orders';
+  })();
+</script>
 
 <main class="account-page">
   <a href="/account" class="account-page-back">
