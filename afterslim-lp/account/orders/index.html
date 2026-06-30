@@ -92,6 +92,18 @@ main.account-page > h1 {
   gap: 24px;
   align-items: center;
 }
+
+/* Variante subscription: header amarelo sol (mesma cor de /account/subscriptions)
+   pra cliente distinguir compras avulsas (laranja) de pedidos vindos da
+   assinatura (amarelo). */
+.order-card--subscription .order-header {
+  background: linear-gradient(to right, #fbbf24 0%, #fbbf24 55%, #d97706 100%);
+  border-bottom-color: #92400e;
+}
+.order-card--subscription .order-col-label,
+.order-card--subscription .order-col-value {
+  text-shadow: 0 1px 1px rgba(146, 64, 14, 0.25);
+}
 .order-col-label {
   font-size: 12px;
   font-weight: 700;
@@ -536,7 +548,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var { data: orders, error } = await supabase
     .from('orders')
-    .select('id, order_number, status, total_cents, tracking_number, tracking_url, shipping_address, created_at, order_items(product_name, product_image, quantity, unit_price_cents)')
+    .select('id, order_number, status, total_cents, tracking_number, tracking_url, shipping_address, created_at, metadata, order_items(product_name, product_image, quantity, unit_price_cents)')
     .eq('profile_id', user.id)
     .order('created_at', { ascending: false });
 
@@ -602,7 +614,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + 'Track package</a>'
       : '';
 
-    return '<article class="order-card">'
+    // Diferencia visualmente orders de subscription (header amarelo sol, mesma
+    // cor da pagina /account/subscriptions). Cliente bate o olho na lista e
+    // sabe qual veio da assinatura vs compra avulsa.
+    var isSubscriptionOrder = !!(o.metadata && o.metadata.stripe_subscription_id);
+    var cardClass = isSubscriptionOrder ? 'order-card order-card--subscription' : 'order-card';
+    return '<article class="' + cardClass + '">'
       + '<div class="order-header">'
         + '<div>'
           + '<p class="order-col-label">Order placed</p>'
