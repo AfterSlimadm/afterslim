@@ -95,10 +95,11 @@ main.account-page > h1 {
 
 /* Variante subscription: header amarelo sol (mesma cor de /account/subscriptions)
    pra cliente distinguir compras avulsas (laranja) de pedidos vindos da
-   assinatura (amarelo). */
+   assinatura (amarelo). Border-bottom removida — em amarelo ela puxa pro
+   laranja e fica visualmente quebrada. */
 .order-card--subscription .order-header {
   background: linear-gradient(to right, #fbbf24 0%, #fbbf24 55%, #d97706 100%);
-  border-bottom-color: #92400e;
+  border-bottom: 0;
 }
 .order-card--subscription .order-col-label,
 .order-card--subscription .order-col-value {
