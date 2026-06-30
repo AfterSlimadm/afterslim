@@ -302,7 +302,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                       <span class="shipping-option-name">Standard Shipping</span>
                       <span class="shipping-option-time">5-7 business days</span>
                     </div>
-                    <span class="shipping-option-price" style="color:#16a34a;font-weight:700">Free</span>
+                    <span class="shipping-option-price" id="ship-standard-price"></span>
                   </label>
                   <label class="shipping-option" id="ship-express">
                     <input type="radio" name="shipping-method" value="express">
@@ -310,7 +310,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                       <span class="shipping-option-name">DHL Expedited</span>
                       <span class="shipping-option-time">2-3 business days</span>
                     </div>
-                    <span class="shipping-option-price">$4.99</span>
+                    <span class="shipping-option-price">$6.99</span>
                   </label>
                 </div>
                 <button type="button" class="btn-next" id="btn-step2" onclick="ckStep2()">Continue to Payment</button>
@@ -516,6 +516,16 @@ var CK_info=CK_PI[CK_key];
 var CK_step=1;
 var CK_cust={name:'',email:'',phone:''};
 
+// Regra de frete (2026-06-30):
+//   Standard: Free se subscription OR qty>=2; $4.99 se qty=1 one-time
+//   Express : $6.99 sempre (DHL Expedited 2-3 days) — nao vale pra sub.
+// Espelhado no backend /api/checkout pra evitar drift.
+function CK_getShipCents(method) {
+  if (method === 'express') return 699;
+  if (CK_isSub) return 0;            // subscription sempre frete gratis
+  return CK_qty >= 2 ? 0 : 499;
+}
+
 // Prefill automatico se o cliente esta logado. Pega session do Supabase,
 // busca a ultima order do usuario pra reutilizar nome + endereco, e
 // preenche os campos vazios. Nao sobrescreve nada ja digitado.
@@ -616,7 +626,7 @@ function ckPushAddPaymentInfo(){
     window.dataLayer = window.dataLayer || [];
     var ship = document.querySelector('.shipping-option.selected input[type="radio"]');
     var shipVal = ship ? ship.value : 'standard';
-    var shipCents = shipVal === 'express' ? 499 : 0;
+    var shipCents = CK_getShipCents(shipVal);
     var subtotalCents = Math.round(CK_info.price * 100);
     var discountCents = Math.min(CK_discount.discountCents || 0, subtotalCents);
     var totalCents = Math.max(50, subtotalCents - discountCents + shipCents);
@@ -641,7 +651,7 @@ function ckPersistOrderContext(email, name, phone){
   try{
     var ship = document.querySelector('.shipping-option.selected input[type="radio"]');
     var shipVal = ship ? ship.value : 'standard';
-    var shipCents = shipVal === 'express' ? 499 : 0;
+    var shipCents = CK_getShipCents(shipVal);
     var subtotalCents = Math.round(CK_info.price * 100);
     var discountCents = Math.min(CK_discount.discountCents || 0, subtotalCents);
     var afterCoupon = subtotalCents - discountCents;
@@ -746,6 +756,28 @@ function ckShowShipping(){
   document.getElementById('btn-step2-address').style.display='none';
   document.querySelector('#step2 .form-row').style.display='none';
   document.getElementById('shipping-methods').style.display='block';
+  // Atualiza label do Standard de acordo com a regra (Free pra sub OR qty>=2, $4.99 pra 1 one-time).
+  var stdPriceEl=document.getElementById('ship-standard-price');
+  if(stdPriceEl){
+    var stdCents=CK_getShipCents('standard');
+    if(stdCents===0){stdPriceEl.textContent='Free';stdPriceEl.style.color='#16a34a';stdPriceEl.style.fontWeight='700';}
+    else{stdPriceEl.textContent='$'+(stdCents/100).toFixed(2);stdPriceEl.style.color='';stdPriceEl.style.fontWeight='';}
+  }
+  // Express nao vale pra subscription (Stripe Subscriptions usam modelo de
+  // shipping diferente, e nao faz sentido de negocio pra cadencia mensal).
+  // Esconde a opcao + garante que Standard fique selecionada.
+  var expressOpt=document.getElementById('ship-express');
+  if(expressOpt){
+    if(CK_isSub){
+      expressOpt.style.display='none';
+      var stdRadio=document.querySelector('#ship-standard input[type="radio"]');
+      if(stdRadio){stdRadio.checked=true;document.getElementById('ship-standard').classList.add('selected');}
+      var expRadio=expressOpt.querySelector('input[type="radio"]');
+      if(expRadio){expRadio.checked=false;expressOpt.classList.remove('selected');}
+    } else {
+      expressOpt.style.display='';
+    }
+  }
   var addrLine=a+(a2?', '+a2:'');
   document.getElementById('address-summary-inline').innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid #e0e0e0;border-radius:8px;background:#fff"><div style="display:flex;align-items:center;gap:10px"><div style="width:8px;height:8px;border-radius:50%;background:#1a1a1a"></div><div><span style="font-weight:600;font-size:13px;color:#1a1a1a">'+addrLine+'</span><br><span style="font-size:12px;color:#888">'+ci+', '+st+' '+z+'</span></div></div><span style="cursor:pointer;color:#999;font-size:18px" onclick="ckEditAddress()">&#9998;</span></div>';
 }
@@ -762,7 +794,14 @@ function ckStep2(){
   if(ok){
     CK_ship={address:a,address2:a2,city:ci,state:st,zip:z,country:co};
     var shipMethod=document.querySelector('input[name="shipping-method"]:checked');
-    var shipLabel=shipMethod&&shipMethod.value==='express'?'DHL Expedited - $4.99 (2-3 days)':'Standard Shipping - Free (5-7 days)';
+    var shipVal=shipMethod?shipMethod.value:'standard';
+    var shipCentsLabel=CK_getShipCents(shipVal);
+    var shipLabel;
+    if(shipVal==='express'){
+      shipLabel='DHL Expedited - $'+(shipCentsLabel/100).toFixed(2)+' (2-3 days)';
+    } else {
+      shipLabel='Standard Shipping - '+(shipCentsLabel===0?'Free':'$'+(shipCentsLabel/100).toFixed(2))+' (5-7 days)';
+    }
     var addrLine=a+(a2?', '+a2:'');
     document.getElementById('summary2').innerHTML='<span class="summary-name">Shipping address:</span><span>'+addrLine+'</span><span>'+ci+', '+st+' '+z+'</span><span style="margin-top:8px;font-weight:600">'+shipLabel+'</span>';
     document.getElementById('shipping-methods').style.display='none';
@@ -891,7 +930,7 @@ if(zipInput){zipInput.addEventListener('input',function(){
 function ckUpdateSidebarTotals(){
   var ship=document.querySelector('.shipping-option.selected input[type="radio"]');
   var shipVal=ship?ship.value:'standard';
-  var shipCents=shipVal==='express'?499:0;
+  var shipCents=CK_getShipCents(shipVal);
   var subtotalCents=Math.round(CK_info.price*100);
   var discountCents=Math.min(CK_discount.discountCents||0,subtotalCents);
   // Referral cookie (?ref=CODE captured by /js/ref-capture.js) gives a
@@ -1172,8 +1211,8 @@ CK_payRequest=CK_stripe.paymentRequest({
   requestPayerEmail:true,
   requestShipping:true,
   shippingOptions:[
-    {id:'standard',label:'Standard Shipping (5-7 days)',amount:0},
-    {id:'express',label:'DHL Expedited (2-3 days)',amount:499}
+    {id:'standard',label:'Standard Shipping (5-7 days)',amount:CK_getShipCents('standard')},
+    {id:'express',label:'DHL Expedited (2-3 days)',amount:CK_getShipCents('express')}
   ]
 });
 CK_payRequest.canMakePayment().then(function(result){
