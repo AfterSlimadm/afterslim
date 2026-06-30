@@ -472,7 +472,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '<p class="sub-title">' + escapeHtml(name) + '</p>'
           + '<p class="sub-status-line" data-s="' + s.status + '"><strong>' + escapeHtml(statusPretty) + '</strong></p>'
           + '<p class="sub-meta-line">' + (s.quantity || 1) + ' bottle' + ((s.quantity || 1) !== 1 ? 's' : '') + ' . ' + price + ' per shipment</p>'
-          + '<p class="sub-meta-line" style="margin-top:8px">Renews ' + escapeHtml(intervalLabel.toLowerCase()) + '. Cancel anytime.</p>'
+          + '<p class="sub-meta-line" style="margin-top:8px">Renews ' + escapeHtml(intervalLabel.toLowerCase()) + '. Next renewal: <strong>' + nextDate + '</strong>.</p>'
         + '</div>'
         + '<div class="sub-actions">' + actions + '</div>'
       + '</div>'
