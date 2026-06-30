@@ -291,19 +291,19 @@ main.account-page > h1 {
 .sub-history-row strong { font-weight: 600; color: #0f1111; }
 .sub-history-date { color: #565959; font-size: 13px; }
 .sub-history-status {
-  font-size: 12px;
+  font-size: 10.5px;
   font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 999px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  background: transparent;
+  padding: 0;
 }
 .sub-history-status[data-s="paid"],
 .sub-history-status[data-s="shipped"],
-.sub-history-status[data-s="delivered"] { background: rgba(22,163,74,0.1); color: #15803d; }
-.sub-history-status[data-s="processing"] { background: #fef9c3; color: #a16207; }
+.sub-history-status[data-s="delivered"] { color: #15803d; }
+.sub-history-status[data-s="processing"] { color: #a16207; }
 .sub-history-status[data-s="refunded"],
-.sub-history-status[data-s="cancelled"] { background: rgba(220,38,38,0.08); color: #b91c1c; }
+.sub-history-status[data-s="cancelled"] { color: #b91c1c; }
 .sub-history-link {
   font-size: 13px;
   font-weight: 600;
@@ -651,6 +651,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="faq-item">
         <button class="faq-question" type="button" aria-expanded="false">
+          When does my next order ship?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">We pack and ship within 1 business day of each renewal. Most orders arrive in 5-7 business days (standard) or 2-3 business days (DHL Expedited).</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          How do I track my order?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Open Shipment history above and click View on the order you want to track. The tracking number and carrier link appear there as soon as your package ships.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
           Can I cancel anytime?
           <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
@@ -660,20 +678,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="faq-item">
         <button class="faq-question" type="button" aria-expanded="false">
-          How do I update my payment method?
+          How do I get in touch?
           <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="faq-answer">
-          <div class="faq-answer-inner">Use the "Update payment method" link above. We open the secure Stripe portal where you can swap cards or update billing.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question" type="button" aria-expanded="false">
-          What if my package doesn't arrive?
-          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">Open a support ticket and we'll resend at no cost. Lost or stolen packages are on us within 30 days of the ship date.</div>
+          <div class="faq-answer-inner">Open Contact support above to start a ticket. We reply within 1 business day. You can also email support@afterslim.com.</div>
         </div>
       </div>
     </div>
