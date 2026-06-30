@@ -731,17 +731,55 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // applying the change to the customer's Stripe subscription needs a
   // server-side endpoint we haven't built yet. Once /api/subscriptions/*
   // exists, swap these for direct calls.
+  // Cancel usa Stripe Customer Portal (auto-cancel direto no Stripe).
+  // Upgrade ainda eh ticket por enquanto (proration + novo PI confirm sao
+  // implementacao Fase 2).
+  var ADMIN_API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:3456/api/billing-portal'
+    : 'https://admin.afterslim.com/api/billing-portal';
+
+  async function openBillingPortal(btn) {
+    var originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Opening...';
+    try {
+      var session = await window.afterslimAuth.session();
+      var token = session && session.access_token;
+      var res = await fetch(ADMIN_API, {
+        method: 'POST',
+        headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+      });
+      if (!res.ok) throw new Error('Endpoint not ready');
+      var json = await res.json();
+      if (json && json.url) {
+        window.location.href = json.url;
+        return;
+      }
+      throw new Error('No portal URL');
+    } catch (err) {
+      console.error('[subscriptions] billing portal failed:', err);
+      btn.disabled = false;
+      btn.textContent = originalText;
+      alert('Could not open the cancel portal. Please open a support ticket instead.');
+    }
+  }
+
   document.querySelectorAll('.sub-btn[data-action]').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var action = btn.getAttribute('data-action');
       var subId = btn.getAttribute('data-sub');
-      var subject = action === 'upgrade'
-        ? 'Upgrade my subscription plan'
-        : 'Cancel my subscription';
-      var qs = '/account/tickets/new?subject=' + encodeURIComponent(subject) + '&sub=' + subId;
-      if (action === 'upgrade') {
-        qs += '&from_qty=' + (btn.getAttribute('data-current-qty') || '1');
+
+      if (action === 'cancel') {
+        var ok = confirm("Cancel your subscription? You'll keep access to any remaining shipments already paid for. No future charges.");
+        if (!ok) return;
+        openBillingPortal(btn);
+        return;
       }
+
+      // Upgrade fica como ticket por enquanto (Fase 2: chamar /api/subscriptions/upgrade
+      // com novo priceId, lidar com proration + 3DS na diferenca).
+      var qs = '/account/tickets/new?subject=' + encodeURIComponent('Upgrade my subscription plan') + '&sub=' + subId;
+      qs += '&from_qty=' + (btn.getAttribute('data-current-qty') || '1');
       window.location.href = qs;
     });
   });
