@@ -125,19 +125,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </a>
   <script>
     // Se o cliente veio de uma order (?order=ID), os botoes de voltar levam
-    // de volta pra essa order em vez da lista de tickets.
+    // pra lista de orders (de onde ele provavelmente comecou o fluxo).
     (function() {
       var orderId = new URLSearchParams(window.location.search).get('order');
       if (!orderId) return;
-      var orderUrl = '/account/orders/detail?id=' + encodeURIComponent(orderId);
+      var ordersUrl = '/account/orders';
       var navBack = document.getElementById('navBackLink');
       var pageBack = document.getElementById('pageBackLink');
-      if (navBack) { navBack.href = orderUrl; navBack.setAttribute('aria-label', 'Back to order'); }
-      if (pageBack) { pageBack.href = orderUrl; }
+      if (navBack) { navBack.href = ordersUrl; navBack.setAttribute('aria-label', 'Back to orders'); }
+      if (pageBack) { pageBack.href = ordersUrl; }
       var navLabel = document.getElementById('navBackLabel');
       var pageLabel = document.getElementById('pageBackLabel');
-      if (navLabel) navLabel.textContent = 'Order';
-      if (pageLabel) pageLabel.textContent = 'Back to order';
+      if (navLabel) navLabel.textContent = 'Orders';
+      if (pageLabel) pageLabel.textContent = 'Back to orders';
     })();
   </script>
   <h1>Open a new ticket</h1>
