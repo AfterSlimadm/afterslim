@@ -504,47 +504,49 @@ main.account-page > h1 {
 .upgrade-status--ok { background: rgba(22,163,74,0.1); color: #15803d; }
 .upgrade-status--err { background: rgba(220,38,38,0.08); color: #b91c1c; }
 
-/* FAQ */
+/* FAQ — replica o estilo do .faq-section em lp.css (home) pra dar consistencia
+   de UI. Sem categoria/tabs (Allan: nao precisa de seletores). */
 .sub-faq-list {
-  background: #fff;
-  border: 1px solid #e7e7e7;
-  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+.sub-faq-list .faq-item {
+  border-bottom: 1px solid #e7e7e7;
   overflow: hidden;
 }
-.sub-faq-item {
-  border-bottom: 1px solid #f3f3f3;
-}
-.sub-faq-item:last-child { border-bottom: 0; }
-.sub-faq-item summary {
-  cursor: pointer;
-  padding: 16px 20px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #0f1111;
-  list-style: none;
+.sub-faq-list .faq-item:first-child { border-top: 1px solid #e7e7e7; }
+.sub-faq-list .faq-question {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  transition: background 0.15s;
+  gap: 16px;
+  padding: 22px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f1111;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-family: inherit;
 }
-.sub-faq-item summary::-webkit-details-marker { display: none; }
-.sub-faq-item summary::after {
-  content: '+';
-  font-size: 22px;
-  font-weight: 300;
-  color: #565959;
-  line-height: 1;
-  transition: transform 0.2s;
+.sub-faq-list .faq-question:hover { color: #ea580c; }
+.sub-faq-list .faq-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  color: #0f1111;
 }
-.sub-faq-item[open] summary::after { content: '–'; }
-.sub-faq-item summary:hover { background: #fafafa; }
-.sub-faq-item p {
-  padding: 0 20px 18px;
-  margin: 0;
-  font-size: 14px;
+.sub-faq-list .faq-item.open .faq-icon { transform: rotate(180deg); color: #ea580c; }
+.sub-faq-list .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.sub-faq-list .faq-answer-inner {
+  padding: 0 0 22px;
+  font-size: 15px;
   color: #565959;
-  line-height: 1.55;
+  line-height: 1.7;
 }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/subscriptions">
@@ -634,28 +636,76 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="historyList" class="sub-history-list"></div>
   </section>
 
-  <!-- FAQ inline: reduz tickets de duvida basica -->
+  <!-- FAQ inline: reduz tickets de duvida basica. Estilo igual ao FAQ da home. -->
   <section id="faqSection" class="sub-section" style="display:none">
     <h2 class="sub-section-title">Common questions</h2>
     <div class="sub-faq-list">
-      <details class="sub-faq-item">
-        <summary>When am I charged?</summary>
-        <p>On your next renewal date, automatically. We'll email a receipt as soon as it processes.</p>
-      </details>
-      <details class="sub-faq-item">
-        <summary>Can I cancel anytime?</summary>
-        <p>Yes. No fees, no hold periods. You'll keep access to any remaining shipments already paid for.</p>
-      </details>
-      <details class="sub-faq-item">
-        <summary>How do I update my payment method?</summary>
-        <p>Use the "Update payment" card above. We open the secure Stripe portal where you can swap cards or update billing.</p>
-      </details>
-      <details class="sub-faq-item">
-        <summary>What if my package doesn't arrive?</summary>
-        <p>Open a support ticket and we'll resend at no cost. Lost or stolen packages are on us within 30 days of the ship date.</p>
-      </details>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          When am I charged?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">On your next renewal date, automatically. We'll email a receipt as soon as it processes.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          Can I cancel anytime?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Yes. No fees, no hold periods. You'll keep access to any remaining shipments already paid for.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          How do I update my payment method?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Use the "Update payment method" link above. We open the secure Stripe portal where you can swap cards or update billing.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" type="button" aria-expanded="false">
+          What if my package doesn't arrive?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Open a support ticket and we'll resend at no cost. Lost or stolen packages are on us within 30 days of the ship date.</div>
+        </div>
+      </div>
     </div>
   </section>
+  <script>
+    // FAQ accordion (mesmo handler do .faq-question da home, sem categoria).
+    document.querySelectorAll('.sub-faq-list .faq-question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = this.closest('.faq-item');
+        var answer = item.querySelector('.faq-answer');
+        var inner = item.querySelector('.faq-answer-inner');
+        var isOpen = item.classList.contains('open');
+        // Close siblings na mesma lista
+        item.parentElement.querySelectorAll('.faq-item.open').forEach(function(other) {
+          if (other !== item) {
+            other.classList.remove('open');
+            other.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            other.querySelector('.faq-answer').style.maxHeight = '0';
+          }
+        });
+        if (isOpen) {
+          item.classList.remove('open');
+          this.setAttribute('aria-expanded', 'false');
+          answer.style.maxHeight = '0';
+        } else {
+          item.classList.add('open');
+          this.setAttribute('aria-expanded', 'true');
+          answer.style.maxHeight = (inner.scrollHeight + 20) + 'px';
+        }
+      });
+    });
+  </script>
 
   <div id="emptyState" class="account-empty" style="display: none;">
 
