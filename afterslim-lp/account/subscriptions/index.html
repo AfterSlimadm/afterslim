@@ -430,7 +430,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     var actions;
     if (s.status === 'active' || s.status === 'paused') {
-      actions = '<button class="sub-btn sub-btn--primary" data-action="skip" data-sub="' + s.id + '">Skip next</button>'
+      // Upgrade Plan: so aparece se o cliente nao esta no maior pack (3 bottles).
+      // qty 1 -> pode upgrade pra 2 ou 3; qty 2 -> pode upgrade pra 3; qty 3 -> sem upgrade.
+      var canUpgrade = (s.quantity || 1) < 3;
+      var upgradeBtn = canUpgrade
+        ? '<button class="sub-btn sub-btn--primary" data-action="upgrade" data-sub="' + s.id + '" data-current-qty="' + (s.quantity || 1) + '">Upgrade plan</button>'
+        : '';
+      actions = upgradeBtn
         + '<button class="sub-btn sub-btn--secondary" data-action="frequency" data-sub="' + s.id + '">Change frequency</button>'
         + '<button class="sub-btn sub-btn--ghost" data-action="cancel" data-sub="' + s.id + '">Cancel</button>';
     } else if (s.status === 'cancelled') {
@@ -471,10 +477,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     btn.addEventListener('click', function() {
       var action = btn.getAttribute('data-action');
       var subId = btn.getAttribute('data-sub');
-      var subject = action === 'skip' ? 'Skip my next subscription shipment'
+      var subject = action === 'upgrade' ? 'Upgrade my subscription plan'
                   : action === 'frequency' ? 'Change my subscription frequency'
                   : 'Cancel my subscription';
-      window.location.href = '/account/tickets/new?subject=' + encodeURIComponent(subject) + '&sub=' + subId;
+      var qs = '/account/tickets/new?subject=' + encodeURIComponent(subject) + '&sub=' + subId;
+      if (action === 'upgrade') {
+        qs += '&from_qty=' + (btn.getAttribute('data-current-qty') || '1');
+      }
+      window.location.href = qs;
     });
   });
 })();
