@@ -239,6 +239,90 @@ main.account-page > h1 {
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/orders">
 <meta name="robots" content="noindex, nofollow">
+<style>
+/* Reorder modal: cliente escolhe pack (1/2/3 bottles) antes de ser redirecionado
+   pra LP. Pre-highlight do pack baseado na quantidade do pedido original. */
+.reorder-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 17, 17, 0.55);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+.reorder-overlay.is-open { display: flex; }
+.reorder-modal {
+  background: #fff;
+  border-radius: 18px;
+  max-width: 440px; width: 100%;
+  padding: 26px 24px 22px;
+  box-shadow: 0 24px 56px rgba(0,0,0,0.22);
+  position: relative;
+}
+.reorder-close {
+  position: absolute; top: 12px; right: 12px;
+  background: none; border: 0; cursor: pointer;
+  color: #565959; padding: 8px;
+  border-radius: 8px;
+}
+.reorder-close:hover { background: #f5f5f4; color: #0f1111; }
+.reorder-title {
+  font-size: 20px; font-weight: 800;
+  color: #0f1111;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+.reorder-sub {
+  font-size: 13.5px;
+  color: #565959;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+.reorder-packs {
+  display: grid; gap: 10px;
+  margin-bottom: 14px;
+}
+.reorder-pack {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 2px solid #e7e7e7;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  position: relative;
+}
+.reorder-pack:hover { border-color: #ea580c; background: #fff8f1; }
+.reorder-pack:active { transform: scale(0.99); }
+.reorder-pack.is-recommended { border-color: #ea580c; }
+.reorder-pack-info { display: flex; flex-direction: column; gap: 2px; }
+.reorder-pack-title {
+  font-size: 15px; font-weight: 700; color: #0f1111;
+  display: flex; align-items: center; gap: 8px;
+}
+.reorder-pack-badge {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #fff; background: #ea580c;
+  padding: 3px 8px; border-radius: 999px;
+}
+.reorder-pack-badge.best { background: #b91c1c; }
+.reorder-pack-sub {
+  font-size: 12.5px; color: #565959;
+}
+.reorder-pack-arrow {
+  align-self: center;
+  color: #c2410c;
+}
+.reorder-foot {
+  font-size: 12px; color: #8a7a6e;
+  text-align: center;
+  margin: 14px 0 0;
+}
+</style>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.afterslim.com/account/orders">
 <meta property="og:title" content="Your Orders — AfterSlim">
@@ -541,9 +625,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '</div>'
         + '<div class="order-actions">'
           + trackingBtn
-          + '<a class="order-btn order-btn--primary" href="/?ref=reorder#bundles">'
+          + '<button type="button" class="order-btn order-btn--primary" data-reorder data-last-qty="' + (first.quantity || 1) + '">'
             + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>'
-            + 'Buy it again</a>'
+            + 'Buy it again</button>'
           + '<a class="order-btn order-btn--secondary" href="/account/tickets/new?order=' + o.id + '">'
             + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
             + 'Need help</a>'
@@ -560,7 +644,83 @@ function escapeHtml(s) {
     return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
   });
 }
+
+// Reorder modal: dispara quando cliente clica "Buy it again". Mostra
+// 3 packs (1/2/3 bottles), pre-highlight do pack baseado na qty do
+// pedido original, e redireciona pra LP com ?pack=N pra a home selecionar
+// o bundle correspondente automaticamente.
+(function() {
+  function openReorderModal(lastQty) {
+    var overlay = document.getElementById('reorderOverlay');
+    var pre = Math.min(3, Math.max(1, parseInt(lastQty, 10) || 1));
+    overlay.querySelectorAll('.reorder-pack').forEach(function(b) {
+      b.classList.toggle('is-recommended', parseInt(b.dataset.pack, 10) === pre);
+    });
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeReorderModal() {
+    var overlay = document.getElementById('reorderOverlay');
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-reorder]');
+    if (btn) {
+      e.preventDefault();
+      openReorderModal(btn.getAttribute('data-last-qty'));
+      return;
+    }
+    var pack = e.target.closest('.reorder-pack');
+    if (pack) {
+      var packN = pack.getAttribute('data-pack');
+      window.location.href = '/?pack=' + packN + '&ref=reorder#bundles';
+      return;
+    }
+    if (e.target.matches('.reorder-overlay') || e.target.closest('.reorder-close')) {
+      closeReorderModal();
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeReorderModal();
+  });
+})();
 </script>
+
+<!-- Reorder modal (oculto por padrao, ativado via data-reorder no botao Buy it again) -->
+<div class="reorder-overlay" id="reorderOverlay" role="dialog" aria-modal="true" aria-labelledby="reorderTitle">
+  <div class="reorder-modal">
+    <button type="button" class="reorder-close" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h2 class="reorder-title" id="reorderTitle">Reorder AfterSlim</h2>
+    <p class="reorder-sub">Pick your bundle. We'll take you straight to checkout.</p>
+    <div class="reorder-packs">
+      <button type="button" class="reorder-pack" data-pack="1">
+        <div class="reorder-pack-info">
+          <div class="reorder-pack-title">1 Bottle</div>
+          <div class="reorder-pack-sub">30-day supply . Save $12</div>
+        </div>
+        <svg class="reorder-pack-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+      <button type="button" class="reorder-pack" data-pack="2">
+        <div class="reorder-pack-info">
+          <div class="reorder-pack-title">2 Bottles <span class="reorder-pack-badge">Recommended</span></div>
+          <div class="reorder-pack-sub">60-day supply . Save $22</div>
+        </div>
+        <svg class="reorder-pack-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+      <button type="button" class="reorder-pack" data-pack="3">
+        <div class="reorder-pack-info">
+          <div class="reorder-pack-title">3 Bottles <span class="reorder-pack-badge best">Best value</span></div>
+          <div class="reorder-pack-sub">90-day supply . Save $32</div>
+        </div>
+        <svg class="reorder-pack-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <p class="reorder-foot">Subscribe & Save 26% applied at checkout. Cancel anytime.</p>
+  </div>
+</div>
 
 </body>
 </html>

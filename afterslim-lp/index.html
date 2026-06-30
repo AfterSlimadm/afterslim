@@ -1492,6 +1492,26 @@ if (document.readyState === 'loading') {
   pushEcom('view_item');
 }
 
+// Reorder deep-link: /?pack=N&ref=reorder vem de /account/orders "Buy it again".
+// Pre-seleciona o pack escolhido pelo cliente e aplica scroll suave pra #bundles.
+(function() {
+  function applyReorderParams() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var pack = parseInt(params.get('pack'), 10);
+      if (pack >= 1 && pack <= 3) {
+        var btn = document.querySelector('.bundle-opt[data-pack="' + pack + '"]');
+        if (btn) btn.click();
+      }
+    } catch (e) { /* ignore */ }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyReorderParams);
+  } else {
+    applyReorderParams();
+  }
+})();
+
 function renderPrice() {
   var d = pricing[currentPlan][currentPack];
   // Update both hero and modal price slots (each has its own IDs)
