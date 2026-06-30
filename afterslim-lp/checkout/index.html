@@ -541,12 +541,13 @@ var CK_cust={name:'',email:'',phone:''};
     setIfEmpty('f-email', user.email || '');
     setIfEmpty('f-name', metaName);
 
-    // Busca ultima order pra reusar shipping_address + name + phone.
+    // Busca ultima order pra reusar shipping_address + billing_name.
     // Coluna correta eh profile_id (a tabela orders linka pro auth.users via
-    // profile_id, nao user_id — confirmado em /account/orders).
+    // profile_id, nao user_id — confirmado em /account/orders). Phone nao
+    // existe como coluna da orders; mora dentro de shipping_address quando ha.
     var ordersRes = await sb
       .from('orders')
-      .select('shipping_address, phone, billing_name')
+      .select('shipping_address, billing_name')
       .eq('profile_id', user.id)
       .order('created_at', { ascending: false })
       .limit(1);
@@ -555,7 +556,7 @@ var CK_cust={name:'',email:'',phone:''};
 
     var addr = last.shipping_address || {};
     setIfEmpty('f-name', addr.name || last.billing_name || '');
-    setIfEmpty('f-phone', last.phone || '');
+    setIfEmpty('f-phone', addr.phone || '');
     setIfEmpty('f-address', addr.line1 || '');
     setIfEmpty('f-address2', addr.line2 || '');
     setIfEmpty('f-city', addr.city || '');
