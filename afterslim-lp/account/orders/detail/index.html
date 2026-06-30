@@ -380,7 +380,7 @@ main.account-page .od-invoice * { text-align: left; }
 .od-tracking-meta a { color: #c2410c; text-decoration: underline; font-weight: 600; }
 .od-timeline {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   position: relative;
   margin: 0;
 }
@@ -439,8 +439,62 @@ main.account-page .od-invoice * { text-align: left; }
 @media (max-width: 600px) {
   .od-tracking { padding: 18px; }
   .od-timeline { gap: 0; }
-  .od-timeline-step-label { font-size: 12px; }
-  .od-timeline-step-date { font-size: 11px; }
+  .od-timeline-step-label { font-size: 11px; }
+  .od-timeline-step-date { font-size: 10px; }
+}
+
+/* Event history (lista estilo USPS de movimentacoes do pacote). */
+.od-events-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #565959;
+  margin: 28px 0 14px;
+}
+.od-events {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #eee5dc;
+}
+.od-event {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee5dc;
+  font-size: 14px;
+  align-items: start;
+}
+.od-event-date {
+  color: #565959;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.od-event-date strong { display: block; color: #0f1111; font-weight: 600; font-size: 13.5px; }
+.od-event-body { color: #0f1111; line-height: 1.5; }
+.od-event-body strong { font-weight: 600; }
+.od-event-location {
+  display: block;
+  color: #565959;
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+.od-event:first-child .od-event-body strong { color: #c2410c; }
+.od-events-empty {
+  background: #faf7f3;
+  border: 1px dashed #e7d9c5;
+  border-radius: 10px;
+  padding: 18px 20px;
+  text-align: center;
+  font-size: 13.5px;
+  color: #8a7a6e;
+  line-height: 1.55;
+}
+@media (max-width: 600px) {
+  .od-event { grid-template-columns: 1fr; gap: 4px; }
+  .od-event-date { font-size: 12px; }
 }
 
 .od-btn--secondary:hover {
@@ -639,10 +693,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + 'Track package</a>'
     : '';
 
-  // Tracking timeline: Placed -> Shipped -> Delivered
+  // Tracking timeline: Placed -> Shipped -> In transit -> Delivered
   var shippedAt = order.shipped_at ? new Date(order.shipped_at) : null;
   var deliveredAt = order.delivered_at ? new Date(order.delivered_at) : null;
   function fmtDate(d) { return d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''; }
+  function fmtDateTime(d) {
+    return d ? d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+  }
   // Estimated delivery: shipped_at + 6 dias (standard) ou + 3 dias (expedited)
   var isExpedited = (order.shipping_method || '').toLowerCase().indexOf('expedited') !== -1
     || (order.shipping_method || '').toLowerCase().indexOf('dhl') !== -1;
@@ -654,9 +711,74 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     etaDate = new Date(placedAt);
     etaDate.setDate(etaDate.getDate() + (isExpedited ? 4 : 8));
   }
+  // 4-step timeline. "In transit" fica current quando o pacote saiu mas
+  // ainda nao chegou (entre shipped_at e delivered_at).
   var step1Class = 'is-done';
-  var step2Class = shippedAt ? (deliveredAt ? 'is-done' : 'is-current') : 'is-pending';
-  var step3Class = deliveredAt ? 'is-done is-current' : 'is-pending';
+  var step2Class = shippedAt ? 'is-done' : 'is-pending';
+  var step3Class = shippedAt ? (deliveredAt ? 'is-done' : 'is-current') : 'is-pending';
+  var step4Class = deliveredAt ? 'is-done is-current' : 'is-pending';
+
+  // Event history — vem de order.tracking_events (array de {at, status, location, description}).
+  // Sem integracao de carrier ainda, fallback eh um placeholder amigavel.
+  var trackingEvents = Array.isArray(order.tracking_events) ? order.tracking_events.slice() : [];
+  trackingEvents.sort(function(a, b) { return new Date(b.at) - new Date(a.at); });
+
+  var eventsHtml;
+  if (trackingEvents.length > 0) {
+    eventsHtml = '<ul class="od-events">'
+      + trackingEvents.map(function(ev) {
+          var d = new Date(ev.at);
+          var datePart = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          var timePart = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+          var loc = (ev.location || '').trim();
+          return '<li class="od-event">'
+            + '<div class="od-event-date"><strong>' + escapeHtml(datePart) + '</strong>' + escapeHtml(timePart) + '</div>'
+            + '<div class="od-event-body">'
+              + '<strong>' + escapeHtml(ev.description || ev.status || 'Status update') + '</strong>'
+              + (loc ? '<span class="od-event-location">' + escapeHtml(loc) + '</span>' : '')
+            + '</div>'
+          + '</li>';
+        }).join('')
+    + '</ul>';
+  } else if (shippedAt) {
+    // Pacote shipou mas nao temos eventos detalhados ainda. Mostra mini-history
+    // com o que sabemos: shipped + (delivered se aplicavel).
+    var seedEvents = [];
+    if (deliveredAt) seedEvents.push({
+      at: deliveredAt,
+      label: 'Delivered',
+      sub: 'Package delivered to ' + (addr.city ? addr.city + ', ' + (addr.state || '') : 'your address')
+    });
+    seedEvents.push({
+      at: shippedAt,
+      label: 'Shipped',
+      sub: 'Package handed to ' + (carrierPretty || 'carrier') + (carrierPretty ? '. Tracking number issued.' : '.')
+    });
+    seedEvents.push({
+      at: placedAt,
+      label: 'Order placed',
+      sub: 'Payment received. We\'re packing your order.'
+    });
+    eventsHtml = '<ul class="od-events">'
+      + seedEvents.map(function(ev) {
+          var d = new Date(ev.at);
+          var datePart = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          var timePart = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+          return '<li class="od-event">'
+            + '<div class="od-event-date"><strong>' + escapeHtml(datePart) + '</strong>' + escapeHtml(timePart) + '</div>'
+            + '<div class="od-event-body">'
+              + '<strong>' + escapeHtml(ev.label) + '</strong>'
+              + '<span class="od-event-location">' + escapeHtml(ev.sub) + '</span>'
+            + '</div>'
+          + '</li>';
+        }).join('')
+    + '</ul>';
+  } else {
+    eventsHtml = '<div class="od-events-empty">'
+      + 'Detailed movement updates appear here once your package ships. '
+      + 'You\'ll get an email when it leaves our facility and another when it lands in your city.'
+    + '</div>';
+  }
 
   var trackingBlock =
     '<section class="od-tracking">'
@@ -681,41 +803,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '<p class="od-timeline-step-date">' + (shippedAt ? fmtDate(shippedAt) : 'Packing up') + '</p>'
         + '</div>'
         + '<div class="od-timeline-step ' + step3Class + '">'
+          + '<p class="od-timeline-step-label">In transit</p>'
+          + '<p class="od-timeline-step-date">' + (deliveredAt ? '' : (shippedAt ? 'On the way' : 'Awaiting handoff')) + '</p>'
+        + '</div>'
+        + '<div class="od-timeline-step ' + step4Class + '">'
           + '<p class="od-timeline-step-label">Delivered</p>'
           + '<p class="od-timeline-step-date">' + (deliveredAt ? fmtDate(deliveredAt) : (etaDate ? 'Expected ' + fmtDate(etaDate) : '')) + '</p>'
         + '</div>'
       + '</div>'
+      + '<p class="od-events-title">Shipment activity</p>'
+      + eventsHtml
     + '</section>';
+
+  // Modo da pagina:
+  //   sem hash -> "tracking" (hero + timeline + event history; sem items/summary/invoice)
+  //   #invoice -> "invoice" (hero + items + summary + invoice card; sem tracking block)
+  var isInvoiceMode = window.location.hash === '#invoice';
+
+  // Action bar: invoice mode mostra Download invoice + Need help.
+  // Tracking mode mostra Track package (link externo) + Need help.
+  var actionBar = '<div class="od-top-actions od-print-hide">'
+    + (isInvoiceMode ? '' : trackingBtn)
+    + '<a class="od-btn od-btn--secondary" href="/account/tickets/new?order=' + order.id + '">'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
+      + 'Need help</a>'
+    + (isInvoiceMode
+        ? '<button type="button" id="od-download-btn" class="od-btn od-btn--primary" data-order="' + escapeHtml(order.order_number || order.id) + '">'
+            + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+            + 'Download invoice</button>'
+        : '')
+  + '</div>';
+
+  var heroBlock = '<div class="od-hero">'
+    + '<div>'
+      + '<p class="od-hero-eyebrow">Order ' + escapeHtml(order.order_number || '') + '</p>'
+      + '<h1>AfterSlim GLP-1 Companion</h1>'
+      + '<p class="od-hero-sub">Placed on ' + datePretty + ' . ' + (order.order_items?.length || 0) + ' item' + ((order.order_items?.length || 0) !== 1 ? 's' : '') + ' . ' + window.formatMoney(order.total_cents) + ' total</p>'
+    + '</div>'
+    + '<div class="od-hero-status">'
+      + '<span class="od-hero-status-label">Status</span>'
+      + statusCap
+    + '</div>'
+  + '</div>';
 
   document.getElementById('orderBody').innerHTML =
     '<a href="/account/orders" class="account-page-back" style="margin-bottom:18px;">'
       + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>'
       + 'Back to orders</a>'
 
-    // Top right action bar: Download + Need help (outside the card)
-    + '<div class="od-top-actions od-print-hide">'
-      + trackingBtn
-      + '<a class="od-btn od-btn--secondary" href="/account/tickets/new?order=' + order.id + '">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'
-        + 'Need help</a>'
-      + '<button type="button" id="od-download-btn" class="od-btn od-btn--primary" data-order="' + escapeHtml(order.order_number || order.id) + '">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
-        + 'Download invoice</button>'
-    + '</div>'
+    + actionBar
+    + heroBlock
+    + (isInvoiceMode ? '' : trackingBlock)
+    + (isInvoiceMode ? renderInvoiceBlocks() : '');
 
-    + '<div class="od-hero">'
-      + '<div>'
-        + '<p class="od-hero-eyebrow">Order ' + escapeHtml(order.order_number || '') + '</p>'
-        + '<h1>AfterSlim GLP-1 Companion</h1>'
-        + '<p class="od-hero-sub">Placed on ' + datePretty + ' . ' + (order.order_items?.length || 0) + ' item' + ((order.order_items?.length || 0) !== 1 ? 's' : '') + ' . ' + window.formatMoney(order.total_cents) + ' total</p>'
-      + '</div>'
-      + '<div class="od-hero-status">'
-        + '<span class="od-hero-status-label">Status</span>'
-        + statusCap
-      + '</div>'
-    + '</div>'
-
-    + trackingBlock
+  // Render dos blocos de items/summary/invoice (so em invoice mode).
+  function renderInvoiceBlocks() {
+    return ''
 
     + '<div class="od-card">'
       + '<div class="od-grid">'
@@ -802,6 +945,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '</p>'
         + '</div>'
       + '</div>';
+  } // end renderInvoiceBlocks
 
   // Comportamento por hash:
   //   sem hash (View order details) -> abre no topo, mostra tracking primeiro
