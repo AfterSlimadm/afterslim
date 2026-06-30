@@ -259,7 +259,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     Back to account
   </a>
   <h1>Subscriptions</h1>
-  <p class="account-page-lede">Skip a shipment, change frequency, or cancel. No fees, no hold periods.</p>
+  <p class="account-page-lede">Upgrade your plan or cancel anytime. No fees, no hold periods.</p>
   <span id="subStatusBadge" class="account-cta-eyebrow" style="display: none;">You haven't started a subscription yet</span>
 
   <div id="subsList"></div>
@@ -437,7 +437,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         ? '<button class="sub-btn sub-btn--primary" data-action="upgrade" data-sub="' + s.id + '" data-current-qty="' + (s.quantity || 1) + '">Upgrade plan</button>'
         : '';
       actions = upgradeBtn
-        + '<button class="sub-btn sub-btn--secondary" data-action="frequency" data-sub="' + s.id + '">Change frequency</button>'
         + '<button class="sub-btn sub-btn--ghost" data-action="cancel" data-sub="' + s.id + '">Cancel</button>';
     } else if (s.status === 'cancelled') {
       actions = '<a class="sub-btn sub-btn--primary" href="/#bundles">Resubscribe</a>';
@@ -477,9 +476,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     btn.addEventListener('click', function() {
       var action = btn.getAttribute('data-action');
       var subId = btn.getAttribute('data-sub');
-      var subject = action === 'upgrade' ? 'Upgrade my subscription plan'
-                  : action === 'frequency' ? 'Change my subscription frequency'
-                  : 'Cancel my subscription';
+      var subject = action === 'upgrade'
+        ? 'Upgrade my subscription plan'
+        : 'Cancel my subscription';
       var qs = '/account/tickets/new?subject=' + encodeURIComponent(subject) + '&sub=' + subId;
       if (action === 'upgrade') {
         qs += '&from_qty=' + (btn.getAttribute('data-current-qty') || '1');
