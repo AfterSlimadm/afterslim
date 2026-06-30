@@ -673,10 +673,11 @@ function escapeHtml(s) {
     }
     var pack = e.target.closest('.reorder-pack');
     if (pack) {
-      var packN = pack.getAttribute('data-pack');
-      // Vai direto pro checkout (compra avulsa). Pra assinatura seria
-      // `?qty=N&subscribe=true`, mas o reorder modal nao tem toggle de plano.
-      window.location.href = '/checkout?qty=' + packN + '&ref=reorder';
+      e.preventDefault();
+      var packN = pack.dataset.pack;
+      var target = '/checkout?qty=' + encodeURIComponent(packN) + '&ref=reorder';
+      console.log('[reorder] pack selected =', packN, '-> redirecting to', target);
+      window.location.assign(target);
       return;
     }
     if (e.target.matches('.reorder-overlay') || e.target.closest('.reorder-close')) {
