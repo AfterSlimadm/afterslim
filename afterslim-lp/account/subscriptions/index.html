@@ -328,6 +328,88 @@ main.account-page > h1 {
   .sub-history-row > :nth-child(4) { grid-column: 2 / 3; justify-self: end; }
 }
 
+/* ===== Upgrade modal ===== */
+.upgrade-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 17, 17, 0.55);
+  display: flex;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+.upgrade-modal {
+  background: #fff;
+  border-radius: 18px;
+  max-width: 460px; width: 100%;
+  padding: 26px 24px 22px;
+  box-shadow: 0 24px 56px rgba(0,0,0,0.22);
+  position: relative;
+}
+.upgrade-close {
+  position: absolute; top: 12px; right: 12px;
+  background: none; border: 0; cursor: pointer;
+  color: #565959; padding: 8px;
+  border-radius: 8px;
+}
+.upgrade-close:hover { background: #f5f5f4; color: #0f1111; }
+.upgrade-title {
+  font-size: 20px; font-weight: 800;
+  color: #0f1111;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+.upgrade-sub {
+  font-size: 13.5px; color: #565959;
+  margin: 0 0 20px; line-height: 1.5;
+}
+.upgrade-sub strong { color: #0f1111; font-weight: 700; }
+.upgrade-packs { display: grid; gap: 10px; margin-bottom: 16px; }
+.upgrade-pack {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 2px solid #e7e7e7;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+.upgrade-pack:hover { border-color: #fbbf24; background: #fefce8; }
+.upgrade-pack:active { transform: scale(0.99); }
+.upgrade-pack:disabled { opacity: 0.5; cursor: not-allowed; }
+.upgrade-pack-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.upgrade-pack-title {
+  font-size: 15px; font-weight: 700; color: #0f1111;
+  display: flex; align-items: center; gap: 8px;
+}
+.upgrade-pack-badge {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #fff; background: #d97706;
+  padding: 3px 8px; border-radius: 999px;
+}
+.upgrade-pack-sub { font-size: 12.5px; color: #565959; }
+.upgrade-pack-arrow { align-self: center; color: #a16207; }
+.upgrade-foot {
+  font-size: 12px; color: #8a7a6e;
+  text-align: center;
+  margin: 12px 0 0;
+  line-height: 1.5;
+}
+.upgrade-status {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fef9c3;
+  color: #854d0e;
+  text-align: center;
+}
+.upgrade-status--ok { background: rgba(22,163,74,0.1); color: #15803d; }
+.upgrade-status--err { background: rgba(220,38,38,0.08); color: #b91c1c; }
+
 /* FAQ */
 .sub-faq-list {
   background: #fff;
@@ -776,13 +858,99 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         return;
       }
 
-      // Upgrade fica como ticket por enquanto (Fase 2: chamar /api/subscriptions/upgrade
-      // com novo priceId, lidar com proration + 3DS na diferenca).
-      var qs = '/account/tickets/new?subject=' + encodeURIComponent('Upgrade my subscription plan') + '&sub=' + subId;
-      qs += '&from_qty=' + (btn.getAttribute('data-current-qty') || '1');
-      window.location.href = qs;
+      if (action === 'upgrade') {
+        openUpgradeModal(subId, parseInt(btn.getAttribute('data-current-qty'), 10) || 1);
+        return;
+      }
     });
   });
+
+  // ===== Upgrade modal =====
+  var UPGRADE_API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:3456/api/subscriptions/upgrade'
+    : 'https://admin.afterslim.com/api/subscriptions/upgrade';
+
+  // Preco subscription mensal por bottle (per shipment, sem desconto).
+  // Usado so pra exibir a comparacao no modal. Stripe valida no backend.
+  var SUB_PRICES_DISPLAY = { 1: 27.99, 2: 47.99, 3: 57.99 };
+
+  function openUpgradeModal(subId, currentQty) {
+    var existing = document.getElementById('upgradeOverlay');
+    if (existing) existing.remove();
+
+    var options = [2, 3].filter(function(q) { return q > currentQty; });
+    var optsHtml = options.map(function(q) {
+      var price = SUB_PRICES_DISPLAY[q].toFixed(2);
+      var perBottle = (SUB_PRICES_DISPLAY[q] / q).toFixed(2);
+      var label = q === 3 ? 'Best value' : 'Recommended';
+      return '<button type="button" class="upgrade-pack" data-target-qty="' + q + '">'
+        + '<div class="upgrade-pack-info">'
+          + '<div class="upgrade-pack-title">' + q + ' Bottles <span class="upgrade-pack-badge">' + label + '</span></div>'
+          + '<div class="upgrade-pack-sub">$' + price + ' every ' + (30 * q) + ' days . $' + perBottle + '/bottle</div>'
+        + '</div>'
+        + '<svg class="upgrade-pack-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>'
+      + '</button>';
+    }).join('');
+
+    var html = '<div class="upgrade-overlay" id="upgradeOverlay">'
+      + '<div class="upgrade-modal">'
+        + '<button type="button" class="upgrade-close" aria-label="Close">'
+          + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+        + '</button>'
+        + '<h2 class="upgrade-title">Upgrade your plan</h2>'
+        + '<p class="upgrade-sub">You\'re on <strong>' + currentQty + ' bottle' + (currentQty !== 1 ? 's' : '') + ' every ' + (30 * currentQty) + ' days</strong>. Pick a new plan below.</p>'
+        + '<div class="upgrade-packs">' + optsHtml + '</div>'
+        + '<p class="upgrade-foot">The price difference is prorated on your next renewal. No extra charge today.</p>'
+        + '<div class="upgrade-status" id="upgradeStatus" style="display:none"></div>'
+      + '</div>'
+    + '</div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+
+    var overlay = document.getElementById('upgradeOverlay');
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay || e.target.closest('.upgrade-close')) {
+        overlay.remove();
+      }
+    });
+    overlay.querySelectorAll('.upgrade-pack').forEach(function(pack) {
+      pack.addEventListener('click', function() {
+        var targetQty = parseInt(pack.getAttribute('data-target-qty'), 10);
+        confirmUpgrade(subId, targetQty, pack);
+      });
+    });
+  }
+
+  async function confirmUpgrade(subId, newQty, packBtn) {
+    var status = document.getElementById('upgradeStatus');
+    var allPacks = document.querySelectorAll('.upgrade-pack');
+    allPacks.forEach(function(p) { p.disabled = true; });
+    status.style.display = 'block';
+    status.textContent = 'Updating your plan...';
+    status.className = 'upgrade-status';
+    try {
+      var session = await window.afterslimAuth.session();
+      var token = session && session.access_token;
+      if (!token) throw new Error('Not signed in');
+      var res = await fetch(UPGRADE_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: JSON.stringify({ subscription_id: subId, new_qty: newQty }),
+      });
+      var json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Upgrade failed');
+      status.textContent = 'Plan updated! Refreshing...';
+      status.className = 'upgrade-status upgrade-status--ok';
+      setTimeout(function() { window.location.reload(); }, 900);
+    } catch (err) {
+      console.error('[subscriptions] upgrade failed:', err);
+      status.textContent = (err && err.message) ? err.message : 'Upgrade failed. Try again or contact support.';
+      status.className = 'upgrade-status upgrade-status--err';
+      allPacks.forEach(function(p) { p.disabled = false; });
+    }
+  }
 })();
 
 function escapeHtml(s) {
