@@ -350,6 +350,99 @@ main.account-page .od-invoice * { text-align: left; }
   border: 1.5px solid #ea580c;
   color: #c2410c;
 }
+/* Tracking timeline */
+.od-tracking {
+  background: #fff;
+  border: 1px solid #eee5dc;
+  border-radius: 16px;
+  padding: 24px 26px;
+  margin-bottom: 24px;
+}
+.od-tracking-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.od-tracking-head h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f1111;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.od-tracking-meta {
+  font-size: 13px;
+  color: #565959;
+}
+.od-tracking-meta a { color: #c2410c; text-decoration: underline; font-weight: 600; }
+.od-timeline {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  position: relative;
+  margin: 0;
+}
+.od-timeline-step {
+  position: relative;
+  padding-top: 32px;
+  text-align: center;
+}
+.od-timeline-step::before {
+  content: '';
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border: 2px solid #d8d4cf;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.od-timeline-step.is-done::before {
+  background: #ea580c;
+  border-color: #ea580c;
+}
+.od-timeline-step.is-current::before {
+  background: #ea580c;
+  border-color: #ea580c;
+  box-shadow: 0 0 0 4px rgba(234,88,12,0.18);
+}
+/* Linha conectora entre os passos */
+.od-timeline-step::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: #e7e3dc;
+  z-index: 1;
+}
+.od-timeline-step:last-child::after { display: none; }
+.od-timeline-step.is-done::after { background: #ea580c; }
+.od-timeline-step-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f1111;
+  margin: 0 0 2px;
+}
+.od-timeline-step-date {
+  font-size: 12px;
+  color: #565959;
+  margin: 0;
+}
+.od-timeline-step.is-pending .od-timeline-step-label { color: #8a7a6e; }
+@media (max-width: 600px) {
+  .od-tracking { padding: 18px; }
+  .od-timeline { gap: 0; }
+  .od-timeline-step-label { font-size: 12px; }
+  .od-timeline-step-date { font-size: 11px; }
+}
+
 .od-btn--secondary:hover {
   background: #fff3e6;
   color: #8a2f0d;
@@ -524,11 +617,75 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Status pretty
   var statusCap = (order.status || '').charAt(0).toUpperCase() + (order.status || '').slice(1);
 
-  var trackingBtn = (order.tracking_url || order.tracking_number)
-    ? '<a class="od-btn od-btn--secondary" href="' + (order.tracking_url || '#') + '" target="_blank" rel="noopener">'
+  // Tracking URL: usa tracking_url se ja salvo, senao constroi a partir do carrier
+  var carrierUrls = {
+    usps: 'https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=',
+    ups: 'https://www.ups.com/track?tracknum=',
+    fedex: 'https://www.fedex.com/fedextrack/?trknbr=',
+    dhl: 'https://www.dhl.com/us-en/home/tracking/tracking-express.html?submit=1&tracking-id=',
+    dhl_ecommerce: 'https://webtrack.dhlecs.com/?trackingnumber='
+  };
+  var trackingUrl = order.tracking_url
+    || (order.tracking_number && order.tracking_carrier && carrierUrls[order.tracking_carrier]
+        ? carrierUrls[order.tracking_carrier] + encodeURIComponent(order.tracking_number)
+        : '');
+  var carrierPretty = order.tracking_carrier
+    ? ({usps:'USPS', ups:'UPS', fedex:'FedEx', dhl:'DHL Express', dhl_ecommerce:'DHL eCommerce'}[order.tracking_carrier] || order.tracking_carrier.toUpperCase())
+    : null;
+
+  var trackingBtn = (trackingUrl || order.tracking_number)
+    ? '<a class="od-btn od-btn--secondary" href="' + (trackingUrl || '#') + '" target="_blank" rel="noopener">'
         + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/></svg>'
         + 'Track package</a>'
     : '';
+
+  // Tracking timeline: Placed -> Shipped -> Delivered
+  var shippedAt = order.shipped_at ? new Date(order.shipped_at) : null;
+  var deliveredAt = order.delivered_at ? new Date(order.delivered_at) : null;
+  function fmtDate(d) { return d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''; }
+  // Estimated delivery: shipped_at + 6 dias (standard) ou + 3 dias (expedited)
+  var isExpedited = (order.shipping_method || '').toLowerCase().indexOf('expedited') !== -1
+    || (order.shipping_method || '').toLowerCase().indexOf('dhl') !== -1;
+  var etaDate = null;
+  if (shippedAt && !deliveredAt) {
+    etaDate = new Date(shippedAt);
+    etaDate.setDate(etaDate.getDate() + (isExpedited ? 3 : 6));
+  } else if (!shippedAt) {
+    etaDate = new Date(placedAt);
+    etaDate.setDate(etaDate.getDate() + (isExpedited ? 4 : 8));
+  }
+  var step1Class = 'is-done';
+  var step2Class = shippedAt ? (deliveredAt ? 'is-done' : 'is-current') : 'is-pending';
+  var step3Class = deliveredAt ? 'is-done is-current' : 'is-pending';
+
+  var trackingBlock =
+    '<section class="od-tracking">'
+      + '<div class="od-tracking-head">'
+        + '<h2>Order tracking</h2>'
+        + (order.tracking_number
+            ? '<p class="od-tracking-meta">'
+                + (carrierPretty ? escapeHtml(carrierPretty) + ' . ' : '')
+                + (trackingUrl
+                    ? '<a href="' + escapeHtml(trackingUrl) + '" target="_blank" rel="noopener">' + escapeHtml(order.tracking_number) + '</a>'
+                    : escapeHtml(order.tracking_number))
+              + '</p>'
+            : '<p class="od-tracking-meta">Tracking number lands here once shipped.</p>')
+      + '</div>'
+      + '<div class="od-timeline">'
+        + '<div class="od-timeline-step ' + step1Class + '">'
+          + '<p class="od-timeline-step-label">Order placed</p>'
+          + '<p class="od-timeline-step-date">' + fmtDate(placedAt) + '</p>'
+        + '</div>'
+        + '<div class="od-timeline-step ' + step2Class + '">'
+          + '<p class="od-timeline-step-label">Shipped</p>'
+          + '<p class="od-timeline-step-date">' + (shippedAt ? fmtDate(shippedAt) : 'Packing up') + '</p>'
+        + '</div>'
+        + '<div class="od-timeline-step ' + step3Class + '">'
+          + '<p class="od-timeline-step-label">Delivered</p>'
+          + '<p class="od-timeline-step-date">' + (deliveredAt ? fmtDate(deliveredAt) : (etaDate ? 'Expected ' + fmtDate(etaDate) : '')) + '</p>'
+        + '</div>'
+      + '</div>'
+    + '</section>';
 
   document.getElementById('orderBody').innerHTML =
     '<a href="/account/orders" class="account-page-back" style="margin-bottom:18px;">'
@@ -557,6 +714,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + statusCap
       + '</div>'
     + '</div>'
+
+    + trackingBlock
 
     + '<div class="od-card">'
       + '<div class="od-grid">'
@@ -644,10 +803,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '</div>'
       + '</div>';
 
-  // Pagina sempre abre no topo, mesmo vindo de /orders?...#invoice. O hash
-  // fica na URL pra referencia mas nao dispara scroll automatico — cliente
-  // quer ver o pedido completo, nao so o invoice.
-  if (window.location.hash) {
+  // Comportamento por hash:
+  //   sem hash (View order details) -> abre no topo, mostra tracking primeiro
+  //   #invoice -> scroll suave ate o card de invoice (vindo do link "Invoice")
+  if (window.location.hash === '#invoice') {
+    var inv = document.querySelector('.od-invoice');
+    if (inv) setTimeout(function() { inv.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+  } else {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
