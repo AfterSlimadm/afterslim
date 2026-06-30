@@ -65,8 +65,20 @@ main.account-page > h1 {
   background: #ffffff;
   border: 1px solid #d5d9d9;
   border-radius: 8px;
-  margin-bottom: 18px;
+  margin-bottom: 28px;
   overflow: hidden;
+  position: relative;
+}
+/* Linha sutil de separacao entre pedidos. Aplicada apos cada card menos o ultimo. */
+.order-card + .order-card { margin-top: 28px; }
+.order-card:not(:last-of-type)::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -16px;
+  height: 1px;
+  background: #e7e7e7;
 }
 
 /* Header strip pintada no mesmo gradient do botao SHOP NOW na home
