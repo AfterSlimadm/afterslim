@@ -319,6 +319,46 @@ main.account-page > h1 {
   .sub-history-row > :nth-child(4) { grid-column: 2 / 3; justify-self: end; }
 }
 
+/* Toast de confirmacao pos-acao (upgrade, etc). */
+.sub-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background: #15803d;
+  color: #fff;
+  padding: 14px 18px 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(21, 128, 61, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms, transform 220ms;
+  max-width: 92vw;
+}
+.sub-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+.sub-toast svg { flex-shrink: 0; }
+.sub-toast strong { font-weight: 700; }
+.sub-toast-close {
+  background: none;
+  border: 0;
+  color: rgba(255,255,255,0.75);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-left: 6px;
+}
+.sub-toast-close:hover { color: #fff; }
+
 /* ===== Cancel modal ===== */
 .cancel-overlay {
   position: fixed; inset: 0;
@@ -819,6 +859,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var user = await window.afterslimAuth.requireAuth();
   var supabase = window.afterslimSupabase;
 
+  // Toast pos-upgrade: se acabou de mudar de plano, mostra confirmacao
+  // visual persistente ate o cliente fechar.
+  try {
+    var upgradedTo = sessionStorage.getItem('subUpgradedToQty');
+    if (upgradedTo) {
+      sessionStorage.removeItem('subUpgradedToQty');
+      var toast = document.createElement('div');
+      toast.className = 'sub-toast';
+      toast.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+        + '<span>Plan upgraded to <strong>' + upgradedTo + ' bottle' + (Number(upgradedTo) !== 1 ? 's' : '') + '</strong>. Starts at your next renewal.</span>'
+        + '<button type="button" class="sub-toast-close" aria-label="Dismiss">&times;</button>';
+      document.body.appendChild(toast);
+      requestAnimationFrame(function() { toast.classList.add('is-visible'); });
+      toast.querySelector('.sub-toast-close').addEventListener('click', function() {
+        toast.classList.remove('is-visible');
+        setTimeout(function() { toast.remove(); }, 250);
+      });
+      setTimeout(function() {
+        toast.classList.remove('is-visible');
+        setTimeout(function() { toast.remove(); }, 250);
+      }, 8000);
+    }
+  } catch (e) { /* ignore */ }
+
   // Assinaturas de cliente vivem em Stripe; o nosso banco linka via
   // orders.metadata.stripe_subscription_id. Le orders com esse metadata
   // preenchido, deduplica por subscription_id (pra renewals nao duplicarem),
@@ -847,13 +911,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }).map(function(o) {
     var item = (o.order_items && o.order_items[0]) || {};
     var meta = o.metadata || {};
-    // Fallback de current_period_end: o webhook customer.subscription.created
-    // dispara antes do payment_intent.succeeded, entao a order ainda nao existe
-    // quando o handler tenta vincular o subscription_current_period_end no
-    // metadata. Estima como created_at + (30 * qty) dias — qty=1 -> 30d,
-    // qty=2 -> 60d, qty=3 -> 90d. Sera substituido pela data real no proximo
-    // ciclo (invoice.paid atualiza o metadata corretamente).
-    var qty = item.quantity || Number(meta.quantity) || 1;
+    // qty vem do metadata (atualizado pelo /api/subscriptions/upgrade) como
+    // source of truth pos-upgrade. order_items.quantity fica congelada no valor
+    // do primeiro pedido — nao serve pra refletir o plano atual.
+    var qty = Number(meta.quantity) || item.quantity || 1;
+    // price_cents deriva do plano atual (qty), nao do total_cents da primeira
+    // cobranca — senao apos upgrade a UI continua mostrando o preco antigo.
+    var SUBS_PRICE_MAP = { 1: 2799, 2: 4799, 3: 5799 };
+    var priceCents = SUBS_PRICE_MAP[qty] || o.total_cents;
     var fallbackEnd = null;
     if (o.created_at) {
       var d = new Date(o.created_at);
@@ -864,7 +929,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       id: meta.stripe_subscription_id,
       status: meta.subscription_status || 'active',
       interval: item.subscription_interval || meta.interval || 'month',
-      price_cents: o.total_cents,
+      price_cents: priceCents,
       quantity: qty,
       current_period_start: meta.subscription_current_period_start || o.created_at || null,
       current_period_end: meta.subscription_current_period_end || fallbackEnd,
@@ -1168,9 +1233,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       var json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Upgrade failed');
-      status.textContent = 'Plan updated! Refreshing...';
+      // Set flag pra pagina mostrar toast "Plan upgraded" apos reload.
+      try { sessionStorage.setItem('subUpgradedToQty', String(newQty)); } catch (e) {}
+      status.textContent = "Plan updated. You'll get " + newQty + ' bottle' + (newQty !== 1 ? 's' : '') + ' at your next renewal.';
       status.className = 'upgrade-status upgrade-status--ok';
-      setTimeout(function() { window.location.reload(); }, 900);
+      setTimeout(function() { window.location.reload(); }, 1600);
     } catch (err) {
       console.error('[subscriptions] upgrade failed:', err);
       status.textContent = (err && err.message) ? err.message : 'Upgrade failed. Try again or contact support.';
