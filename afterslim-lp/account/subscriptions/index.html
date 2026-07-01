@@ -1316,14 +1316,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function showDowngradeConfirm(subId, currentQty, targetQty) {
     var modal = document.querySelector('#upgradeOverlay .upgrade-modal');
     if (!modal) return;
-    var newPrice = SUB_PRICES_DISPLAY[targetQty].toFixed(2);
-    var currentPrice = SUB_PRICES_DISPLAY[currentQty].toFixed(2);
     modal.innerHTML =
       '<button type="button" class="upgrade-close" aria-label="Close">'
         + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>'
       + '</button>'
       + '<h2 class="upgrade-title">Are you sure?</h2>'
-      + '<p class="upgrade-sub">You\'re about to switch from <strong>' + currentQty + ' bottle' + (currentQty !== 1 ? 's' : '') + ' ($' + currentPrice + ')</strong> to <strong>' + targetQty + ' bottle' + (targetQty !== 1 ? 's' : '') + ' ($' + newPrice + ')</strong> per shipment.</p>'
+      + '<p class="upgrade-sub">You\'re about to reduce from <strong>' + currentQty + ' bottle' + (currentQty !== 1 ? 's' : '') + '</strong> to <strong>' + targetQty + ' bottle' + (targetQty !== 1 ? 's' : '') + '</strong> per shipment.</p>'
       + '<p class="upgrade-sub" style="margin-top:0">You\'ll keep your current plan until the next renewal. Then you\'ll get less AfterSlim each shipment.</p>'
       + '<div class="downgrade-actions">'
         + '<button type="button" class="downgrade-keep" id="downgradeKeep">Keep my current plan</button>'
