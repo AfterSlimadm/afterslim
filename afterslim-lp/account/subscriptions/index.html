@@ -1333,8 +1333,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       document.getElementById('upgradeOverlay').remove();
     });
     document.getElementById('downgradeKeep').addEventListener('click', function() {
+      // Fecha o modal e retorna pra pagina de subscriptions. Cliente ja
+      // decidiu manter o plano — nao faz sentido re-abrir menu de escolha.
       document.getElementById('upgradeOverlay').remove();
-      openUpgradeModal(subId, currentQty, 'down');
     });
     document.getElementById('downgradeConfirm').addEventListener('click', function() {
       confirmUpgrade(subId, targetQty, this);
