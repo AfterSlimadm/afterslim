@@ -561,6 +561,45 @@ main.account-page > h1 {
 }
 .upgrade-alt-link:hover { color: #0f1111; }
 
+/* Downgrade confirmation buttons (stacked, keep-plan em destaque). */
+.downgrade-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+.downgrade-keep,
+.downgrade-confirm {
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  border: 1.5px solid transparent;
+}
+.downgrade-keep {
+  background: linear-gradient(to right, #fbbf24 0%, #fbbf24 55%, #d97706 100%);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(146, 64, 14, 0.25);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 2px rgba(146,64,14,0.25);
+}
+.downgrade-keep:hover {
+  background: linear-gradient(to right, #d97706 0%, #d97706 55%, #92400e 100%);
+  box-shadow: 0 4px 14px rgba(146,64,14,0.35);
+}
+.downgrade-confirm {
+  background: #fff;
+  border-color: #d5d9d9;
+  color: #565959;
+}
+.downgrade-confirm:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+.downgrade-keep:disabled,
+.downgrade-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* FAQ — replica o estilo do .faq-section em lp.css (home) pra dar consistencia
    de UI. Sem categoria/tabs (Allan: nao precisa de seletores). */
 .sub-faq-list {
@@ -1251,7 +1290,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     overlay.querySelectorAll('.upgrade-pack').forEach(function(pack) {
       pack.addEventListener('click', function() {
         var targetQty = parseInt(pack.getAttribute('data-target-qty'), 10);
-        confirmUpgrade(subId, targetQty, pack);
+        // Downgrade (targetQty < currentQty) pede confirmacao. Upgrade nao —
+        // eh acao "boa" pra ambos os lados, evitar friccao.
+        if (targetQty < currentQty) {
+          showDowngradeConfirm(subId, currentQty, targetQty);
+        } else {
+          confirmUpgrade(subId, targetQty, pack);
+        }
       });
     });
     var switchDown = document.getElementById('upgradeSwitchDown');
@@ -1263,6 +1308,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (switchUp) switchUp.addEventListener('click', function() {
       overlay.remove();
       openUpgradeModal(subId, currentQty, 'up');
+    });
+  }
+
+  // Substitui o body do modal por uma tela de confirmacao de downgrade.
+  // Cliente confirma com "Yes, switch" ou volta com "Keep current plan".
+  function showDowngradeConfirm(subId, currentQty, targetQty) {
+    var modal = document.querySelector('#upgradeOverlay .upgrade-modal');
+    if (!modal) return;
+    var newPrice = SUB_PRICES_DISPLAY[targetQty].toFixed(2);
+    var currentPrice = SUB_PRICES_DISPLAY[currentQty].toFixed(2);
+    modal.innerHTML =
+      '<button type="button" class="upgrade-close" aria-label="Close">'
+        + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>'
+      + '</button>'
+      + '<h2 class="upgrade-title">Are you sure?</h2>'
+      + '<p class="upgrade-sub">You\'re about to switch from <strong>' + currentQty + ' bottle' + (currentQty !== 1 ? 's' : '') + ' ($' + currentPrice + ')</strong> to <strong>' + targetQty + ' bottle' + (targetQty !== 1 ? 's' : '') + ' ($' + newPrice + ')</strong> per shipment.</p>'
+      + '<p class="upgrade-sub" style="margin-top:0">You\'ll keep your current plan until the next renewal. Then you\'ll get less product and pay less each month.</p>'
+      + '<div class="downgrade-actions">'
+        + '<button type="button" class="downgrade-keep" id="downgradeKeep">Keep my current plan</button>'
+        + '<button type="button" class="downgrade-confirm" id="downgradeConfirm">Yes, switch to ' + targetQty + ' bottle' + (targetQty !== 1 ? 's' : '') + '</button>'
+      + '</div>'
+      + '<div class="upgrade-status" id="upgradeStatus" style="display:none"></div>';
+
+    modal.querySelector('.upgrade-close').addEventListener('click', function() {
+      document.getElementById('upgradeOverlay').remove();
+    });
+    document.getElementById('downgradeKeep').addEventListener('click', function() {
+      document.getElementById('upgradeOverlay').remove();
+      openUpgradeModal(subId, currentQty, 'down');
+    });
+    document.getElementById('downgradeConfirm').addEventListener('click', function() {
+      confirmUpgrade(subId, targetQty, this);
     });
   }
 
