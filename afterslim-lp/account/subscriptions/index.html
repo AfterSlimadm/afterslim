@@ -1191,39 +1191,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       confirmBtn.disabled = true;
       keepBtn.disabled = true;
       status.style.display = 'block';
-      status.textContent = 'Saving and redirecting...';
+      status.textContent = 'Cancelling...';
 
-      // Salva reason no metadata da subscription order (se preenchido).
-      // Best-effort: nao bloqueia o cancel se falhar.
-      if (reason) {
-        try {
-          var firstOrder = await supabase
-            .from('orders')
-            .select('id, metadata')
-            .eq('profile_id', user.id)
-            .eq('metadata->>stripe_subscription_id', subId)
-            .order('created_at', { ascending: true })
-            .limit(1)
-            .maybeSingle();
-          if (firstOrder && firstOrder.data) {
-            var meta = firstOrder.data.metadata || {};
-            await supabase
-              .from('orders')
-              .update({
-                metadata: Object.assign({}, meta, {
-                  cancel_reason: reason,
-                  cancel_reason_submitted_at: new Date().toISOString(),
-                }),
-              })
-              .eq('id', firstOrder.data.id);
-          }
-        } catch (err) {
-          console.warn('[cancel] failed to persist reason:', err);
-        }
+      var CANCEL_API = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:3456/api/subscriptions/cancel'
+        : 'https://admin.afterslim.com/api/subscriptions/cancel';
+
+      try {
+        var session = await window.afterslimAuth.session();
+        var token = session && session.access_token;
+        if (!token) throw new Error('Not signed in');
+        var body = { subscription_id: subId };
+        if (reason) body.reason = reason;
+        var res = await fetch(CANCEL_API, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify(body),
+        });
+        var json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Cancel failed');
+        try { sessionStorage.setItem('subCancelledAt', json.cancel_effective_at || ''); } catch (e) {}
+        status.textContent = 'Cancelled. Refreshing...';
+        status.className = 'cancel-status cancel-status--ok';
+        setTimeout(function() { window.location.reload(); }, 1400);
+      } catch (err) {
+        console.error('[cancel] failed:', err);
+        status.textContent = (err && err.message) ? err.message : 'Cancel failed. Try again or contact support.';
+        status.className = 'cancel-status cancel-status--err';
+        confirmBtn.disabled = false;
+        keepBtn.disabled = false;
       }
-
-      // Redireciona pro Stripe Customer Portal pra confirmar cancel.
-      openBillingPortal(confirmBtn);
     });
   }
 
