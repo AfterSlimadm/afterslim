@@ -157,6 +157,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var user = await window.afterslimAuth.requireAuth();
   var supabase = window.afterslimSupabase;
 
+  // Aponta pra admin local em dev, prod caso contrario.
+  var ADMIN_BILLING_PORTAL_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:3456/api/billing-portal'
+    : 'https://admin.afterslim.com/api/billing-portal';
+
   var btn = document.getElementById('openPortalBtn');
   var note = document.getElementById('payNote');
   var card = document.getElementById('payReady');
@@ -170,7 +175,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var session = await window.afterslimAuth.session();
       var headers = {};
       if (session && session.access_token) headers['Authorization'] = 'Bearer ' + session.access_token;
-      var r = await fetch('https://admin.afterslim.com/api/billing-portal', {
+      var r = await fetch(ADMIN_BILLING_PORTAL_URL, {
         method: 'OPTIONS', headers: headers,
       });
       return r.status !== 404;
@@ -189,7 +194,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       var session = await window.afterslimAuth.session();
       var token = session && session.access_token;
-      var res = await fetch('https://admin.afterslim.com/api/billing-portal', {
+      var res = await fetch(ADMIN_BILLING_PORTAL_URL, {
         method: 'POST',
         headers: token ? { 'Authorization': 'Bearer ' + token } : {},
       });
