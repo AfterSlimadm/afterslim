@@ -168,7 +168,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- Header -->
   <div class="checkout-header">
     <a href="/">&larr; Back to store</a>
-    <img src="/images/logo-afterslim.png" alt="AfterSlim" style="height:180px;margin:-70px 0"/>
+    <a href="/" aria-label="AfterSlim home"><img src="/images/logo-afterslim.png" alt="AfterSlim" style="height:180px;margin:-70px 0"/></a>
     <div style="width:100px"></div>
   </div>
 
@@ -502,9 +502,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/supabase-client.js"></script>
   <script>
-/* LOCAL TEST OVERRIDE (2026-06-28). Restore from index.html.bak-live before pushing. */ var CK_PK='pk_test_51TC4a9Ay7m7ndbNOBzdmYXh0xmtz63DDHCf2EyK1WHeMUH9UY3vsrwglfTjcHgGfKDaD3BoR6ryQcPrRZ4gknLqz00cI7FKLYQ';
-var CK_API=(location.hostname==='localhost'||location.hostname==='127.0.0.1')?'http://localhost:3456/api/checkout':'/api/checkout';
-var CK_PM={'1-onetime':'price_1Tme5QAy7m7ndbNOJkARBkBn','1-subscribe':'price_1Tme5RAy7m7ndbNOZhcNAQmP','2-onetime':'price_1Tme5RAy7m7ndbNOIADc0rf8','2-subscribe':'price_1Tme5SAy7m7ndbNOMLbfX2Xe','3-onetime':'price_1Tme5RAy7m7ndbNO6GvBEd1H','3-subscribe':'price_1Tme5SAy7m7ndbNOEJoxmKjl'};
+var CK_PK='pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
+var CK_API='/api/checkout';
+var CK_PM={'1-onetime':'price_1TC4qvAy7m7ndbNOmzhrCfLv','1-subscribe':'price_1TMbv8Ay7m7ndbNOKKiA3vxk','2-onetime':'price_1TMbxdAy7m7ndbNOYi3z5QoA','2-subscribe':'price_1TMbzPAy7m7ndbNO1zsXcJ6e','3-onetime':'price_1TMc1AAy7m7ndbNO7vOXSCU6','3-subscribe':'price_1TMc2MAy7m7ndbNOh5oPM3MF'};
 var CK_PI={'1-onetime':{name:'AfterSlim GLP-1 Balance',variant:'1 bottle - 30 day supply',price:37.99},'1-subscribe':{name:'AfterSlim GLP-1 Balance',variant:'1 bottle - monthly subscription',price:27.99},'2-onetime':{name:'AfterSlim GLP-1 Balance',variant:'2 bottles - 60 day supply',price:57.99},'2-subscribe':{name:'AfterSlim GLP-1 Balance',variant:'2 bottles - monthly subscription',price:47.99},'3-onetime':{name:'AfterSlim GLP-1 Balance',variant:'3 bottles - 90 day supply',price:67.99},'3-subscribe':{name:'AfterSlim GLP-1 Balance',variant:'3 bottles - monthly subscription',price:57.99}};
 var CK_params=new URLSearchParams(window.location.search);
 var CK_rawQty=parseInt(CK_params.get('qty'))||1;
@@ -549,23 +549,55 @@ function CK_getShipCents(method) {
 
     var metaName = (user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name)) || '';
     setIfEmpty('f-email', user.email || '');
-    setIfEmpty('f-name', metaName);
+    // Nota: NAO seta f-name aqui — o nome vem do endereco default (ou fallback
+    // pro metaName). Se setasse agora, setIfEmpty depois nao sobrescreveria.
 
-    // Busca ultima order pra reusar shipping_address + billing_name.
-    // Coluna correta eh profile_id (a tabela orders linka pro auth.users via
-    // profile_id, nao user_id — confirmado em /account/orders). Phone nao
-    // existe como coluna da orders; mora dentro de shipping_address quando ha.
-    var ordersRes = await sb
-      .from('orders')
-      .select('shipping_address, billing_name')
-      .eq('profile_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(1);
-    var last = ordersRes && ordersRes.data && ordersRes.data[0];
-    if (!last) return;
+    // Autofill do endereco: prioridade
+    // 1) addresses default (via profiles.default_address_id) — fonte de verdade
+    //    depois que o cliente edita em /account/addresses
+    // 2) ultima orders.shipping_address — fallback quando addresses ainda esta vazia
+    //    (cliente que so fez checkout sem passar por /account/addresses)
+    var addr = {}; var lastName = '';
+    var profRes = await sb
+      .from('profiles').select('default_address_id').eq('id', user.id).maybeSingle();
+    var defId = profRes && profRes.data && profRes.data.default_address_id;
+    if (defId) {
+      var { data: defAddr } = await sb
+        .from('addresses').select('*').eq('id', defId).eq('profile_id', user.id).maybeSingle();
+      if (defAddr) {
+        addr = {
+          name: ((defAddr.first_name || '') + ' ' + (defAddr.last_name || '')).trim(),
+          phone: defAddr.phone || '',
+          line1: defAddr.address_line1 || '',
+          line2: defAddr.address_line2 || '',
+          city: defAddr.city || '',
+          state: defAddr.state || '',
+          postal_code: defAddr.zip_code || '',
+        };
+        lastName = addr.name;
+      }
+    }
+    if (!addr.line1) {
+      var ordersRes = await sb
+        .from('orders')
+        .select('shipping_address, billing_name')
+        .eq('profile_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1);
+      var last = ordersRes && ordersRes.data && ordersRes.data[0];
+      if (last) {
+        addr = last.shipping_address || {};
+        lastName = last.billing_name || '';
+      }
+    }
+    if (!addr.line1) {
+      // Sem endereco default nem historico — pelo menos preenche o nome
+      // do metadata (One Tap / signup) pra nao deixar o campo vazio.
+      setIfEmpty('f-name', metaName);
+      return;
+    }
 
-    var addr = last.shipping_address || {};
-    setIfEmpty('f-name', addr.name || last.billing_name || '');
+    setIfEmpty('f-name', addr.name || lastName || metaName || '');
     setIfEmpty('f-phone', addr.phone || '');
     setIfEmpty('f-address', addr.line1 || '');
     setIfEmpty('f-address2', addr.line2 || '');

@@ -64,8 +64,10 @@ body { background: #ffffff; }
   display: flex;
   flex-direction: column;
   min-height: 260px;
+  overflow: hidden;
 }
-.addr-card.default { border-color: #c2410c; border-width: 1.5px; }
+.addr-card.default { border-color: #c2410c; border-width: 1.5px; padding-top: 0; }
+.addr-card.default .addr-default-strip { margin-top: 0; }
 .addr-default-strip {
   background: #fafafa;
   border-bottom: 1px solid #e7e7e7;
@@ -147,22 +149,42 @@ body { background: #ffffff; }
 .addr-form .row-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 540px) { .addr-form .row-two { grid-template-columns: 1fr; } }
 .addr-form label { font-size: 12.5px; font-weight: 600; color: var(--ink); display: block; margin-bottom: 4px; }
-.addr-form input, .addr-form select {
+.addr-form input[type="text"], .addr-form input[type="tel"], .addr-form select {
   width: 100%; font-family: inherit; font-size: 14.5px;
   background: #fff; border: 1px solid var(--line); border-radius: 8px;
   padding: 10px 12px; outline: 0;
 }
-.addr-form input:focus, .addr-form select:focus {
+.addr-form input[type="text"]:focus, .addr-form input[type="tel"]:focus, .addr-form select:focus {
   border-color: var(--orange); box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
 }
-.addr-form-actions { display: flex; gap: 10px; margin-top: 8px; }
-.addr-form-actions button {
-  font-size: 14px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
-  padding: 12px 22px; border-radius: 999px; border: 0; cursor: pointer; font-family: inherit;
+.addr-default-row {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 500; font-size: 14px; line-height: 1.4; color: var(--ink);
+  cursor: pointer;
+  margin-top: 4px;
+  align-self: flex-start;
 }
-.addr-form-submit { background: var(--orange); color: #fff; }
+.addr-default-row input[type="checkbox"] {
+  width: 11px; height: 11px;
+  accent-color: var(--orange);
+  cursor: pointer;
+  margin: 0; padding: 0;
+  flex-shrink: 0;
+}
+.addr-form-actions { display: flex; align-items: center; gap: 14px; margin-top: 12px; }
+.addr-form-submit {
+  background: var(--orange); color: #fff;
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  padding: 9px 18px; border-radius: 8px; border: 0; cursor: pointer;
+  transition: background 0.15s;
+}
 .addr-form-submit:hover { background: var(--orange-dark); }
-.addr-form-cancel { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.addr-form-cancel {
+  background: none; border: 0; padding: 0;
+  color: var(--ink-2); font-family: inherit; font-size: 14px; font-weight: 500;
+  cursor: pointer;
+}
+.addr-form-cancel:hover { color: var(--ink); text-decoration: underline; }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/addresses">
 <meta name="robots" content="noindex, nofollow">
@@ -223,8 +245,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div><label for="addr_zip">ZIP code</label><input id="addr_zip" type="text" required></div>
       <div><label for="addr_phone">Phone (optional)</label><input id="addr_phone" type="tel"></div>
     </div>
-    <label style="display: flex; align-items: center; gap: 8px; font-weight: 500; cursor: pointer;">
-      <input id="addr_default" type="checkbox"> Make this my default shipping address
+    <label class="addr-default-row">
+      <input id="addr_default" type="checkbox">
+      <span>Make this my default shipping address</span>
+      <span id="addr_default_hint" style="color:#8a8a8a; font-weight:400; font-size:12.5px; margin-left:4px;"></span>
     </label>
     <div class="addr-form-actions">
       <button type="submit" class="addr-form-submit" id="addrSubmitBtn">Save address</button>
@@ -346,7 +370,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }).join('');
   }
 
-  function showForm(addr) {
+  async function showForm(addr) {
     form.style.display = 'grid';
     formTitle.textContent = addr ? 'Edit address' : 'Add address';
     document.getElementById('addr_id').value = addr ? addr.id : '';
@@ -359,7 +383,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     document.getElementById('addr_state').value = (addr && addr.state) || '';
     document.getElementById('addr_zip').value = (addr && addr.zip_code) || '';
     document.getElementById('addr_phone').value = (addr && addr.phone) || '';
-    document.getElementById('addr_default').checked = !!(addr && addr.is_default);
+
+    // Regra do default: nunca pode ficar todos desmarcados.
+    // - 0 enderecos existentes → forca marcado + disabled (primeiro vira default)
+    // - editando o unico endereco → forca marcado + disabled
+    // - editando o default atual (havendo outros) → forca marcado + disabled
+    //   (pra trocar default, cliente clica "Set as default" em outro card)
+    // - resto (adicionando/editando nao-default com outros no lista) → livre
+    var { data: allAddrs } = await supabase
+      .from('addresses').select('id').eq('profile_id', user.id);
+    var total = (allAddrs || []).length;
+    var isCurrentDefault = !!(addr && addr.id === (profile && profile.default_address_id));
+    var chk = document.getElementById('addr_default');
+    var hint = document.getElementById('addr_default_hint');
+    var forceDefault = (!addr && total === 0) || (addr && total <= 1) || (addr && isCurrentDefault);
+    if (forceDefault) {
+      chk.checked = true;
+      chk.disabled = true;
+      hint.textContent = total <= 1
+        ? '(only address)'
+        : '(to change, set another as default)';
+    } else {
+      chk.checked = !!(addr && addr.is_default);
+      chk.disabled = false;
+      hint.textContent = '';
+    }
+
     form.scrollIntoView({ behavior: 'smooth' });
   }
 
