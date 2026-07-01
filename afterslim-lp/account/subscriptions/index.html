@@ -544,6 +544,23 @@ main.account-page > h1 {
 .upgrade-status--ok { background: rgba(22,163,74,0.1); color: #15803d; }
 .upgrade-status--err { background: rgba(220,38,38,0.08); color: #b91c1c; }
 
+.upgrade-alt-link {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 12px 4px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8a7a6e;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-family: inherit;
+}
+.upgrade-alt-link:hover { color: #0f1111; }
+
 /* FAQ — replica o estilo do .faq-section em lp.css (home) pra dar consistencia
    de UI. Sem categoria/tabs (Allan: nao precisa de seletores). */
 .sub-faq-list {
@@ -960,12 +977,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     var actions;
     if (s.status === 'active' || s.status === 'paused') {
-      // Upgrade Plan: so aparece se o cliente nao esta no maior pack (3 bottles).
-      // qty 1 -> pode upgrade pra 2 ou 3; qty 2 -> pode upgrade pra 3; qty 3 -> sem upgrade.
-      var canUpgrade = (s.quantity || 1) < 3;
-      var upgradeBtn = canUpgrade
-        ? '<button class="sub-btn sub-btn--primary" data-action="upgrade" data-sub="' + s.id + '" data-current-qty="' + (s.quantity || 1) + '">Upgrade plan</button>'
-        : '';
+      // Change plan: label muda dependendo do que ha disponivel.
+      //   qty=1 -> "Upgrade plan" (so tem pra cima)
+      //   qty=2 -> "Change plan" (tem 1 e 3)
+      //   qty=3 -> "Switch to smaller plan" (so tem pra baixo)
+      var currentQ = s.quantity || 1;
+      var planLabel, planDirection;
+      if (currentQ === 3) { planLabel = 'Change plan'; planDirection = 'down'; }
+      else if (currentQ === 2) { planLabel = 'Change plan'; planDirection = 'up'; }
+      else { planLabel = 'Upgrade plan'; planDirection = 'up'; }
+      var upgradeBtn = '<button class="sub-btn sub-btn--primary" data-action="upgrade" data-sub="' + s.id + '" data-current-qty="' + currentQ + '" data-direction="' + planDirection + '">' + planLabel + '</button>';
       actions = upgradeBtn
         + '<button class="sub-btn sub-btn--ghost" data-action="cancel" data-sub="' + s.id + '">Cancel</button>';
     } else if (s.status === 'cancelled') {
@@ -1078,7 +1099,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
 
       if (action === 'upgrade') {
-        openUpgradeModal(subId, parseInt(btn.getAttribute('data-current-qty'), 10) || 1);
+        var direction = btn.getAttribute('data-direction') || 'up';
+        openUpgradeModal(subId, parseInt(btn.getAttribute('data-current-qty'), 10) || 1, direction);
         return;
       }
     });
@@ -1166,33 +1188,55 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Usado so pra exibir a comparacao no modal. Stripe valida no backend.
   var SUB_PRICES_DISPLAY = { 1: 27.99, 2: 47.99, 3: 57.99 };
 
-  function openUpgradeModal(subId, currentQty) {
+  function openUpgradeModal(subId, currentQty, direction) {
     var existing = document.getElementById('upgradeOverlay');
     if (existing) existing.remove();
 
-    var options = [2, 3].filter(function(q) { return q > currentQty; });
+    // direction: 'up' (default) mostra planos maiores; 'down' mostra menores.
+    var isDown = direction === 'down';
+    var options = [1, 2, 3].filter(function(q) {
+      return isDown ? q < currentQty : q > currentQty;
+    });
     var optsHtml = options.map(function(q) {
       var price = SUB_PRICES_DISPLAY[q].toFixed(2);
       var perBottle = (SUB_PRICES_DISPLAY[q] / q).toFixed(2);
-      var label = q === 3 ? 'Best value' : 'Recommended';
+      // Badge só faz sentido pra upgrade. Pra downgrade fica sem badge.
+      var badge = '';
+      if (!isDown) {
+        var label = q === 3 ? 'Best value' : 'Recommended';
+        badge = ' <span class="upgrade-pack-badge">' + label + '</span>';
+      }
       return '<button type="button" class="upgrade-pack" data-target-qty="' + q + '">'
         + '<div class="upgrade-pack-info">'
-          + '<div class="upgrade-pack-title">' + q + ' Bottles <span class="upgrade-pack-badge">' + label + '</span></div>'
+          + '<div class="upgrade-pack-title">' + q + ' Bottle' + (q !== 1 ? 's' : '') + badge + '</div>'
           + '<div class="upgrade-pack-sub">$' + price + ' every ' + (30 * q) + ' days . $' + perBottle + '/bottle</div>'
         + '</div>'
         + '<svg class="upgrade-pack-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>'
       + '</button>';
     }).join('');
 
+    var title = isDown ? 'Switch to a smaller plan' : 'Upgrade your plan';
+    var subText = isDown
+      ? 'You\'re on <strong>' + currentQty + ' bottles every ' + (30 * currentQty) + ' days</strong>. Pick a smaller plan below.'
+      : 'You\'re on <strong>' + currentQty + ' bottle' + (currentQty !== 1 ? 's' : '') + ' every ' + (30 * currentQty) + ' days</strong>. Pick a new plan below.';
+    // Link pra alternar direcao (aparece so quando ha planos no outro sentido).
+    var altLink = '';
+    if (!isDown && currentQty > 1) {
+      altLink = '<button type="button" class="upgrade-alt-link" id="upgradeSwitchDown">Switch to a smaller plan instead</button>';
+    } else if (isDown && currentQty < 3) {
+      altLink = '<button type="button" class="upgrade-alt-link" id="upgradeSwitchUp">Upgrade to a bigger plan instead</button>';
+    }
+
     var html = '<div class="upgrade-overlay" id="upgradeOverlay">'
       + '<div class="upgrade-modal">'
         + '<button type="button" class="upgrade-close" aria-label="Close">'
           + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>'
         + '</button>'
-        + '<h2 class="upgrade-title">Upgrade your plan</h2>'
-        + '<p class="upgrade-sub">You\'re on <strong>' + currentQty + ' bottle' + (currentQty !== 1 ? 's' : '') + ' every ' + (30 * currentQty) + ' days</strong>. Pick a new plan below.</p>'
+        + '<h2 class="upgrade-title">' + title + '</h2>'
+        + '<p class="upgrade-sub">' + subText + '</p>'
         + '<div class="upgrade-packs">' + optsHtml + '</div>'
         + '<p class="upgrade-foot">Your new plan starts at the next renewal. No charge today.</p>'
+        + altLink
         + '<div class="upgrade-status" id="upgradeStatus" style="display:none"></div>'
       + '</div>'
     + '</div>';
@@ -1209,6 +1253,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var targetQty = parseInt(pack.getAttribute('data-target-qty'), 10);
         confirmUpgrade(subId, targetQty, pack);
       });
+    });
+    var switchDown = document.getElementById('upgradeSwitchDown');
+    if (switchDown) switchDown.addEventListener('click', function() {
+      overlay.remove();
+      openUpgradeModal(subId, currentQty, 'down');
+    });
+    var switchUp = document.getElementById('upgradeSwitchUp');
+    if (switchUp) switchUp.addEventListener('click', function() {
+      overlay.remove();
+      openUpgradeModal(subId, currentQty, 'up');
     });
   }
 
