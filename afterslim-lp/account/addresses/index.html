@@ -218,6 +218,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     ]);
     profile = profRes.data || {};
     var addrs = addrRes.data || [];
+
+    // Auto-import: se tabela `addresses` vazia mas ha orders com shipping_address,
+    // importa o endereco mais recente como default. Sem isso, cliente que ja fez
+    // checkout via a pagina vazia (porque webhook do admin nao popula addresses
+    // hoje — so grava em orders.shipping_address jsonb).
+    if (addrs.length === 0) {
+      var { data: recentOrder } = await supabase
+        .from('orders')
+        .select('shipping_address, created_at')
+        .eq('profile_id', user.id)
+        .not('shipping_address', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      var sa = recentOrder && recentOrder.shipping_address;
+      if (sa && sa.line1) {
+        var nameParts = (sa.name || '').split(' ');
+        var firstName = nameParts.shift() || '';
+        var lastName = nameParts.join(' ') || '';
+        var { data: inserted } = await supabase.from('addresses').insert({
+          profile_id: user.id,
+          first_name: firstName,
+          last_name: lastName,
+          address_line1: sa.line1,
+          address_line2: sa.line2 || null,
+          city: sa.city || '',
+          state: sa.state || '',
+          zip_code: sa.postal_code || '',
+          country: sa.country || 'US',
+          is_default: true,
+        }).select().maybeSingle();
+        if (inserted) {
+          addrs = [inserted];
+          await supabase.from('profiles').update({ default_address_id: inserted.id }).eq('id', user.id);
+          profile.default_address_id = inserted.id;
+        }
+      }
+    }
+
     var defaultId = profile.default_address_id;
 
     if (addrs.length === 0) {
@@ -277,6 +316,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var { data } = await supabase.from('addresses').select('*').eq('id', id).eq('profile_id', user.id).maybeSingle();
       if (data) showForm(data);
     } else if (act === 'delete') {
+      // Guard: se este e o unico endereco E cliente tem sub ativa, bloqueia.
+      // Sub sem endereco fica orfa — precisa manter pelo menos um.
+      var { data: allAddrs } = await supabase.from('addresses').select('id').eq('profile_id', user.id);
+      if ((allAddrs || []).length <= 1) {
+        var { data: activeSub } = await supabase
+          .from('orders')
+          .select('id')
+          .eq('profile_id', user.id)
+          .not('metadata->>stripe_subscription_id', 'is', null)
+          .neq('metadata->>subscription_status', 'canceled')
+          .limit(1)
+          .maybeSingle();
+        if (activeSub) {
+          alert("You can't delete your only address while a subscription is active. Add a new one first, or cancel the subscription.");
+          return;
+        }
+      }
       if (!confirm('Delete this address?')) return;
       await supabase.from('addresses').delete().eq('id', id).eq('profile_id', user.id);
       await loadAddresses();
