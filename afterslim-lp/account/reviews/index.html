@@ -22,6 +22,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <style>
 body { background: #ffffff; }
 
+/* Hero centralizado com titulo grande e gradiente escuro→laranja no estilo
+   da secao problems da LP. Reforca visualmente que a acao (review) e um
+   momento de compartilhamento, nao mais um item de menu. */
+.rv-hero {
+  text-align: center;
+  padding: 48px 20px 40px;
+  background: linear-gradient(180deg, #fff3e6 0%, #ffffff 100%);
+  margin: 0 -20px 32px;
+  border-bottom: 1px solid #f5e8d8;
+}
+.rv-hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  background: linear-gradient(135deg, #0f1111 40%, #ea580c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .rv-section { margin-bottom: 40px; }
 .rv-section h2 {
   font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 0 4px;
@@ -33,7 +55,7 @@ body { background: #ffffff; }
 .rv-card {
   background: #fff; border: 1px solid var(--line); border-radius: 12px;
   padding: 18px 20px;
-  display: flex; align-items: flex-start; gap: 16px;
+  display: flex; align-items: center; gap: 16px;
 }
 .rv-card-thumb {
   width: 64px; height: 64px; flex-shrink: 0;
@@ -71,6 +93,13 @@ body { background: #ffffff; }
 .rv-mine-actions button.rv-danger:hover { background: #fef2f2; color: #b91c1c; }
 .rv-mine-title { font-weight: 600; font-size: 15px; margin: 8px 0 4px; color: var(--ink); }
 .rv-mine-body { font-size: 14px; line-height: 1.55; color: var(--ink); margin: 0; }
+.rv-mine-media {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
+}
+.rv-mine-media img {
+  width: 80px; height: 80px; object-fit: cover;
+  border-radius: 8px; border: 1px solid var(--line);
+}
 .rv-mine-date { font-size: 12px; color: var(--ink-2); margin-top: 8px; }
 .rv-mine-hidden-note {
   margin-top: 10px; padding: 8px 12px;
@@ -124,14 +153,9 @@ body { background: #ffffff; }
 .rv-star-picker { display: flex; gap: 4px; }
 .rv-star-picker button {
   background: none; border: 0; cursor: pointer; padding: 2px;
-  color: #e5e7eb;
+  color: #e5e7eb; transition: color 0.1s;
 }
-.rv-star-picker button.on, .rv-star-picker button:hover ~ button.on {
-  color: #f59e0b;
-}
-.rv-star-picker button:hover, .rv-star-picker button:hover ~ button:not(:hover) {
-  color: #f59e0b;
-}
+.rv-star-picker button.on { color: #f59e0b; }
 .rv-star-picker svg { width: 28px; height: 28px; fill: currentColor; }
 .rv-form-actions { display: flex; align-items: center; gap: 14px; margin-top: 20px; }
 .rv-btn-submit {
@@ -148,6 +172,39 @@ body { background: #ffffff; }
 }
 .rv-form-status { font-size: 13px; padding: 8px 0; }
 .rv-form-status.err { color: #b91c1c; }
+
+.rv-media-grid {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;
+}
+.rv-media-grid:empty { display: none; }
+.rv-media-thumb {
+  position: relative; width: 80px; height: 80px;
+  border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--line);
+  background: #f5f5f4;
+}
+.rv-media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.rv-media-thumb.uploading {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--ink-2);
+}
+.rv-media-thumb-remove {
+  position: absolute; top: 4px; right: 4px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,0,0,0.7); color: #fff;
+  border: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; line-height: 1; padding: 0;
+}
+.rv-media-thumb-remove:hover { background: #000; }
+.rv-media-add {
+  background: none; border: 1px dashed var(--line); color: var(--ink-2);
+  padding: 8px 14px; border-radius: 8px;
+  font-family: inherit; font-size: 13px; font-weight: 500;
+  cursor: pointer;
+}
+.rv-media-add:hover { border-color: var(--orange); color: var(--orange); }
+.rv-media-add:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 <link rel="canonical" href="https://www.afterslim.com/account/reviews">
 <meta name="robots" content="noindex, nofollow">
@@ -174,8 +231,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     Back to account
   </a>
-  <h1>My Reviews</h1>
-  <p class="account-page-lede">Share your experience with AfterSlim. Only products you've received show up here.</p>
+  <div class="rv-hero">
+    <h1>Share your review</h1>
+  </div>
 
   <div class="rv-section">
     <h2>Ready to review</h2>
@@ -184,7 +242,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="rv-section">
-    <h2>Your reviews</h2>
+    <h2>Reviews you've written</h2>
     <p class="rv-section-sub">Edit or remove any time.</p>
     <div id="rvMine" class="rv-mine-list"></div>
   </div>
@@ -262,6 +320,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
     }
 
+    // Fallback pra imagem: single-product store, imagem do bottle e conhecida.
+    // Se order_items.product_image estiver preenchida, usa; senao cai pro
+    // asset padrao (mesmo que aparece na LP hero).
+    var DEFAULT_PRODUCT_IMAGE = '/images/afterslim-bottle-transparent.png';
+
     // Render pending
     if (pending.length === 0) {
       pendingEl.innerHTML = '<div class="rv-empty">'
@@ -270,8 +333,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '</div>';
     } else {
       pendingEl.innerHTML = pending.map(function(p) {
+        var imgSrc = p.product_image || DEFAULT_PRODUCT_IMAGE;
         return '<div class="rv-card">'
-          + '<div class="rv-card-thumb">' + (p.product_image ? '<img src="' + escapeHtml(p.product_image) + '" alt="">' : '') + '</div>'
+          + '<div class="rv-card-thumb"><img src="' + escapeHtml(imgSrc) + '" alt=""></div>'
           + '<div class="rv-card-body">'
             + '<p class="rv-card-title">' + escapeHtml(p.product_name) + '</p>'
             + '<p class="rv-card-meta">Delivered ' + (p.delivered_at ? new Date(p.delivered_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '') + ' · Order ' + escapeHtml(p.order_number) + '</p>'
@@ -310,6 +374,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '</div>'
           + (r.title ? '<p class="rv-mine-title">' + escapeHtml(r.title) + '</p>' : '')
           + (r.body ? '<p class="rv-mine-body">' + escapeHtml(r.body) + '</p>' : '')
+          + (Array.isArray(r.media_urls) && r.media_urls.length
+              ? '<div class="rv-mine-media">' + r.media_urls.map(function(u) {
+                  return '<img src="' + escapeHtml(u) + '" alt="">';
+                }).join('') + '</div>'
+              : '')
           + '<p class="rv-mine-date">' + new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '</p>'
           + hiddenNote
           + replyBlock
@@ -333,6 +402,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var body = isEdit ? (ctx.body || '') : '';
     var titleTxt = isEdit ? 'Edit your review' : 'Review this product';
     var subTxt = isEdit ? '' : ctx.product_name;
+    var currentMedia = (isEdit && Array.isArray(ctx.media_urls)) ? ctx.media_urls.slice() : [];
+    var MAX_MEDIA = 3;
 
     var starsPickerHtml = '';
     for (var i = 5; i >= 1; i--) {
@@ -359,6 +430,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + '<label class="rv-form-label" for="rvBody">Your review (optional)</label>'
             + '<textarea id="rvBody" rows="5" maxlength="4000">' + escapeHtml(body) + '</textarea>'
           + '</div>'
+          + '<div class="rv-form-field">'
+            + '<label class="rv-form-label">Photos (optional, up to ' + MAX_MEDIA + ')</label>'
+            + '<div class="rv-media-grid" id="rvMediaGrid"></div>'
+            + '<input type="file" id="rvMediaInput" accept="image/*" multiple style="display:none">'
+            + '<button type="button" class="rv-media-add" id="rvMediaAdd">+ Add photo</button>'
+          + '</div>'
           + '<div class="rv-form-status" id="rvStatus" style="display:none"></div>'
           + '<div class="rv-form-actions">'
             + '<button type="submit" class="rv-btn-submit" id="rvSubmit">' + (isEdit ? 'Save changes' : 'Submit review') + '</button>'
@@ -373,18 +450,101 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     document.getElementById('rvCancel').addEventListener('click', function() { overlay.remove(); });
     overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
 
-    // Star picker
+    // Star picker: click grava o valor e pinta 1..N. Sem hover preview —
+    // usuario prefere feedback so ao clicar (padrao TripAdvisor/Yelp).
     var picker = document.getElementById('rvStarPicker');
-    picker.addEventListener('click', function(e) {
-      var btn = e.target.closest('button[data-rv-star]');
-      if (!btn) return;
-      var v = parseInt(btn.getAttribute('data-rv-star'), 10);
-      document.getElementById('rvRating').value = v;
+    var ratingInput = document.getElementById('rvRating');
+
+    function paintStars(n) {
       picker.querySelectorAll('button').forEach(function(b) {
         var bv = parseInt(b.getAttribute('data-rv-star'), 10);
-        b.classList.toggle('on', bv <= v);
+        b.classList.toggle('on', bv <= n);
+      });
+    }
+
+    picker.querySelectorAll('button[data-rv-star]').forEach(function(btn) {
+      var v = parseInt(btn.getAttribute('data-rv-star'), 10);
+      btn.addEventListener('click', function() {
+        ratingInput.value = v;
+        paintStars(v);
       });
     });
+
+    // Media upload — vai direto pro bucket 'review-media' via supabase-js.
+    // Path: reviews/{profile_id}/{timestamp}-{safe_filename}. RLS restringe
+    // uploads pra o proprio profile_id no auth.uid(), entao nao da pra
+    // upar no path do outro.
+    var mediaGrid = document.getElementById('rvMediaGrid');
+    var mediaInput = document.getElementById('rvMediaInput');
+    var mediaAddBtn = document.getElementById('rvMediaAdd');
+
+    function renderMediaGrid() {
+      mediaGrid.innerHTML = currentMedia.map(function(url, idx) {
+        return '<div class="rv-media-thumb">'
+          + '<img src="' + escapeHtml(url) + '" alt="">'
+          + '<button type="button" class="rv-media-thumb-remove" data-rv-media-idx="' + idx + '" aria-label="Remove">×</button>'
+        + '</div>';
+      }).join('');
+      mediaAddBtn.disabled = currentMedia.length >= MAX_MEDIA;
+      mediaAddBtn.textContent = currentMedia.length >= MAX_MEDIA
+        ? 'Photo limit reached'
+        : '+ Add photo';
+    }
+
+    mediaGrid.addEventListener('click', function(e) {
+      var btn = e.target.closest('button[data-rv-media-idx]');
+      if (!btn) return;
+      var idx = parseInt(btn.getAttribute('data-rv-media-idx'), 10);
+      currentMedia.splice(idx, 1);
+      renderMediaGrid();
+    });
+
+    mediaAddBtn.addEventListener('click', function() { mediaInput.click(); });
+
+    mediaInput.addEventListener('change', async function() {
+      var files = Array.from(mediaInput.files || []);
+      mediaInput.value = '';
+      if (!files.length) return;
+
+      var slots = MAX_MEDIA - currentMedia.length;
+      if (slots <= 0) return;
+      files = files.slice(0, slots);
+
+      // Placeholder "uploading" pra dar feedback imediato
+      var uploadingHtml = files.map(function() {
+        return '<div class="rv-media-thumb uploading">Uploading…</div>';
+      }).join('');
+      mediaGrid.insertAdjacentHTML('beforeend', uploadingHtml);
+      mediaAddBtn.disabled = true;
+
+      try {
+        for (var i = 0; i < files.length; i++) {
+          var f = files[i];
+          if (f.size > 5 * 1024 * 1024) {
+            alert('Image too large (max 5MB): ' + f.name);
+            continue;
+          }
+          var safeName = f.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+          var path = 'reviews/' + user.id + '/' + Date.now() + '-' + i + '-' + safeName;
+          var { error: upErr } = await supabase.storage
+            .from('review-media').upload(path, f, { contentType: f.type, upsert: false });
+          if (upErr) {
+            console.error('[review upload] failed:', upErr.message);
+            alert('Upload failed: ' + upErr.message);
+            continue;
+          }
+          var { data: pub } = supabase.storage.from('review-media').getPublicUrl(path);
+          if (pub && pub.publicUrl) currentMedia.push(pub.publicUrl);
+        }
+      } catch (err) {
+        console.error('[review upload] unexpected:', err);
+        alert('Upload error. Try again.');
+      }
+      renderMediaGrid();
+    });
+
+    // Estado inicial da grid (edit mode traz medias existentes)
+    renderMediaGrid();
 
     document.getElementById('rvForm').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -403,6 +563,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           rating: parseInt(document.getElementById('rvRating').value, 10) || 5,
           title: document.getElementById('rvTitle').value.trim(),
           body: document.getElementById('rvBody').value.trim(),
+          media_urls: currentMedia,
         };
 
         var url, method;

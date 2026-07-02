@@ -1093,6 +1093,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 4px;
   padding: 2px 8px; margin-left: 8px;
 }
+.rl-media {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+}
+.rl-media img {
+  width: 96px; height: 96px; object-fit: cover;
+  border-radius: 8px; border: 1px solid #e5e7eb;
+}
+.rl-media a:hover img { border-color: #ea580c; }
 </style>
 
 <script>
@@ -1138,6 +1146,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + '<p class="rl-reply-body">' + esc(r.admin_reply) + '</p>'
         + '</div>'
       : '';
+    var mediaHtml = (Array.isArray(r.media_urls) && r.media_urls.length)
+      ? '<div class="rl-media">'
+          + r.media_urls.map(function(u) {
+              return '<a href="' + esc(u) + '" target="_blank" rel="noopener"><img src="' + esc(u) + '" alt=""></a>';
+            }).join('')
+        + '</div>'
+      : '';
     return '<article class="rl-item">'
       + '<div class="rl-side">'
         + '<div class="rl-avatar">' + esc(initial(r.reviewer_display_name)) + '</div>'
@@ -1151,6 +1166,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '</div>'
         + (r.title ? '<h3 class="rl-headline">' + esc(r.title) + '</h3>' : '')
         + (r.body ? '<p class="rl-text">' + esc(r.body) + '</p>' : '')
+        + mediaHtml
         + replyHtml
       + '</div>'
     + '</article>';
@@ -1166,7 +1182,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (sb) {
       clearInterval(timer);
       sb.from('product_reviews')
-        .select('id, rating, title, body, admin_reply, reviewer_display_name, created_at')
+        .select('id, rating, title, body, admin_reply, media_urls, reviewer_display_name, created_at')
         .eq('status', 'approved')
         .eq('verified_purchase', true)
         .order('is_featured', { ascending: false })
