@@ -941,6 +941,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <div class="reviews-list-items">
+      <!-- Reviews reais (verified_purchase=true) do banco sao prepended aqui via JS.
+           Se o script falhar por qualquer motivo, esse container fica vazio e as
+           reviews hardcoded abaixo continuam visiveis — secao nunca fica em branco. -->
+      <div id="reviewsListDynamic"></div>
       <article class="rl-item">
         <div class="rl-side">
           <div class="rl-avatar">K</div>
@@ -1073,6 +1077,112 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 </section>
+
+<style>
+.rl-reply {
+  margin-top: 14px; padding: 12px 14px;
+  background: #fff7ed; border-left: 3px solid #ea580c; border-radius: 6px;
+}
+.rl-reply-label {
+  font-size: 11px; font-weight: 700; color: #c2410c;
+  text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px;
+}
+.rl-reply-body { font-size: 13.5px; line-height: 1.55; color: #0f1111; margin: 0; }
+.rl-verified {
+  font-size: 11px; font-weight: 600; color: #059669;
+  background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 4px;
+  padding: 2px 8px; margin-left: 8px;
+}
+</style>
+
+<script>
+// Adiciona reviews reais (verified_purchase=true) por CIMA das hardcoded.
+// Se qualquer erro: silencioso, container fica vazio, hardcoded permanece.
+// Nunca substituimos ou removemos o HTML fixo abaixo.
+(function() {
+  var container = document.getElementById('reviewsListDynamic');
+  if (!container) return;
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+    });
+  }
+  function timeAgo(iso) {
+    if (!iso) return '';
+    var t = new Date(iso).getTime();
+    if (isNaN(t)) return '';
+    var days = Math.floor((Date.now() - t) / 86400000);
+    if (days < 1) return 'today';
+    if (days === 1) return '1 day ago';
+    if (days < 7) return days + ' days ago';
+    if (days < 14) return '1 week ago';
+    if (days < 30) return Math.floor(days / 7) + ' weeks ago';
+    if (days < 60) return '1 month ago';
+    if (days < 365) return Math.floor(days / 30) + ' months ago';
+    var y = Math.floor(days / 365);
+    return y === 1 ? '1 year ago' : y + ' years ago';
+  }
+  function starsHtml(n) {
+    var out = '';
+    for (var i = 1; i <= 5; i++) out += (i <= n) ? '★' : '☆';
+    return out;
+  }
+  function initial(name) {
+    return (name || 'A').trim().charAt(0).toUpperCase();
+  }
+  function renderReview(r) {
+    var replyHtml = r.admin_reply
+      ? '<div class="rl-reply">'
+          + '<div class="rl-reply-label">Response from AfterSlim</div>'
+          + '<p class="rl-reply-body">' + esc(r.admin_reply) + '</p>'
+        + '</div>'
+      : '';
+    return '<article class="rl-item">'
+      + '<div class="rl-side">'
+        + '<div class="rl-avatar">' + esc(initial(r.reviewer_display_name)) + '</div>'
+        + '<div class="rl-name">' + esc(r.reviewer_display_name || 'Customer') + '</div>'
+      + '</div>'
+      + '<div class="rl-body">'
+        + '<div class="rl-meta">'
+          + '<div class="rl-stars">' + starsHtml(r.rating) + '</div>'
+          + '<span class="rl-time">' + timeAgo(r.created_at) + '</span>'
+          + '<span class="rl-verified" title="Verified purchase">Verified purchase</span>'
+        + '</div>'
+        + (r.title ? '<h3 class="rl-headline">' + esc(r.title) + '</h3>' : '')
+        + (r.body ? '<p class="rl-text">' + esc(r.body) + '</p>' : '')
+        + replyHtml
+      + '</div>'
+    + '</article>';
+  }
+
+  // Espera o Supabase estar pronto. supabase-client.js expoe `afterslimSupabase`
+  // como global — carregado no fim da pagina. Poll curto ate o global aparecer.
+  var tries = 0;
+  var maxTries = 20; // ~4 segundos
+  var timer = setInterval(function() {
+    tries++;
+    var sb = window.afterslimSupabase;
+    if (sb) {
+      clearInterval(timer);
+      sb.from('product_reviews')
+        .select('id, rating, title, body, admin_reply, reviewer_display_name, created_at')
+        .eq('status', 'approved')
+        .eq('verified_purchase', true)
+        .order('is_featured', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(20)
+        .then(function(res) {
+          if (res.error || !res.data || !res.data.length) return;
+          container.innerHTML = res.data.map(renderReview).join('');
+        })
+        .catch(function() { /* silencia — fallback ja e o HTML hardcoded */ });
+    } else if (tries >= maxTries) {
+      clearInterval(timer);
+    }
+  }, 200);
+})();
+</script>
 
 <!-- FAQ -->
 <section class="faq-section">
