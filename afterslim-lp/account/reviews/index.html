@@ -27,10 +27,8 @@ body { background: #ffffff; }
    momento de compartilhamento, nao mais um item de menu. */
 .rv-hero {
   text-align: center;
-  padding: 48px 20px 40px;
-  background: linear-gradient(180deg, #fff3e6 0%, #ffffff 100%);
-  margin: 0 -20px 32px;
-  border-bottom: 1px solid #f5e8d8;
+  padding: 32px 0 28px;
+  margin: 0 0 24px;
 }
 .rv-hero h1 {
   font-size: clamp(32px, 5vw, 52px);
@@ -38,10 +36,16 @@ body { background: #ffffff; }
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0;
+  color: #0f1111;
+}
+.rv-hero .g1 {
   background: linear-gradient(135deg, #0f1111 40%, #ea580c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.rv-hero .g2 {
+  color: #ea580c;
 }
 
 .rv-section { margin-bottom: 40px; }
@@ -96,10 +100,34 @@ body { background: #ffffff; }
 .rv-mine-media {
   display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
 }
+.rv-mine-media-btn {
+  background: none; border: 0; padding: 0; cursor: zoom-in;
+}
 .rv-mine-media img {
   width: 80px; height: 80px; object-fit: cover;
   border-radius: 8px; border: 1px solid var(--line);
+  transition: border-color 0.15s;
 }
+.rv-mine-media-btn:hover img { border-color: var(--orange); }
+
+/* Lightbox — mesmo padrao da LP publica */
+.rv-lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10000; padding: 20px; cursor: zoom-out;
+}
+.rv-lightbox img {
+  max-width: min(1100px, 95vw); max-height: 90vh;
+  border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+.rv-lightbox-close {
+  position: absolute; top: 20px; right: 24px;
+  background: rgba(255,255,255,0.15); color: #fff;
+  border: 0; width: 40px; height: 40px; border-radius: 50%;
+  font-size: 24px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.rv-lightbox-close:hover { background: rgba(255,255,255,0.25); }
 .rv-mine-date { font-size: 12px; color: var(--ink-2); margin-top: 8px; }
 .rv-mine-hidden-note {
   margin-top: 10px; padding: 8px 12px;
@@ -232,7 +260,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     Back to account
   </a>
   <div class="rv-hero">
-    <h1>Share your review</h1>
+    <h1>Share <span class="g1">your</span> <span class="g2">review</span></h1>
   </div>
 
   <div class="rv-section">
@@ -353,11 +381,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         + '</div>';
     } else {
       mineEl.innerHTML = mine.map(function(r) {
-        var hiddenNote = r.status === 'hidden'
-          ? '<div class="rv-mine-hidden-note">This review is not currently visible to other customers.</div>'
-          : (r.status === 'pending'
-              ? '<div class="rv-mine-hidden-note">Your review is being reviewed by our team and will be published soon.</div>'
-              : '');
+        // Nada de "esta review nao esta visivel" ou "aguardando aprovacao":
+        // moderacao silenciosa. Cliente ve como se estivesse publicada, sempre.
         var replyBlock = r.admin_reply
           ? '<div class="rv-mine-reply">'
               + '<p class="rv-mine-reply-label">Response from AfterSlim</p>'
@@ -376,11 +401,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           + (r.body ? '<p class="rv-mine-body">' + escapeHtml(r.body) + '</p>' : '')
           + (Array.isArray(r.media_urls) && r.media_urls.length
               ? '<div class="rv-mine-media">' + r.media_urls.map(function(u) {
-                  return '<img src="' + escapeHtml(u) + '" alt="">';
+                  return '<button type="button" class="rv-mine-media-btn" data-rl-full="' + escapeHtml(u) + '"><img src="' + escapeHtml(u) + '" alt=""></button>';
                 }).join('') + '</div>'
               : '')
           + '<p class="rv-mine-date">' + new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '</p>'
-          + hiddenNote
           + replyBlock
         + '</article>';
       }).join('');
@@ -620,21 +644,88 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return;
     }
     if (act === 'delete') {
-      if (!confirm('Delete this review? This cannot be undone.')) return;
       var id2 = btn.getAttribute('data-id');
+      openDeleteConfirm(id2);
+    }
+  });
+
+  // Modal customizado de confirmacao de delete. Substitui o confirm()
+  // nativo do browser que ficava feio + fora do estilo da conta.
+  function openDeleteConfirm(reviewId) {
+    var existing = document.getElementById('rvDeleteOverlay');
+    if (existing) existing.remove();
+    var html = '<div class="rv-overlay" id="rvDeleteOverlay">'
+      + '<div class="rv-modal" style="max-width:400px">'
+        + '<h3>Delete this review?</h3>'
+        + '<p class="rv-modal-sub">This cannot be undone.</p>'
+        + '<div class="rv-form-status" id="rvDeleteStatus" style="display:none"></div>'
+        + '<div class="rv-form-actions" style="justify-content:flex-end;">'
+          + '<button type="button" class="rv-btn-cancel" id="rvDeleteCancel">Cancel</button>'
+          + '<button type="button" class="rv-btn-submit" id="rvDeleteConfirm" style="background:#b91c1c">Delete review</button>'
+        + '</div>'
+      + '</div>'
+    + '</div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+    var overlay = document.getElementById('rvDeleteOverlay');
+    var confirmBtn = document.getElementById('rvDeleteConfirm');
+    var cancelBtn = document.getElementById('rvDeleteCancel');
+    var statusEl = document.getElementById('rvDeleteStatus');
+
+    function close() { overlay.remove(); }
+    cancelBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+
+    confirmBtn.addEventListener('click', async function() {
+      confirmBtn.disabled = true;
+      cancelBtn.disabled = true;
+      confirmBtn.textContent = 'Deleting...';
+      statusEl.style.display = 'none';
       try {
         var session = await window.afterslimAuth.session();
         var token = session && session.access_token;
-        var res = await fetch(API_BASE + '/api/reviews/' + id2, {
+        var res = await fetch(API_BASE + '/api/reviews/' + reviewId, {
           method: 'DELETE',
           headers: { 'Authorization': 'Bearer ' + token },
         });
-        if (!res.ok) throw new Error('Failed to delete.');
+        if (!res.ok) throw new Error('Failed to delete review.');
+        close();
         await loadAll();
       } catch (err) {
-        alert(err.message || 'Failed to delete review.');
+        statusEl.style.display = 'block';
+        statusEl.className = 'rv-form-status err';
+        statusEl.textContent = err.message || 'Failed to delete review.';
+        confirmBtn.disabled = false;
+        cancelBtn.disabled = false;
+        confirmBtn.textContent = 'Delete review';
       }
+    });
+  }
+
+  // Lightbox: click em thumb abre imagem em popup. Fecha em qualquer click
+  // ou Esc. Delegado no body pra pegar tanto reviews atuais quanto qualquer
+  // re-render depois de edit/create.
+  document.body.addEventListener('click', function(e) {
+    var trigger = e.target.closest('[data-rl-full]');
+    if (!trigger) return;
+    e.preventDefault();
+    var url = trigger.getAttribute('data-rl-full');
+    var existing = document.getElementById('rvLightbox');
+    if (existing) existing.remove();
+    var box = document.createElement('div');
+    box.className = 'rv-lightbox';
+    box.id = 'rvLightbox';
+    box.innerHTML = '<button type="button" class="rv-lightbox-close" aria-label="Close">×</button>'
+      + '<img src="' + url + '" alt="">';
+    document.body.appendChild(box);
+    document.body.style.overflow = 'hidden';
+    function close() {
+      box.remove();
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
     }
+    function onKey(ev) { if (ev.key === 'Escape') close(); }
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
   });
 
   await loadAll();

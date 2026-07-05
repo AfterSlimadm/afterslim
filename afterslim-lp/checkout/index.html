@@ -502,6 +502,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/supabase-client.js"></script>
   <script>
+// Fix scroll travado apos click no iframe Stripe:
+// 1) Blur + body.focus() ao clicar fora — solta o foco do iframe
+// 2) Fallback: intercepta ArrowUp/Down na window e faz scroll manual
+//    se a activeElement nao for um input/textarea/select nosso
+document.body.setAttribute('tabindex', '-1');
+document.body.style.outline = 'none';
+document.addEventListener('mousedown', function(e) {
+  var t = e.target;
+  if (!t || !t.closest) return;
+  if (t.closest('input, select, textarea, button, a, iframe, [contenteditable], label')) return;
+  var active = document.activeElement;
+  if (active && active !== document.body) {
+    if (typeof active.blur === 'function') active.blur();
+    document.body.focus();
+  }
+});
+window.addEventListener('keydown', function(e) {
+  // So intervem se nao ha input do checkout com foco.
+  var ae = document.activeElement;
+  var tag = ae && ae.tagName ? ae.tagName.toLowerCase() : '';
+  var typing = (tag === 'input' || tag === 'textarea' || tag === 'select');
+  if (typing) return;
+  if (e.key === 'ArrowDown') { window.scrollBy({ top: 60, behavior: 'auto' }); e.preventDefault(); }
+  else if (e.key === 'ArrowUp') { window.scrollBy({ top: -60, behavior: 'auto' }); e.preventDefault(); }
+  else if (e.key === 'PageDown') { window.scrollBy({ top: window.innerHeight * 0.9, behavior: 'auto' }); e.preventDefault(); }
+  else if (e.key === 'PageUp') { window.scrollBy({ top: -window.innerHeight * 0.9, behavior: 'auto' }); e.preventDefault(); }
+}, true);
 var CK_PK='pk_live_51TC4a9Ay7m7ndbNOiC086tsFYZ2AYWhz9t001JGU7f2S8Sk3GFkCQTwcoibyWUWxjtEOfTTUkaAoLdloz3L0JWcC00cIrsgQzP';
 var CK_API='/api/checkout';
 var CK_PM={'1-onetime':'price_1TC4qvAy7m7ndbNOmzhrCfLv','1-subscribe':'price_1TMbv8Ay7m7ndbNOKKiA3vxk','2-onetime':'price_1TMbxdAy7m7ndbNOYi3z5QoA','2-subscribe':'price_1TMbzPAy7m7ndbNO1zsXcJ6e','3-onetime':'price_1TMc1AAy7m7ndbNO7vOXSCU6','3-subscribe':'price_1TMc2MAy7m7ndbNOh5oPM3MF'};
@@ -889,11 +916,15 @@ async function ckPay(){
     if(CK_discount.code) payBody.promotion_code=CK_discount.code;
     var __refCode=window.afterslimReferral&&window.afterslimReferral.code();
     if(__refCode) payBody.referral_code=__refCode;
-    // Loyalty redemption: only forward when a logged-in customer actually
-    // toggled credit into this checkout. Server re-validates the JWT and
-    // re-caps the amount against the live balance before reducing the PI.
-    if(CK_credit.appliedCents>0&&CK_credit.accessToken){
+    // Sempre envia o JWT quando cliente esta logado — independente de
+    // aplicar credit. Server usa pra: (1) validar credit se aplicado;
+    // (2) linkar order ao profile do logado mesmo se email do form for
+    // outro (cenario "presente pro irmao"). Sem o JWT, webhook cai no
+    // auto-enroll pelo email do form.
+    if(CK_credit.accessToken){
       payBody.customer_access_token=CK_credit.accessToken;
+    }
+    if(CK_credit.appliedCents>0&&CK_credit.accessToken){
       payBody.applied_credit_cents=CK_credit.appliedCents;
     }
     var res=await fetch(CK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payBody)});
@@ -1323,12 +1354,15 @@ async function ckInitCredit(){
     if(!window.afterslimAuth||!window.afterslimSupabase)return;
     var session=await window.afterslimAuth.session();
     if(!session||!session.user||!session.access_token)return;
+    // Populado sempre que cliente estiver logado — mesmo sem saldo. O token
+    // eh necessario pra o admin linkar a order ao profile logado (cenario
+    // "presente pro irmao"). Balance so decide se a UI de credit aparece.
+    CK_credit.profileId=session.user.id;
+    CK_credit.accessToken=session.access_token;
     var sb=window.afterslimSupabase;
     var res=await sb.from('customer_credit_balance').select('balance_cents').eq('profile_id',session.user.id).maybeSingle();
     var bal=(res&&res.data&&res.data.balance_cents)||0;
     if(bal<=0)return;
-    CK_credit.profileId=session.user.id;
-    CK_credit.accessToken=session.access_token;
     CK_credit.balanceCents=bal;
     var row=document.getElementById('credit-row');
     var lbl=document.getElementById('credit-balance-label');
