@@ -115,6 +115,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(26,22,18,0.30) rgba(26,22,18
 }
 @media (max-width: 720px) {
   .urgency-inner { gap: 16px; }
+  .urgency-message { align-items: center; text-align: center; }   /* stack line under title, centered under countdown row */
   .urgency-title { font-size: 13px; }
   .urgency-sub { font-size: 9px; }
   .cell-num { font-size: 16px; }
