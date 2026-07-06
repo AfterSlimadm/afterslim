@@ -633,7 +633,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     var trackingBtn = (o.tracking_url || o.tracking_number)
-      ? '<a class="order-btn order-btn--secondary" href="' + (o.tracking_url || '#') + '" target="_blank" rel="noopener">'
+      ? '<a class="order-btn order-btn--secondary" href="' + safeHref(o.tracking_url) + '" target="_blank" rel="noopener">'
           + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/></svg>'
           + 'Track package</a>'
       : '';
@@ -703,6 +703,13 @@ function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
     return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
   });
+}
+// href seguro pra links vindos do DB (tracking_url): so http(s), escapado
+// pra atributo. Qualquer outra coisa (javascript:, data:, quebra de aspas)
+// vira '#'.
+function safeHref(url) {
+  if (!url || !/^https?:\/\//i.test(url)) return '#';
+  return escapeHtml(url);
 }
 
 // Reorder modal: dispara quando cliente clica "Buy it again". Mostra

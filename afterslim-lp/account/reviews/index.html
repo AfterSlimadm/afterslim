@@ -709,13 +709,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (!trigger) return;
     e.preventDefault();
     var url = trigger.getAttribute('data-rl-full');
+    // So http(s); e img.src via propriedade (nao innerHTML) pra evitar XSS
+    // por quebra de atributo — getAttribute retorna valor decodificado.
+    if (!/^https?:\/\//i.test(url)) return;
     var existing = document.getElementById('rvLightbox');
     if (existing) existing.remove();
     var box = document.createElement('div');
     box.className = 'rv-lightbox';
     box.id = 'rvLightbox';
-    box.innerHTML = '<button type="button" class="rv-lightbox-close" aria-label="Close">×</button>'
-      + '<img src="' + url + '" alt="">';
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'rv-lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.textContent = '×';
+    var lbImg = document.createElement('img');
+    lbImg.src = url;
+    lbImg.alt = '';
+    box.appendChild(closeBtn);
+    box.appendChild(lbImg);
     document.body.appendChild(box);
     document.body.style.overflow = 'hidden';
     function close() {

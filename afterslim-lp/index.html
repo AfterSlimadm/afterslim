@@ -1242,13 +1242,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Lightbox: click em thumb (real ou hardcoded) abre imagem em popup.
   // Fecha clicando em qualquer lugar, no X ou apertando Esc.
   function openLightbox(url) {
+    // Aceita so http(s). Bloqueia javascript:/data:/etc — url vem de
+    // media_urls de review (controlavel por quem escreve). Setar via .src
+    // (propriedade) em vez de innerHTML tambem evita XSS por quebra de
+    // atributo: o valor de getAttribute vem decodificado e concatenar em
+    // innerHTML reintroduziria o payload.
+    if (!/^https?:\/\//i.test(url)) return;
     var existing = document.getElementById('rlLightbox');
     if (existing) existing.remove();
     var box = document.createElement('div');
     box.className = 'rl-lightbox';
     box.id = 'rlLightbox';
-    box.innerHTML = '<button type="button" class="rl-lightbox-close" aria-label="Close">×</button>'
-      + '<img src="' + url + '" alt="">';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'rl-lightbox-close';
+    btn.setAttribute('aria-label', 'Close');
+    btn.textContent = '×';
+    var img = document.createElement('img');
+    img.src = url;
+    img.alt = '';
+    box.appendChild(btn);
+    box.appendChild(img);
     document.body.appendChild(box);
     document.body.style.overflow = 'hidden';
     function close() {
