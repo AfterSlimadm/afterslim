@@ -25,3 +25,6 @@ index.html.bak-before-v6-hero
 
 # Build/edit scripts and the local dev server — not needed in a static deploy.
 *.py
+
+# Audit backups — never ship (would expose old copy/prices at a public URL).
+*.bak-audit-*

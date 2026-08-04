@@ -17,6 +17,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }(window, document, 'ttq');
 </script>
 <!-- End TikTok Pixel Code -->
+<!-- Meta Pixel Code (base loader; pixel id lives in /js/meta-pixel.js) -->
+<script src="/js/meta-pixel.js"></script>
+<!-- End Meta Pixel Code -->
 <!-- TikTok attribution capture: persist ttclid, expose asTikTokAttr() for checkout -->
 <script>
 (function(){
@@ -210,10 +213,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           item_name: 'AfterSlim GLP-1 Companion',
           item_brand: 'AfterSlim',
           item_category: 'Supplements',
-          price: 27.99,
+          price: 37.99,
           quantity: 1
         }];
-        var value = (typeof ctx.value === 'number' && ctx.value > 0) ? ctx.value : 27.99;
+        var value = (typeof ctx.value === 'number' && ctx.value > 0) ? ctx.value : 37.99;
 
         var userData = {};
         try {
@@ -260,6 +263,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               value: value,
               currency: ctx.currency || 'USD'
             }, { event_id: 'tt_purchase_' + txnId });
+          }
+        } catch (e) {}
+
+        // Meta (Facebook): Purchase. eventID matches the server-side CAPI
+        // event ('fb_purchase_<PaymentIntent id>') so Meta dedups the browser
+        // and server hits into one conversion.
+        try {
+          if (window.fbq) {
+            var fbUserData = {};
+            var fbEmail = ctx.email ? String(ctx.email).trim().toLowerCase() : '';
+            var fbPhone = normalizePhone(ctx.phone);
+            if (fbEmail) fbUserData.em = fbEmail;
+            if (fbPhone) fbUserData.ph = fbPhone;
+            if (window.META_PIXEL_ID && (fbUserData.em || fbUserData.ph)) {
+              fbq('init', window.META_PIXEL_ID, fbUserData);
+            }
+            fbq('track', 'Purchase', {
+              value: value,
+              currency: ctx.currency || 'USD',
+              content_type: 'product',
+              content_ids: items.map(function (it) { return it.item_id; }),
+              contents: items.map(function (it) { return { id: it.item_id, quantity: it.quantity, item_price: it.price }; }),
+              num_items: items.reduce(function (s, it) { return s + (it.quantity || 1); }, 0)
+            }, { eventID: 'fb_purchase_' + txnId });
           }
         } catch (e) {}
 

@@ -17,6 +17,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }(window, document, 'ttq');
 </script>
 <!-- End TikTok Pixel Code -->
+<!-- Meta Pixel Code (base loader; pixel id lives in /js/meta-pixel.js) -->
+<script src="/js/meta-pixel.js"></script>
+<!-- End Meta Pixel Code -->
 <!-- TikTok attribution capture: persist ttclid, expose asTikTokAttr() for checkout -->
 <script>
 (function(){
@@ -667,6 +670,7 @@ var CK_credit={profileId:'',accessToken:'',balanceCents:0,appliedCents:0};
 // TikTok: InitiateCheckout fires when the checkout page loads, with the
 // selected bundle's real price and quantity.
 try{if(window.ttq){ttq.track('InitiateCheckout',{contents:[{content_id:'afterslim-'+CK_qty+(CK_isSub?'-sub':'-otp'),content_type:'product',content_name:CK_info.name,quantity:CK_qty,price:CK_info.price}],value:CK_info.price,currency:'USD'});}}catch(e){}
+try{if(window.fbq){fbq('track','InitiateCheckout',{content_ids:['afterslim-'+CK_qty+(CK_isSub?'-sub':'-otp')],content_type:'product',contents:[{id:'afterslim-'+CK_qty+(CK_isSub?'-sub':'-otp'),quantity:CK_qty,item_price:CK_info.price}],value:CK_info.price,currency:'USD',num_items:CK_qty});}}catch(e){}
 
 function ckBuildItemList(){
   return [{
