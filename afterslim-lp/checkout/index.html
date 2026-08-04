@@ -871,6 +871,7 @@ function ckStep2(){
     document.getElementById('shipping-methods').style.display='none';
     ckShowStep(3);
     ckInitStripe();
+    ckPushAddPaymentInfo(); // AddPaymentInfo: fires when the payment step is reached (not at Pay Now)
   }
 }
 
@@ -907,7 +908,6 @@ async function ckPay(){
     errEl.textContent='Apple Pay is being configured. Please use the Express Checkout button at the top, or choose another method.';
     errEl.style.display='block';return;
   }
-  ckPushAddPaymentInfo();
   ckPersistOrderContext(CK_cust.email, CK_cust.name, CK_cust.phone);
   procEl.classList.add('active');
   try{
