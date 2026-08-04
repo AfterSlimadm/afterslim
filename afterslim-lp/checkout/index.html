@@ -704,6 +704,7 @@ function ckPushAddPaymentInfo(){
         items: ckBuildItemList()
       }
     });
+    if(window.fbq){ var _api=ckBuildItemList(); fbq('track','AddPaymentInfo',{content_ids:_api.map(function(i){return i.item_id;}),content_type:'product',contents:_api.map(function(i){return {id:i.item_id,quantity:i.quantity,item_price:i.price};}),value: totalCents/100,currency:'USD',num_items: CK_qty}); }
   }catch(e){}
 }
 

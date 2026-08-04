@@ -1526,6 +1526,7 @@ document.addEventListener('click', function(e) {
   if (heroBtn) {
     e.preventDefault();
     pushEcom('begin_checkout');
+    try{ if(window.fbq){ var _atc=pricing[currentPlan][currentPack]; var _atcId='afterslim-'+currentPack+(currentPlan==='subscribe'?'-sub':'-otp'); fbq('track','AddToCart',{content_ids:[_atcId],content_type:'product',contents:[{id:_atcId,quantity:parseInt(currentPack,10),item_price:parseFloat(_atc.price)}],value:parseFloat(_atc.price),currency:'USD',num_items:parseInt(currentPack,10)}); } }catch(e){}
     var url = '/checkout?qty=' + currentPack;
     if (currentPlan === 'subscribe') url += '&subscribe=true';
     window.location.href = url;
