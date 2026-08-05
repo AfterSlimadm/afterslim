@@ -28,3 +28,8 @@ index.html.bak-before-v6-hero
 
 # Audit backups — never ship (would expose old copy/prices at a public URL).
 *.bak-audit-*
+
+# /science taken down for a compliance rewrite (disease/drug + symptom-targeting
+# claims throughout). Redirected to / in vercel.json; excluded here so the raw
+# page is never served. Restore both when the rewritten page is approved.
+science/index.html
