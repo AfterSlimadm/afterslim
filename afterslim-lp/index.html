@@ -216,15 +216,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="urgency">
   <div class="urgency-inner">
     <div class="urgency-message">
-      <strong class="urgency-title">Save up to 36% off retail</strong>
-      <span class="urgency-sub">Free shipping on subscriptions &amp; 2+ bottles</span>
-    </div>
-    <div class="urgency-countdown" data-midcta-countdown>
-      <div class="urgency-cell"><span class="cell-num" data-h>00</span><span class="cell-lbl">Hrs</span></div>
-      <span class="cell-sep">:</span>
-      <div class="urgency-cell"><span class="cell-num" data-m>00</span><span class="cell-lbl">Min</span></div>
-      <span class="cell-sep">:</span>
-      <div class="urgency-cell"><span class="cell-num" data-s>00</span><span class="cell-lbl">Sec</span></div>
+      <strong class="urgency-title">Free shipping on subscriptions &amp; orders of 2+ bottles</strong>
     </div>
   </div>
 </div>
@@ -285,17 +277,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="bundle-options">
             <button class="bundle-opt" data-pack="1">
               <div class="bundle-opt-title">1 Bottle</div>
-              <div class="bundle-opt-save" data-save>Save $12.00</div>
+              <div class="bundle-opt-save" data-save></div>
             </button>
             <button class="bundle-opt selected" data-pack="2">
               <span class="bundle-opt-badge">Recommended</span>
               <div class="bundle-opt-title">2 Bottles</div>
-              <div class="bundle-opt-save" data-save>Save $22.00</div>
+              <div class="bundle-opt-save" data-save></div>
             </button>
             <button class="bundle-opt" data-pack="3">
               <span class="bundle-opt-badge" style="background:#b91c1c;">Best value</span>
               <div class="bundle-opt-title">3 Bottles</div>
-              <div class="bundle-opt-save" data-save>Save $32.00</div>
+              <div class="bundle-opt-save" data-save></div>
             </button>
           </div>
         </div>
@@ -304,8 +296,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="hero-eyebrow">GLP-1 Companion</div>
         <div class="hero-price-row">
           <span class="price-current" id="priceCurrent">$47.99</span>
-          <span class="price-original" id="priceOriginal">$69.99</span>
-          <span class="price-badge" id="priceBadge">31% OFF TODAY</span>
+          <span class="price-original" id="priceOriginal"></span>
+          <span class="price-badge" id="priceBadge"></span>
         </div>
 
         <a href="#bundles" class="btn-primary hero-checkout-btn">
@@ -830,14 +822,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><span class="midcta-gifts-plus">+</span> Cancel anytime, no subscription lock-in</li>
           </ul>
         </div>
-
-        <div class="midcta-countdown" data-midcta-countdown>
-          <svg class="midcta-countdown-bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
-          <span class="midcta-countdown-label">Offer ends in</span>
-          <span class="midcta-countdown-time"><span data-h>00</span>:<span data-m>00</span>:<span data-s>00</span></span>
-        </div>
-
-        <a href="#bundles" class="btn-primary midcta-button" data-bundle-modal-open>
+<a href="#bundles" class="btn-primary midcta-button" data-bundle-modal-open>
           Start AfterSlim today
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -1224,14 +1209,14 @@ document.querySelectorAll('.faq-question').forEach(function(btn) {
 // AfterSlim real pricing (from production index.html)
 var pricing = {
   subscribe: {
-    1: { price: '27.99', original: '39.99', percent: 30, perDay: '0.93', freeShip: false, saveAbs: '12.00' },
-    2: { price: '47.99', original: '69.99', percent: 31, perDay: '0.80', freeShip: true,  saveAbs: '22.00' },
-    3: { price: '57.99', original: '89.99', percent: 36, perDay: '0.64', freeShip: true,  saveAbs: '32.00' }
+    1: { price: '27.99', original: '27.99', percent: 0, perDay: '0.93', freeShip: false, saveAbs: '0' },
+    2: { price: '47.99', original: '47.99', percent: 0, perDay: '0.80', freeShip: true,  saveAbs: '0' },
+    3: { price: '57.99', original: '57.99', percent: 0, perDay: '0.64', freeShip: true,  saveAbs: '0' }
   },
   onetime: {
-    1: { price: '37.99', original: '37.99', percent: 0,  perDay: '1.27', freeShip: false, saveAbs: '0' },
-    2: { price: '57.99', original: '69.99', percent: 17, perDay: '0.97', freeShip: true,  saveAbs: '12.00' },
-    3: { price: '67.99', original: '89.99', percent: 24, perDay: '0.76', freeShip: true,  saveAbs: '22.00' }
+    1: { price: '37.99', original: '37.99', percent: 0, perDay: '1.27', freeShip: false, saveAbs: '0' },
+    2: { price: '57.99', original: '57.99', percent: 0, perDay: '0.97', freeShip: true,  saveAbs: '0' },
+    3: { price: '67.99', original: '67.99', percent: 0, perDay: '0.76', freeShip: true,  saveAbs: '0' }
   }
 };
 var currentPlan = 'subscribe';
@@ -1301,31 +1286,17 @@ function renderPrice() {
   });
   ['priceOriginal', 'modalPriceOriginal'].forEach(function(id) {
     var el = document.getElementById(id);
-    if (!el) return;
-    if (d.percent > 0) { el.textContent = '$' + d.original; el.style.display = ''; }
-    else { el.style.display = 'none'; }
+    if (el) { el.textContent = ''; el.style.display = 'none'; }
   });
   ['priceBadge', 'modalPriceBadge'].forEach(function(id) {
     var el = document.getElementById(id);
-    if (!el) return;
-    if (d.percent > 0) { el.textContent = d.percent + '% OFF TODAY'; el.style.display = ''; }
-    else { el.style.display = 'none'; }
+    if (el) { el.textContent = ''; el.style.display = 'none'; }
   });
 
-  // Update each bundle button's inline save based on plan (hero + modal share class)
-  document.querySelectorAll('.bundle-opt').forEach(function(b) {
-    var pack = b.getAttribute('data-pack');
-    var pd = pricing[currentPlan][pack];
-    var saveEl = b.querySelector('[data-save]');
-    if (saveEl) {
-      if (pd.percent > 0) {
-        saveEl.textContent = 'Save $' + pd.saveAbs;
-        saveEl.style.display = '';
-      } else {
-        saveEl.textContent = '';
-        saveEl.style.display = 'none';
-      }
-    }
+  // Bundle "save" badges removed (compliance: no reference-price discounts).
+  document.querySelectorAll('.bundle-opt [data-save]').forEach(function(saveEl) {
+    saveEl.textContent = '';
+    saveEl.style.display = 'none';
   });
 }
 
@@ -1398,10 +1369,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Urgency banner timer is now driven by the same midcta-countdown loop
-// further down in this script (countdown until viewer's local midnight,
-// hrs/min/sec). The banner picks it up via data-midcta-countdown +
-// [data-h]/[data-m]/[data-s] hooks.
+// Urgency/countdown removed for compliance (fake looping timer).
 
 // Problems — manual horizontal carousel (continuous color canvas)
 (function() {
@@ -1620,30 +1588,7 @@ if ('IntersectionObserver' in window) {
   document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('in'); });
 }
 
-/* ===== MidCTA countdown — resets at viewer's local midnight ===== */
-(function(){
-  var nodes = document.querySelectorAll('[data-midcta-countdown]');
-  if (!nodes.length) return;
-  function pad(n){ return n < 10 ? '0' + n : '' + n; }
-  function tick(){
-    var now = new Date();
-    var end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
-    var diff = Math.max(0, end - now);
-    var h = Math.floor(diff / 3600000);
-    var m = Math.floor((diff % 3600000) / 60000);
-    var s = Math.floor((diff % 60000) / 1000);
-    nodes.forEach(function(root){
-      var hEl = root.querySelector('[data-h]');
-      var mEl = root.querySelector('[data-m]');
-      var sEl = root.querySelector('[data-s]');
-      if (hEl) hEl.textContent = pad(h);
-      if (mEl) mEl.textContent = pad(m);
-      if (sEl) sEl.textContent = pad(s);
-    });
-  }
-  tick();
-  setInterval(tick, 1000);
-})();
+/* Countdown removed (compliance: fake/looping urgency). */
 
 /* ===== Problem-scene stat number count-up animation =====
    Animates the big numbers (.stat-compare-number b for the side-by-side
@@ -1971,17 +1916,17 @@ if ('IntersectionObserver' in window) {
       <div class="bundle-options">
         <button class="bundle-opt" data-pack="1">
           <div class="bundle-opt-title">1 Bottle</div>
-          <div class="bundle-opt-save" data-save>Save $12.00</div>
+          <div class="bundle-opt-save" data-save></div>
         </button>
         <button class="bundle-opt selected" data-pack="2">
           <span class="bundle-opt-badge">Recommended</span>
           <div class="bundle-opt-title">2 Bottles</div>
-          <div class="bundle-opt-save" data-save>Save $22.00</div>
+          <div class="bundle-opt-save" data-save></div>
         </button>
         <button class="bundle-opt" data-pack="3">
           <span class="bundle-opt-badge" style="background:#b91c1c;">Best value</span>
           <div class="bundle-opt-title">3 Bottles</div>
-          <div class="bundle-opt-save" data-save>Save $32.00</div>
+          <div class="bundle-opt-save" data-save></div>
         </button>
       </div>
     </div>
@@ -1989,8 +1934,8 @@ if ('IntersectionObserver' in window) {
     <!-- Price row (separate IDs from hero so renderPrice updates both) -->
     <div class="bundle-modal-price-row">
       <span class="price-current" id="modalPriceCurrent">$47.99</span>
-      <span class="price-original" id="modalPriceOriginal">$69.99</span>
-      <span class="price-badge" id="modalPriceBadge">31% OFF TODAY</span>
+      <span class="price-original" id="modalPriceOriginal"></span>
+      <span class="price-badge" id="modalPriceBadge"></span>
     </div>
 
     <a href="#bundles" class="btn-primary hero-checkout-btn bundle-modal-cta">
